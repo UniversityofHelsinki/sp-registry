@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block content %}
+<h1>Service Providers</h1>
+<ul>
+{% for provider in object_list %}
+    <li><a href="/serviceprovider/{{ provider.pk }}/">{{ provider.entity_id }}</a></li>
+{% empty %}
+    <li>No providers</li>
+{% endfor %}
+</ul>
+{% endblock %}

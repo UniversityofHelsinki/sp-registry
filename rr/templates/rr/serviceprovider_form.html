@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load bootstrap4 %}
+{% block content %}
+<h1>{% trans "Basic information" %} - <small>{{ object }}</small></h1>
+<form action="" method="post" class="form">
+    {% csrf_token %}
+    {% bootstrap_form form layout='horizontal' %}
+    {% buttons %}
+        <button type="submit" class="btn btn-primary">{% trans "Submit" %}</button>
+    {% endbuttons %}
+</form>
+{% endblock %}

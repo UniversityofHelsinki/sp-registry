@@ -33,7 +33,10 @@
             <a class="nav-link" href="{% url 'attribute-list' object.pk %}">{% trans "Attributes" %}</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#">{% trans "Certificates" %}</a>
+            <a class="nav-link" href="{% url 'certificate-list' object.pk %}">{% trans "Certificates" %}</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'contact-list' object.pk %}">{% trans "Contacts" %}</a>
           </li>
           {% endif %}
         </ul>

@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load bootstrap4 %}
+{% block content %}
+<h1>{% trans "Certificates" %} - <small>{{ object }}</small></h1>
+<h2>{% trans "List of certificates" %}</h2>
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">{% trans "Type" %}</th>
+      <th scope="col">{% trans "First name" %}</th>
+      <th scope="col">{% trans "Last name" %}</th>
+      <th scope="col">{% trans "E-Mail" %}</th>
+      <th scope="col">{% trans "Remove" %}</th>
+    </tr>
+  </thead>
+  <tbody>
+  <form action="" method='POST'>
+  {% csrf_token %}
+{% for contact in object_list %}
+    <tr>
+      <th scope="row">{{ contact.get_type_display }}</th>
+      <td>{{ contact.firstname }}</td>
+      <td>{{ contact.lastname }}</td>
+      <td>{{ contact.email }}</td>
+      <td><input type="submit" name="{{ contact.pk }}" value="Remove" /></td>
+    </tr>
+{% empty %}
+    <tr>
+      <th scope="row">{% trans "No contacts" %}</th>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+{% endfor %}
+  </form>
+  </tbody>
+</table>
+<h2>{% trans "Add contact" %}</h2>
+<form action="" method="post" class="form">
+    {% csrf_token %}
+    {% bootstrap_form form layout='horizontal' %}
+    {% buttons %}
+        <button type="submit" name="add_contact" class="btn btn-primary">{% trans "Submit" %}</button>
+    {% endbuttons %}
+</form>
+{% endblock %}

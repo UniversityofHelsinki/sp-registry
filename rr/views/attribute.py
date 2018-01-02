@@ -9,11 +9,11 @@ from django.utils import timezone
 
 @login_required
 def attribute_list(request, pk):
-    attributes = Attribute.objects.filter(public=True)
     try:
         sp = ServiceProvider.objects.get(pk=pk, admins=request.user)
     except ServiceProvider.DoesNotExist:
         raise Http404("Service proviced does not exist")
+    attributes = Attribute.objects.filter(public=True)
     if request.method == "POST":
         form = AttributeForm(request.POST, sp=sp)
         if form.is_valid():

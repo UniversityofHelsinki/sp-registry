@@ -19,10 +19,14 @@ from django.contrib import admin
 from django.contrib.auth.decorators import login_required
 from rr.views.serviceprovider import BasicInformationCreate, BasicInformationUpdate, BasicInformationView, ServiceProviderList
 from rr.views.attribute import attribute_list
+from rr.views.certificate import certificate_list
+from rr.views.contact import contact_list
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^$', login_required(ServiceProviderList.as_view()), name='serviceprovider-list'),
+    url(r'certificate/(?P<pk>[0-9]+)/$', certificate_list, name='certificate-list'),
+    url(r'contact/(?P<pk>[0-9]+)/$', contact_list, name='contact-list'),
     url(r'attribute/(?P<pk>[0-9]+)/$', attribute_list, name='attribute-list'),
     url(r'serviceprovider/add/$', login_required(BasicInformationCreate.as_view()), name='basicinformation-add'),
     url(r'serviceprovider/(?P<pk>[0-9]+)/$', login_required(BasicInformationView.as_view()), name='basicinformation-view'),

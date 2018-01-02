@@ -23,7 +23,7 @@
       <td>{{ certificate.valid_until }}</td>
       <td>{{ certificate.valid_from }}</td>
       <td>{{ certificate.key_size }}</td>
-      <td><input type="submit" name="{{ certificate.pk }}" value="Remove" /></td>
+      <td><input class="btn btn-danger" type="submit" name="{{ certificate.pk }}" value="Remove" /></td>
     </tr>
 {% empty %}
     <tr>

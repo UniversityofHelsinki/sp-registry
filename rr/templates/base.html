@@ -36,8 +36,15 @@
             <a class="nav-link" href="{% url 'certificate-list' object.pk %}">{% trans "Certificates" %}</a>
           </li>
           <li class="nav-item">
+            <a class="nav-link" href="{% url 'endpoint-list' object.pk %}">{% trans "SAML Endpoints" %}</a>
+          </li>
+          <li class="nav-item">
             <a class="nav-link" href="{% url 'contact-list' object.pk %}">{% trans "Contacts" %}</a>
           </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'metadata-view' object.pk %}">{% trans "View Metadata" %}</a>
+          </li>
+
           {% endif %}
         </ul>
       </div>

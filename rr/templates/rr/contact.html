@@ -2,8 +2,8 @@
 {% load i18n %}
 {% load bootstrap4 %}
 {% block content %}
-<h1>{% trans "Certificates" %} - <small>{{ object }}</small></h1>
-<h2>{% trans "List of certificates" %}</h2>
+<h1>{% trans "Contacts" %} - <small>{{ object }}</small></h1>
+<h2>{% trans "List of contacts" %}</h2>
 <table class="table">
   <thead>
     <tr>
@@ -23,7 +23,7 @@
       <td>{{ contact.firstname }}</td>
       <td>{{ contact.lastname }}</td>
       <td>{{ contact.email }}</td>
-      <td><input type="submit" name="{{ contact.pk }}" value="Remove" /></td>
+      <td><input class="btn btn-danger" type="submit" name="{{ contact.pk }}" value="Remove" /></td>
     </tr>
 {% empty %}
     <tr>

@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load bootstrap4 %}
+{% block content %}
+<h1>{% trans "Metadata" %} - <small>{{ object }}</small></h1>
+<pre><code>
+{{ metadata }}
+</code></pre>
+{% endblock %}

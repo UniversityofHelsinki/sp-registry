@@ -18,7 +18,9 @@ def certificate_list(request, pk):
             form = CertificateForm(request.POST)
             if form.is_valid():
                 certificate = form.cleaned_data['certificate']
-                if Certificate.objects.add_certificate(certificate, sp):
+                signing = form.cleaned_data['signing']
+                encryption = form.cleaned_data['encryption']
+                if Certificate.objects.add_certificate(certificate, sp, signing=signing, encryption=encryption):
                     form = CertificateForm()
         else:
             form = CertificateForm()
@@ -32,8 +34,6 @@ def certificate_list(request, pk):
     else:
         form = CertificateForm()
     certificates = Certificate.objects.filter(sp=sp, end_at=None)
-    if certificates.count() > 1:
-        form = None
     return render(request, "rr/certificate.html", {'object_list': certificates,
                                                    'form': form,
                                                    'object': sp})

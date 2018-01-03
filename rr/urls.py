@@ -22,7 +22,7 @@ from rr.views.attribute import attribute_list
 from rr.views.certificate import certificate_list
 from rr.views.contact import contact_list
 from rr.views.endpoint import endpoint_list
-from rr.views.metadata import metadata
+from rr.views.metadata import metadata, read_metadata
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
@@ -32,6 +32,7 @@ urlpatterns = [
     url(r'contact/(?P<pk>[0-9]+)/$', contact_list, name='contact-list'),
     url(r'endpoint/(?P<pk>[0-9]+)/$', endpoint_list, name='endpoint-list'),
     url(r'metadata/(?P<pk>[0-9]+)/$', metadata, name='metadata-view'),
+    url(r'metadata/read/$', read_metadata, name='metadata-view'),
     url(r'serviceprovider/add/$', login_required(BasicInformationCreate.as_view()), name='basicinformation-add'),
     url(r'serviceprovider/(?P<pk>[0-9]+)/$', login_required(BasicInformationView.as_view()), name='basicinformation-view'),
     url(r'serviceprovider/update/(?P<pk>[0-9]+)/$', login_required(BasicInformationUpdate.as_view()), name='basicinformation-update'),

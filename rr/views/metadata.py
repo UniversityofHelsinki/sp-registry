@@ -6,8 +6,7 @@ from rr.models.endpoint import Endpoint
 from django.shortcuts import render
 from django.http.response import Http404
 from django.contrib.auth.decorators import login_required
-from lxml import etree
-from xml.etree.ElementTree import QName
+from lxml import etree, objectify
 
 
 def metadata_generator(sp):
@@ -18,8 +17,8 @@ def metadata_generator(sp):
     attributes = Attribute.objects.filter(public=True)
 
     EntityDescriptor = etree.Element("EntityDescriptor",
-                         schemaLocation="urn:oasis:names:tc:SAML:2.0:metadata",
-                         entityID=basicinfo.entity_id)
+                                     schemaLocation="urn:oasis:names:tc:SAML:2.0:metadata",
+                                     entityID=basicinfo.entity_id)
     SPSSODescriptor = etree.SubElement(EntityDescriptor, "SPSSODescriptor", protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol")
     Extensions = etree.SubElement(SPSSODescriptor, "Extensions")
     if basicinfo.discovery_service_url:
@@ -27,9 +26,9 @@ def metadata_generator(sp):
                                              Binding="urn:oasis:names:tc:SAML:profiles:SSO:idp-discovery-protocol",
                                              Location=basicinfo.discovery_service_url,
                                              index="1",
-                                             nsmap = {"idpdisc" : 'urn:oasis:names:tc:SAML:profiles:SSO:idp-discovery-protocol'})
+                                             nsmap={"idpdisc": 'urn:oasis:names:tc:SAML:profiles:SSO:idp-discovery-protocol'})
     UIIInfo = etree.SubElement(Extensions, "{urn:oasis:names:tc:SAML:metadata:ui}UIIInfo",
-                                             nsmap = {"mdui" : 'urn:oasis:names:tc:SAML:metadata:ui'})
+                               nsmap={"mdui": 'urn:oasis:names:tc:SAML:metadata:ui'})
     if basicinfo.name_fi:
         DisplayName_fi = etree.SubElement(UIIInfo, "{urn:oasis:names:tc:SAML:metadata:ui}DisplayName")
         DisplayName_fi.attrib['{http://www.w3.org/XML/1998/namespace}lang'] = "fi"
@@ -71,14 +70,27 @@ def metadata_generator(sp):
 
     for certificate in certificates:
         KeyDescriptor = etree.SubElement(SPSSODescriptor, "KeyDescriptor")
-        KeyInfo = etree.SubElement(KeyDescriptor, "{urn:oasis:names:tc:SAML:2.0:metadata}KeyInfo", nsmap = {"ds" : 'urn:oasis:names:tc:SAML:2.0:metadata'})
+        if certificate.signing:
+            KeyDescriptor.attrib['use'] = 'signing'
+        if certificate.encryption:
+            KeyDescriptor.attrib['use'] = 'encryption'
+
+        KeyInfo = etree.SubElement(KeyDescriptor, "{urn:oasis:names:tc:SAML:2.0:metadata}KeyInfo",
+                                   nsmap={"ds": 'urn:oasis:names:tc:SAML:2.0:metadata'})
         X509Data = etree.SubElement(KeyInfo, "{urn:oasis:names:tc:SAML:2.0:metadata}X509Data")
         X509Certificate = etree.SubElement(X509Data, "{urn:oasis:names:tc:SAML:2.0:metadata}X509Certificate")
         X509Certificate.text = certificate.get_certificate()
 
+    if basicinfo.name_format_transient:
+        NameIDFormat = etree.SubElement(SPSSODescriptor, "NameIDFormat")
+        NameIDFormat.text = "urn:oasis:names:tc:SAML:2.0:nameid-format:transient"
+    if basicinfo.name_format_persistent:
+        NameIDFormat = etree.SubElement(SPSSODescriptor, "NameIDFormat")
+        NameIDFormat.text = "urn:oasis:names:tc:SAML:2.0:nameid-format:persistent"
+
     for endpoint in endpoints:
-        attr = etree.SubElement(SPSSODescriptor, endpoint.type, Binding=endpoint.binding, Location=endpoint.url)
-        
+        etree.SubElement(SPSSODescriptor, endpoint.type, Binding=endpoint.binding, Location=endpoint.url)
+
     AttributeConsumingService = etree.SubElement(SPSSODescriptor, "AttributeConsumingService", index="1")
     if basicinfo.name_fi:
         DisplayName_fi = etree.SubElement(AttributeConsumingService, "ServiceName")
@@ -107,7 +119,9 @@ def metadata_generator(sp):
         Description_sv.text = basicinfo.description_sv
 
     for attribute in attributes:
-        etree.SubElement(AttributeConsumingService, "RequestedAttribute", FriendlyName=attribute.name, Name=attribute.oid, NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri")
+        etree.SubElement(AttributeConsumingService, "RequestedAttribute",
+                         FriendlyName=attribute.name, Name=attribute.oid,
+                         NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri")
 
     for contact in contacts:
         ContactPerson = etree.SubElement(EntityDescriptor, "ContactPerson", contactType=contact.type)

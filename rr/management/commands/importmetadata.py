@@ -71,8 +71,9 @@ def metadata_parser(filename):
                                 else:
                                     certificate = certificate + "\n-----END CERTIFICATE-----\n"
                                 certificate = "-----BEGIN CERTIFICATE-----\n" + certificate
-                                if not Certificate.objects.add_certificate(certificate=certificate, sp=sp, signing=signing, encryption=encryption):
-                                    print("Could not load certificate for " + entityID)
+                                if not Certificate.objects.filter(certificate=certificate, sp=sp, signing=signing, encryption=encryption):
+                                    if not Certificate.objects.add_certificate(certificate=certificate, sp=sp, signing=signing, encryption=encryption):
+                                        print("Could not load certificate for " + entityID)
                         if etree.QName(c.tag).localname == "NameIDFormat":
                             if c.text is "urn:oasis:names:tc:SAML:2.0:nameid-format:transient":
                                 sp.name_format_transient = True
@@ -80,45 +81,21 @@ def metadata_parser(filename):
                                 sp.name_format_persistent = True
                             else:
                                 print("Unsupported nameid-format " + entityID)
-                        if etree.QName(c.tag).localname == "ArtifactResolutionService":
-                            binding = c.get("Binding")
-                            location = c.get("Location")
-                            index = c.get("Index")
-                            try:
-                                Endpoint.objects.create(sp=sp,
-                                                        type="ArtifactResolutionService",
-                                                        binding=binding,
-                                                        url=location,
-                                                        index=index,
-                                                        created=timezone.now())
-                            except:
-                                print("Could not add ArtifactResolutionService for " + entityID)
-                        if etree.QName(c.tag).localname == "SingleLogoutService":
-                            binding = c.get("Binding")
-                            location = c.get("Location")
-                            index = c.get("Index")
-                            try:
-                                Endpoint.objects.create(sp=sp,
-                                                        type="SingleLogoutService",
-                                                        binding=binding,
-                                                        url=location,
-                                                        index=index,
-                                                        created=timezone.now())
-                            except:
-                                print("Could not add SingleLogoutService for " + entityID)
-                        if etree.QName(c.tag).localname == "AssertionConsumerService":
-                            binding = c.get("Binding")
-                            location = c.get("Location")
-                            index = c.get("Index")
-                            try:
-                                Endpoint.objects.create(sp=sp,
-                                                        type="AssertionConsumerService",
-                                                        binding=binding,
-                                                        url=location,
-                                                        index=index,
-                                                        created=timezone.now())
-                            except:
-                                print("Could not add AssertionConsumerService for " + entityID)
+                        for servicetype in ["ArtifactResolutionService", "SingleLogoutService", "AssertionConsumerService"]:
+                            if etree.QName(c.tag).localname == servicetype:
+                                binding = c.get("Binding")
+                                location = c.get("Location")
+                                index = c.get("Index")
+                                if not Endpoint.objects.filter(sp=sp, type=servicetype, binding=binding, url=location, index=index).exists():
+                                    try:
+                                        Endpoint.objects.create(sp=sp,
+                                                                type=servicetype,
+                                                                binding=binding,
+                                                                url=location,
+                                                                index=index,
+                                                                created=timezone.now())
+                                    except:
+                                        print("Could not add " + servicetype + " for " + entityID)
                         if etree.QName(c.tag).localname == "AttributeConsumingService":
                             for d in c:
                                 if etree.QName(d.tag).localname == "RequestedAttribute":
@@ -158,7 +135,8 @@ def metadata_parser(filename):
                                 lastname = c.text
                             if etree.QName(c.tag).localname == "EmailAddress":
                                 email = c.text
-                        Contact.objects.create(sp=sp, type=contacttype, firstname=firstname, lastname=lastname, email=email)
+                        if not Contact.objects.filter(sp=sp, type=contacttype, firstname=firstname, lastname=lastname, email=email).exists():
+                            Contact.objects.create(sp=sp, type=contacttype, firstname=firstname, lastname=lastname, email=email)
             sp.save()
 
 

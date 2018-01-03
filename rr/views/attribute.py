@@ -9,6 +9,7 @@ from django.utils import timezone
 
 @login_required
 def attribute_list(request, pk):
+    attributes = Attribute.objects.filter(public=True)
     try:
         sp = ServiceProvider.objects.get(pk=pk, admins=request.user)
     except ServiceProvider.DoesNotExist:
@@ -29,9 +30,9 @@ def attribute_list(request, pk):
                         if sp_attribute.reason != data:
                             sp_attribute.reason = data
                             sp_attribute.save()
+        form = AttributeForm(request.POST, sp=sp)
     else:
         form = AttributeForm(sp=sp)
-    attributes = Attribute.objects.filter(public=True)
     return render(request, "rr/attribute.html", {'object_list': attributes,
                                                  'form': form,
                                                  'object': sp})

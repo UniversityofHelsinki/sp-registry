@@ -1,4 +1,4 @@
-from rr.models.serviceprovider import ServiceProvider
+from rr.models.serviceprovider import ServiceProvider, SPAttribute
 from rr.models.certificate import Certificate
 from rr.models.contact import Contact
 from rr.models.attribute import Attribute
@@ -14,7 +14,7 @@ def metadata_generator(sp):
     certificates = Certificate.objects.filter(sp=sp, end_at=None)
     contacts = Contact.objects.filter(sp=sp, end_at=None)
     endpoints = Endpoint.objects.filter(sp=sp, end_at=None)
-    attributes = Attribute.objects.filter(public=True)
+    attributes = SPAttribute.objects.filter(sp=sp)
 
     EntityDescriptor = etree.Element("EntityDescriptor",
                                      schemaLocation="urn:oasis:names:tc:SAML:2.0:metadata",
@@ -120,7 +120,7 @@ def metadata_generator(sp):
 
     for attribute in attributes:
         etree.SubElement(AttributeConsumingService, "RequestedAttribute",
-                         FriendlyName=attribute.name, Name=attribute.oid,
+                         FriendlyName=attribute.attribute.name, Name=attribute.attribute.oid,
                          NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri")
 
     for contact in contacts:

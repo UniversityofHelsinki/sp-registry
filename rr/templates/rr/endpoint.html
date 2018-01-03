@@ -10,6 +10,7 @@
       <th scope="col">{% trans "Type" %}</th>
       <th scope="col">{% trans "Binding" %}</th>
       <th scope="col">{% trans "URL" %}</th>
+      <th scope="col">{% trans "Index" %}</th>
       <th scope="col">{% trans "Remove" %}</th>
     </tr>
   </thead>
@@ -21,11 +22,13 @@
       <th scope="row">{{ endpoint.get_type_display }}</th>
       <td>{{ endpoint.get_binding_display }}</td>
       <td>{{ endpoint.url }}</td>
+      <td>{{ endpoint.index }}</td>
       <td><input class="btn btn-danger" type="submit" name="{{ endpoint.pk }}" value="Remove" /></td>
     </tr>
 {% empty %}
     <tr>
       <th scope="row">{% trans "No endpoints" %}</th>
+      <td></td>
       <td></td>
       <td></td>
       <td></td>

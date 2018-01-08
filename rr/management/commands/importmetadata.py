@@ -4,9 +4,6 @@ from rr.models.contact import Contact
 from rr.models.attribute import Attribute
 from rr.models.endpoint import Endpoint
 from django.contrib.auth.models import User
-from django.shortcuts import render
-from django.http.response import Http404
-from django.contrib.auth.decorators import login_required
 from lxml import etree, objectify
 from django.utils import timezone
 from django.core.management.base import BaseCommand
@@ -103,9 +100,9 @@ def metadata_parser(filename):
                                     name = d.get("Name")
                                     if friendlyname:
                                         try:
-                                            attribute = Attribute.objects.get(name=friendlyname)
+                                            attribute = Attribute.objects.get(friendlyname=friendlyname)
                                             if not SPAttribute.objects.filter(sp=sp, attribute=attribute).exists():
-                                                SPAttribute.objects.create(sp=sp, attribute=attribute, reason=attribute.name, updated=timezone.now())
+                                                SPAttribute.objects.create(sp=sp, attribute=attribute, reason="initial dump, please give the real reason", updated=timezone.now())
                                         except Attribute.DoesNotExist:
                                             print("Could not add attribute " + friendlyname + " for " + entityID)
                                 if etree.QName(d.tag).localname == "ServiceName":

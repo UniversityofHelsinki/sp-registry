@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.utils.translation import ugettext_lazy as _
 from rr.models.attribute import Attribute
+from django.utils import timezone
 
 
 class ServiceProvider(models.Model):
@@ -33,6 +34,20 @@ class ServiceProvider(models.Model):
 
     def __str__(self):
         return self.entity_id
+
+#     def save(self, *args, **kwargs):
+#         if self.pk:
+#             sp = ServiceProvider.objects.get(pk=self.pk)
+#             sp.pk = None
+#             sp.end_at = timezone.now()
+#             sp.save()
+#             sp.admins.set(self.admins.all())
+# #             attributes = SPAttribute.objects.filter(sp=self.sp)
+# #             for attribute in attributes:
+# #                 SPAttribute.objects.create(sp=sp, attribute=attribute.attribute, reason=attribute.reason, update=attribute.updated, validated=attribute.validaded)
+#             # self.pk.updated = timezone.now()
+# 
+#         return super(ServiceProvider, self).save(*args, **kwargs)
 
 
 class SPAttribute(models.Model):

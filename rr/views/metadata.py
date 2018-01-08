@@ -1,7 +1,6 @@
 from rr.models.serviceprovider import ServiceProvider, SPAttribute
 from rr.models.certificate import Certificate
 from rr.models.contact import Contact
-from rr.models.attribute import Attribute
 from rr.models.endpoint import Endpoint
 from django.shortcuts import render
 from django.http.response import Http404
@@ -120,8 +119,8 @@ def metadata_generator(sp):
 
     for attribute in attributes:
         etree.SubElement(AttributeConsumingService, "RequestedAttribute",
-                         FriendlyName=attribute.attribute.name, Name=attribute.attribute.oid,
-                         NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri")
+                         FriendlyName=attribute.attribute.friendlyname, Name=attribute.attribute.name,
+                         NameFormat=attribute.attribute.nameformat)
 
     for contact in contacts:
         ContactPerson = etree.SubElement(EntityDescriptor, "ContactPerson", contactType=contact.type)
@@ -138,7 +137,10 @@ def metadata_generator(sp):
 @login_required
 def metadata(request, pk):
     try:
-        sp = ServiceProvider.objects.get(pk=pk, admins=request.user)
+        if request.user.is_superuser:
+            sp = ServiceProvider.objects.get(pk=pk)
+        else:
+            sp = ServiceProvider.objects.get(pk=pk, admins=request.user)
     except ServiceProvider.DoesNotExist:
         raise Http404("Service proviced does not exist")
     metadata = metadata_generator(sp)

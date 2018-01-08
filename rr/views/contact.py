@@ -10,7 +10,10 @@ from django.utils import timezone
 @login_required
 def contact_list(request, pk):
     try:
-        sp = ServiceProvider.objects.get(pk=pk, admins=request.user)
+        if request.user.is_superuser:
+            sp = ServiceProvider.objects.get(pk=pk)
+        else:
+            sp = ServiceProvider.objects.get(pk=pk, admins=request.user)
     except ServiceProvider.DoesNotExist:
         raise Http404("Service proviced does not exist")
     if request.method == "POST":

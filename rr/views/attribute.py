@@ -11,7 +11,10 @@ from django.utils import timezone
 def attribute_list(request, pk):
     attributes = Attribute.objects.filter(public=True)
     try:
-        sp = ServiceProvider.objects.get(pk=pk, admins=request.user)
+        if request.user.is_superuser:
+            sp = ServiceProvider.objects.get(pk=pk)
+        else:
+            sp = ServiceProvider.objects.get(pk=pk, admins=request.user)
     except ServiceProvider.DoesNotExist:
         raise Http404("Service proviced does not exist")
     if request.method == "POST":
@@ -19,12 +22,12 @@ def attribute_list(request, pk):
         if form.is_valid():
             for field in form:
                 data = form.cleaned_data.get(field.name)
-                sp_attribute = SPAttribute.objects.filter(sp=sp, attribute__name=field.name).first()
+                sp_attribute = SPAttribute.objects.filter(sp=sp, attribute__friendlyname=field.name).first()
                 if sp_attribute and not data:
                     sp_attribute.delete()
                 elif data:
                     if not sp_attribute:
-                        attribute = Attribute.objects.filter(name=field.name).first()
+                        attribute = Attribute.objects.filter(friendlyname=field.name).first()
                         SPAttribute.objects.create(sp=sp, attribute=attribute, reason=data, updated=timezone.now())
                     else:
                         if sp_attribute.reason != data:

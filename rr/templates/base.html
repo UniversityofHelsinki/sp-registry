@@ -20,7 +20,7 @@
         <span class="navbar-toggler-icon"></span>
       </button>
 
-      <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+      <div class="collapse navbar-collapse" id="nav">
         <ul class="navbar-nav mr-auto">
           <li class="nav-item">
             <a class="nav-link" href="{% url 'serviceprovider-list' %}">{% trans "Service Provicers" %}</a>
@@ -44,9 +44,21 @@
           <li class="nav-item">
             <a class="nav-link" href="{% url 'metadata-view' object.pk %}">{% trans "View Metadata" %}</a>
           </li>
-
           {% endif %}
         </ul>
+          {% if request.user.is_superuser %}
+          <ul class="navbar-nav ml-auto">
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="false" aria-expanded="false">
+          Admin
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <a class="dropdown-item" href="{% url 'attribute-admin-list' %}">Attributes</a>
+        </div>
+      </li>
+       </ul>
+          {% endif %}
+         
       </div>
     </nav>
     <main role="main">

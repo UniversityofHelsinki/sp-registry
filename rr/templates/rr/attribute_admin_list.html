@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block content %}
+<h1>Attributes</h1>
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">{% trans "Friendly name" %}</th>
+      <th scope="col">{% trans "Attribute ID" %}</th>
+      <th scope="col">{% trans "OID / Name" %}</th>
+      <th scope="col">{% trans "Public" %}</th>
+    </tr>
+  </thead>
+  <tbody>
+{% for object in object_list %}
+    <tr>
+      <th scope="row">{{ object.friendlyname }}</th>
+      <td><a href="{% url 'attribute-view' object.pk %}">{{ object.attributeid }}</a></td>
+      <td>{{ object.name }}</td>
+      <td>{{ object.public }}</td>
+    </tr>
+{% empty %}
+    <tr>
+      <th scope="row">{% trans "No attributes" %}</th>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+{% endfor %}
+  </tbody>
+</table>
+{% endblock %}

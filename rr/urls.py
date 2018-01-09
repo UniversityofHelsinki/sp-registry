@@ -18,7 +18,7 @@ from django.conf.urls import url
 from django.contrib import admin
 from django.contrib.auth.decorators import login_required
 from rr.views.serviceprovider import BasicInformationCreate, BasicInformationUpdate, BasicInformationView, ServiceProviderList
-from rr.views.attribute import attribute_list
+from rr.views.attribute import attribute_list, attribute_admin_list, attribute_view
 from rr.views.certificate import certificate_list
 from rr.views.contact import contact_list
 from rr.views.endpoint import endpoint_list
@@ -28,6 +28,8 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^$', login_required(ServiceProviderList.as_view()), name='serviceprovider-list'),
     url(r'attribute/(?P<pk>[0-9]+)/$', attribute_list, name='attribute-list'),
+    url(r'attribute/list/$', attribute_admin_list, name='attribute-admin-list'),
+    url(r'attribute/view/(?P<pk>[0-9]+)/$', attribute_view, name='attribute-view'),
     url(r'certificate/(?P<pk>[0-9]+)/$', certificate_list, name='certificate-list'),
     url(r'contact/(?P<pk>[0-9]+)/$', contact_list, name='contact-list'),
     url(r'endpoint/(?P<pk>[0-9]+)/$', endpoint_list, name='endpoint-list'),

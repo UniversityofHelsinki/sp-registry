@@ -30,3 +30,11 @@ DATABASES = {
         'HOST': 'localhost',
     }
 }
+
+SAML_LOGIN_URL = 'https://localhost/Shibboleth.sso/?target=https://localhost/login/?next='
+SAML_ATTR_EPPN = 'shib_eppn'
+SAML_ATTR_FIRST_NAME = 'shib_first_name'
+SAML_ATTR_LAST_NAME = 'shib_last_name'
+SAML_ATTR_EMAIL = 'shib_mail'
+
+STATIC_ROOT = '/path/to/rr/static/'

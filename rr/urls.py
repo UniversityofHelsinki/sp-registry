@@ -23,18 +23,21 @@ from rr.views.certificate import certificate_list
 from rr.views.contact import contact_list
 from rr.views.endpoint import endpoint_list
 from rr.views.metadata import metadata
+from rr.views.login import login, logout
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^$', login_required(ServiceProviderList.as_view()), name='serviceprovider-list'),
-    url(r'attribute/(?P<pk>[0-9]+)/$', attribute_list, name='attribute-list'),
-    url(r'attribute/list/$', attribute_admin_list, name='attribute-admin-list'),
-    url(r'attribute/view/(?P<pk>[0-9]+)/$', attribute_view, name='attribute-view'),
-    url(r'certificate/(?P<pk>[0-9]+)/$', certificate_list, name='certificate-list'),
-    url(r'contact/(?P<pk>[0-9]+)/$', contact_list, name='contact-list'),
-    url(r'endpoint/(?P<pk>[0-9]+)/$', endpoint_list, name='endpoint-list'),
-    url(r'metadata/(?P<pk>[0-9]+)/$', metadata, name='metadata-view'),
-    url(r'serviceprovider/add/$', login_required(BasicInformationCreate.as_view()), name='basicinformation-add'),
-    url(r'serviceprovider/(?P<pk>[0-9]+)/$', login_required(BasicInformationView.as_view()), name='basicinformation-view'),
-    url(r'serviceprovider/update/(?P<pk>[0-9]+)/$', login_required(BasicInformationUpdate.as_view()), name='basicinformation-update'),
+    url(r'^login/$', login, name='login'),
+    url(r'^logout/$', logout, name='logout'),
+    url(r'^attribute/(?P<pk>[0-9]+)/$', attribute_list, name='attribute-list'),
+    url(r'^attribute/list/$', attribute_admin_list, name='attribute-admin-list'),
+    url(r'^attribute/view/(?P<pk>[0-9]+)/$', attribute_view, name='attribute-view'),
+    url(r'^certificate/(?P<pk>[0-9]+)/$', certificate_list, name='certificate-list'),
+    url(r'^contact/(?P<pk>[0-9]+)/$', contact_list, name='contact-list'),
+    url(r'^endpoint/(?P<pk>[0-9]+)/$', endpoint_list, name='endpoint-list'),
+    url(r'^metadata/(?P<pk>[0-9]+)/$', metadata, name='metadata-view'),
+    url(r'^serviceprovider/add/$', login_required(BasicInformationCreate.as_view()), name='basicinformation-add'),
+    url(r'^serviceprovider/(?P<pk>[0-9]+)/$', login_required(BasicInformationView.as_view()), name='basicinformation-view'),
+    url(r'^serviceprovider/update/(?P<pk>[0-9]+)/$', login_required(BasicInformationUpdate.as_view()), name='basicinformation-update'),
 ]

@@ -1,24 +1,19 @@
 from django.contrib.auth.models import User
 import re
+from django.conf import settings
 
 
 class ShibbolethAuthModelBackend(object):
     """
-    Model Backend for Shibboleth authentication
+    Backend for Shibboleth authentication
     """
     def authenticate(self, request):
-        """
-        returns user object with user_id
-        creates user if it's not found
-        Keywords:
-            user_id: user to be authenticated
-        """
-        username = request.META.get('shib_eppn', 'None')
-        first_name = request.META.get('shib_first_name', 'None')
-        last_name = request.META.get('shib_last_name', 'None')
-        email = request.META.get('shib_email', 'None')
+        username = request.META.get(settings.SAML_ATTR_EPPN, '')
+        first_name = request.META.get(settings.SAML_ATTR_FIRST_NAME, '')
+        last_name = request.META.get(settings.SAML_ATTR_LAST_NAME, '')
+        email = request.META.get(settings.SAML_ATTR_EMAIL, '')
 
-        if re.match("[^@]+@[^@]+\.[^@]+", username):
+        if username and re.match("[^@]+@[^@]+\.[^@]+", username):
             try:
                 user = User.objects.get(username=username)
             except User.DoesNotExist:

@@ -4,6 +4,9 @@ from rr.models.serviceprovider import ServiceProvider
 
 
 class Contact(models.Model):
+    """
+    Stores a single contact, related to :model:`rr.ServiceProvider`
+    """
     sp = models.ForeignKey(ServiceProvider)
 
     TYPECHOICES = (('administrative', _('Administrative')),

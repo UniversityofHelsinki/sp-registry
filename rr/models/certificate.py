@@ -11,6 +11,9 @@ import pytz
 
 class CertificateManager(models.Manager):
     def add_certificate(self, certificate, sp, signing=None, encryption=None):
+        """
+        Manager for adding a certificate to database.
+        """
         try:
             cert = x509.load_pem_x509_certificate(certificate.encode('utf-8'), default_backend())
         except ValueError:
@@ -47,6 +50,9 @@ class CertificateManager(models.Manager):
 
 
 class Certificate(models.Model):
+    """
+    Stores a single certificate, related to :model:`rr.ServiceProvider`
+    """
     sp = models.ForeignKey(ServiceProvider)
     cn = models.CharField(max_length=255, blank=True, verbose_name=_('cn'))
     issuer = models.CharField(max_length=255, blank=True, verbose_name=_('Issuer cn'))
@@ -61,6 +67,10 @@ class Certificate(models.Model):
 
     objects = CertificateManager()
 
-    def get_certificate(self):
+    def get_certificate_content(self):
+        """
+        Returns the certificate without BEGIN and END lines.
+        """
         cert = x509.load_pem_x509_certificate(self.certificate.encode('utf-8'), default_backend())
-        return cert.public_bytes(Encoding.PEM).decode("utf-8").replace("-----BEGIN CERTIFICATE-----\n","").replace("-----END CERTIFICATE-----\n","")
+        return cert.public_bytes(Encoding.PEM).decode("utf-8").replace(
+            "-----BEGIN CERTIFICATE-----\n", "").replace("-----END CERTIFICATE-----\n", "")

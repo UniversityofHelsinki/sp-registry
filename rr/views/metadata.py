@@ -1,3 +1,7 @@
+"""
+Functions for genereating metadata of service providers
+"""
+
 from rr.models.serviceprovider import ServiceProvider, SPAttribute
 from rr.models.certificate import Certificate
 from rr.models.contact import Contact
@@ -9,6 +13,10 @@ from lxml import etree, objectify
 
 
 def metadata_generator(sp):
+    """
+    Using CamelCase instead of regular underscore attribute names in element tree.
+    Generates metadata for single SP.
+    """
     basicinfo = sp
     certificates = Certificate.objects.filter(sp=sp, end_at=None)
     contacts = Contact.objects.filter(sp=sp, end_at=None)
@@ -78,7 +86,7 @@ def metadata_generator(sp):
                                    nsmap={"ds": 'urn:oasis:names:tc:SAML:2.0:metadata'})
         X509Data = etree.SubElement(KeyInfo, "{urn:oasis:names:tc:SAML:2.0:metadata}X509Data")
         X509Certificate = etree.SubElement(X509Data, "{urn:oasis:names:tc:SAML:2.0:metadata}X509Certificate")
-        X509Certificate.text = certificate.get_certificate()
+        X509Certificate.text = certificate.get_certificate_content()
 
     if basicinfo.name_format_transient:
         NameIDFormat = etree.SubElement(SPSSODescriptor, "NameIDFormat")
@@ -136,6 +144,21 @@ def metadata_generator(sp):
 
 @login_required
 def metadata(request, pk):
+    """
+    Displays a metadata for :model:`rr.ServiceProvider`.
+
+    **Context**
+
+    ``object``
+        An instance of :model:`rr.ServiceProvider`.
+
+    ``metadata``
+        Metadata for a :model:`rr.ServiceProvider`.
+
+    **Template:**
+
+    :template:`rr/metadata.html`
+    """
     try:
         if request.user.is_superuser:
             sp = ServiceProvider.objects.get(pk=pk)

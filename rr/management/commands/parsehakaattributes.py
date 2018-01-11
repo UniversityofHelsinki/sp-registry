@@ -1,3 +1,11 @@
+"""
+Parse a Haka metadata file and print out attribute-filter for it.
+Short term manual hack for IdP 2 as Haka stopped releasing attribute-filter file.
+
+Usage: ./manage.py parsehakaattributes <metadata-file-name>
+Saves output to "attribute-filter-haka.xml_YYYYMMDD"
+"""
+
 from rr.models.attribute import Attribute
 from lxml import etree, objectify
 from django.core.management.base import BaseCommand
@@ -5,6 +13,9 @@ from datetime import date
 
 
 def haka_attribute_parser(filename):
+    """
+    Using CamelCase instead of regular underscore attribute names in element tree.
+    """
     parser = etree.XMLParser(ns_clean=True, remove_comments=True, remove_blank_text=True)
     tree = etree.parse(filename, parser)
     root = tree.getroot()
@@ -54,4 +65,5 @@ class Command(BaseCommand):
             filename = "attribute-filter-haka.xml_" + date.today().strftime("%Y%m%d")
             with open(filename, 'wb') as f:
                 f.write('<?xml version="1.0" encoding="UTF-8"?>\n'.encode('utf-8'))
+                # Hack for correcting namespace definition by removing prefix.
                 f.write(data.replace(b'xmlns:xmlns', b'xmlns'))

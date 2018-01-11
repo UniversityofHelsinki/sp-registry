@@ -1,3 +1,10 @@
+"""
+Command line script for importing attribute filter.
+Import metadata first as this imports attributes only if entityID is found from database.
+
+Usage: ./manage.py importattributefilter <attritube-filter-file-name>
+"""
+
 from rr.models.serviceprovider import ServiceProvider, SPAttribute
 from rr.models.attribute import Attribute
 from lxml import etree, objectify

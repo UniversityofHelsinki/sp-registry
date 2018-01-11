@@ -6,6 +6,20 @@ from rr.forms.serviceprovider import BasicInformationForm
 
 
 class ServiceProviderList(ListView):
+    """
+    Displays a list of :model:`rr.ServiceProvider` which
+    user has access.
+
+
+    **Context**
+
+    ``object_list``
+        List of :model:`rr.ServiceProvider`.
+
+    **Template:**
+
+    :template:`rr/serviceprovider_list.html`
+    """
     model = ServiceProvider
 
     def get_queryset(self):
@@ -16,6 +30,18 @@ class ServiceProviderList(ListView):
 
 
 class BasicInformationView(DetailView):
+    """
+    Displays details for an invidual :model:`rr.ServiceProvider`.
+
+    **Context**
+
+    ``object``
+        An instance of :model:`rr.ServiceProvider`.
+
+    **Template:**
+
+    :template:`rr/serviceprovider_detail.html`
+    """
     model = ServiceProvider
 
     def get_queryset(self):
@@ -26,6 +52,18 @@ class BasicInformationView(DetailView):
 
 
 class BasicInformationCreate(CreateView):
+    """
+    Displays a form for creating a :model:`rr.ServiceProvider`.
+
+    **Context**
+
+    ``form``
+        Form for :model:`rr.ServiceProvider`.
+
+    **Template:**
+
+    :template:`rr/serviceprovider_form.html`
+    """
     model = ServiceProvider
     form_class = BasicInformationForm
     success_url = '#'
@@ -36,6 +74,18 @@ class BasicInformationCreate(CreateView):
 
 
 class BasicInformationUpdate(UpdateView):
+    """
+    Displays a form for updating a :model:`rr.ServiceProvider`.
+
+    **Context**
+
+    ``form``
+        Form for :model:`rr.ServiceProvider`.
+
+    **Template:**
+
+    :template:`rr/serviceprovider_form.html`
+    """
     model = ServiceProvider
     form_class = BasicInformationForm
     success_url = '#'

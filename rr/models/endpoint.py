@@ -4,6 +4,9 @@ from rr.models.serviceprovider import ServiceProvider
 
 
 class Endpoint(models.Model):
+    """
+    Stores a single certificate, related to :model:`rr.ServiceProvider`
+    """
     sp = models.ForeignKey(ServiceProvider)
 
     TYPECHOICES = (('AssertionConsumerService', _('AssertionConsumerService')),

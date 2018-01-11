@@ -14,7 +14,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
 
-from django.conf.urls import url
+from django.conf.urls import url, include
 from django.contrib import admin
 from django.contrib.auth.decorators import login_required
 from rr.views.serviceprovider import BasicInformationCreate, BasicInformationUpdate, BasicInformationView, ServiceProviderList
@@ -26,6 +26,7 @@ from rr.views.metadata import metadata
 from rr.views.login import login, logout
 
 urlpatterns = [
+    url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
     url(r'^admin/', admin.site.urls),
     url(r'^$', login_required(ServiceProviderList.as_view()), name='serviceprovider-list'),
     url(r'^login/$', login, name='login'),

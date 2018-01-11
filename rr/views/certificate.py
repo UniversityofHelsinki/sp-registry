@@ -9,6 +9,28 @@ from django.utils import timezone
 
 @login_required
 def certificate_list(request, pk):
+    """
+    Displays a list of :model:`rr.Certificate` linked to
+    :model:`rr.ServiceProvider`.
+
+    Includes a form for adding :model:`rr.Certificate` to
+    :model:`rr.ServiceProvider`.
+
+    **Context**
+
+    ``object_list``
+        List of :model:`rr.Certificate`.
+
+    ``form``
+        Text form for adding a certificate.
+
+    ``object``
+        An instance of :model:`rr.ServiceProvider`.
+
+    **Template:**
+
+    :template:`rr/certificate.html`
+    """
     try:
         if request.user.is_superuser:
             sp = ServiceProvider.objects.get(pk=pk)

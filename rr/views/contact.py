@@ -9,6 +9,28 @@ from django.utils import timezone
 
 @login_required
 def contact_list(request, pk):
+    """
+    Displays a list of :model:`rr.Contact` linked to
+    :model:`rr.ServiceProvider`.
+
+    Includes a ModelForm for adding :model:`rr.Contact` to
+    :model:`rr.ServiceProvider`.
+
+    **Context**
+
+    ``object_list``
+        List of :model:`rr.Contact`.
+
+    ``form``
+        ModelForm for creating a :model:`rr.Contact`
+
+    ``object``
+        An instance of :model:`rr.ServiceProvider`.
+
+    **Template:**
+
+    :template:`rr/contact.html`
+    """
     try:
         if request.user.is_superuser:
             sp = ServiceProvider.objects.get(pk=pk)

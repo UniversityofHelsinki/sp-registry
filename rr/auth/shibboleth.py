@@ -5,7 +5,8 @@ from django.conf import settings
 
 class ShibbolethAuthModelBackend(object):
     """
-    Backend for Shibboleth authentication
+    Backend for Shibboleth authentication.
+    If Shibboleth EPPN is found, signs user in, creating a new user if nesessary.
     """
     def authenticate(self, request):
         username = request.META.get(settings.SAML_ATTR_EPPN, '')

@@ -15,6 +15,7 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 
 INSTALLED_APPS = [
     'django.contrib.admin',
+    'django.contrib.admindocs',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
@@ -39,7 +40,7 @@ ROOT_URLCONF = 'rr.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': ['templates'],
+        'DIRS': ['rr/templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

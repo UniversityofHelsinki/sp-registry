@@ -6,6 +6,10 @@ from cryptography.hazmat.backends import default_backend
 
 
 class CertificateForm(Form):
+    """
+    Form for importing certificates.
+    Validating the certificate by trying to read it with cryptography library.
+    """
     certificate = CharField(widget=Textarea,
                             help_text=_("Certificate in PEM format, including -----BEGIN CERTIFICATE----- and -----END CERTIFICATE-----"))
     signing = BooleanField(required=False, help_text=_("Use this certificate for signing. If both signing and encryption are left empty, certificate is used for both."))

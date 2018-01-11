@@ -9,6 +9,28 @@ from django.utils import timezone
 
 @login_required
 def endpoint_list(request, pk):
+    """
+    Displays a list of :model:`rr.Endpoint` linked to
+    :model:`rr.ServiceProvider`.
+
+    Includes a ModelForm for adding :model:`rr.Endpoint` to
+    :model:`rr.ServiceProvider`.
+
+    **Context**
+
+    ``object_list``
+        List of :model:`rr.Endpoint`.
+
+    ``form``
+        ModelForm for creating a :model:`rr.Endpoint`
+
+    ``object``
+        An instance of :model:`rr.ServiceProvider`.
+
+    **Template:**
+
+    :template:`rr/endpoint.html`
+    """
     try:
         if request.user.is_superuser:
             sp = ServiceProvider.objects.get(pk=pk)

@@ -22,5 +22,6 @@ class Endpoint(models.Model):
     binding = models.CharField(max_length=60, choices=BINDINGCHOICES, verbose_name=_('Endpoint Binding'))
     url = models.URLField(max_length=255, verbose_name=_('Endpoint URL'))
     index = models.SmallIntegerField(null=True, blank=True, verbose_name=_('Endpoint Index'))
-    created = models.DateTimeField(null=True, blank=True, verbose_name=_('Created at'))
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name=_('Created at'))
+    updated_at = models.DateTimeField(auto_now=True, verbose_name=_('Updated at'))
     end_at = models.DateTimeField(blank=True, null=True, verbose_name=_('Entry end time'))

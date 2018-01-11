@@ -17,5 +17,6 @@ class Contact(models.Model):
     firstname = models.CharField(max_length=50, blank=True, verbose_name=_('First Name'))
     lastname = models.CharField(max_length=50, blank=True, verbose_name=_('Last Name'))
     email = models.EmailField(blank=True, verbose_name=_('E-Mail'))
-    created = models.DateTimeField(null=True, blank=True, verbose_name=_('Created at'))
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name=_('Created at'))
+    updated_at = models.DateTimeField(auto_now=True, verbose_name=_('Updated at'))
     end_at = models.DateTimeField(blank=True, null=True, verbose_name=_('Entry end time'))

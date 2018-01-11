@@ -50,8 +50,7 @@ def contact_list(request, pk):
                                        type=contact_type,
                                        firstname=firstname,
                                        lastname=lastname,
-                                       email=email,
-                                       created=timezone.now())
+                                       email=email)
         else:
             form = ContactForm()
             # For certificate removal, check for the first POST item after csrf

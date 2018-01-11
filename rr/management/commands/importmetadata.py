@@ -95,8 +95,7 @@ def metadata_parser(filename):
                                                                 type=servicetype,
                                                                 binding=binding,
                                                                 url=location,
-                                                                index=index,
-                                                                created=timezone.now())
+                                                                index=index)
                                     except:
                                         print("Could not add " + servicetype + " for " + entityID)
                         if etree.QName(c.tag).localname == "AttributeConsumingService":
@@ -108,7 +107,10 @@ def metadata_parser(filename):
                                         try:
                                             attribute = Attribute.objects.get(friendlyname=friendlyname)
                                             if not SPAttribute.objects.filter(sp=sp, attribute=attribute).exists():
-                                                SPAttribute.objects.create(sp=sp, attribute=attribute, reason="initial dump, please give the real reason", updated=timezone.now())
+                                                SPAttribute.objects.create(sp=sp,
+                                                                           attribute=attribute,
+                                                                           reason="initial dump, please give the real reason",
+                                                                           validated=True)
                                         except Attribute.DoesNotExist:
                                             print("Could not add attribute " + friendlyname + " for " + entityID)
                                 if etree.QName(d.tag).localname == "ServiceName":

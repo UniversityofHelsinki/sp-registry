@@ -31,27 +31,14 @@ class ServiceProvider(models.Model):
     attributes = models.ManyToManyField(Attribute, through='SPAttribute')
     admins = models.ManyToManyField(User, related_name="admins")
 
-    updated = models.DateTimeField(null=True, blank=True, verbose_name=_('Updated at'))
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name=_('Created at'))
+    updated_at = models.DateTimeField(auto_now=True, verbose_name=_('Updated at'))
     end_at = models.DateTimeField(blank=True, null=True, verbose_name=_('Entry end time'))
     updated_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, verbose_name=_('Updated by'))
     validated = models.BooleanField(default=False, verbose_name=_('Validated'))
 
     def __str__(self):
         return self.entity_id
-
-#     def save(self, *args, **kwargs):
-#         if self.pk:
-#             sp = ServiceProvider.objects.get(pk=self.pk)
-#             sp.pk = None
-#             sp.end_at = timezone.now()
-#             sp.save()
-#             sp.admins.set(self.admins.all())
-# #             attributes = SPAttribute.objects.filter(sp=self.sp)
-# #             for attribute in attributes:
-# #                 SPAttribute.objects.create(sp=sp, attribute=attribute.attribute, reason=attribute.reason, update=attribute.updated, validated=attribute.validaded)
-#             # self.pk.updated = timezone.now()
-#
-#         return super(ServiceProvider, self).save(*args, **kwargs)
 
 
 class SPAttribute(models.Model):
@@ -62,6 +49,7 @@ class SPAttribute(models.Model):
     attribute = models.ForeignKey(Attribute)
     sp = models.ForeignKey(ServiceProvider)
     reason = models.CharField(max_length=255, verbose_name=_('Reason for the attribute requisition'))
-    updated = models.DateTimeField(null=True, blank=True, verbose_name=_('Updated at'))
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name=_('Created at'))
+    updated_at = models.DateTimeField(auto_now=True, verbose_name=_('Updated at'))
     end_at = models.DateTimeField(blank=True, null=True, verbose_name=_('Entry end time'))
     validated = models.DateTimeField(null=True, blank=True, verbose_name=_('Validated on'))

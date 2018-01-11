@@ -54,8 +54,7 @@ def attribute_list(request, pk):
                         attribute = Attribute.objects.filter(friendlyname=field.name).first()
                         SPAttribute.objects.create(sp=sp,
                                                    attribute=attribute,
-                                                   reason=data,
-                                                   updated=timezone.now())
+                                                   reason=data)
                     else:
                         if sp_attribute.reason != data:
                             sp_attribute.reason = data

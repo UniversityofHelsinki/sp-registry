@@ -13,6 +13,8 @@ class Attribute(models.Model):
     attributeid = models.CharField(max_length=255, verbose_name=_('Attribute ID'))
     nameformat = models.CharField(max_length=255, verbose_name=_('Attribute NameFormat'))
     public = models.BooleanField(default=True, verbose_name=_('Show in attribute list'))
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name=_('Created at'))
+    updated_at = models.DateTimeField(auto_now=True, verbose_name=_('Updated at'))
 
     def __str__(self):
         return self.friendlyname

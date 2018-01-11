@@ -42,8 +42,7 @@ class CertificateManager(models.Manager):
                         key_size=key_size,
                         certificate=certificate,
                         signing=signing,
-                        encryption=encryption,
-                        created=timezone.now())
+                        encryption=encryption)
         except ValueError:
             return False
         return True
@@ -62,7 +61,8 @@ class Certificate(models.Model):
     certificate = models.TextField(verbose_name=_('Certificate'))
     signing = models.BooleanField(default=False, verbose_name=_('Use for signing'))
     encryption = models.BooleanField(default=False, verbose_name=_('Use for encryption'))
-    created = models.DateTimeField(null=True, blank=True, verbose_name=_('Created at'))
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name=_('Created at'))
+    updated_at = models.DateTimeField(auto_now=True, verbose_name=_('Updated at'))
     end_at = models.DateTimeField(blank=True, null=True, verbose_name=_('Entry end time'))
 
     objects = CertificateManager()

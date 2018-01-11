@@ -3,6 +3,7 @@ from django.views.generic.edit import CreateView, UpdateView
 from django.views.generic.detail import DetailView
 from django.views.generic.list import ListView
 from rr.forms.serviceprovider import BasicInformationForm
+from django.utils import timezone
 
 
 class ServiceProviderList(ListView):
@@ -98,4 +99,10 @@ class BasicInformationUpdate(UpdateView):
 
     def form_valid(self, form):
         form.instance.updated_by = self.request.user
+        sp = ServiceProvider.objects.get(pk=form.instance.pk)
+        admins = sp.admins.all()
+        sp.pk = None
+        sp.end_at = timezone.now()
+        sp.save()
+        sp.admins.set(admins)
         return super().form_valid(form)

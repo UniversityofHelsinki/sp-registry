@@ -19,7 +19,7 @@
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
-
+	  {% if user.is_authenticated %}
       <div class="collapse navbar-collapse" id="nav">
         <ul class="navbar-nav mr-auto">
           <li class="nav-item">
@@ -60,6 +60,7 @@
           {% endif %}
          
       </div>
+      {% endif %}
     </nav>
     <main role="main">
       <div class="jumbotron">

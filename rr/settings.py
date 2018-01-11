@@ -22,6 +22,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'bootstrap4',
+    'behave_django',
     'rr',
 ]
 
@@ -48,6 +49,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'rr.context_processors.saml_login_url',
             ],
         },
     },
@@ -77,6 +79,11 @@ AUTHENTICATION_BACKENDS = (
     'rr.auth.shibboleth.ShibbolethAuthModelBackend',
     'django.contrib.auth.backends.ModelBackend',
 )
+
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+DEFAULT_FROM_EMAIL = 'noreply@example.com'
+
+TEST_SCREENSHOT_DIR = 'test-screenshots/'
 
 LOGIN_URL = '/login/'
 

@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load bootstrap4 %}
+{% block content %}
+<h1>{% trans "University of Helsinki - Service Provider Registry" %}</h1>
+{% if user.is_authenticated %}
+<h3>{% trans "You have already logged in" %}</h3>
+<a href="{% url 'logout' %}"><button type="button" class="btn btn-primary">{% trans "Logout" %}</button></a>
+{% else %}
+  <div class="row">
+    <div class="col-md">
+    	<h4>{% trans "Login using SSO" %}</h4>
+    	<br>
+      <a href="{{ SAML_LOGIN_URL }}{% firstof next '/' %}"><button type="button" class="btn btn-primary">{% trans "Login using SSO" %}</button></a>
+    </div>
+    <div class="col-md">
+		<h4>{% trans "Login using a local account" %}</h4>
+		<form method="post" action="{% url 'login' %}">
+		{% csrf_token %}
+		{% bootstrap_form form %}
+		<button type="submit" class="btn btn-default">{% trans "Submit" %}</button>
+		<input type="hidden" name="next" value="{% firstof next '/' %}" />
+		</form>
+		<br>
+		<p><a href="{% url 'password_reset' %}">{% trans "Lost password? Reset it here. You may use same form to get forgotten username." %}</a></p>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md">
+		<p>{% trans "This site uses cookies to save session information between page changes. By logging in to the site, you are agreeing to our use of cookies." %}</p>
+    </div>
+  </div>
+
+{% endif %}
+{% endblock %}

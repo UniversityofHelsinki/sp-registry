@@ -33,9 +33,9 @@ def endpoint_list(request, pk):
     """
     try:
         if request.user.is_superuser:
-            sp = ServiceProvider.objects.get(pk=pk)
+            sp = ServiceProvider.objects.get(pk=pk, end_at=None)
         else:
-            sp = ServiceProvider.objects.get(pk=pk, admins=request.user)
+            sp = ServiceProvider.objects.get(pk=pk, admins=request.user, end_at=None)
     except ServiceProvider.DoesNotExist:
         raise Http404("Service proviced does not exist")
     if request.method == "POST":
@@ -48,8 +48,7 @@ def endpoint_list(request, pk):
                 Endpoint.objects.create(sp=sp,
                                         type=contact_type,
                                         binding=binding,
-                                        url=url,
-                                        created=timezone.now())
+                                        url=url)
         else:
             form = EndpointForm()
             # For certificate removal, check for the first POST item after csrf

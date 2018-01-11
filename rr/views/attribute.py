@@ -35,9 +35,9 @@ def attribute_list(request, pk):
     """
     try:
         if request.user.is_superuser:
-            sp = ServiceProvider.objects.get(pk=pk)
+            sp = ServiceProvider.objects.get(pk=pk, end_at=None)
         else:
-            sp = ServiceProvider.objects.get(pk=pk, admins=request.user)
+            sp = ServiceProvider.objects.get(pk=pk, admins=request.user, end_at=None)
     except ServiceProvider.DoesNotExist:
         raise Http404(_("Service proviced does not exist"))
     if request.method == "POST":

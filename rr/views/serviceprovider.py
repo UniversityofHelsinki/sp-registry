@@ -25,9 +25,9 @@ class ServiceProviderList(ListView):
 
     def get_queryset(self):
         if self.request.user.is_superuser:
-            return ServiceProvider.objects.all().order_by('entity_id')
+            return ServiceProvider.objects.filter(end_at=None).order_by('entity_id')
         else:
-            return ServiceProvider.objects.filter(admins=self.request.user).order_by('entity_id')
+            return ServiceProvider.objects.filter(admins=self.request.user, end_at=None).order_by('entity_id')
 
 
 class BasicInformationView(DetailView):
@@ -49,7 +49,7 @@ class BasicInformationView(DetailView):
         if self.request.user.is_superuser:
             return ServiceProvider.objects.all().order_by('entity_id')
         else:
-            return ServiceProvider.objects.filter(admins=self.request.user).order_by('entity_id')
+            return ServiceProvider.objects.filter(admins=self.request.user, end_at=None).order_by('entity_id')
 
 
 class BasicInformationCreate(CreateView):
@@ -93,9 +93,9 @@ class BasicInformationUpdate(UpdateView):
 
     def get_queryset(self):
         if self.request.user.is_superuser:
-            return ServiceProvider.objects.all().order_by('entity_id')
+            return ServiceProvider.objects.filter(end_at=None).order_by('entity_id')
         else:
-            return ServiceProvider.objects.filter(admins=self.request.user).order_by('entity_id')
+            return ServiceProvider.objects.filter(admins=self.request.user, end_at=None).order_by('entity_id')
 
     def form_valid(self, form):
         form.instance.updated_by = self.request.user

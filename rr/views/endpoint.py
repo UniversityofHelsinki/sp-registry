@@ -49,6 +49,8 @@ def endpoint_list(request, pk):
                                         type=contact_type,
                                         binding=binding,
                                         url=url)
+                sp.modified = True
+                sp.save()
         else:
             form = EndpointForm()
             # For certificate removal, check for the first POST item after csrf
@@ -58,6 +60,8 @@ def endpoint_list(request, pk):
                 if endpoint.sp == sp:
                     endpoint.end_at = timezone.now()
                     endpoint.save()
+                    sp.modified = True
+                    sp.save()
     else:
         form = EndpointForm()
     endpoints = Endpoint.objects.filter(sp=sp, end_at=None)

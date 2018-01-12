@@ -2,11 +2,31 @@
 {% load i18n %}
 {% block content %}
 <h1>Service Providers</h1>
-<ul>
-{% for provider in object_list %}
-    <li><a href="/serviceprovider/{{ provider.pk }}/">{{ provider.entity_id }}</a></li>
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">{% trans "entityID" %}</th>
+      <th scope="col">{% trans "Name" %}</th>
+      <th scope="col">{% trans "Status" %}</th>
+    </tr>
+  </thead>
+  <tbody>
+  <form action="" method='POST'>
+  {% csrf_token %}
+{% for object in object_list %}
+    <tr>
+      <th scope="row"><a href="/summary/{{ object.pk }}/">{{ object.entity_id  }}</a></th>
+      <td>{{ object.name }}</td>
+      {% if object.validated and not object.modified %}<td class="table-success">{% trans "OK "%}</td>{% else %}<td class="table-warning">{% trans "Modified "%}</td>{% endif %}
+    </tr>
 {% empty %}
-    <li>No providers</li>
+    <tr>
+      <th scope="row">{% trans "You do not have access to any service providers." %}</th>
+      <td></td>
+      <td></td>
+    </tr>
 {% endfor %}
-</ul>
+  </form>
+  </tbody>
+</table>
 {% endblock %}

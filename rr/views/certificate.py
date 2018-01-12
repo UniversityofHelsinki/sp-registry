@@ -47,6 +47,8 @@ def certificate_list(request, pk):
                 encryption = form.cleaned_data['encryption']
                 if Certificate.objects.add_certificate(certificate, sp, signing=signing, encryption=encryption):
                     form = CertificateForm()
+                    sp.modified = True
+                    sp.save()
         else:
             form = CertificateForm()
             # For certificate removal, check for the first POST item after csrf
@@ -56,6 +58,8 @@ def certificate_list(request, pk):
                 if cert.sp == sp:
                     cert.end_at = timezone.now()
                     cert.save()
+                    sp.modified = True
+                    sp.save()
     else:
         form = CertificateForm()
     certificates = Certificate.objects.filter(sp=sp, end_at=None)

@@ -23,7 +23,7 @@ urlpatterns = [
     url(r'^endpoint/(?P<pk>[0-9]+)/$', endpoint_list, name='endpoint-list'),
     url(r'^metadata/(?P<pk>[0-9]+)/$', metadata, name='metadata-view'),
     url(r'^serviceprovider/add/$', login_required(BasicInformationCreate.as_view()), name='basicinformation-add'),
-    url(r'^serviceprovider/(?P<pk>[0-9]+)/$', login_required(BasicInformationView.as_view()), name='basicinformation-view'),
     url(r'^serviceprovider/update/(?P<pk>[0-9]+)/$', login_required(BasicInformationUpdate.as_view()), name='basicinformation-update'),
+    url(r'^summary/(?P<pk>[0-9]+)/$', login_required(BasicInformationView.as_view()), name='summary-view'),
     url('^', include('django.contrib.auth.urls')),
 ]

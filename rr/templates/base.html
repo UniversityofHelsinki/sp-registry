@@ -27,6 +27,9 @@
           </li>
           {% if object %}
           <li class="nav-item">
+            <a class="nav-link" href="{% url 'summary-view' object.pk %}">{% trans "Summary" %}</a>
+          </li>
+          <li class="nav-item">
             <a class="nav-link" href="{% url 'basicinformation-update' object.pk %}">{% trans "Basic Information" %}</a>
           </li>
           <li class="nav-item">

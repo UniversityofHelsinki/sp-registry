@@ -1,34 +1,162 @@
 {% extends "base.html" %}
 {% load i18n %}
 {% load bootstrap4 %}
+{% load attribute_filters %}
 {% block content %}
 <h1>{% trans "Details" %} - <small>{{ object }}</small></h1>
 <h2>{% trans "Basic Information" %}</h2>
-<dl class="row">
-    <dt class="col-sm-3">{% trans "Entity Id" %}</dt>
-    <dd class="col-sm-9">{{ object.entity_id }}</dd>
-    <dt class="col-sm-3">{% trans "Service Name (Finnish)" %}</dt>
-    <dd class="col-sm-9">{{ object.name_fi }}</dd>
-    <dt class="col-sm-3">{% trans "Service Name (English)" %}</dt>
-    <dd class="col-sm-9">{{ object.name_en }}</dd>
-    <dt class="col-sm-3">{% trans "Service Name (Swedish)" %}</dt>
-    <dd class="col-sm-9">{{ object.name_sv }}</dd>
-    <dt class="col-sm-3">{% trans "Service Description (Finnish)" %}</dt>
-    <dd class="col-sm-9">{{ object.description_fi }}</dd>
-    <dt class="col-sm-3">{% trans "Service Description (English)" %}</dt>
-    <dd class="col-sm-9">{{ object.description_en }}</dd>
-    <dt class="col-sm-3">{% trans "Service Description (Swedish)" %}</dt>
-    <dd class="col-sm-9">{{ object.description_sv }}</dd>
-</dl>
-<h2>{% trans "Attributes" %}</h2>
-<dl class="row">
-    <dt class="col-sm-3"><h3>{% trans "Attribute" %}</h3></dt>
-    <dd class="col-sm-9"><h3>{% trans "Reason" %}</h3></dd>
-{% for attribute in object.spattribute_set.all %}
-    <dt class="col-sm-3">{{ attribute.attribute }}</dt>
-    <dd class="col-sm-9">{{ attribute.reason }}</dd>
-{% empty %}
-    <dt>{% trans "No attribute requisitions" %}</dt>
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th scope="col">{% trans "Attribute" %}</th>
+      <th scope="col">{% trans "Value" %}</th>
+      {% if history_object %}<th scope="col">{% trans "Validated value" %}</th>{% endif %}
+    </tr>
+  </thead>
+  <tbody>
+{% for f in object.get_all_fields %}
+{% if history_object %}
+{% if f.value != history_object|get_item:f.name %}
+    <tr class="table-warning">
+{% else %}
+    <tr>
+{% endif %}
+      <td scope="row">{{ f.label }}</td>
+      <td>{{ f.value }}</td>
+      <td>{{ history_object|get_item:f.name }}</td>
+    </tr>
+{% else %}
+    <tr>
+      <td scope="row">{{ f.label }}</td>
+      <td>{{ f.value }}</td>
+    </tr>
+{% endif %}
 {% endfor %}
-</dl>
+  </tbody>
+</table>
+
+<h2>{% trans "Registry administrators" %}</h2>
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th scope="col">{% trans "Name" %}</th>
+      <th scope="col">{% trans "Email" %}</th>
+    </tr>
+  </thead>
+  <tbody>
+{% for o in object.admins.all %}
+    <tr>
+      <td scope="row">{{ o.first_name }} {{ o.last_name }}</td>
+      <td>{{ o.email }}</td>
+    </tr>
+{% endfor %}
+  </tbody>
+</table>
+
+<h2>{% trans "Attribute requisitions" %}</h2>
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th scope="col">{% trans "Attribute" %}</th>
+      <th scope="col">{% trans "Reason" %}</th>
+    </tr>
+  </thead>
+  <tbody>
+{% for a in attributes %}
+{% if a.end_at %}
+	<tr class="table-danger">
+{% elif not a.validated %}
+    <tr class="table-warning">
+{% else %}
+    <tr>
+{% endif %}
+      <td scope="row">{{ a.attribute }}</td>
+      <td>{{ a.reason }}</td>
+    </tr>
+{% endfor %}
+  </tbody>
+</table>
+
+<h2>{% trans "Certificates" %}</h2>
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th scope="col">{% trans "Valid until" %}</th>
+      <th scope="col">{% trans "Valid from" %}</th>
+      <th scope="col">{% trans "Key size" %}</th>
+    </tr>
+  </thead>
+  <tbody>
+{% for a in certificates %}
+{% if a.end_at %}
+	<tr class="table-danger">
+{% elif not a.validated %}
+    <tr class="table-warning">
+{% else %}
+    <tr>
+{% endif %}
+      <td scope="row">{{ a.valid_until }}</td>
+      <td>{{ a.valid_from }}</td>
+      <td>{{ a.key_size }}</td>
+    </tr>
+{% endfor %}
+  </tbody>
+</table>
+
+<h2>{% trans "Contacts" %}</h2>
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th scope="col">{% trans "Type" %}</th>
+      <th scope="col">{% trans "First name" %}</th>
+      <th scope="col">{% trans "Last name" %}</th>
+      <th scope="col">{% trans "Email" %}</th>
+    </tr>
+  </thead>
+  <tbody>
+{% for a in contacts %}
+{% if a.end_at %}
+	<tr class="table-danger">
+{% elif not a.validated %}
+    <tr class="table-warning">
+{% else %}
+    <tr>
+{% endif %}
+      <td scope="row">{{ a.get_type_display }}</td>
+      <td>{{ a.firstname }}</td>
+      <td>{{ a.lastname }}</td>
+      <td>{{ a.email }}</td>
+    </tr>
+{% endfor %}
+  </tbody>
+</table>
+
+<h2>{% trans "SAML endpoints" %}</h2>
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th scope="col">{% trans "Type" %}</th>
+      <th scope="col">{% trans "Binding" %}</th>
+      <th scope="col">{% trans "URL" %}</th>
+      <th scope="col">{% trans "Index" %}</th>
+    </tr>
+  </thead>
+  <tbody>
+{% for a in endpoints %}
+{% if a.end_at %}
+	<tr class="table-danger">
+{% elif not a.validated %}
+    <tr class="table-warning">
+{% else %}
+    <tr>
+{% endif %}
+      <td scope="row">{{ a.get_type_display }}</td>
+      <td>{{ a.get_binding_display }}</td>
+      <td>{{ a.url }}</td>
+      <td>{{ a.index }}</td>
+    </tr>
+{% endfor %}
+  </tbody>  
+</table>
+
 {% endblock %}

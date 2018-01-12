@@ -49,16 +49,22 @@ def attribute_list(request, pk):
                 if sp_attribute and not data:
                     sp_attribute.end_at = timezone.now()
                     sp_attribute.save()
+                    sp.modified = True
+                    sp.save()
                 elif data:
                     if not sp_attribute:
                         attribute = Attribute.objects.filter(friendlyname=field.name).first()
                         SPAttribute.objects.create(sp=sp,
                                                    attribute=attribute,
                                                    reason=data)
+                        sp.modified = True
+                        sp.save()
                     else:
                         if sp_attribute.reason != data:
                             sp_attribute.reason = data
                             sp_attribute.save()
+                            sp.modified = True
+                            sp.save()
         form = AttributeForm(request.POST, sp=sp)
     else:
         form = AttributeForm(sp=sp)

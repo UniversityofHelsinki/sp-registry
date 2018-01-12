@@ -51,6 +51,8 @@ def contact_list(request, pk):
                                        firstname=firstname,
                                        lastname=lastname,
                                        email=email)
+                sp.modified = True
+                sp.save()
         else:
             form = ContactForm()
             # For certificate removal, check for the first POST item after csrf
@@ -60,6 +62,8 @@ def contact_list(request, pk):
                 if contact.sp == sp:
                     contact.end_at = timezone.now()
                     contact.save()
+                    sp.modified = True
+                    sp.save()
     else:
         form = ContactForm()
     contacts = Contact.objects.filter(sp=sp, end_at=None)

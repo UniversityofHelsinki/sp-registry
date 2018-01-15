@@ -1,4 +1,5 @@
 {% load i18n %}
+{% load static %}
 
 <!doctype html>
 <html lang="en">
@@ -11,21 +12,18 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/css/bootstrap.min.css" integrity="sha384-Zug+QiDoJOrZ5t4lssLdxGhVrurbmBWopoEl+M6BdEfwnCJZtKxi1KgxUyJq13dy" crossorigin="anonymous">
 
     <title>{% trans "Shibboleth Resource Registry" %}</title>
+    <link href="{% static "navbar-top-fixed.css" %}" rel="stylesheet">
   </head>
   <body>
   
     <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
-      <a class="navbar-brand" href="#">{% trans "Resource Registry" %}</a>
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+      <a class="navbar-brand" href="{% url 'serviceprovider-list' %}">{% trans "Resource Registry" %}</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
-	  {% if user.is_authenticated %}
       <div class="collapse navbar-collapse" id="nav">
         <ul class="navbar-nav mr-auto">
-          <li class="nav-item">
-            <a class="nav-link" href="{% url 'serviceprovider-list' %}">{% trans "Service Provicers" %}</a>
-          </li>
-          {% if object %}
+{% if object %}
           <li class="nav-item">
             <a class="nav-link" href="{% url 'summary-view' object.pk %}">{% trans "Summary" %}</a>
           </li>
@@ -50,31 +48,33 @@
           <li class="nav-item">
             <a class="nav-link" href="{% url 'metadata-view' object.pk %}">{% trans "View Metadata" %}</a>
           </li>
-          {% endif %}
+{% endif %}
         </ul>
-          {% if request.user.is_superuser %}
-          <ul class="navbar-nav ml-auto">
-      <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="false" aria-expanded="false">
-          Admin
-        </a>
-        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-          <a class="dropdown-item" href="{% url 'attribute-admin-list' %}">Attributes</a>
-        </div>
-      </li>
-       </ul>
-          {% endif %}
-         
+         <ul class="navbar-nav ml-auto">
+{% if user.is_authenticated %}
+           <li class="nav-item dropdown">
+             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="false" aria-expanded="false">
+               {{ request.user.first_name }} {{ request.user.last_name }}
+             </a>
+             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+{% if request.user.is_superuser %}
+               <a class="dropdown-item" href="{% url 'attribute-admin-list' %}">{% trans "Attributes" %}</a>
+               <a class="dropdown-item" href="/admin_django/">{% trans "Admin view" %}</a>
+{% endif %}
+               <a class="dropdown-item" href="/logout/">{% trans "Logout" %}</a>
+             </div>
+           </li>
+{% else %}
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'login' %}">{% trans "Login" %}</a>
+          </li>
+{% endif %}
+         </ul>
       </div>
-      {% endif %}
     </nav>
-    <main role="main">
-      <div class="jumbotron">
-        <div class="container">
+    <main role="main" class="container">
 	{% block content %}
 	{% endblock %}
-	    </div>
-	  </div>
     </main>
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->

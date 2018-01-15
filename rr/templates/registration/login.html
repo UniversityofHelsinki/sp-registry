@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load i18n %}
+{% load static %}
 {% load bootstrap4 %}
 {% block content %}
 <h1>{% trans "University of Helsinki - Service Provider Registry" %}</h1>
@@ -11,7 +12,9 @@
     <div class="col-md">
     	<h4>{% trans "Login using SSO" %}</h4>
     	<br>
-      <a href="{{ SAML_LOGIN_URL }}{% firstof next '/' %}"><button type="button" class="btn btn-primary">{% trans "Login using SSO" %}</button></a>
+    	<div class="text-center">
+    	<a href="{{ SAML_LOGIN_URL }}{% firstof next '/' %}"><img src="{% static "login-hy-idp.gif" %}" alt="SSO Login"/></a>
+    	</div>
     </div>
     <div class="col-md">
 		<h4>{% trans "Login using a local account" %}</h4>

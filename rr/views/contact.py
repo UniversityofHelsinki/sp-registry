@@ -38,6 +38,7 @@ def contact_list(request, pk):
             sp = ServiceProvider.objects.get(pk=pk, admins=request.user, end_at=None)
     except ServiceProvider.DoesNotExist:
         raise Http404("Service proviced does not exist")
+    form = ContactForm()
     if request.method == "POST":
         if "add_contact" in request.POST:
             form = ContactForm(request.POST)
@@ -53,19 +54,15 @@ def contact_list(request, pk):
                                        email=email)
                 sp.modified = True
                 sp.save()
-        else:
-            form = ContactForm()
-            # For contact removal, check for the first POST item after csrf
-            if (list(request.POST.dict().values())[1]) == "Remove":
-                contact_id = list(request.POST.dict().keys())[1]
-                contact = Contact.objects.get(pk=contact_id)
-                if contact.sp == sp:
-                    contact.end_at = timezone.now()
-                    contact.save()
-                    sp.modified = True
-                    sp.save()
-    else:
-        form = ContactForm()
+        elif "remove_contact" in request.POST:
+            for key, value in request.POST.dict().items():
+                if value == "on":
+                    contact = Contact.objects.get(pk=key)
+                    if contact.sp == sp:
+                        contact.end_at = timezone.now()
+                        contact.save()
+                        sp.modified = True
+                        sp.save()
     contacts = Contact.objects.filter(sp=sp, end_at=None)
     return render(request, "rr/contact.html", {'object_list': contacts,
                                                'form': form,

@@ -37,7 +37,7 @@ class KeystoreManager(models.Manager):
 
     def activate_key(self, user, key):
         """
-        Add permissions to user if key matches
+        Add user to SP admins if key matches
         """
         try:
             keystore = self.get(activation_key=key)

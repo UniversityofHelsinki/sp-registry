@@ -4,7 +4,9 @@
 {% block content %}
 <h1>{% trans "Admins" %} - <small>{{ object }}</small></h1>
 <h2>{% trans "List of admins" %}</h2>
+{% if object.admins.all %}
 <form action="" method='POST'>
+{% csrf_token %}
 <table class="table">
   <thead>
     <tr>
@@ -15,30 +17,23 @@
     </tr>
   </thead>
   <tbody>
-  {% csrf_token %}
 {% for admin in object.admins.all %}
     <tr>
       <td>{{ admin.first_name }}</td>
       <td>{{ admin.last_name }}</td>
       <td>{{ admin.email }}</td>
-      <td><div class="checkbox"><input type="checkbox" name="{{ admin.pk }}" class="" id="id_signing" /></div></td>
-    </tr>
-{% empty %}
-    <tr>
-      <th scope="row">{% trans "No admins" %}</th>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
+      <td><div class="checkbox"><input type="checkbox" name="{{ admin.pk }}" class="" id="id_admin" /></div></td>
     </tr>
 {% endfor %}
   </form>
   </tbody>
 </table>
 <input class="btn btn-danger" type="submit" name="remove_admin" value="{% trans "Remove selected" %}" />
-<br>
-<br>
+{% else %}
+<p>{% trans "No admins" %}</p>
+{% endif %}
 <h2>{% trans "List of invites" %}</h2>
+{% if object_list %}
 <form action="" method='POST'>
 <table class="table">
   <thead>
@@ -56,23 +51,17 @@
       <td>{{ invite.email }}</td>
       <td>{{ invite.valid_until|date:'j.n.Y' }}</td>
       <td>{{ invite.creator.first_name }} {{ invite.creator.last_name }}</td>
-      <td><div class="checkbox"><input type="checkbox" name="{{ invite.pk }}" class="" id="id_signing" /></div></td>
-    </tr>
-{% empty %}
-    <tr>
-      <th scope="row">{% trans "No invites" %}</th>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
+      <td><div class="checkbox"><input type="checkbox" name="{{ invite.pk }}" class="" id="id_invite" /></div></td>
     </tr>
 {% endfor %}
   </form>
   </tbody>
 </table>
 <input class="btn btn-danger" type="submit" name="remove_invite" value="{% trans "Remove selected" %}" />
-<br>
-<br>
+{% else %}
+<p>{% trans "No invites" %}</p>
+{% endif %}
+{% if form %}
 <h2>{% trans "Add admin" %}</h2>
 <form action="" method="post" class="form">
     {% csrf_token %}
@@ -81,4 +70,5 @@
         <button type="submit" name="add_invite" class="btn btn-primary">{% trans "Send invitations" %}</button>
     {% endbuttons %}
 </form>
+{% endif %}
 {% endblock %}

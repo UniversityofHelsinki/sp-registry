@@ -4,6 +4,9 @@
 {% block content %}
 <h1>{% trans "Contacts" %} - <small>{{ object }}</small></h1>
 <h2>{% trans "List of contacts" %}</h2>
+{% if object_list %}
+<form action="" method='POST'>
+{% csrf_token %}
 <table class="table">
   <thead>
     <tr>
@@ -15,28 +18,23 @@
     </tr>
   </thead>
   <tbody>
-  <form action="" method='POST'>
-  {% csrf_token %}
 {% for contact in object_list %}
     <tr>
       <th scope="row">{{ contact.get_type_display }}</th>
       <td>{{ contact.firstname }}</td>
       <td>{{ contact.lastname }}</td>
       <td>{{ contact.email }}</td>
-      <td><input class="btn btn-danger" type="submit" name="{{ contact.pk }}" value="Remove" /></td>
-    </tr>
-{% empty %}
-    <tr>
-      <th scope="row">{% trans "No contacts" %}</th>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
+      <td><div class="checkbox"><input type="checkbox" name="{{ contact.pk }}" class="" id="id_admin" /></div></td>
     </tr>
 {% endfor %}
   </form>
   </tbody>
 </table>
+<input class="btn btn-danger" type="submit" name="remove_contact" value="{% trans "Remove selected" %}" />
+{% else %}
+<p>{% trans "No contacts" %}</p>
+{% endif %}
+{% if form %}
 <h2>{% trans "Add contact" %}</h2>
 <form action="" method="post" class="form">
     {% csrf_token %}
@@ -45,4 +43,5 @@
         <button type="submit" name="add_contact" class="btn btn-primary">{% trans "Submit" %}</button>
     {% endbuttons %}
 </form>
+{% endif %}
 {% endblock %}

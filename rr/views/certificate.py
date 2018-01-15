@@ -38,6 +38,7 @@ def certificate_list(request, pk):
             sp = ServiceProvider.objects.get(pk=pk, admins=request.user, end_at=None)
     except ServiceProvider.DoesNotExist:
         raise Http404("Service proviced does not exist")
+    form = CertificateForm()
     if request.method == "POST":
         if "add_cert" in request.POST:
             form = CertificateForm(request.POST)
@@ -49,19 +50,15 @@ def certificate_list(request, pk):
                     form = CertificateForm()
                     sp.modified = True
                     sp.save()
-        else:
-            form = CertificateForm()
-            # For certificate removal, check for the first POST item after csrf
-            if (list(request.POST.dict().values())[1]) == "Remove":
-                cert_id = list(request.POST.dict().keys())[1]
-                cert = Certificate.objects.get(pk=cert_id)
-                if cert.sp == sp:
-                    cert.end_at = timezone.now()
-                    cert.save()
-                    sp.modified = True
-                    sp.save()
-    else:
-        form = CertificateForm()
+        elif "remove_certificate" in request.POST:
+            for key, value in request.POST.dict().items():
+                if value == "on":
+                    cert = Certificate.objects.get(pk=key)
+                    if cert.sp == sp:
+                        cert.end_at = timezone.now()
+                        cert.save()
+                        sp.modified = True
+                        sp.save()
     certificates = Certificate.objects.filter(sp=sp, end_at=None)
     return render(request, "rr/certificate.html", {'object_list': certificates,
                                                    'form': form,

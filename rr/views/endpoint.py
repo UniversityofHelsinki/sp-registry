@@ -38,6 +38,7 @@ def endpoint_list(request, pk):
             sp = ServiceProvider.objects.get(pk=pk, admins=request.user, end_at=None)
     except ServiceProvider.DoesNotExist:
         raise Http404("Service proviced does not exist")
+    form = EndpointForm()
     if request.method == "POST":
         if "add_endpoint" in request.POST:
             form = EndpointForm(request.POST)
@@ -51,19 +52,15 @@ def endpoint_list(request, pk):
                                         url=url)
                 sp.modified = True
                 sp.save()
-        else:
-            form = EndpointForm()
-            # For endpoint removal, check for the first POST item after csrf
-            if (list(request.POST.dict().values())[1]) == "Remove":
-                endpoint_id = list(request.POST.dict().keys())[1]
-                endpoint = Endpoint.objects.get(pk=endpoint_id)
-                if endpoint.sp == sp:
-                    endpoint.end_at = timezone.now()
-                    endpoint.save()
-                    sp.modified = True
-                    sp.save()
-    else:
-        form = EndpointForm()
+        elif "remove_endpoint" in request.POST:
+            for key, value in request.POST.dict().items():
+                if value == "on":
+                    endpoint = Endpoint.objects.get(pk=key)
+                    if endpoint.sp == sp:
+                        endpoint.end_at = timezone.now()
+                        endpoint.save()
+                        sp.modified = True
+                        sp.save()
     endpoints = Endpoint.objects.filter(sp=sp, end_at=None)
     return render(request, "rr/endpoint.html", {'object_list': endpoints,
                                                 'form': form,

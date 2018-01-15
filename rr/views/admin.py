@@ -13,11 +13,8 @@ from django.contrib.auth.models import User
 @login_required
 def admin_list(request, pk):
     """
-    Displays a list of :model:`auth.User` linked to
-    :model:`rr.ServiceProvider`.
-
-    Includes a ModelForm for adding :model:`rr.Contact` to
-    :model:`rr.ServiceProvider`.
+    Displays a lists of :model:`auth.User` and :model:`rr.Keystore`
+    linked to :model:`rr.ServiceProvider`.
 
     **Context**
 
@@ -41,6 +38,7 @@ def admin_list(request, pk):
             sp = ServiceProvider.objects.get(pk=pk, admins=request.user, end_at=None)
     except ServiceProvider.DoesNotExist:
         raise Http404("Service provider does not exist")
+    form = AdminForm()
     if request.method == "POST":
         if "add_invite" in request.POST:
             form = AdminForm(request.POST)
@@ -48,22 +46,16 @@ def admin_list(request, pk):
                 email = form.cleaned_data['email']
                 Keystore.objects.create_key(sp=sp, creator=request.user, email=email)
         elif "remove_invite" in request.POST:
-            form = AdminForm()
             for key, value in request.POST.dict().items():
                 if value == "on":
                     invite = Keystore.objects.get(pk=key)
                     if invite.sp == sp:
                         invite.delete()
         elif "remove_admin" in request.POST:
-            form = AdminForm()
             for key, value in request.POST.dict().items():
                 if value == "on":
                     admin = User.objects.get(pk=key)
                     sp.admins.remove(admin)
-        else:
-            form = AdminForm()
-    else:
-        form = AdminForm()
     invites = Keystore.objects.filter(sp=sp)
     return render(request, "rr/admin.html", {'object_list': invites,
                                              'form': form,
@@ -73,9 +65,10 @@ def admin_list(request, pk):
 @login_required
 def activate_key(request, invite_key=""):
     """
-    Add group permission if activation key matches
-    Keyword arguments:
-       activation_key: key hash
+    Activates an :model:`rr.Keystore' adding
+    :model:`auth.User` to :model:`rr.ServiceProvider`.
+
+    Redirects to summary-view.
     """
 
     sp = Keystore.objects.activate_key(user=request.user,

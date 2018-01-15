@@ -4,6 +4,9 @@
 {% block content %}
 <h1>{% trans "Certificates" %} - <small>{{ object }}</small></h1>
 <h2>{% trans "List of certificates" %}</h2>
+{% if object_list %}
+<form action="" method='POST'>
+{% csrf_token %}
 <table class="table">
   <thead>
     <tr>
@@ -15,30 +18,24 @@
     </tr>
   </thead>
   <tbody>
-  <form action="" method='POST'>
-  {% csrf_token %}
 {% for certificate in object_list %}
     <tr>
       <th scope="row">{{ certificate.cn }}</th>
       <td>{{ certificate.valid_until }}</td>
       <td>{{ certificate.valid_from }}</td>
       <td>{{ certificate.key_size }}</td>
-      <td><input class="btn btn-danger" type="submit" name="{{ certificate.pk }}" value="Remove" /></td>
-    </tr>
-{% empty %}
-    <tr>
-      <th scope="row">{% trans "No certificates" %}</th>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
+      <td><div class="checkbox"><input type="checkbox" name="{{ certificate.pk }}" class="" id="id_admin" /></div></td>
     </tr>
 {% endfor %}
   </form>
   </tbody>
 </table>
-<h2>{% trans "Add certificate" %}</h2>
+<input class="btn btn-danger" type="submit" name="remove_certificate" value="{% trans "Remove selected" %}" />
+{% else %}
+<p>{% trans "No certificates" %}</p>
+{% endif %}
 {% if form %}
+<h2>{% trans "Add certificate" %}</h2>
 <form action="" method="post" class="form">
     {% csrf_token %}
     {% bootstrap_form form layout='horizontal' %}

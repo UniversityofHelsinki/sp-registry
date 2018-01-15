@@ -37,7 +37,8 @@ def attributefilter_parser(filename):
                                 if not SPAttribute.objects.filter(sp=sp, attribute=attribute).exists():
                                     SPAttribute.objects.create(sp=sp,
                                                                attribute=attribute,
-                                                               reason="initial dump, please give the real reason")
+                                                               reason="initial dump, please give the real reason",
+                                                               validated=timezone.now())
                             except Attribute.DoesNotExist:
                                 print("Could not add attribute " + attribute_name + " for " + entityID)
 

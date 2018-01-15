@@ -80,8 +80,6 @@ AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
 )
 
-TEST_SCREENSHOT_DIR = 'test-screenshots/'
-
 LOGIN_URL = '/login/'
 
 # Internationalization

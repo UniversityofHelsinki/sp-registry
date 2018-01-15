@@ -10,7 +10,7 @@ class ServiceProvider(models.Model):
     :model:`rr.Attribute` through :model:`rr.SPAttribute`
     """
     entity_id = models.CharField(max_length=255, verbose_name=_('Entity Id'))
-    name_fi = models.CharField(max_length=255, verbose_name=_('Service Name (Finnish)'))
+    name_fi = models.CharField(max_length=255, blank=True, verbose_name=_('Service Name (Finnish)'))
     name_en = models.CharField(max_length=255, blank=True, verbose_name=_('Service Name (English)'))
     name_sv = models.CharField(max_length=255, blank=True, verbose_name=_('Service Name (Swedish)'))
     description_fi = models.CharField(max_length=255, blank=True, verbose_name=_('Service Description (Finnish)'))

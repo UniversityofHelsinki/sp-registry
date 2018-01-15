@@ -26,7 +26,7 @@ def metadata_parser(filename):
             try:
                 sp = ServiceProvider.objects.get(entity_id=entityID, end_at=None)
             except ServiceProvider.DoesNotExist:
-                sp = ServiceProvider.objects.create(entity_id=entityID, name_fi=entityID, validated=True)
+                sp = ServiceProvider.objects.create(entity_id=entityID, name_fi=entityID, validated=True, modified=False)
             for b in a:
                 if etree.QName(b.tag).localname == "SPSSODescriptor":
                     AuthnRequestsSigned = b.get("AuthnRequestsSigned")
@@ -74,7 +74,10 @@ def metadata_parser(filename):
                                     certificate = certificate + "\n-----END CERTIFICATE-----\n"
                                 certificate = "-----BEGIN CERTIFICATE-----\n" + certificate
                                 if not Certificate.objects.filter(certificate=certificate, sp=sp, signing=signing, encryption=encryption):
-                                    if not Certificate.objects.add_certificate(certificate=certificate, sp=sp, signing=signing, encryption=encryption):
+                                    if not Certificate.objects.add_certificate(certificate=certificate,
+                                                                               sp=sp,
+                                                                               signing=signing,
+                                                                               encryption=encryption):
                                         print("Could not load certificate for " + entityID)
                         if etree.QName(c.tag).localname == "NameIDFormat":
                             if c.text is "urn:oasis:names:tc:SAML:2.0:nameid-format:transient":
@@ -94,7 +97,8 @@ def metadata_parser(filename):
                                                                 type=servicetype,
                                                                 binding=binding,
                                                                 url=location,
-                                                                index=index)
+                                                                index=index,
+                                                                validated=timezone.now())
                                     except:
                                         print("Could not add " + servicetype + " for " + entityID)
                         if etree.QName(c.tag).localname == "AttributeConsumingService":
@@ -109,7 +113,7 @@ def metadata_parser(filename):
                                                 SPAttribute.objects.create(sp=sp,
                                                                            attribute=attribute,
                                                                            reason="initial dump, please give the real reason",
-                                                                           validated=True)
+                                                                           validated=timezone.now())
                                         except Attribute.DoesNotExist:
                                             print("Could not add attribute " + friendlyname + " for " + entityID)
                                 if etree.QName(d.tag).localname == "ServiceName":
@@ -128,7 +132,7 @@ def metadata_parser(filename):
                                         sp.description_sv = d.text
                 if etree.QName(b.tag).localname == "ContactPerson":
                     contacttype = b.get("contactType")
-                    if contacttype == "techincal" or contacttype == "administrative" or contacttype == "support":
+                    if contacttype == "technical" or contacttype == "administrative" or contacttype == "support":
                         firstname = ""
                         lastname = ""
                         email = ""
@@ -139,8 +143,13 @@ def metadata_parser(filename):
                                 lastname = c.text
                             if etree.QName(c.tag).localname == "EmailAddress":
                                 email = c.text
-                        if not Contact.objects.filter(sp=sp, type=contacttype, firstname=firstname, lastname=lastname, email=email).exists():
-                            Contact.objects.create(sp=sp, type=contacttype, firstname=firstname, lastname=lastname, email=email)
+                        if not Contact.objects.filter(sp=sp, type=contacttype, firstname=firstname, lastname=lastname, email=email).exists() and email:
+                            Contact.objects.create(sp=sp,
+                                                   type=contacttype,
+                                                   firstname=firstname,
+                                                   lastname=lastname,
+                                                   email=email,
+                                                   validated=timezone.now())
             sp.save()
 
 

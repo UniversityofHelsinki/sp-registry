@@ -55,7 +55,7 @@ def contact_list(request, pk):
                 sp.save()
         else:
             form = ContactForm()
-            # For certificate removal, check for the first POST item after csrf
+            # For contact removal, check for the first POST item after csrf
             if (list(request.POST.dict().values())[1]) == "Remove":
                 contact_id = list(request.POST.dict().keys())[1]
                 contact = Contact.objects.get(pk=contact_id)

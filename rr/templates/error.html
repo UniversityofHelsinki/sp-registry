@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block content %}
+   <h1>{% trans "An error occurred" %}</h1>
+   {% if error_message %}
+     <p>Error: {{ error_message }}</p>
+   {% endif %}
+   <p><a href="/">Return to front page.</a></p>
+{% endblock %}

@@ -27,7 +27,6 @@ def metadata_parser(filename):
                 sp = ServiceProvider.objects.get(entity_id=entityID, end_at=None)
             except ServiceProvider.DoesNotExist:
                 sp = ServiceProvider.objects.create(entity_id=entityID, name_fi=entityID, validated=True)
-            sp.admins.add(user)
             for b in a:
                 if etree.QName(b.tag).localname == "SPSSODescriptor":
                     AuthnRequestsSigned = b.get("AuthnRequestsSigned")

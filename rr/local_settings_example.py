@@ -30,6 +30,8 @@ DATABASES = {
         'HOST': 'localhost',
     }
 }
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+DEFAULT_FROM_EMAIL = 'noreply@example.com'
 
 SAML_LOGIN_URL = 'https://localhost/Shibboleth.sso/?target=https://localhost/login/?next='
 SAML_ATTR_EPPN = 'shib_eppn'

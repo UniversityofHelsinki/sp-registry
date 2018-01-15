@@ -58,8 +58,8 @@ class BasicInformationView(DetailView):
     def get_context_data(self, **kwargs):
         context = super(BasicInformationView, self).get_context_data(**kwargs)
         sp = context['object']
-        if not context['object'].validated:
-            history = ServiceProvider.objects.filter(history=sp.pk, validated=True).last()
+        history = ServiceProvider.objects.filter(history=sp.pk, validated=True).last()
+        if not context['object'].validated and history:
             context['attributes'] = SPAttribute.objects.filter(Q(sp=sp, end_at__gte=history.created_at) | Q(sp=sp, end_at=None))
             context['certificates'] = Certificate.objects.filter(Q(sp=sp, end_at__gte=history.created_at) | Q(sp=sp, end_at=None))
             context['contacts'] = Contact.objects.filter(Q(sp=sp, end_at__gte=history.created_at) | Q(sp=sp, end_at=None))

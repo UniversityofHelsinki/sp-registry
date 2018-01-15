@@ -45,6 +45,9 @@
             <a class="nav-link" href="{% url 'contact-list' object.pk %}">{% trans "Contacts" %}</a>
           </li>
           <li class="nav-item">
+            <a class="nav-link" href="{% url 'admin-list' object.pk %}">{% trans "Admins" %}</a>
+          </li>
+          <li class="nav-item">
             <a class="nav-link" href="{% url 'metadata-view' object.pk %}">{% trans "View Metadata" %}</a>
           </li>
           {% endif %}

@@ -80,9 +80,6 @@ AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
 )
 
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-DEFAULT_FROM_EMAIL = 'noreply@example.com'
-
 TEST_SCREENSHOT_DIR = 'test-screenshots/'
 
 LOGIN_URL = '/login/'

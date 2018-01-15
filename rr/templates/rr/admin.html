@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load bootstrap4 %}
+{% block content %}
+<h1>{% trans "Admins" %} - <small>{{ object }}</small></h1>
+<h2>{% trans "List of admins" %}</h2>
+<form action="" method='POST'>
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">{% trans "First name" %}</th>
+      <th scope="col">{% trans "Last name" %}</th>
+      <th scope="col">{% trans "E-Mail" %}</th>
+      <th scope="col">{% trans "Remove" %}</th>
+    </tr>
+  </thead>
+  <tbody>
+  {% csrf_token %}
+{% for admin in object.admins.all %}
+    <tr>
+      <td>{{ admin.first_name }}</td>
+      <td>{{ admin.last_name }}</td>
+      <td>{{ admin.email }}</td>
+      <td><div class="checkbox"><input type="checkbox" name="{{ admin.pk }}" class="" id="id_signing" /></div></td>
+    </tr>
+{% empty %}
+    <tr>
+      <th scope="row">{% trans "No admins" %}</th>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+{% endfor %}
+  </form>
+  </tbody>
+</table>
+<input class="btn btn-danger" type="submit" name="remove_admin" value="{% trans "Remove selected" %}" />
+<br>
+<br>
+<h2>{% trans "List of invites" %}</h2>
+<form action="" method='POST'>
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">{% trans "E-Mail" %}</th>
+      <th scope="col">{% trans "Valid until" %}</th>
+      <th scope="col">{% trans "Creator" %}</th>
+      <th scope="col">{% trans "Remove" %}</th>
+    </tr>
+  </thead>
+  <tbody>
+  {% csrf_token %}
+{% for invite in object_list %}
+    <tr>
+      <td>{{ invite.email }}</td>
+      <td>{{ invite.valid_until|date:'j.n.Y' }}</td>
+      <td>{{ invite.creator.first_name }} {{ invite.creator.last_name }}</td>
+      <td><div class="checkbox"><input type="checkbox" name="{{ invite.pk }}" class="" id="id_signing" /></div></td>
+    </tr>
+{% empty %}
+    <tr>
+      <th scope="row">{% trans "No invites" %}</th>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+{% endfor %}
+  </form>
+  </tbody>
+</table>
+<input class="btn btn-danger" type="submit" name="remove_invite" value="{% trans "Remove selected" %}" />
+<br>
+<br>
+<h2>{% trans "Add admin" %}</h2>
+<form action="" method="post" class="form">
+    {% csrf_token %}
+    {% bootstrap_form form layout='horizontal' %}
+    {% buttons %}
+        <button type="submit" name="add_invite" class="btn btn-primary">{% trans "Send invitations" %}</button>
+    {% endbuttons %}
+</form>
+{% endblock %}

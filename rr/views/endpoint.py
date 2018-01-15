@@ -53,7 +53,7 @@ def endpoint_list(request, pk):
                 sp.save()
         else:
             form = EndpointForm()
-            # For certificate removal, check for the first POST item after csrf
+            # For endpoint removal, check for the first POST item after csrf
             if (list(request.POST.dict().values())[1]) == "Remove":
                 endpoint_id = list(request.POST.dict().keys())[1]
                 endpoint = Endpoint.objects.get(pk=endpoint_id)

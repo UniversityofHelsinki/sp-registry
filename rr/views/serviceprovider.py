@@ -8,6 +8,8 @@ from rr.models.certificate import Certificate
 from rr.models.contact import Contact
 from rr.models.endpoint import Endpoint
 from django.db.models import Q
+from django.http.response import HttpResponseRedirect
+from django.urls.base import reverse
 
 
 class ServiceProviderList(ListView):
@@ -92,9 +94,16 @@ class BasicInformationCreate(CreateView):
     form_class = BasicInformationForm
     success_url = '#'
 
+    def get_form_kwargs(self):
+        kwargs = super(BasicInformationCreate, self).get_form_kwargs()
+        kwargs.update({'request': self.request})
+        return kwargs
+
     def form_valid(self, form):
         form.instance.updated_by = self.request.user
-        return super().form_valid(form)
+        super().form_valid(form)
+        self.object.admins.add(self.request.user)
+        return HttpResponseRedirect(reverse('summary-view', args=(self.object.pk,)))
 
 
 class BasicInformationUpdate(UpdateView):
@@ -120,17 +129,27 @@ class BasicInformationUpdate(UpdateView):
         else:
             return ServiceProvider.objects.filter(admins=self.request.user, end_at=None).order_by('entity_id')
 
+    def get_form_kwargs(self):
+        kwargs = super(BasicInformationUpdate, self).get_form_kwargs()
+        kwargs.update({'request': self.request})
+        return kwargs
+
     def form_valid(self, form):
-        form.instance.updated_by = self.request.user
-        redirect_url = super().form_valid(form)
-        sp = ServiceProvider.objects.get(pk=form.instance.pk)
-        sp.validated = False
-        sp.modified = True
-        sp.save()
-        admins = sp.admins.all()
-        sp.history = sp.pk
-        sp.pk = None
-        sp.end_at = timezone.now()
-        sp.save()
-        sp.admins.set(admins)
-        return redirect_url
+        if form.has_changed():
+            sp = ServiceProvider.objects.get(pk=form.instance.pk)
+            # create a history copy if modifying validated SP
+            if sp.validated:
+                admins = sp.admins.all()
+                sp.history = sp.pk
+                sp.pk = None
+                sp.end_at = timezone.now()
+                sp.save()
+                sp.admins.set(admins)
+            redirect_url = super().form_valid(form)
+            self.object.updated_by = self.request.user
+            self.object.validated = False
+            self.object.modified = True
+            self.object.save()
+            return redirect_url
+        else:
+            return super().form_invalid(form)

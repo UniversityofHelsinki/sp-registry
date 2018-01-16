@@ -54,7 +54,7 @@
 {% if user.is_authenticated %}
            <li class="nav-item dropdown">
              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="false" aria-expanded="false">
-               {{ request.user.first_name }} {{ request.user.last_name }}
+               {% if request.user.first_name and request.user.last_name %}{{ request.user.first_name }} {{ request.user.last_name }}{% else %}{{ request.user.username }}{% endif %}
              </a>
              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
 {% if request.user.is_superuser %}

@@ -32,7 +32,7 @@ class ServiceProvider(models.Model):
     admins = models.ManyToManyField(User, related_name="admins")
 
     modified = models.BooleanField(default=True, verbose_name=_('Modified'))
-    history = models.IntegerField(null=True, verbose_name=_('History key'))
+    history = models.IntegerField(blank=True, null=True, verbose_name=_('History key'))
     created_at = models.DateTimeField(auto_now_add=True, verbose_name=_('Created at'))
     updated_at = models.DateTimeField(auto_now=True, verbose_name=_('Updated at'))
     end_at = models.DateTimeField(blank=True, null=True, verbose_name=_('Entry end time'))
@@ -74,7 +74,7 @@ class ServiceProvider(models.Model):
                 except AttributeError:
                     value = None
             # only display fields with values and skip some fields entirely
-            if f.editable and f.name not in ('id', 'end_at', 'history', 'validated'):
+            if f.editable and f.name not in ('id', 'end_at', 'history', 'validated', 'modified'):
                 fields.append(
                   {
                    'label': f.verbose_name,

@@ -18,8 +18,9 @@ from django.core.management.base import BaseCommand
 def metadata_parser(filename):
     parser = etree.XMLParser(ns_clean=True, remove_comments=True, remove_blank_text=True)
     tree = etree.parse(filename, parser)
+    if not tree:
+        print("File does not exist: " + filename)
     root = tree.getroot()
-    user = User.objects.filter(pk=1).first()
     for a in root:
         entityID = a.get("entityID")
         if entityID:
@@ -66,13 +67,11 @@ def metadata_parser(filename):
                                 signing = True
                             if key_use == "encryption":
                                 encryption = True
+                            if not signing and not encryption:
+                                signing = True
+                                encryption = True
                             for element in c.iter(tag="{*}X509Certificate"):
-                                certificate = element.text
-                                if certificate.endswith("\n"):
-                                    certificate = certificate + "-----END CERTIFICATE-----\n"
-                                else:
-                                    certificate = certificate + "\n-----END CERTIFICATE-----\n"
-                                certificate = "-----BEGIN CERTIFICATE-----\n" + certificate
+                                certificate = element.text.strip()
                                 if not Certificate.objects.filter(certificate=certificate, sp=sp, signing=signing, encryption=encryption):
                                     if not Certificate.objects.add_certificate(certificate=certificate,
                                                                                sp=sp,
@@ -80,9 +79,9 @@ def metadata_parser(filename):
                                                                                encryption=encryption):
                                         print("Could not load certificate for " + entityID)
                         if etree.QName(c.tag).localname == "NameIDFormat":
-                            if c.text is "urn:oasis:names:tc:SAML:2.0:nameid-format:transient":
+                            if c.text == "urn:oasis:names:tc:SAML:2.0:nameid-format:transient":
                                 sp.name_format_transient = True
-                            elif c.text is "urn:oasis:names:tc:SAML:2.0:nameid-format:persistent":
+                            elif c.text == "urn:oasis:names:tc:SAML:2.0:nameid-format:persistent":
                                 sp.name_format_persistent = True
                             else:
                                 print("Unsupported nameid-format " + entityID)

@@ -34,59 +34,59 @@ def metadata_generator(sp):
                                              Location=basicinfo.discovery_service_url,
                                              index="1",
                                              nsmap={"idpdisc": 'urn:oasis:names:tc:SAML:profiles:SSO:idp-discovery-protocol'})
-    UIIInfo = etree.SubElement(Extensions, "{urn:oasis:names:tc:SAML:metadata:ui}UIIInfo",
+    UIInfo = etree.SubElement(Extensions, "{urn:oasis:names:tc:SAML:metadata:ui}UIInfo",
                                nsmap={"mdui": 'urn:oasis:names:tc:SAML:metadata:ui'})
     if basicinfo.name_fi:
-        DisplayName_fi = etree.SubElement(UIIInfo, "{urn:oasis:names:tc:SAML:metadata:ui}DisplayName")
+        DisplayName_fi = etree.SubElement(UIInfo, "{urn:oasis:names:tc:SAML:metadata:ui}DisplayName")
         DisplayName_fi.attrib['{http://www.w3.org/XML/1998/namespace}lang'] = "fi"
         DisplayName_fi.text = basicinfo.name_fi
     if basicinfo.name_en:
-        DisplayName_en = etree.SubElement(UIIInfo, "{urn:oasis:names:tc:SAML:metadata:ui}DisplayName")
+        DisplayName_en = etree.SubElement(UIInfo, "{urn:oasis:names:tc:SAML:metadata:ui}DisplayName")
         DisplayName_en.attrib['{http://www.w3.org/XML/1998/namespace}lang'] = "en"
         DisplayName_en.text = basicinfo.name_en
     if basicinfo.name_sv:
-        DisplayName_sv = etree.SubElement(UIIInfo, "{urn:oasis:names:tc:SAML:metadata:ui}DisplayName")
+        DisplayName_sv = etree.SubElement(UIInfo, "{urn:oasis:names:tc:SAML:metadata:ui}DisplayName")
         DisplayName_sv.attrib['{http://www.w3.org/XML/1998/namespace}lang'] = "sv"
         DisplayName_sv.text = basicinfo.name_sv
 
     if basicinfo.description_fi:
-        Description_fi = etree.SubElement(UIIInfo, "{urn:oasis:names:tc:SAML:metadata:ui}Description")
+        Description_fi = etree.SubElement(UIInfo, "{urn:oasis:names:tc:SAML:metadata:ui}Description")
         Description_fi.attrib['{http://www.w3.org/XML/1998/namespace}lang'] = "fi"
         Description_fi.text = basicinfo.description_fi
     if basicinfo.description_en:
-        Description_en = etree.SubElement(UIIInfo, "{urn:oasis:names:tc:SAML:metadata:ui}Description")
+        Description_en = etree.SubElement(UIInfo, "{urn:oasis:names:tc:SAML:metadata:ui}Description")
         Description_en.attrib['{http://www.w3.org/XML/1998/namespace}lang'] = "en"
         Description_en.text = basicinfo.description_en
     if basicinfo.description_sv:
-        Description_sv = etree.SubElement(UIIInfo, "{urn:oasis:names:tc:SAML:metadata:ui}Description")
+        Description_sv = etree.SubElement(UIInfo, "{urn:oasis:names:tc:SAML:metadata:ui}Description")
         Description_sv.attrib['{http://www.w3.org/XML/1998/namespace}lang'] = "sv"
         Description_sv.text = basicinfo.description_sv
 
     if basicinfo.privacypolicy_fi:
-        PrivacyStatementURL_fi = etree.SubElement(UIIInfo, "{urn:oasis:names:tc:SAML:metadata:ui}PrivacyStatementURL")
+        PrivacyStatementURL_fi = etree.SubElement(UIInfo, "{urn:oasis:names:tc:SAML:metadata:ui}PrivacyStatementURL")
         PrivacyStatementURL_fi.attrib['{http://www.w3.org/XML/1998/namespace}lang'] = "fi"
         PrivacyStatementURL_fi.text = basicinfo.privacypolicy_fi
     if basicinfo.privacypolicy_en:
-        PrivacyStatementURL_en = etree.SubElement(UIIInfo, "{urn:oasis:names:tc:SAML:metadata:ui}PrivacyStatementURL")
+        PrivacyStatementURL_en = etree.SubElement(UIInfo, "{urn:oasis:names:tc:SAML:metadata:ui}PrivacyStatementURL")
         PrivacyStatementURL_en.attrib['{http://www.w3.org/XML/1998/namespace}lang'] = "en"
         PrivacyStatementURL_en.text = basicinfo.privacypolicy_en
     if basicinfo.privacypolicy_sv:
-        PrivacyStatementURL_sv = etree.SubElement(UIIInfo, "{urn:oasis:names:tc:SAML:metadata:ui}PrivacyStatementURL")
+        PrivacyStatementURL_sv = etree.SubElement(UIInfo, "{urn:oasis:names:tc:SAML:metadata:ui}PrivacyStatementURL")
         PrivacyStatementURL_sv.attrib['{http://www.w3.org/XML/1998/namespace}lang'] = "sv"
         PrivacyStatementURL_sv.text = basicinfo.privacypolicy_sv
 
     for certificate in certificates:
         KeyDescriptor = etree.SubElement(SPSSODescriptor, "KeyDescriptor")
-        if certificate.signing:
+        if certificate.signing and not certificate.encryption:
             KeyDescriptor.attrib['use'] = 'signing'
-        if certificate.encryption:
+        if certificate.encryption and not certificate.signing:
             KeyDescriptor.attrib['use'] = 'encryption'
 
         KeyInfo = etree.SubElement(KeyDescriptor, "{urn:oasis:names:tc:SAML:2.0:metadata}KeyInfo",
                                    nsmap={"ds": 'urn:oasis:names:tc:SAML:2.0:metadata'})
         X509Data = etree.SubElement(KeyInfo, "{urn:oasis:names:tc:SAML:2.0:metadata}X509Data")
         X509Certificate = etree.SubElement(X509Data, "{urn:oasis:names:tc:SAML:2.0:metadata}X509Certificate")
-        X509Certificate.text = certificate.get_certificate_content()
+        X509Certificate.text = certificate.certificate
 
     if basicinfo.name_format_transient:
         NameIDFormat = etree.SubElement(SPSSODescriptor, "NameIDFormat")

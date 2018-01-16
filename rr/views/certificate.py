@@ -38,16 +38,19 @@ def certificate_list(request, pk):
             sp = ServiceProvider.objects.get(pk=pk, admins=request.user, end_at=None)
     except ServiceProvider.DoesNotExist:
         raise Http404("Service proviced does not exist")
-    form = CertificateForm()
+    form = CertificateForm(sp=sp)
     if request.method == "POST":
         if "add_cert" in request.POST:
-            form = CertificateForm(request.POST)
+            form = CertificateForm(request.POST, sp=sp)
             if form.is_valid():
                 certificate = form.cleaned_data['certificate']
                 signing = form.cleaned_data['signing']
                 encryption = form.cleaned_data['encryption']
+                if not signing and not encryption:
+                    signing = True
+                    encryption = True
                 if Certificate.objects.add_certificate(certificate, sp, signing=signing, encryption=encryption):
-                    form = CertificateForm()
+                    form = CertificateForm(sp=sp)
                     sp.modified = True
                     sp.save()
         elif "remove_certificate" in request.POST:

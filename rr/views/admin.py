@@ -56,6 +56,13 @@ def admin_list(request, pk):
                 if value == "on":
                     admin = User.objects.get(pk=key)
                     sp.admins.remove(admin)
+                    try:
+                        if request.user.is_superuser:
+                            sp = ServiceProvider.objects.get(pk=pk, end_at=None)
+                        else:
+                            sp = ServiceProvider.objects.get(pk=pk, admins=request.user, end_at=None)
+                    except ServiceProvider.DoesNotExist:
+                        return HttpResponseRedirect(reverse('serviceprovider-list'))
     invites = Keystore.objects.filter(sp=sp)
     return render(request, "rr/admin.html", {'object_list': invites,
                                              'form': form,

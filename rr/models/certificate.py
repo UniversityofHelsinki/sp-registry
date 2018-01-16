@@ -9,15 +9,25 @@ from cryptography.x509.oid import NameOID
 import pytz
 
 
+def load_certificate(certificate):
+    if certificate.endswith("\n"):
+        certificate = certificate + "-----END CERTIFICATE-----\n"
+    else:
+        certificate = certificate + "\n-----END CERTIFICATE-----\n"
+    certificate = "-----BEGIN CERTIFICATE-----\n" + certificate
+    try:
+        cert = x509.load_pem_x509_certificate(certificate.encode('utf-8'), default_backend())
+        return cert
+    except ValueError:
+        return False
+
+
 class CertificateManager(models.Manager):
     def add_certificate(self, certificate, sp, signing=None, encryption=None):
         """
         Manager for adding a certificate to database.
         """
-        try:
-            cert = x509.load_pem_x509_certificate(certificate.encode('utf-8'), default_backend())
-        except ValueError:
-            return False
+        cert = load_certificate(certificate)
         try:
             cn = cert.subject.get_attributes_for_oid(NameOID.COMMON_NAME)[0].value
         except ValueError:
@@ -40,7 +50,8 @@ class CertificateManager(models.Manager):
                         valid_from=pytz.utc.localize(valid_from),
                         valid_until=pytz.utc.localize(valid_until),
                         key_size=key_size,
-                        certificate=certificate,
+                        certificate=cert.public_bytes(Encoding.PEM).decode("utf-8").replace(
+                            "-----BEGIN CERTIFICATE-----\n", "").replace("-----END CERTIFICATE-----\n", ""),
                         signing=signing,
                         encryption=encryption,
                         validated=timezone.now())
@@ -68,11 +79,3 @@ class Certificate(models.Model):
     validated = models.DateTimeField(null=True, blank=True, verbose_name=_('Validated on'))
 
     objects = CertificateManager()
-
-    def get_certificate_content(self):
-        """
-        Returns the certificate without BEGIN and END lines.
-        """
-        cert = x509.load_pem_x509_certificate(self.certificate.encode('utf-8'), default_backend())
-        return cert.public_bytes(Encoding.PEM).decode("utf-8").replace(
-            "-----BEGIN CERTIFICATE-----\n", "").replace("-----END CERTIFICATE-----\n", "")

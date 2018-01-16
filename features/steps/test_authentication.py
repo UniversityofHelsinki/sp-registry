@@ -3,16 +3,6 @@ from django.contrib.auth.models import User
 from rr.models.serviceprovider import ServiceProvider
 
 
-@when('I visit the "{url}"')
-def impl(context, url):
-    context.browser.visit(context.base_url + url)
-
-
-@then('the result page will include text "{text}"')
-def visit(context, text):
-    assert context.browser.is_text_present(text)
-
-
 @given(u'user "{username}" exists')
 def create_user(context, username):
     u = User.objects.create_user(username=username, password='mysecretpassword')
@@ -23,7 +13,7 @@ def create_user(context, username):
 
 @given(u'superuser "{username}" exists')
 def create_superuser(context, username):
-    u = User.objects.create_superuser(username=username, password='mysecretpassword')
+    u = User.objects.create_superuser(username=username, password='mysecretpassword', email="master.guy@example.org")
     u.first_name = "Master"
     u.last_name = "Guy"
     u.save()
@@ -41,7 +31,7 @@ def add_admin(context, username, entity_id):
     sp.admins.add(u)
 
 
-@when('I login with "{username}" and "{password}"')
+@when(u'I login with "{username}" and "{password}"')
 def login(context, username, password):
     context.browser.fill("username", username)
     context.browser.fill("password", password)

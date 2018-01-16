@@ -38,20 +38,23 @@ def endpoint_list(request, pk):
             sp = ServiceProvider.objects.get(pk=pk, admins=request.user, end_at=None)
     except ServiceProvider.DoesNotExist:
         raise Http404("Service proviced does not exist")
-    form = EndpointForm()
+    form = EndpointForm(sp=sp)
     if request.method == "POST":
         if "add_endpoint" in request.POST:
-            form = EndpointForm(request.POST)
+            form = EndpointForm(request.POST, sp=sp)
             if form.is_valid():
                 contact_type = form.cleaned_data['type']
                 binding = form.cleaned_data['binding']
                 url = form.cleaned_data['url']
+                index = form.cleaned_data['index']
                 Endpoint.objects.create(sp=sp,
                                         type=contact_type,
                                         binding=binding,
-                                        url=url)
+                                        url=url,
+                                        index=index)
                 sp.modified = True
                 sp.save()
+                form = EndpointForm(sp=sp)
         elif "remove_endpoint" in request.POST:
             for key, value in request.POST.dict().items():
                 if value == "on":

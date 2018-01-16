@@ -24,7 +24,7 @@
       <td>{{ endpoint.get_binding_display }}</td>
       <td>{{ endpoint.url }}</td>
       <td>{{ endpoint.index }}</td>
-      <td><div class="checkbox"><input type="checkbox" name="{{ endpoint.pk }}" class="" id="id_admin" /></div></td>
+      <td><div class="checkbox"><input type="checkbox" name="{{ endpoint.pk }}" id="id_endpoint_{{ endpoint.pk }}" /></div></td>
     </tr>
 {% endfor %}
   </form>

@@ -38,10 +38,10 @@ def contact_list(request, pk):
             sp = ServiceProvider.objects.get(pk=pk, admins=request.user, end_at=None)
     except ServiceProvider.DoesNotExist:
         raise Http404("Service proviced does not exist")
-    form = ContactForm()
+    form = ContactForm(sp=sp)
     if request.method == "POST":
         if "add_contact" in request.POST:
-            form = ContactForm(request.POST)
+            form = ContactForm(request.POST, sp=sp)
             if form.is_valid():
                 contact_type = form.cleaned_data['type']
                 firstname = form.cleaned_data['firstname']
@@ -54,6 +54,7 @@ def contact_list(request, pk):
                                        email=email)
                 sp.modified = True
                 sp.save()
+                form = ContactForm(sp=sp)
         elif "remove_contact" in request.POST:
             for key, value in request.POST.dict().items():
                 if value == "on":

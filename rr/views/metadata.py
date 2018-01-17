@@ -76,7 +76,8 @@ def metadata_generator(sp):
         PrivacyStatementURL_sv.text = basicinfo.privacypolicy_sv
 
     for certificate in certificates:
-        KeyDescriptor = etree.SubElement(SPSSODescriptor, "KeyDescriptor")
+        KeyDescriptor = etree.SubElement(SPSSODescriptor, "KeyDescriptor",
+                                         nsmap={"ds": 'urn:oasis:names:tc:SAML:2.0:metadata'})
         if certificate.signing and not certificate.encryption:
             KeyDescriptor.attrib['use'] = 'signing'
         if certificate.encryption and not certificate.signing:

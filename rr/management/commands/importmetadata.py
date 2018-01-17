@@ -58,7 +58,7 @@ def metadata_parser(filename):
                                             elif e.values()[0] == "sv":
                                                 sp.privacypolicy_sv = e.text
                                 if etree.QName(d.tag).localname == "RequestInitiator":
-                                    RequestInitiator = c.get("Location")
+                                    sp.login_page_url = c.get("Location")
                         if etree.QName(c.tag).localname == "KeyDescriptor":
                             signing = False
                             encryption = False

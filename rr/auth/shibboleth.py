@@ -10,7 +10,7 @@ class ShibbolethBackend:
     If Shibboleth EPPN is found, signs user in, creating a new user if nesessary.
     """
     def authenticate(self, request):
-        username = request.META.get(settings.SAML_ATTR_EPPN, 'testi@example.org')
+        username = request.META.get(settings.SAML_ATTR_EPPN, '')
         first_name = request.META.get(settings.SAML_ATTR_FIRST_NAME, '')
         last_name = request.META.get(settings.SAML_ATTR_LAST_NAME, '')
         email = request.META.get(settings.SAML_ATTR_EMAIL, '')

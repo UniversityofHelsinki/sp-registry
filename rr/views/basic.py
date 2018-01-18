@@ -21,7 +21,7 @@ class CustomLoginView(LoginView):
         user = ShibbolethBackend.authenticate(self, request)
         if user:
             if user.is_active:
-                login(request, user, backend=ShibbolethBackend)
+                login(request, user, backend='rr.auth.shibboleth.ShibbolethBackend')
                 redirect_to = self.get_success_url()
                 if redirect_to == self.request.path:
                     error_message = _("Redirection loop for authenticated user detected. Check that your LOGIN_REDIRECT_URL doesn't point to a login page.")

@@ -13,6 +13,16 @@
     </tr>
   </tbody>  
 </table>
+{% if request.user.is_superuser and object.modified %}
+<h2>{% trans "Validate changes" %}</h2>
+<p>{% trans "This object has changed. Click the button to validate all changes listed below" %}</p>
+<form action="" method='POST'>
+{% csrf_token %}
+<input type='hidden' name="object" value="{{ object.pk }}" />
+<input type='hidden' name="modify_date" value="{{ object.updated_at|date:'YmdHis' }}" />
+<input class="btn btn-success" type="submit" name="validate_changes" value="{% trans "Validate changes" %}" />
+</form>
+{% endif %}
 <h2>{% trans "Basic Information" %}</h2>
 <table class="table table-striped">
   <thead>

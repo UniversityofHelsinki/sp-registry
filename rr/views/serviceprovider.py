@@ -10,6 +10,7 @@ from rr.models.endpoint import Endpoint
 from django.db.models import Q
 from django.http.response import HttpResponseRedirect
 from django.urls.base import reverse
+from django.shortcuts import render
 
 
 class ServiceProviderList(ListView):
@@ -50,6 +51,31 @@ class BasicInformationView(DetailView):
     :template:`rr/serviceprovider_detail.html`
     """
     model = ServiceProvider
+
+    def post(self, request, *args, **kwargs):
+        if self.request.user.is_superuser:
+            modify_date = request.POST.get('modify_date')
+            sp = self.get_object()
+            if modify_date == sp.updated_at.strftime("%Y%m%d%H%M%S"):
+                for attribute in SPAttribute.objects.filter(sp=sp, end_at=None, validated=None):
+                    attribute.validated = timezone.now()
+                    attribute.save()
+                for certificate in Certificate.objects.filter(sp=sp, end_at=None, validated=None):
+                    certificate.validated = timezone.now()
+                    certificate.save()
+                for contact in Contact.objects.filter(sp=sp, end_at=None, validated=None):
+                    contact.validated = timezone.now()
+                    contact.save()
+                for endpoint in Endpoint.objects.filter(sp=sp, end_at=None, validated=None):
+                    endpoint.validated = timezone.now()
+                    endpoint.save()
+            sp.validated = True
+            sp.modified = False
+            sp.save()
+            return HttpResponseRedirect(reverse('summary-view', args=(sp.pk,)))
+        else:
+            error_message = _("You should not be here.")
+            return render(request, "error.html", {'error_message': error_message})
 
     def get_queryset(self):
         if self.request.user.is_superuser:

@@ -4,6 +4,15 @@
 {% load attribute_filters %}
 {% block content %}
 <h1>{% trans "Details" %} - <small>{{ object }}</small></h1>
+<table class="table table-striped">
+  <tbody>
+    <tr>
+      <td>{% trans "Colors legend:" %}</td>
+      <td class="table-warning">{% trans "Modified since last validation" %}</td>
+      <td class="table-danger">{% trans "Removed since last validation" %}</td>
+    </tr>
+  </tbody>  
+</table>
 <h2>{% trans "Basic Information" %}</h2>
 <table class="table table-striped">
   <thead>
@@ -158,5 +167,4 @@
 {% endfor %}
   </tbody>  
 </table>
-
 {% endblock %}

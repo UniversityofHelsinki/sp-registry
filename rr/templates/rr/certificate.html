@@ -31,10 +31,10 @@
       <td><div class="checkbox"><input type="checkbox" name="{{ certificate.pk }}" class="" id="id_certificate" /></div></td>
     </tr>
 {% endfor %}
-  </form>
   </tbody>
 </table>
 <input class="btn btn-danger" type="submit" name="remove_certificate" value="{% trans "Remove selected" %}" />
+</form>
 {% else %}
 <p>{% trans "No certificates" %}</p>
 {% endif %}

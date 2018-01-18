@@ -27,10 +27,10 @@
       <td><div class="checkbox"><input type="checkbox" name="{{ contact.pk }}" class="" id="id_contact" /></div></td>
     </tr>
 {% endfor %}
-  </form>
   </tbody>
 </table>
 <input class="btn btn-danger" type="submit" name="remove_contact" value="{% trans "Remove selected" %}" />
+</form>
 {% else %}
 <p>{% trans "No contacts" %}</p>
 {% endif %}

@@ -9,6 +9,9 @@ from django.urls.base import reverse
 
 
 class ShibbolethLoginView(View):
+    """
+    LoginView to authenticate user against Shibboleth
+    """
     def get(self, request, *args, **kwargs):
         redirect_to = request.GET.get('next', '/')
         print(redirect_to)

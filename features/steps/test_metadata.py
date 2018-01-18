@@ -26,8 +26,8 @@ def check_for_text(context):
         <mdui:PrivacyStatementURL xml:lang="sv">https://sp.example.org/privacy/policy_ev.pdf</mdui:PrivacyStatementURL>
       </mdui:UIInfo>
     </Extensions>
-    <KeyDescriptor>
-      <ds:KeyInfo xmlns:ds="urn:oasis:names:tc:SAML:2.0:metadata">
+    <KeyDescriptor xmlns:ds="urn:oasis:names:tc:SAML:2.0:metadata">
+      <ds:KeyInfo>
         <ds:X509Data>
           <ds:X509Certificate>MIIFBTCCAu2gAwIBAgIJAKOceIf3koqXMA0GCSqGSIb3DQEBCwUAMBkxFzAVBgNV
 BAMMDnNwLmV4YW1wbGUub3JnMB4XDTE4MDExNjExMTAxN1oXDTI4MDExNDExMTAx

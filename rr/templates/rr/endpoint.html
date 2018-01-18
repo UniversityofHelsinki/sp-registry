@@ -27,10 +27,10 @@
       <td><div class="checkbox"><input type="checkbox" name="{{ endpoint.pk }}" id="id_endpoint_{{ endpoint.pk }}" /></div></td>
     </tr>
 {% endfor %}
-  </form>
   </tbody>
 </table>
 <input class="btn btn-danger" type="submit" name="remove_endpoint" value="{% trans "Remove selected" %}" />
+</form>
 {% else %}
 <p>{% trans "No endpoints" %}</p>
 {% endif %}

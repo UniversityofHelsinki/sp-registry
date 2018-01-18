@@ -77,7 +77,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
-#    'rr.auth.shibboleth.ShibbolethBackend',
+    'rr.auth.shibboleth.ShibbolethBackend',
 )
 
 LOGIN_URL = '/login/'

@@ -1,6 +1,7 @@
 
 from django.conf.urls import url, include
 from django.contrib import admin
+from django.contrib.auth.views import LogoutView
 from django.contrib.auth.decorators import login_required
 from rr.views.serviceprovider import BasicInformationCreate, BasicInformationUpdate, BasicInformationView, ServiceProviderList
 from rr.views.attribute import attribute_list, attribute_admin_list, attribute_view
@@ -16,6 +17,7 @@ urlpatterns = [
     url(r'^admin_django/', admin.site.urls),
     url(r'^$', login_required(ServiceProviderList.as_view()), name='front-page'),
     url(r'^login/$', CustomLoginView.as_view(), name='login'),
+    url(r'^logout/$', LogoutView.as_view(template_name="registration/logout.html"), name='logout'),
     url(r'^list/$', login_required(ServiceProviderList.as_view()), name='serviceprovider-list'),
     url(r'^admin/(?P<pk>[0-9]+)/$', admin_list, name='admin-list'),
     url(r'^attribute/(?P<pk>[0-9]+)/$', attribute_list, name='attribute-list'),

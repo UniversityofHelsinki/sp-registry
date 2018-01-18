@@ -6,5 +6,8 @@
    {% if info_message %}
      <p>{{ info_message }}</p>
    {% endif %}
+   {% if contact %}
+     <p>Please contact {{ contact }} for more information.</p>
+   {% endif %}
    <p><a href="/">Return to front page.</a></p>
 {% endblock %}

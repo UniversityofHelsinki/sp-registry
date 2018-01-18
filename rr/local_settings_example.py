@@ -51,7 +51,8 @@ LOGGING = {
 }
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-DEFAULT_FROM_EMAIL = 'noreply@example.com'
+DEFAULT_FROM_EMAIL = 'noreply@example.org'
+DEFAULT_CONTACT_EMAIL = 'contact@example.org'
 
 TEST_SCREENSHOT_DIR = '/path/to/test-screenshots/'
 
@@ -60,5 +61,6 @@ SAML_ATTR_EPPN = 'shib_eppn'
 SAML_ATTR_FIRST_NAME = 'shib_first_name'
 SAML_ATTR_LAST_NAME = 'shib_last_name'
 SAML_ATTR_EMAIL = 'shib_mail'
+SAML_ATTR_AFFILIATION = 'shib_affiliation'
 
 STATIC_ROOT = '/path/to/rr/static/'

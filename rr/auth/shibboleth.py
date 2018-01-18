@@ -1,7 +1,6 @@
 from django.contrib.auth.models import User
 import re
 from django.conf import settings
-from django.contrib.auth import login
 
 
 class ShibbolethBackend:
@@ -10,21 +9,27 @@ class ShibbolethBackend:
     If Shibboleth EPPN is found, signs user in, creating a new user if nesessary.
     """
     def authenticate(self, request):
-        username = request.META.get(settings.SAML_ATTR_EPPN, '')
+        username = request.META.get(settings.SAML_ATTR_EPPN, 'test@example.org')
         first_name = request.META.get(settings.SAML_ATTR_FIRST_NAME, '')
         last_name = request.META.get(settings.SAML_ATTR_LAST_NAME, '')
         email = request.META.get(settings.SAML_ATTR_EMAIL, '')
+        affiliations = request.META.get(settings.SAML_ATTR_AFFILIATION, '')
 
         if username and re.match("[^@]+@[^@]+\.[^@]+", username):
             try:
                 user = User.objects.get(username=username)
             except User.DoesNotExist:
                 # Create a new user with unusable password
+                if "faculty" in affiliations or "staff" in affiliations:
+                    active = True
+                else:
+                    active = False
                 user = User(username=username,
                             password=User.objects.make_random_password(),
                             first_name=first_name,
                             last_name=last_name,
-                            email=email)
+                            email=email,
+                            is_active=active)
                 user.set_unusable_password = True
                 user.save()
             return user

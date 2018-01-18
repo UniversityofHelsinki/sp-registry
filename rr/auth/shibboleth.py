@@ -1,9 +1,10 @@
 from django.contrib.auth.models import User
 import re
 from django.conf import settings
+from django.contrib.auth import login
 
 
-class ShibbolethAuthModelBackend(object):
+class ShibbolethBackend:
     """
     Backend for Shibboleth authentication.
     If Shibboleth EPPN is found, signs user in, creating a new user if nesessary.

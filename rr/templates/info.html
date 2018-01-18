@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block content %}
+   <h1>{% trans "For your information" %}</h1>
+   {% if info_message %}
+     <p>{{ info_message }}</p>
+   {% endif %}
+   <p><a href="/">Return to front page.</a></p>
+{% endblock %}

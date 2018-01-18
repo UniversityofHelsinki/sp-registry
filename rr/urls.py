@@ -8,13 +8,14 @@ from rr.views.certificate import certificate_list
 from rr.views.contact import contact_list
 from rr.views.endpoint import endpoint_list
 from rr.views.metadata import metadata
-from rr.views.basic import FrontPage
+from rr.views.basic import FrontPage, CustomLoginView
 from rr.views.admin import activate_key, admin_list
 
 urlpatterns = [
     url(r'^admin_django/doc/', include('django.contrib.admindocs.urls')),
     url(r'^admin_django/', admin.site.urls),
     url(r'^$', login_required(ServiceProviderList.as_view()), name='front-page'),
+    url(r'^login/$', CustomLoginView.as_view(), name='login'),
     url(r'^list/$', login_required(ServiceProviderList.as_view()), name='serviceprovider-list'),
     url(r'^admin/(?P<pk>[0-9]+)/$', admin_list, name='admin-list'),
     url(r'^attribute/(?P<pk>[0-9]+)/$', attribute_list, name='attribute-list'),

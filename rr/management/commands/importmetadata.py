@@ -5,7 +5,7 @@ Usage: ./manage.py importmetadata <metadata-file-name>
 """
 
 from rr.models.serviceprovider import ServiceProvider, SPAttribute
-from rr.models.certificate import Certificate
+from rr.models.certificate import Certificate, load_certificate
 from rr.models.contact import Contact
 from rr.models.attribute import Attribute
 from rr.models.endpoint import Endpoint
@@ -13,6 +13,7 @@ from django.contrib.auth.models import User
 from lxml import etree, objectify
 from django.utils import timezone
 from django.core.management.base import BaseCommand
+from cryptography.hazmat.primitives.serialization import Encoding
 
 
 def metadata_parser(filename):
@@ -58,7 +59,7 @@ def metadata_parser(filename):
                                             elif e.values()[0] == "sv":
                                                 sp.privacypolicy_sv = e.text
                                 if etree.QName(d.tag).localname == "RequestInitiator":
-                                    sp.login_page_url = c.get("Location")
+                                    sp.login_page_url = c.get("Location", "")
                         if etree.QName(c.tag).localname == "KeyDescriptor":
                             signing = False
                             encryption = False
@@ -71,7 +72,9 @@ def metadata_parser(filename):
                                 signing = True
                                 encryption = True
                             for element in c.iter(tag="{*}X509Certificate"):
-                                certificate = element.text.strip()
+                                cert = load_certificate(element.text.strip())
+                                certificate = certificate=cert.public_bytes(Encoding.PEM).decode("utf-8").replace(
+                                    "-----BEGIN CERTIFICATE-----\n", "").replace("-----END CERTIFICATE-----\n", "")
                                 if not Certificate.objects.filter(certificate=certificate, sp=sp, signing=signing, encryption=encryption):
                                     if not Certificate.objects.add_certificate(certificate=certificate,
                                                                                sp=sp,

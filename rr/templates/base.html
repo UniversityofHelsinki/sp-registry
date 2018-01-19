@@ -39,6 +39,11 @@
           <li class="nav-item">
             <a class="nav-link" href="{% url 'admin-list' object.pk %}">{% trans "Admins" %}</a>
           </li>
+{% if object.test %}
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'testuser-list' object.pk %}">{% trans "Test users" %}</a>
+          </li>
+{% endif %}
           <li class="nav-item">
             <a class="nav-link" href="{% url 'metadata-view' object.pk %}">{% trans "View Metadata" %}</a>
           </li>
@@ -73,5 +78,6 @@
     <script src="{% static "js/jquery-3.2.1.slim.min.js" %}" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"></script>
     <script src="{% static "js/popper.min.js" %}" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"></script>
     <script src="{% static "js/bootstrap.min.js" %}" integrity="sha384-a5N7Y/aK3qNeh15eJKGWxsqtnX/wWdSZSKp+81YjTmS15nvnvxKHuzaWwXHDli+4"></script>
+	<script src="{% static "js/popover.js" %}"></script>
   </body>
 </html>

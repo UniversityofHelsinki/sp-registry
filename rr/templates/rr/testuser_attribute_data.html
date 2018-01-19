@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load bootstrap4 %}
+{% block content %}
+<h1>{% trans "Test user attribute values" %} - <small>{{ object }}</small></h1>
+<h2>{{ testuser }}</h2>
+<form action="" method="post" class="form">
+    {% csrf_token %}
+    {% bootstrap_form form layout='horizontal' %}
+    {% buttons %}
+        <button type="submit" class="btn btn-primary">{% trans "Submit" %}</button>
+    {% endbuttons %}
+</form>
+{% endblock %}

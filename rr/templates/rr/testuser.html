@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load bootstrap4 %}
+{% load static %}
+{% block content %}
+<h1>{% trans "Test users" %} - <small>{{ object }}</small></h1>
+<p>{% trans "These users are populated to test IdP database and can be used to test SPs against test IdP." %}</p>
+<h2>{% trans "List of users" %}</h2>
+{% if object_list %}
+<form action="" method='POST'>
+{% csrf_token %}
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">{% trans "Username" %}</th>
+      <th scope="col">{% trans "First name" %}</th>
+      <th scope="col">{% trans "Last name" %}</th>
+      <th scope="col">{% trans "Password" %}</th>
+      <th scope="col">{% trans "Remove" %}</th>
+    </tr>
+  </thead>
+  <tbody>
+{% for user in object_list %}
+    <tr>
+      <th scope="row"><a href="{% url 'testuser-attribute-data' user.pk %}">{{ user.username }}</a></th>
+      <td>{{ user.firstname }}</td>
+      <td>{{ user.lastname }}</td>
+      <td><button type="button" class="btn btn-small btn-danger" data-toggle="popover" title="Password" data-content="{{ user.password }}">Show password</button></td>
+      <td><div class="checkbox"><input type="checkbox" name="{{ user.pk }}" class="" id="id_user" /></div></td>
+    </tr>
+{% endfor %}
+  </tbody>
+</table>
+<input class="btn btn-danger" type="submit" name="remove_testuser" value="{% trans "Remove selected" %}" />
+</form>
+{% else %}
+<p>{% trans "No users" %}</p>
+{% endif %}
+{% if form %}
+<h2>{% trans "Add a test user" %}</h2>
+<form action="" method="post" class="form">
+    {% csrf_token %}
+    {% bootstrap_form form layout='horizontal' %}
+    {% buttons %}
+        <button type="submit" name="add_testuser" class="btn btn-primary">{% trans "Submit" %}</button>
+    {% endbuttons %}
+</form>
+{% endif %}
+{% endblock %}

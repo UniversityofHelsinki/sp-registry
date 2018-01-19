@@ -11,6 +11,8 @@ from rr.views.endpoint import endpoint_list
 from rr.views.metadata import metadata
 from rr.views.basic import ShibbolethLoginView
 from rr.views.admin import activate_key, admin_list
+from rr.views.testuser import testuser_list, testuser_attribute_data
+
 
 urlpatterns = [
     url(r'^admin_django/doc/', include('django.contrib.admindocs.urls')),
@@ -31,6 +33,8 @@ urlpatterns = [
     url(r'^serviceprovider/add/$', login_required(BasicInformationCreate.as_view()), name='serviceprovider-add'),
     url(r'^serviceprovider/update/(?P<pk>[0-9]+)/$', login_required(BasicInformationUpdate.as_view()), name='basicinformation-update'),
     url(r'^summary/(?P<pk>[0-9]+)/$', login_required(BasicInformationView.as_view()), name='summary-view'),
+    url(r'^testuser/(?P<pk>[0-9]+)/$', testuser_list, name='testuser-list'),
+    url(r'^testuser/data/(?P<pk>[0-9]+)/$', testuser_attribute_data, name='testuser-attribute-data'),
     url(r'^invite/(?P<invite_key>[\w+\s-]+)/$', activate_key, name='invite-activate'),
     url('^', include('django.contrib.auth.urls')),
 ]

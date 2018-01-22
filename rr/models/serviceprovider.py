@@ -27,6 +27,11 @@ class ServiceProvider(models.Model):
     production = models.BooleanField(default=False, verbose_name=_('Publish to production servers'))
     test = models.BooleanField(default=False, verbose_name=_('Publish to test servers'))
 
+    saml_product = models.CharField(max_length=255, blank=True, verbose_name=_('SAML product this service is using'))
+    autoupdate_idp_metadata = models.BooleanField(default=False, verbose_name=_('Does SP automatically update IdP metadata?'))
+    notes = models.TextField(blank=True, verbose_name=_('Additional notes'))
+    admin_notes = models.TextField(blank=True, verbose_name=_('Admin notes'))
+
     # Attributes are linked through SPAttribute model to include reason and validation information
     attributes = models.ManyToManyField(Attribute, through='SPAttribute')
     admins = models.ManyToManyField(User, related_name="admins")

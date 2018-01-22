@@ -11,7 +11,7 @@ class BasicInformationForm(ModelForm):
         fields = ['entity_id', 'name_fi', 'name_en', 'name_sv', 'description_fi', 'description_en', 'description_sv',
                   'privacypolicy_fi', 'privacypolicy_en', 'privacypolicy_sv',
                   'login_page_url', 'discovery_service_url', 'name_format_transient', 'name_format_persistent',
-                  'encyrpt_attribute_assertions', 'production', 'test']
+                  'encyrpt_attribute_assertions', 'production', 'test', 'saml_product', 'autoupdate_idp_metadata', 'notes', 'admin_notes']
         help_texts = {
             'entity_id': _('Should be URI including scheme, hostname of your application and path e.g. https://test.helsinki.fi/sp'),
         }
@@ -19,6 +19,8 @@ class BasicInformationForm(ModelForm):
     def __init__(self, *args, **kwargs):
         self.request = kwargs.pop('request', None)
         super(BasicInformationForm, self).__init__(*args, **kwargs)
+        if not self.request.user.is_superuser:
+            del self.fields['admin_notes']
 
     def clean_entity_id(self):
         entity_id = self.cleaned_data['entity_id']

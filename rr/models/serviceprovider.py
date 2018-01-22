@@ -95,8 +95,8 @@ class SPAttribute(models.Model):
     Stores iformation for SP attributes, related to :model:`rr.ServiceProvider`
     and :model:`rr.Attribute`
     """
-    attribute = models.ForeignKey(Attribute)
-    sp = models.ForeignKey(ServiceProvider)
+    attribute = models.ForeignKey(Attribute, on_delete=models.CASCADE)
+    sp = models.ForeignKey(ServiceProvider, on_delete=models.CASCADE)
     reason = models.CharField(max_length=255, verbose_name=_('Reason for the attribute requisition'))
     created_at = models.DateTimeField(auto_now_add=True, verbose_name=_('Created at'))
     updated_at = models.DateTimeField(auto_now=True, verbose_name=_('Updated at'))

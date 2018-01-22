@@ -7,7 +7,7 @@ class Contact(models.Model):
     """
     Stores a single contact, related to :model:`rr.ServiceProvider`
     """
-    sp = models.ForeignKey(ServiceProvider)
+    sp = models.ForeignKey(ServiceProvider, on_delete=models.CASCADE)
 
     TYPECHOICES = (('administrative', _('Administrative')),
                    ('technical', _('Technical')),

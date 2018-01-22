@@ -8,7 +8,7 @@ class TestUser(models.Model):
     """
     Stores a test user, related to :model:`rr.ServiceProvider`
     """
-    sp = models.ForeignKey(ServiceProvider)
+    sp = models.ForeignKey(ServiceProvider, on_delete=models.CASCADE)
     username = models.CharField(max_length=255, verbose_name=_('Login name'))
     password = models.CharField(max_length=255, verbose_name=_('Password'))
     firstname = models.CharField(blank=True, null=True, max_length=255, verbose_name=_('First name'))
@@ -26,6 +26,6 @@ class TestUserData(models.Model):
     Stores a attribute value for test user, related to :model:`rr.TestUser`
     and :model:`rr.Attribute`
     """
-    attribute = models.ForeignKey(Attribute)
-    user = models.ForeignKey(TestUser)
+    attribute = models.ForeignKey(Attribute, on_delete=models.CASCADE)
+    user = models.ForeignKey(TestUser, on_delete=models.CASCADE)
     value = models.CharField(blank=True, null=True, max_length=511, verbose_name=_('Attribute value'))

@@ -64,7 +64,7 @@ class Certificate(models.Model):
     """
     Stores a single certificate, related to :model:`rr.ServiceProvider`
     """
-    sp = models.ForeignKey(ServiceProvider)
+    sp = models.ForeignKey(ServiceProvider, on_delete=models.CASCADE)
     cn = models.CharField(max_length=255, blank=True, verbose_name=_('cn'))
     issuer = models.CharField(max_length=255, blank=True, verbose_name=_('Issuer cn'))
     valid_from = models.DateTimeField(null=True, blank=True, verbose_name=_('Valid from'))

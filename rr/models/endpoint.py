@@ -7,7 +7,7 @@ class Endpoint(models.Model):
     """
     Stores a single certificate, related to :model:`rr.ServiceProvider`
     """
-    sp = models.ForeignKey(ServiceProvider)
+    sp = models.ForeignKey(ServiceProvider, on_delete=models.CASCADE)
 
     TYPECHOICES = (('AssertionConsumerService', _('AssertionConsumerService')),
                    ('SingleLogoutService', _('SingleLogoutService')),

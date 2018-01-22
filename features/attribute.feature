@@ -13,5 +13,5 @@ Scenario: Attribute modifications
 	When clicking link with text "Attributes"
 	And removing attribute reason
 	And clicking link with text "Summary"
-	Then the result page will not include text "funetEduPersonStudentID"
+	Then the result page code include text "table-danger"
 	And the result page will include text "Basic contact address"

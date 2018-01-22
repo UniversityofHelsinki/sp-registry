@@ -13,7 +13,7 @@ def create_test_environment(context):
     u.first_name = "Teemu"
     u.last_name = "Testeri"
     u.save()
-    sp = ServiceProvider.objects.create(entity_id="https://sp.example.org/sp", name_en="My program name", validated=True, modified=False)
+    sp = ServiceProvider.objects.create(entity_id="https://sp.example.org/sp", name_en="My program name", validated=timezone.now(), modified=False)
     sp.admins.add(u)
     context.browser.visit(context.base_url)
     context.browser.fill("username", username)

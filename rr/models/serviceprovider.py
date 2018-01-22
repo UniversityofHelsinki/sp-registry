@@ -42,7 +42,7 @@ class ServiceProvider(models.Model):
     updated_at = models.DateTimeField(auto_now=True, verbose_name=_('Updated at'))
     end_at = models.DateTimeField(blank=True, null=True, verbose_name=_('Entry end time'))
     updated_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, verbose_name=_('Updated by'))
-    validated = models.BooleanField(default=False, verbose_name=_('Validated'))
+    validated = models.DateTimeField(null=True, blank=True, verbose_name=_('Validated on'))
 
     def name(self):
         if get_language() == "fi" and self.name_fi:

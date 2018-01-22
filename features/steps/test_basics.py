@@ -26,3 +26,8 @@ def check_for_missing_text(context, text):
 @then(u'count of tag "{text}" is "{number}"')
 def count_id(context, text, number):
     assert len(context.browser.find_by_tag(text)) == int(number)
+
+
+@then(u'the result page code include text "{text}"')
+def check_for_code_text(context, text):
+    assert text in context.browser.html

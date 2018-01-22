@@ -69,7 +69,7 @@ class BasicInformationView(DetailView):
                 for endpoint in Endpoint.objects.filter(sp=sp, end_at=None, validated=None):
                     endpoint.validated = timezone.now()
                     endpoint.save()
-            sp.validated = True
+            sp.validated = timezone.now()
             sp.modified = False
             sp.save()
             return HttpResponseRedirect(reverse('summary-view', args=(sp.pk,)))
@@ -86,18 +86,24 @@ class BasicInformationView(DetailView):
     def get_context_data(self, **kwargs):
         context = super(BasicInformationView, self).get_context_data(**kwargs)
         sp = context['object']
-        history = ServiceProvider.objects.filter(history=sp.pk, validated=True).last()
+        history = ServiceProvider.objects.filter(history=sp.pk).exclude(validated=None).last()
         if not context['object'].validated and history:
             context['attributes'] = SPAttribute.objects.filter(Q(sp=sp, end_at__gte=history.created_at) | Q(sp=sp, end_at=None))
             context['certificates'] = Certificate.objects.filter(Q(sp=sp, end_at__gte=history.created_at) | Q(sp=sp, end_at=None))
             context['contacts'] = Contact.objects.filter(Q(sp=sp, end_at__gte=history.created_at) | Q(sp=sp, end_at=None))
             context['endpoints'] = Endpoint.objects.filter(Q(sp=sp, end_at__gte=history.created_at) | Q(sp=sp, end_at=None))
+        elif context['object'].validated:
+            history = None
+            context['attributes'] = SPAttribute.objects.filter(Q(sp=sp, end_at__gte=sp.validated) | Q(sp=sp, end_at=None))
+            context['certificates'] = Certificate.objects.filter(Q(sp=sp, end_at__gte=sp.validated) | Q(sp=sp, end_at=None))
+            context['contacts'] = Contact.objects.filter(Q(sp=sp, end_at__gte=sp.validated) | Q(sp=sp, end_at=None))
+            context['endpoints'] = Endpoint.objects.filter(Q(sp=sp, end_at__gte=sp.validated) | Q(sp=sp, end_at=None))
         else:
             history = None
-            context['attributes'] = SPAttribute.objects.filter(Q(sp=sp, end_at__gte=sp.updated_at) | Q(sp=sp, end_at=None))
-            context['certificates'] = Certificate.objects.filter(Q(sp=sp, end_at__gte=sp.updated_at) | Q(sp=sp, end_at=None))
-            context['contacts'] = Contact.objects.filter(Q(sp=sp, end_at__gte=sp.updated_at) | Q(sp=sp, end_at=None))
-            context['endpoints'] = Endpoint.objects.filter(Q(sp=sp, end_at__gte=sp.updated_at) | Q(sp=sp, end_at=None))
+            context['attributes'] = SPAttribute.objects.filter(Q(sp=sp, end_at__gte=sp.created_at) | Q(sp=sp, end_at=None))
+            context['certificates'] = Certificate.objects.filter(Q(sp=sp, end_at__gte=sp.created_at) | Q(sp=sp, end_at=None))
+            context['contacts'] = Contact.objects.filter(Q(sp=sp, end_at__gte=sp.created_at) | Q(sp=sp, end_at=None))
+            context['endpoints'] = Endpoint.objects.filter(Q(sp=sp, end_at__gte=sp.created_at) | Q(sp=sp, end_at=None))
         if history:
             context['history_object'] = history
         return context
@@ -173,8 +179,12 @@ class BasicInformationUpdate(UpdateView):
                 sp.admins.set(admins)
             redirect_url = super().form_valid(form)
             self.object.updated_by = self.request.user
-            self.object.validated = False
-            self.object.modified = True
+            if not self.request.user.is_superuser or not sp.validated:
+                self.object.validated = None
+            if self.request.user.is_superuser and not sp.modified:
+                self.object.modified = False
+            else:
+                self.object.modified = True
             self.object.save()
             return redirect_url
         else:

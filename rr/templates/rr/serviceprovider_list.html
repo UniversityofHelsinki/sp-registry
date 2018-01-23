@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load i18n %}
+{% load static %}
 {% block content %}
 <h1>Service Providers</h1>
 <table class="table">
@@ -7,6 +8,8 @@
     <tr>
       <th scope="col">{% trans "entityID" %}</th>
       <th scope="col">{% trans "Name" %}</th>
+      <th scope="col">{% trans "Prod" %}</th>
+      <th scope="col">{% trans "Test" %}</th>
       <th scope="col">{% trans "Status" %}</th>
     </tr>
   </thead>
@@ -17,6 +20,8 @@
     <tr>
       <th scope="row"><a href="/summary/{{ object.pk }}/">{{ object.entity_id  }}</a></th>
       <td>{{ object.name }}</td>
+      <td>{% if object.production %}<object data="{% static "true.svg" %}"></object>{% else %}<object data="{% static "false.svg" %}"></object>{% endif %}</td>
+      <td>{% if object.test %}<object data="{% static "true.svg" %}"></object>{% else %}<object data="{% static "false.svg" %}"></object>{% endif %}</td>
       {% if object.validated and not object.modified %}<td class="table-success">{% trans "OK "%}</td>{% else %}<td class="table-warning">{% trans "Modified "%}</td>{% endif %}
     </tr>
 {% empty %}

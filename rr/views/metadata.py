@@ -62,8 +62,11 @@ def metadata_extensions(element, sp):
         PrivacyStatementURL_sv.text = sp.privacypolicy_sv
 
 
-def metadata_certificates(element, sp):
-    certificates = Certificate.objects.filter(sp=sp, end_at=None)
+def metadata_certificates(element, sp, validated=True):
+    if validated:
+        certificates = Certificate.objects.filter(sp=sp, end_at=None).exclude(validated=None)
+    else:
+        certificates = Certificate.objects.filter(sp=sp, end_at=None)
     for certificate in certificates:
         KeyDescriptor = etree.SubElement(element, "KeyDescriptor",
                                          nsmap={"ds": 'urn:oasis:names:tc:SAML:2.0:metadata'})
@@ -88,14 +91,20 @@ def metadata_nameidformat(element, sp):
         NameIDFormat.text = "urn:oasis:names:tc:SAML:2.0:nameid-format:persistent"
 
 
-def metadata_endpoints(element, sp):
-    endpoints = Endpoint.objects.filter(sp=sp, end_at=None)
+def metadata_endpoints(element, sp, validated=True):
+    if validated:
+        endpoints = Endpoint.objects.filter(sp=sp, end_at=None).exclude(validated=None)
+    else:
+        endpoints = Endpoint.objects.filter(sp=sp, end_at=None)
     for endpoint in endpoints:
         etree.SubElement(element, endpoint.type, Binding=endpoint.binding, Location=endpoint.url)
 
 
-def metadata_attributeconsumingservice(element, sp):
-    attributes = SPAttribute.objects.filter(sp=sp)
+def metadata_attributeconsumingservice(element, sp, validated=True):
+    if validated:
+        attributes = SPAttribute.objects.filter(sp=sp).exclude(validated=None)
+    else:
+        attributes = SPAttribute.objects.filter(sp=sp)
     AttributeConsumingService = etree.SubElement(element, "AttributeConsumingService", index="1")
     if sp.name_fi:
         DisplayName_fi = etree.SubElement(AttributeConsumingService, "ServiceName")
@@ -129,8 +138,11 @@ def metadata_attributeconsumingservice(element, sp):
                          NameFormat=attribute.attribute.nameformat)
 
 
-def metadata_contact(element, sp):
-    contacts = Contact.objects.filter(sp=sp, end_at=None)
+def metadata_contact(element, sp, validated=True):
+    if validated:
+        contacts = Contact.objects.filter(sp=sp, end_at=None).exclude(validated=None)
+    else:
+        contacts = Contact.objects.filter(sp=sp, end_at=None)
     for contact in contacts:
         ContactPerson = etree.SubElement(element, "ContactPerson", contactType=contact.type)
         GivenName = etree.SubElement(ContactPerson, "GivenName")
@@ -141,16 +153,16 @@ def metadata_contact(element, sp):
         EmailAddress.text = contact.email
 
 
-def metadata_spssodescriptor(element, sp):
+def metadata_spssodescriptor(element, sp, validated=True):
     SPSSODescriptor = etree.SubElement(element, "SPSSODescriptor", protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol")
     metadata_extensions(SPSSODescriptor, sp)
-    metadata_certificates(SPSSODescriptor, sp)
+    metadata_certificates(SPSSODescriptor, sp, validated)
     metadata_nameidformat(SPSSODescriptor, sp)
-    metadata_endpoints(SPSSODescriptor, sp)
-    metadata_attributeconsumingservice(SPSSODescriptor, sp)
+    metadata_endpoints(SPSSODescriptor, sp, validated)
+    metadata_attributeconsumingservice(SPSSODescriptor, sp, validated)
 
 
-def metadata_generator(sp):
+def metadata_generator(sp, validated=True):
     """
     Using CamelCase instead of regular underscore attribute names in element tree.
     Generates metadata for single SP.
@@ -159,8 +171,8 @@ def metadata_generator(sp):
     EntityDescriptor = etree.Element("EntityDescriptor",
                                      schemaLocation="urn:oasis:names:tc:SAML:2.0:metadata",
                                      entityID=sp.entity_id)
-    metadata_spssodescriptor(EntityDescriptor, sp)
-    metadata_contact(EntityDescriptor, sp)
+    metadata_spssodescriptor(EntityDescriptor, sp, validated)
+    metadata_contact(EntityDescriptor, sp, validated)
 
     return(etree.tostring(EntityDescriptor, pretty_print=True))
 
@@ -188,7 +200,18 @@ def metadata(request, pk):
         else:
             sp = ServiceProvider.objects.get(pk=pk, admins=request.user, end_at=None)
     except ServiceProvider.DoesNotExist:
-        raise Http404("Service proviced does not exist")
-    metadata = metadata_generator(sp)
+        raise Http404("Service provider does not exist")
+    if request.GET.get('validated', '') in ("false", "False"):
+        validated = False
+    else:
+        validated = True
+    metadata_sp = sp
+    if validated and not sp.validated:
+        metadata_sp = ServiceProvider.objects.filter(history=sp.pk).exclude(validated=None).last()
+    if metadata_sp:
+        metadata = metadata_generator(sp=metadata_sp, validated=validated)
+    else:
+        metadata = None
     return render(request, "rr/metadata.html", {'object': sp,
-                                                'metadata': metadata})
+                                                'metadata': metadata,
+                                                'validated': validated})

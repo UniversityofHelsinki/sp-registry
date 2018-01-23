@@ -3,7 +3,18 @@
 {% load bootstrap4 %}
 {% block content %}
 <h1>{% trans "Metadata" %} - <small>{{ object }}</small></h1>
+{% if validated %}
+<div class="alert alert-success" role="alert">
+  {% trans "Displaying validated metadata." %}
+</div>
+<a class="btn btn-info" href="{{ request.path }}?validated=false" role="button">{% trans "Show unvalidated" %}</a>
+{% else %}
+<div class="alert alert-danger" role="alert">
+  {% trans "Displaying unvalidated metadata." %}
+</div>
+<a class="btn btn-info" href="{{ request.path }}?validated=true" role="button">{% trans "Show validated" %}</a>
+{% endif %}
 <pre><code>
-{{ metadata }}
+{% if metadata %}{{ metadata }}{% else %}{% trans "Could not find metadata" %}{% endif %}
 </code></pre>
 {% endblock %}

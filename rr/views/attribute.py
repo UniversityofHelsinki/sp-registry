@@ -39,7 +39,7 @@ def attribute_list(request, pk):
         else:
             sp = ServiceProvider.objects.get(pk=pk, admins=request.user, end_at=None)
     except ServiceProvider.DoesNotExist:
-        raise Http404(_("Service proviced does not exist"))
+        raise Http404(_("Service provider does not exist"))
     if request.method == "POST":
         form = AttributeForm(request.POST, sp=sp)
         if form.is_valid():

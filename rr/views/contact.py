@@ -37,7 +37,7 @@ def contact_list(request, pk):
         else:
             sp = ServiceProvider.objects.get(pk=pk, admins=request.user, end_at=None)
     except ServiceProvider.DoesNotExist:
-        raise Http404("Service proviced does not exist")
+        raise Http404("Service provider does not exist")
     form = ContactForm(sp=sp)
     if request.method == "POST":
         if "add_contact" in request.POST:

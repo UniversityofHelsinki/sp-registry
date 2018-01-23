@@ -46,7 +46,7 @@ def attributefilter_parser(filename):
 class Command(BaseCommand):
 
     def add_arguments(self, parser):
-        parser.add_argument('files', nargs='+', type=str)
+        parser.add_argument('-i', type=str,  nargs='+', action='store', dest='files', help='List of files')
 
     def handle(self, *args, **options):
         for file in options['files']:

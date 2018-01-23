@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% load i18n %}
 {% load bootstrap4 %}
+{% load static %}
 {% block content %}
 <h1>{% trans "Certificates" %} - <small>{{ object }}</small></h1>
 <h2>{% trans "List of certificates" %}</h2>
@@ -26,8 +27,8 @@
       <td>{{ certificate.valid_until }}</td>
       <td>{{ certificate.valid_from }}</td>
       <td>{{ certificate.key_size }}</td>
-      <td>{{ certificate.signing }}</td>
-      <td>{{ certificate.encryption }}</td>
+      <td>{% if certificate.signing %}<object data="{% static "true.svg" %}"></object>{% else %}<object data="{% static "false.svg" %}"></object>{% endif %}</td>
+      <td>{% if certificate.encryption %}<object data="{% static "true.svg" %}"></object>{% else %}<object data="{% static "false.svg" %}"></object>{% endif %}</td>
       <td><div class="checkbox"><input type="checkbox" name="{{ certificate.pk }}" class="" id="id_certificate" /></div></td>
     </tr>
 {% endfor %}

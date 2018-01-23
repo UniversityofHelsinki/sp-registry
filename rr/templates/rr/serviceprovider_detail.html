@@ -1,10 +1,11 @@
 {% extends "base.html" %}
 {% load i18n %}
 {% load bootstrap4 %}
+{% load static %}
 {% load attribute_filters %}
 {% block content %}
 <h1>{% trans "Details" %} - <small>{{ object }}</small></h1>
-<table class="table table-striped">
+<table class="table">
   <tbody>
     <tr>
       <td>{% trans "Colors legend:" %}</td>
@@ -24,30 +25,26 @@
 </form>
 {% endif %}
 <h2>{% trans "Basic Information" %}</h2>
-<table class="table table-striped">
+<table class="table">
   <thead>
     <tr>
       <th scope="col">{% trans "Attribute" %}</th>
-      <th scope="col">{% trans "Value" %}</th>
-      {% if history_object %}<th scope="col">{% trans "Validated value" %}</th>{% endif %}
+      <th scope="col">{% trans "Value" %}</th>{% if history_object %}
+      <th scope="col">{% trans "Validated value" %}</th>{% endif %}
     </tr>
   </thead>
   <tbody>
 {% for f in object.get_all_fields %}
 {% if history_object %}
-{% if f.value != history_object|get_item:f.name %}
-    <tr class="table-warning">
-{% else %}
-    <tr>
-{% endif %}
+    {% if f.value != history_object|get_item:f.name %}<tr class="table-warning">{% else %}<tr>{% endif %}
       <td scope="row">{{ f.label }}</td>
-      <td>{{ f.value }}</td>
-      <td>{{ history_object|get_item:f.name }}</td>
+      <td>{% if f.value == True %}<object data="{% static "true.svg" %}"></object>{% elif f.value == False %}<object data="{% static "false.svg" %}"></object>{% else %}{{ f.value }}{% endif %}</td>
+      <td>{% if history_object|get_item:f.name == True %}<object data="{% static "true.svg" %}"></object>{% elif history_object|get_item:f.name == False %}<object data="{% static "false.svg" %}"></object>{% else %}{{ history_object|get_item:f.name }}{% endif %}</td>
     </tr>
 {% else %}
     <tr>
       <td scope="row">{{ f.label }}</td>
-      <td>{{ f.value }}</td>
+      <td>{% if f.value == True %}<object data="{% static "true.svg" %}"></object>{% elif f.value == False %}<object data="{% static "false.svg" %}"></object>{% else %}{{ f.value }}{% endif %}</td>
     </tr>
 {% endif %}
 {% endfor %}
@@ -55,7 +52,7 @@
 </table>
 
 <h2>{% trans "Registry administrators" %}</h2>
-<table class="table table-striped">
+<table class="table">
   <thead>
     <tr>
       <th scope="col">{% trans "Name" %}</th>
@@ -73,7 +70,7 @@
 </table>
 
 <h2>{% trans "Attribute requisitions" %}</h2>
-<table class="table table-striped">
+<table class="table">
   <thead>
     <tr>
       <th scope="col">{% trans "Attribute" %}</th>
@@ -82,13 +79,7 @@
   </thead>
   <tbody>
 {% for a in attributes %}
-{% if a.end_at %}
-	<tr class="table-danger">
-{% elif not a.validated %}
-    <tr class="table-warning">
-{% else %}
-    <tr>
-{% endif %}
+    {% if a.end_at %}<tr class="table-danger">{% elif not a.validated %}<tr class="table-warning">{% else %}<tr>{% endif %}
       <td scope="row">{{ a.attribute }}</td>
       <td>{{ a.reason }}</td>
     </tr>
@@ -97,7 +88,7 @@
 </table>
 
 <h2>{% trans "Certificates" %}</h2>
-<table class="table table-striped">
+<table class="table">
   <thead>
     <tr>
       <th scope="col">{% trans "Valid until" %}</th>
@@ -107,13 +98,7 @@
   </thead>
   <tbody>
 {% for a in certificates %}
-{% if a.end_at %}
-	<tr class="table-danger">
-{% elif not a.validated %}
-    <tr class="table-warning">
-{% else %}
-    <tr>
-{% endif %}
+    {% if a.end_at %}<tr class="table-danger">{% elif not a.validated %}<tr class="table-warning">{% else %}<tr>{% endif %}
       <td scope="row">{{ a.valid_until }}</td>
       <td>{{ a.valid_from }}</td>
       <td>{{ a.key_size }}</td>
@@ -123,7 +108,7 @@
 </table>
 
 <h2>{% trans "Contacts" %}</h2>
-<table class="table table-striped">
+<table class="table">
   <thead>
     <tr>
       <th scope="col">{% trans "Type" %}</th>
@@ -134,13 +119,7 @@
   </thead>
   <tbody>
 {% for a in contacts %}
-{% if a.end_at %}
-	<tr class="table-danger">
-{% elif not a.validated %}
-    <tr class="table-warning">
-{% else %}
-    <tr>
-{% endif %}
+    {% if a.end_at %}<tr class="table-danger">{% elif not a.validated %}<tr class="table-warning">{% else %}<tr>{% endif %}
       <td scope="row">{{ a.get_type_display }}</td>
       <td>{{ a.firstname }}</td>
       <td>{{ a.lastname }}</td>
@@ -151,7 +130,7 @@
 </table>
 
 <h2>{% trans "SAML endpoints" %}</h2>
-<table class="table table-striped">
+<table class="table">
   <thead>
     <tr>
       <th scope="col">{% trans "Type" %}</th>
@@ -162,13 +141,7 @@
   </thead>
   <tbody>
 {% for a in endpoints %}
-{% if a.end_at %}
-	<tr class="table-danger">
-{% elif not a.validated %}
-    <tr class="table-warning">
-{% else %}
-    <tr>
-{% endif %}
+    {% if a.end_at %}<tr class="table-danger">{% elif not a.validated %}<tr class="table-warning">{% else %}<tr>{% endif %}
       <td scope="row">{{ a.get_type_display }}</td>
       <td>{{ a.get_binding_display }}</td>
       <td>{{ a.url }}</td>

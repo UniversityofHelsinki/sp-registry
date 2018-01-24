@@ -6,7 +6,7 @@ from django.utils.six import StringIO
 @when(u'loading test metadata')
 def load_test_metadata(context):
     out = StringIO()
-    call_command('importmetadata', 'testdata/metadata.xml', stdout=out)
+    call_command('importmetadata', '-i', 'testdata/metadata.xml', stdout=out)
 
 
 @then(u'the page will have same metadata')

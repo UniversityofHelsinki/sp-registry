@@ -3,9 +3,9 @@ entityID {{ sp }}.
 
 You may use following link to gain management rights.
 
-{{ request.get_host }}/invite/{{activation_key}}
+{{ hostname }}/invite/{{activation_key}}
 
-After clicking the link, you will be asked to log in using University of Helsinki
-single sign on system.
+After clicking the link, you will be asked to log in using University of
+Helsinki single sign on system.
 
 The activation key is valid until {{ valid|date:'j.n.Y' }}.

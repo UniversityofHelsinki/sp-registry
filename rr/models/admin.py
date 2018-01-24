@@ -12,7 +12,7 @@ class KeystoreManager(models.Manager):
     """
     Manager for Keystore
     """
-    def create_key(self, sp, creator, email):
+    def create_key(self, sp, creator, email, hostname):
         """
         Creates invitation key for a SP
         Sends it to user by email, using templates/email to generate content
@@ -31,7 +31,8 @@ class KeystoreManager(models.Manager):
                                    {'creator': creator.first_name + " " + creator.last_name,
                                     'sp': sp.entity_id,
                                     'activation_key': activation_key,
-                                    'valid': date.date})
+                                    'valid': date.date,
+                                    'hostname': hostname})
         send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, [email], fail_silently=False)
         return activation_key
 

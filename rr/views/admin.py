@@ -10,6 +10,13 @@ from django.http.response import Http404
 from django.contrib.auth.models import User
 
 
+def get_hostname(request):
+    if request.is_secure():
+        return 'https://' + request.META.get('HTTP_HOST', '')
+    else:
+        return 'http://' + request.META.get('HTTP_HOST', '')
+
+
 @login_required
 def admin_list(request, pk):
     """
@@ -44,7 +51,8 @@ def admin_list(request, pk):
             form = AdminForm(request.POST)
             if form.is_valid():
                 email = form.cleaned_data['email']
-                Keystore.objects.create_key(sp=sp, creator=request.user, email=email)
+                Keystore.objects.create_key(sp=sp, creator=request.user, email=email, hostname=get_hostname(request))
+                form = AdminForm()
         elif "remove_invite" in request.POST:
             for key, value in request.POST.dict().items():
                 if value == "on":

@@ -1,7 +1,7 @@
 """
 Command line script for importing metadata.xml
 
-Usage: ./manage.py importmetadata <metadata-file-name>
+Usage: ./manage.py importmetadata -i <metadata-file-name>
 """
 
 from rr.models.serviceprovider import ServiceProvider, SPAttribute

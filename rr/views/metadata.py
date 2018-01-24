@@ -13,6 +13,16 @@ from lxml import etree, objectify
 
 
 def metadata_extensions(element, sp):
+    """
+    Generates Extensions element for SP metadata XML
+
+    element: etree.Element object for previous level (SPSSODescriptor)
+    sp: ServiceProvider object
+    validated: if false, using unvalidated metadata
+
+    Using CamelCase instead of regular underscore attribute names in element tree.
+    """
+
     Extensions = etree.SubElement(element, "Extensions")
     if sp.discovery_service_url:
         etree.SubElement(Extensions, "{urn:oasis:names:tc:SAML:profiles:SSO:idp-discovery-protocol}DiscoveryResponse",
@@ -63,6 +73,15 @@ def metadata_extensions(element, sp):
 
 
 def metadata_certificates(element, sp, validated=True):
+    """
+    Generates KeyDescriptor elements for SP metadata XML
+
+    element: etree.Element object for previous level (SPSSODescriptor)
+    sp: ServiceProvider object
+    validated: if false, using unvalidated metadata
+
+    Using CamelCase instead of regular underscore attribute names in element tree.
+    """
     if validated:
         certificates = Certificate.objects.filter(sp=sp, end_at=None).exclude(validated=None)
     else:
@@ -83,6 +102,14 @@ def metadata_certificates(element, sp, validated=True):
 
 
 def metadata_nameidformat(element, sp):
+    """
+    Generates NameIDFormat elements for SP metadata XML
+
+    element: etree.Element object for previous level (SPSSODescriptor)
+    sp: ServiceProvider object
+    validated: if false, using unvalidated metadata
+    """
+
     if sp.name_format_transient:
         NameIDFormat = etree.SubElement(element, "NameIDFormat")
         NameIDFormat.text = "urn:oasis:names:tc:SAML:2.0:nameid-format:transient"
@@ -92,6 +119,14 @@ def metadata_nameidformat(element, sp):
 
 
 def metadata_endpoints(element, sp, validated=True):
+    """
+    Generates EndPoint elements for SP metadata XML
+
+    element: etree.Element object for previous level (SPSSODescriptor)
+    sp: ServiceProvider object
+    validated: if false, using unvalidated metadata
+    """
+
     if validated:
         endpoints = Endpoint.objects.filter(sp=sp, end_at=None).exclude(validated=None)
     else:
@@ -101,6 +136,16 @@ def metadata_endpoints(element, sp, validated=True):
 
 
 def metadata_attributeconsumingservice(element, sp, validated=True):
+    """
+    Generates AttributeConsumingService element for SP metadata XML
+
+    element: etree.Element object for previous level (SPSSODescriptor)
+    sp: ServiceProvider object
+    validated: if false, using unvalidated metadata
+
+    Using CamelCase instead of regular underscore attribute names in element tree.
+    """
+
     if validated:
         attributes = SPAttribute.objects.filter(sp=sp).exclude(validated=None)
     else:
@@ -139,6 +184,16 @@ def metadata_attributeconsumingservice(element, sp, validated=True):
 
 
 def metadata_contact(element, sp, validated=True):
+    """
+    Generates ContactPerson elements for SP metadata XML
+
+    element: etree.Element object for previous level (EntityDescriptor)
+    sp: ServiceProvider object
+    validated: if false, using unvalidated metadata
+
+    Using CamelCase instead of regular underscore attribute names in element tree.
+    """
+
     if validated:
         contacts = Contact.objects.filter(sp=sp, end_at=None).exclude(validated=None)
     else:
@@ -154,6 +209,16 @@ def metadata_contact(element, sp, validated=True):
 
 
 def metadata_spssodescriptor(element, sp, validated=True):
+    """
+    Generates SPSSODescriptor elements for SP metadata XML
+
+    element: etree.Element object for previous level (EntityDescriptor)
+    sp: ServiceProvider object
+    validated: if false, using unvalidated metadata
+
+    Using CamelCase instead of regular underscore attribute names in element tree.
+    """
+
     SPSSODescriptor = etree.SubElement(element, "SPSSODescriptor", protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol")
     metadata_extensions(SPSSODescriptor, sp)
     metadata_certificates(SPSSODescriptor, sp, validated)
@@ -164,8 +229,12 @@ def metadata_spssodescriptor(element, sp, validated=True):
 
 def metadata_generator(sp, validated=True):
     """
-    Using CamelCase instead of regular underscore attribute names in element tree.
     Generates metadata for single SP.
+
+    sp: ServiceProvider object
+    validated: if false, using unvalidated metadata
+
+    Using CamelCase instead of regular underscore attribute names in element tree.
     """
 
     EntityDescriptor = etree.Element("EntityDescriptor",

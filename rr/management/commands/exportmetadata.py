@@ -1,9 +1,10 @@
 """
-Parse a Haka metadata file and print out attribute-filter for it.
-Short term manual hack for IdP 2 as Haka stopped releasing attribute-filter file.
+Command line script for exporting metadata
 
-Usage: ./manage.py parsehakaattributes <metadata-file-name>
-Saves output to "attribute-filter-haka.xml_YYYYMMDD"
+Usage: ./manage.py exportmetadata -o <output-file-name> -p -t -i entityId [entityId]
+-p                include production data
+-t                include test data
+-- unvalidated    use unvalidated metadata
 """
 
 from lxml import etree, objectify
@@ -21,31 +22,45 @@ class Command(BaseCommand):
         parser.add_argument('-t', action='store_true', dest='test', help='Include test service providers')
         parser.add_argument('-m', type=str, action='store', dest='metadata', help='Metadata output file name')
         parser.add_argument('-i', type=str,  nargs='+', action='store', dest='include', help='List of included entityIDs')
+        parser.add_argument('-u', action='store_true', dest='unvalidated', help='Use unvalidated data')
 
     def handle(self, *args, **options):
         production = options['production']
         test = options['test']
         metadata_output = options['metadata']
         include = options['include']
+        validated = not options['unvalidated']
         if not production and not test and not include:
-            self.stdout.write("Specify production, test or included entityIDs")
-        serviceproviders = ServiceProvider.objects.none()
-        if production:
-            serviceproviders = serviceproviders | ServiceProvider.objects.filter(end_at=None, production=True).exclude(validated=None)
-        if test:
-            serviceproviders = serviceproviders | ServiceProvider.objects.filter(end_at=None, test=True).exclude(validated=None)
-        if include:
-            for entity_id in include:
-                serviceproviders = serviceproviders | ServiceProvider.objects.filter(entity_id=entity_id, end_at=None).exclude(validated=None)
+            self.stdout.write("Give production, test or included entityIDs as command line arguments")
+        if validated:
+            serviceproviders = ServiceProvider.objects.none()
+            sp_loop = ServiceProvider.objects.filter(end_at=None)
+            for sp in sp_loop:
+                if not sp.validated:
+                    sp = ServiceProvider.objects.filter(history=sp.pk).exclude(validated=None).last()
+                if sp and production and sp.production:
+                    serviceproviders = serviceproviders | ServiceProvider.objects.filter(pk=sp.pk)
+                if sp and test and sp.test:
+                    serviceproviders = serviceproviders | ServiceProvider.objects.filter(pk=sp.pk)
+                if sp and include and sp.entity_id in include:
+                    serviceproviders = serviceproviders | ServiceProvider.objects.filter(pk=sp.pk)
+        else:
+            serviceproviders = ServiceProvider.objects.none()
+            if production:
+                serviceproviders = serviceproviders | ServiceProvider.objects.filter(end_at=None, production=True)
+            if test:
+                serviceproviders = serviceproviders | ServiceProvider.objects.filter(end_at=None, test=True)
+            if include:
+                for entity_id in include:
+                    serviceproviders = serviceproviders | ServiceProvider.objects.filter(entity_id=entity_id, end_at=None)
+        # Create XML containing selected EntityDescriptors
         if serviceproviders:
-            NSMAL = {"xmlns": 'urn:mace:shibboleth:2.0:afp',
-                     }
             metadata = etree.Element("EntitiesDescriptor", name="urn:mace:funet.fi:helsinki.fi")
             metadata.attrib['{http://www.w3.org/2001/XMLSchema-instance}schemaLocation'] = "urn:oasis:names:tc:SAML:2.0:metadata saml-schema-metadata-2.0.xsd urn:mace:shibboleth:metadata:1.0 shibboleth-metadata-1.0.xsd http://www.w3.org/2000/09/xmldsig# xmldsig-core-schema.xsd"
             for sp in serviceproviders:
                 EntityDescriptor = etree.SubElement(metadata, "EntityDescriptor", entityID=sp.entity_id)
-                metadata_spssodescriptor(EntityDescriptor, sp)
-                metadata_contact(EntityDescriptor, sp)
+                metadata_spssodescriptor(EntityDescriptor, sp, validated)
+                metadata_contact(EntityDescriptor, sp, validated)
             if metadata_output:
                 with open(metadata_output, 'wb') as f:
                     f.write(etree.tostring(metadata, pretty_print=True))

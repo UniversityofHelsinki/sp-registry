@@ -23,7 +23,12 @@ class ServiceProvider(models.Model):
     discovery_service_url = models.URLField(max_length=255, blank=True, verbose_name=_('Discovery Service URL'))
     name_format_transient = models.BooleanField(default=False, verbose_name=_('nameid-format:transient'))
     name_format_persistent = models.BooleanField(default=False, verbose_name=_('nameid-format:persistent'))
-    encyrpt_attribute_assertions = models.BooleanField(default=False, verbose_name=_('Encrypt attribute assertions'))
+
+    sign_assertions = models.BooleanField(default=True, verbose_name=_('Sign SSO assertions'))
+    sign_requests = models.BooleanField(default=False, verbose_name=_('Sign SSO requests'))
+    sign_responses = models.BooleanField(default=False, verbose_name=_('Sign SSO responses'))
+    encyrpt_assertions = models.BooleanField(default=True, verbose_name=_('Encrypt SSO assertions'))
+
     production = models.BooleanField(default=False, verbose_name=_('Publish to production servers'))
     test = models.BooleanField(default=False, verbose_name=_('Publish to test servers'))
 

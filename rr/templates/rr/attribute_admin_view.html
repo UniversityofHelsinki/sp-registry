@@ -1,20 +1,20 @@
 {% extends "base.html" %}
 {% load i18n %}
 {% block content %}
-<h1>Attributes - <small>{{ object }}</small></h1>
+<h1>Attributes - <small>{{ attribute }}</small></h1>
 <dl class="row">
     <dt class="col-sm-3">{% trans "Friendly Name" %}</dt>
-    <dd class="col-sm-9">{{ object.friendlyname }}</dd>
+    <dd class="col-sm-9">{{ attribute.friendlyname }}</dd>
     <dt class="col-sm-3">{% trans "Attribute ID" %}</dt>
-    <dd class="col-sm-9">{{ object.attributeid }}</dd>
+    <dd class="col-sm-9">{{ attribute.attributeid }}</dd>
     <dt class="col-sm-3">{% trans "Name / OID" %}</dt>
-    <dd class="col-sm-9">{{ object.name }}</dd>
+    <dd class="col-sm-9">{{ attribute.name }}</dd>
     <dt class="col-sm-3">{% trans "Name Format" %}</dt>
-    <dd class="col-sm-9">{{ object.nameformat }}</dd>
+    <dd class="col-sm-9">{{ attribute.nameformat }}</dd>
     <dt class="col-sm-3">{% trans "Public" %}</dt>
-    <dd class="col-sm-9">{{ object.public }}</dd>
+    <dd class="col-sm-9">{{ attribute.public }}</dd>
     <dt class="col-sm-3">{% trans "Information" %}</dt>
-    <dd class="col-sm-9">{{ object.info }}</dd>
+    <dd class="col-sm-9">{{ attribute.info }}</dd>
 </dl>
 <h2>{% trans "ServiceProviders using the attribute" %}</h2>
 <table class="table">

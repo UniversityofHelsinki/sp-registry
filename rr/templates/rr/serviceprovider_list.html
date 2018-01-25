@@ -2,8 +2,10 @@
 {% load i18n %}
 {% load static %}
 {% block content %}
-<h1>Service Providers</h1>
-<table class="table">
+<h1>{% trans "Service Providers" %}</h1>
+<p>{% trans "This list includes all service providers you currently have administration access." %}
+<p><a href="{% url 'serviceprovider-add' %}"><button type="button" class="btn btn-primary btn-lg btn-block">{% trans "Add a new service provider" %}</button></a></p>
+<table class="table table-sm">
   <thead>
     <tr>
       <th scope="col">{% trans "entityID" %}</th>
@@ -34,5 +36,4 @@
   </form>
   </tbody>
 </table>
-<a href="{% url 'serviceprovider-add' %}"><button type="button" class="btn btn-primary btn-lg btn-block">{% trans "Add a new service provider" %}</button></a>
 {% endblock %}

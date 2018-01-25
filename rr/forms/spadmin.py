@@ -2,7 +2,7 @@ from django.forms import Form, EmailField
 from django.utils.translation import ugettext_lazy as _
 
 
-class AdminForm(Form):
+class SPAdminForm(Form):
     """
     Form for sending email invites
     """

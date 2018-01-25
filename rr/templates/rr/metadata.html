@@ -5,14 +5,14 @@
 <h1>{% trans "Metadata" %} - <small>{{ object }}</small></h1>
 {% if validated %}
 <div class="alert alert-success" role="alert">
-  {% trans "Displaying validated metadata." %}
+  {% trans "Displaying validated metadata. This is used for production IdP." %}
 </div>
-<a class="btn btn-info" href="{{ request.path }}?validated=false" role="button">{% trans "Show unvalidated" %}</a>
+<p><a class="btn btn-info" href="{{ request.path }}?validated=false" role="button">{% trans "Show unvalidated" %}</a></p>
 {% else %}
 <div class="alert alert-danger" role="alert">
-  {% trans "Displaying unvalidated metadata." %}
+  {% trans "Displaying unvalidated metadata. This is used for test IdP." %}
 </div>
-<a class="btn btn-info" href="{{ request.path }}?validated=true" role="button">{% trans "Show validated" %}</a>
+<p><a class="btn btn-info" href="{{ request.path }}?validated=true" role="button">{% trans "Show validated" %}</a></p>
 {% endif %}
 <pre><code>
 {% if metadata %}{{ metadata }}{% else %}{% trans "Could not find metadata" %}{% endif %}

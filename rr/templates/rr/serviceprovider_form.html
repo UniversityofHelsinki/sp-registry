@@ -1,13 +1,23 @@
 {% extends "base.html" %}
 {% load i18n %}
+{% load static %}
 {% load bootstrap4 %}
 {% block content %}
 <h1>{% trans "Basic information" %} - <small>{{ object }}</small></h1>
+<p>{% trans "Basic information for your service provider. Necessary information for production use are marked." %}</p>
 <form action="" method="post" class="form">
     {% csrf_token %}
     {% bootstrap_form form layout='horizontal' %}
     {% buttons %}
-        <button type="submit" class="btn btn-primary">{% trans "Submit" %}</button>
+    <p><button type="submit" class="btn btn-primary">{% trans "Submit" %}</button></p>
     {% endbuttons %}
 </form>
+{% endblock %}
+{% block javascript %}
+<script src="{% static "js/jquery.are-you-sure.js" %}"></script>
+<script>
+$(function() {
+    $('form').areYouSure( {'message':'{% trans "You have modified the form without saving it." %}'} );
+})
+</script>
 {% endblock %}

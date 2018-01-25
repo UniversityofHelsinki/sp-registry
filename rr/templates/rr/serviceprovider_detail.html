@@ -5,7 +5,7 @@
 {% load attribute_filters %}
 {% block content %}
 <h1>{% trans "Details" %} - <small>{{ object }}</small></h1>
-<table class="table">
+<table class="table table-sm">
   <tbody>
     <tr>
       <td>{% trans "Colors legend:" %}</td>
@@ -14,6 +14,8 @@
     </tr>
   </tbody>  
 </table>
+<br>
+
 {% if request.user.is_superuser and object.modified %}
 <h2>{% trans "Validate changes" %}</h2>
 <p>{% trans "This object has changed. Click the button to validate all changes listed below" %}</p>
@@ -21,11 +23,13 @@
 {% csrf_token %}
 <input type='hidden' name="object" value="{{ object.pk }}" />
 <input type='hidden' name="modify_date" value="{{ object.updated_at|date:'YmdHis' }}" />
-<input class="btn btn-success" type="submit" name="validate_changes" value="{% trans "Validate changes" %}" />
+<p><input class="btn btn-success" type="submit" name="validate_changes" value="{% trans "Validate changes" %}" /></p>
 </form>
+<br>
 {% endif %}
+
 <h2>{% trans "Basic Information" %}</h2>
-<table class="table">
+<table class="table table-sm">
   <thead>
     <tr>
       <th scope="col">{% trans "Attribute" %}</th>
@@ -50,9 +54,10 @@
 {% endfor %}
   </tbody>
 </table>
+<br>
 
 <h2>{% trans "Registry administrators" %}</h2>
-<table class="table">
+<table class="table table-sm">
   <thead>
     <tr>
       <th scope="col">{% trans "Name" %}</th>
@@ -68,9 +73,10 @@
 {% endfor %}
   </tbody>
 </table>
+<br>
 
 <h2>{% trans "Attribute requisitions" %}</h2>
-<table class="table">
+<table class="table table-sm">
   <thead>
     <tr>
       <th scope="col">{% trans "Attribute" %}</th>
@@ -86,9 +92,10 @@
 {% endfor %}
   </tbody>
 </table>
+<br>
 
 <h2>{% trans "Certificates" %}</h2>
-<table class="table">
+<table class="table table-sm">
   <thead>
     <tr>
       <th scope="col">{% trans "Valid until" %}</th>
@@ -106,9 +113,10 @@
 {% endfor %}
   </tbody>
 </table>
+<br>
 
 <h2>{% trans "Contacts" %}</h2>
-<table class="table">
+<table class="table table-sm">
   <thead>
     <tr>
       <th scope="col">{% trans "Type" %}</th>
@@ -128,9 +136,10 @@
 {% endfor %}
   </tbody>
 </table>
+<br>
 
 <h2>{% trans "SAML endpoints" %}</h2>
-<table class="table">
+<table class="table table-sm">
   <thead>
     <tr>
       <th scope="col">{% trans "Type" %}</th>

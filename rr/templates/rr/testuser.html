@@ -4,8 +4,9 @@
 {% load static %}
 {% block content %}
 <h1>{% trans "Test users" %} - <small>{{ object }}</small></h1>
-<p>{% trans "These users are populated to test IdP database and can be used to test SPs against test IdP." %}</p>
+<p>{% trans "These users are added to the test IdP database and can be used to test this SP against the test IdP." %}</p>
 <h2>{% trans "List of users" %}</h2>
+<p>{% trans "Click the username to configure user attribute values." %}</p>
 {% if object_list %}
 <form action="" method='POST'>
 {% csrf_token %}
@@ -31,7 +32,7 @@
 {% endfor %}
   </tbody>
 </table>
-<input class="btn btn-danger" type="submit" name="remove_testuser" value="{% trans "Remove selected" %}" />
+<p><input class="btn btn-danger" type="submit" data-toggle="confirmation" name="remove_testuser" value="{% trans "Remove selected" %}" /></p>
 </form>
 {% else %}
 <p>{% trans "No users" %}</p>
@@ -42,8 +43,22 @@
     {% csrf_token %}
     {% bootstrap_form form layout='horizontal' %}
     {% buttons %}
-        <button type="submit" name="add_testuser" class="btn btn-primary">{% trans "Submit" %}</button>
+    <p><button type="submit" name="add_testuser" class="btn btn-primary">{% trans "Submit" %}</button></p>
     {% endbuttons %}
 </form>
 {% endif %}
+{% endblock %}
+{% block javascript %}
+  <script src="{% static "js/popover.js" %}"></script>
+  <script src="{% static "js/jquery.popconfirm.js" %}"></script>
+  <script>
+  $("[data-toggle='confirmation']").popConfirm({
+    title: "{% trans "Confirm removal" %}",
+    content: "{% trans "Do you want to remove selected test users?" %}",
+    placement: "bottom",
+    container: "body",
+    yesBtn: "{% trans "Confirm" %}",
+    noBtn: "{% trans "Cancel" %}"
+  });
+  </script>
 {% endblock %}

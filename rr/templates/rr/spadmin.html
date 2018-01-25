@@ -1,8 +1,11 @@
 {% extends "base.html" %}
 {% load i18n %}
 {% load bootstrap4 %}
+{% load static %}
 {% block content %}
 <h1>{% trans "Admins" %} - <small>{{ object }}</small></h1>
+<p>{% trans "Users who can manage this service provider. You can send invites through email." %}</p>
+<p>{% trans "Users without a University of Helsinki login account have to requisition a local account from IdP administrators." %}</p>
 <h2>{% trans "List of admins" %}</h2>
 {% if object.admins.all %}
 <form action="" method='POST'>
@@ -28,7 +31,7 @@
   </form>
   </tbody>
 </table>
-<input class="btn btn-danger" type="submit" name="remove_admin" value="{% trans "Remove selected" %}" />
+<p><input class="btn btn-danger" type="submit" data-toggle="confirmation" name="remove_admin" value="{% trans "Remove selected" %}" /></p>
 {% else %}
 <p>{% trans "No admins" %}</p>
 {% endif %}
@@ -57,7 +60,7 @@
   </form>
   </tbody>
 </table>
-<input class="btn btn-danger" type="submit" name="remove_invite" value="{% trans "Remove selected" %}" />
+<p><input class="btn btn-danger" type="submit" data-toggle="confirmation" name="remove_invite" value="{% trans "Remove selected" %}" /></p>
 {% else %}
 <p>{% trans "No invites" %}</p>
 {% endif %}
@@ -67,8 +70,21 @@
     {% csrf_token %}
     {% bootstrap_form form layout='horizontal' %}
     {% buttons %}
-        <button type="submit" name="add_invite" class="btn btn-primary">{% trans "Send invitation" %}</button>
+    <p><button type="submit" name="add_invite" class="btn btn-primary">{% trans "Send invitation" %}</button></p>
     {% endbuttons %}
 </form>
 {% endif %}
+{% endblock %}
+{% block javascript %}
+  <script src="{% static "js/jquery.popconfirm.js" %}"></script>
+  <script>
+  $("[data-toggle='confirmation']").popConfirm({
+    title: "{% trans "Confirm removal" %}",
+    content: "{% trans "Do you want to remove selected admins/invites?" %}",
+    placement: "bottom",
+    container: "body",
+    yesBtn: "{% trans "Confirm" %}",
+    noBtn: "{% trans "Cancel" %}"
+  });
+  </script>
 {% endblock %}

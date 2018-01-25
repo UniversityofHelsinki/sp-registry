@@ -1,8 +1,11 @@
 {% extends "base.html" %}
 {% load i18n %}
 {% load bootstrap4 %}
+{% load static %}
 {% block content %}
 <h1>{% trans "Contacts" %} - <small>{{ object }}</small></h1>
+<p>{% trans "You need to specify at least support and technical contacts for production use." %}</p>
+
 <h2>{% trans "List of contacts" %}</h2>
 {% if object_list %}
 <form action="" method='POST'>
@@ -29,7 +32,7 @@
 {% endfor %}
   </tbody>
 </table>
-<input class="btn btn-danger" type="submit" name="remove_contact" value="{% trans "Remove selected" %}" />
+<p><input class="btn btn-danger" type="submit" data-toggle="confirmation" name="remove_contact" value="{% trans "Remove selected" %}" /></p>
 </form>
 {% else %}
 <p>{% trans "No contacts" %}</p>
@@ -40,8 +43,21 @@
     {% csrf_token %}
     {% bootstrap_form form layout='horizontal' %}
     {% buttons %}
-        <button type="submit" name="add_contact" class="btn btn-primary">{% trans "Submit" %}</button>
+    <p><button type="submit" name="add_contact" class="btn btn-primary">{% trans "Submit" %}</button></p>
     {% endbuttons %}
 </form>
 {% endif %}
+{% endblock %}
+{% block javascript %}
+  <script src="{% static "js/jquery.popconfirm.js" %}"></script>
+  <script>
+  $("[data-toggle='confirmation']").popConfirm({
+    title: "{% trans "Confirm removal" %}",
+    content: "{% trans "Do you want to remove selected contacts?" %}",
+    placement: "bottom",
+    container: "body",
+    yesBtn: "{% trans "Confirm" %}",
+    noBtn: "{% trans "Cancel" %}"
+  });
+  </script>
 {% endblock %}

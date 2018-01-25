@@ -1,7 +1,7 @@
 from behave import when, then, given
 from django.contrib.auth.models import User
 from rr.models.serviceprovider import ServiceProvider
-from rr.models.admin import Keystore
+from rr.models.spadmin import Keystore
 from django.utils import timezone
 
 

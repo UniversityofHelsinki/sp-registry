@@ -1,11 +1,11 @@
 from django.contrib.auth.decorators import login_required
 from django.utils.translation import ugettext_lazy as _
-from rr.models.admin import Keystore
+from rr.models.spadmin import Keystore
 from django.urls import reverse
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from rr.models.serviceprovider import ServiceProvider
-from rr.forms.admin import AdminForm
+from rr.forms.spadmin import SPAdminForm
 from django.http.response import Http404
 from django.contrib.auth.models import User
 
@@ -45,14 +45,14 @@ def admin_list(request, pk):
             sp = ServiceProvider.objects.get(pk=pk, admins=request.user, end_at=None)
     except ServiceProvider.DoesNotExist:
         raise Http404("Service provider does not exist")
-    form = AdminForm()
+    form = SPAdminForm()
     if request.method == "POST":
         if "add_invite" in request.POST:
-            form = AdminForm(request.POST)
+            form = SPAdminForm(request.POST)
             if form.is_valid():
                 email = form.cleaned_data['email']
                 Keystore.objects.create_key(sp=sp, creator=request.user, email=email, hostname=get_hostname(request))
-                form = AdminForm()
+                form = SPAdminForm()
         elif "remove_invite" in request.POST:
             for key, value in request.POST.dict().items():
                 if value == "on":
@@ -72,7 +72,7 @@ def admin_list(request, pk):
                     except ServiceProvider.DoesNotExist:
                         return HttpResponseRedirect(reverse('serviceprovider-list'))
     invites = Keystore.objects.filter(sp=sp)
-    return render(request, "rr/admin.html", {'object_list': invites,
+    return render(request, "rr/spadmin.html", {'object_list': invites,
                                              'form': form,
                                              'object': sp})
 

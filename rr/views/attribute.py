@@ -113,7 +113,7 @@ def attribute_view(request, pk):
 
     **Template:**
 
-    :template:`rr/attribute_view.html`
+    :template:`rr/attribute_admin_view.html`
     """
     if not request.user.is_superuser:
         raise PermissionDenied
@@ -122,5 +122,5 @@ def attribute_view(request, pk):
     except ServiceProvider.DoesNotExist:
         raise Http404(_("Attribute proviced does not exist"))
     attributes = SPAttribute.objects.filter(attribute=attribute, end_at=None).order_by('sp__entity_id')
-    return render(request, "rr/attribute_view.html", {'object_list': attributes,
-                                                      'object': attribute})
+    return render(request, "rr/attribute_admin_view.html", {'object_list': attributes,
+                                                            'attribute': attribute})

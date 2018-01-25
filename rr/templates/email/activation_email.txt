@@ -1,5 +1,5 @@
-{{ creator }} has added you management rights to service provider with
-entityID {{ sp }}.
+{{ creator }} has added you management rights to service provider
+with entityID {{ sp }}.
 
 You may use following link to gain management rights.
 

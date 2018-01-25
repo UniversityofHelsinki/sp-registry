@@ -10,7 +10,7 @@ from rr.views.contact import contact_list
 from rr.views.endpoint import endpoint_list
 from rr.views.metadata import metadata
 from rr.views.basic import ShibbolethLoginView
-from rr.views.admin import activate_key, admin_list
+from rr.views.spadmin import activate_key, admin_list
 from rr.views.testuser import testuser_list, testuser_attribute_data
 
 

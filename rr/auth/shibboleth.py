@@ -10,14 +10,18 @@ class ShibbolethBackend:
     """
     def authenticate(self, request):
         username = request.META.get(settings.SAML_ATTR_EPPN, '')
-        first_name = request.META.get(settings.SAML_ATTR_FIRST_NAME, '')
-        last_name = request.META.get(settings.SAML_ATTR_LAST_NAME, '')
+        first_name = request.META.get(settings.SAML_ATTR_FIRST_NAME, '').encode('latin1').decode('utf-8', 'ignore')
+        last_name = request.META.get(settings.SAML_ATTR_LAST_NAME, '').encode('latin1').decode('utf-8', 'ignore')
         email = request.META.get(settings.SAML_ATTR_EMAIL, '')
         affiliations = request.META.get(settings.SAML_ATTR_AFFILIATION, '')
 
         if username and re.match("[^@]+@[^@]+\.[^@]+", username):
             try:
                 user = User.objects.get(username=username)
+                if user.first_name != first_name or user.last_name != last_name:
+                    user.first_name = first_name
+                    user.last_name = last_name
+                    user.save()
             except User.DoesNotExist:
                 # Create a new user with unusable password
                 if "faculty" in affiliations or "staff" in affiliations:

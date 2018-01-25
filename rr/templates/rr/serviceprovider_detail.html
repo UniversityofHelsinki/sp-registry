@@ -16,9 +16,22 @@
 </table>
 <br>
 
+{% if missing %}
+<h2>{% trans "Missing data" %}</h2>
+{% if object.production %}
+<p>{% trans "This service provider is marked for production IdPs but is missing following data:" %}</p>
+{% else %}
+<p>{% trans "This service provider is marked for test IdPs but it is missing following data:" %}</p>
+{% endif %}
+<ul>
+{% for field in missing %}<li>{{ field }}</li>{% endfor %}
+</ul>
+<br>
+{% endif %}
+
 {% if request.user.is_superuser and object.modified %}
 <h2>{% trans "Validate changes" %}</h2>
-<p>{% trans "This object has changed. Click the button to validate all changes listed below" %}</p>
+<p>{% trans "This object has changed. Click the button to validate all changes listed below." %}</p>
 <form action="" method='POST'>
 {% csrf_token %}
 <input type='hidden' name="object" value="{{ object.pk }}" />

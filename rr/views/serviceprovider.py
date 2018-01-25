@@ -11,6 +11,7 @@ from django.db.models import Q
 from django.http.response import HttpResponseRedirect
 from django.urls.base import reverse
 from django.shortcuts import render
+from django.utils.translation import ugettext_lazy as _
 
 
 class ServiceProviderList(ListView):
@@ -83,6 +84,33 @@ class BasicInformationView(DetailView):
         else:
             return ServiceProvider.objects.filter(admins=self.request.user, end_at=None).order_by('entity_id')
 
+    def get_missing_data(self, sp):
+        missing = []
+        if sp.test or sp.production:
+            if not sp.name_en:
+                missing.append(_(sp._meta.get_field('name_en').verbose_name))
+            if sp.production:
+                if not sp.name_fi:
+                    missing.append(_(sp._meta.get_field('name_fi').verbose_name))
+                if not sp.description_en:
+                    missing.append(_(sp._meta.get_field('description_en').verbose_name))
+                if not sp.description_fi:
+                    missing.append(_(sp._meta.get_field('description_fi').verbose_name))
+                if not sp.privacypolicy_en and sp.attributes:
+                    missing.append(_(sp._meta.get_field('privacypolicy_en').verbose_name))
+                if not sp.privacypolicy_fi and sp.attributes:
+                    missing.append(_(sp._meta.get_field('privacypolicy_fi').verbose_name))
+            if not Certificate.objects.filter(sp=sp, end_at=None):
+                missing.append(_("Certificate"))
+            if not Endpoint.objects.filter(sp=sp, end_at=None, type='AssertionConsumerService'):
+                missing.append(_("AssertionConsumerService endpoint"))
+            if not Contact.objects.filter(sp=sp, end_at=None, type="technical"):
+                missing.append(_("Technical contact"))
+            if not Contact.objects.filter(sp=sp, end_at=None, type="support"):
+                missing.append(_("Support contact"))
+
+        return missing
+
     def get_context_data(self, **kwargs):
         context = super(BasicInformationView, self).get_context_data(**kwargs)
         sp = context['object']
@@ -106,6 +134,9 @@ class BasicInformationView(DetailView):
             context['endpoints'] = Endpoint.objects.filter(Q(sp=sp, end_at__gte=sp.created_at) | Q(sp=sp, end_at=None))
         if history:
             context['history_object'] = history
+        if sp.production or sp.test:
+            context['missing'] = self.get_missing_data(sp)
+
         return context
 
 

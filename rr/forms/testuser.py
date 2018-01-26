@@ -1,11 +1,16 @@
-from django.forms import ModelForm, Form, CharField
+from django.forms import ModelForm, Form, CharField, BooleanField
 from rr.models.serviceprovider import SPAttribute
 from rr.models.testuser import TestUser, TestUserData
 from django.core.validators import ValidationError
 from django.utils.translation import ugettext_lazy as _
+from django.forms.widgets import TextInput
 
 
 class TestUserForm(ModelForm):
+
+    userdata = BooleanField(required=False, label=_("Generate attribute data based for name and username based fields."))
+    otherdata = BooleanField(required=False, label=_("Generate random attribute data for other fields."))
+
     class Meta:
         model = TestUser
         fields = ['username', 'password', 'firstname', 'lastname']
@@ -35,3 +40,5 @@ class TestUserDataForm(Form):
             attribute = TestUserData.objects.filter(user=self.user, attribute=field.attribute).first()
             if attribute:
                 self.fields[field.attribute.friendlyname].initial = attribute.value
+            else:
+                self.fields[field.attribute.friendlyname].widget = TextInput(attrs={'placeholder': ''})

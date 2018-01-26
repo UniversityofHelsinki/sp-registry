@@ -22,8 +22,8 @@
     <tr>
       <th scope="row"><a href="/summary/{{ object.pk }}/">{{ object.entity_id  }}</a></th>
       <td>{{ object.name }}</td>
-      <td>{% if object.production %}<object data="{% static "true.svg" %}"></object>{% else %}{% endif %}</td>
-      <td>{% if object.test %}<object data="{% static "true.svg" %}"></object>{% else %}{% endif %}</td>
+      {% if object.production %}<td class="text-success">&#10004;{% else %}<td>{% endif %}</td>
+      {% if object.test %}<td class="text-success">&#10004;{% else %}<td>{% endif %}</td>
       {% if object.validated and not object.modified %}<td class="table-success">{% trans "OK "%}</td>{% else %}<td class="table-warning">{% trans "Modified "%}</td>{% endif %}
     </tr>
 {% empty %}

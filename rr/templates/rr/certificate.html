@@ -31,8 +31,8 @@
       <td>{{ certificate.valid_until }}</td>
       <td>{{ certificate.valid_from }}</td>
       <td>{{ certificate.key_size }}</td>
-      <td>{% if certificate.signing %}<object data="{% static "true.svg" %}"></object>{% else %}<object data="{% static "false.svg" %}"></object>{% endif %}</td>
-      <td>{% if certificate.encryption %}<object data="{% static "true.svg" %}"></object>{% else %}<object data="{% static "false.svg" %}"></object>{% endif %}</td>
+      {% if certificate.signing %}<td class="text-success">&#10004;{% else %}<td>{% endif %}</td>
+      {% if certificate.encryption %}<td class="text-success">&#10004;{% else %}<td>{% endif %}</td>
       <td><div class="checkbox"><input type="checkbox" name="{{ certificate.pk }}" class="" id="id_certificate" /></div></td>
     </tr>
 {% endfor %}

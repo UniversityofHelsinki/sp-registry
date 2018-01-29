@@ -3,8 +3,11 @@
 {% load static %}
 {% block content %}
 <h1>{% trans "Service Providers" %}</h1>
-<p>{% trans "This list includes all service providers you currently have administration access." %}
+<div class="alert alert-success" role="alert">
+<p>{% trans "This list includes all service providers you currently have administration access." %}</p>
+</div>
 <p><a href="{% url 'serviceprovider-add' %}"><button type="button" class="btn btn-primary btn-lg btn-block">{% trans "Add a new service provider" %}</button></a></p>
+
 <table class="table table-sm">
   <thead>
     <tr>

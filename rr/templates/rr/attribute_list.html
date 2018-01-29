@@ -4,15 +4,18 @@
 {% load static %}
 {% block content %}
 <h1>{% trans "Attributes" %} - <small>{{ object }}</small></h1>
+<div class="alert alert-success" role="alert">
 <p>{% trans "Give reasons for the attribute requisitions. Remove reason to remove requisition." %}</p>
 <p>{% trans "Attributes with green border are validated and attributes with red border still need to be validated." %}</p>
 <p>{% trans 'Check the <a target="_blank" href="https://wiki.helsinki.fi/pages/viewpage.action?pageId=226580829">Wiki of the University of Helsinki</a> for attribute classifications.' %}</p>
+</div>
+
 <h2>{% trans "Attribute list" %}</h2>
 <form action="" method="post" class="form">
     {% csrf_token %}
     {% bootstrap_form form layout='horizontal' %}
     {% buttons %}
-        <button type="submit" class="btn btn-primary">{% trans "Submit" %}</button>
+        <button type="submit" class="btn btn-primary">{% trans "Save" %}</button>
     {% endbuttons %}
 </form>
 {% endblock %}

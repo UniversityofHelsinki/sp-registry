@@ -4,9 +4,12 @@
 {% load static %}
 {% block content %}
 <h1 class="page-header">{% trans "Endpoints" %} - <small>{{ object }}</small></h1>
+<div class="alert alert-success" role="alert">
 <p>{% trans "Endpoints are communication addresses for SP." %}</p>
 <p>{% trans "In most cases you only have to specify AssertionConsumerService with HTTP-POST binding." %}</p>
 <p>{% trans "If the service supports Single Logout Service, you should also specify endpoint for that." %}</p>
+</div>
+
 <h2>{% trans "List of endpoints" %}</h2>
 {% if object_list %}
 <form action="" method='POST'>
@@ -38,13 +41,14 @@
 {% else %}
 <p>{% trans "No endpoints" %}</p>
 {% endif %}
+
 {% if form %}
 <h2>{% trans "Add endpoint" %}</h2>
 <form action="" method="post" class="form">
     {% csrf_token %}
     {% bootstrap_form form layout='horizontal' %}
     {% buttons %}
-    <p><button type="submit" name="add_endpoint" class="btn btn-primary">{% trans "Submit" %}</button></p>
+    <p><button type="submit" name="add_endpoint" class="btn btn-primary">{% trans "Save" %}</button></p>
     {% endbuttons %}
 </form>
 {% endif %}

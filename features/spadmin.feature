@@ -1,4 +1,4 @@
-Feature: Admins
+Feature: Service Provider Admins
 	Inviting new admins for SP 
 
 Scenario: Admin invitations

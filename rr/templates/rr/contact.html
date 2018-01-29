@@ -4,7 +4,9 @@
 {% load static %}
 {% block content %}
 <h1>{% trans "Contacts" %} - <small>{{ object }}</small></h1>
+<div class="alert alert-success" role="alert">
 <p>{% trans "You need to specify at least support and technical contacts for production use." %}</p>
+</div>
 
 <h2>{% trans "List of contacts" %}</h2>
 {% if object_list %}
@@ -43,7 +45,7 @@
     {% csrf_token %}
     {% bootstrap_form form layout='horizontal' %}
     {% buttons %}
-    <p><button type="submit" name="add_contact" class="btn btn-primary">{% trans "Submit" %}</button></p>
+    <p><button type="submit" name="add_contact" class="btn btn-primary">{% trans "Save" %}</button></p>
     {% endbuttons %}
 </form>
 {% endif %}

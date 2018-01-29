@@ -1,6 +1,4 @@
 from behave import when, then, given
-from django.contrib.auth.models import User
-from rr.models.serviceprovider import ServiceProvider
 
 
 @when(u'I visit the "{url}"')
@@ -21,6 +19,11 @@ def check_for_text(context, text):
 @then(u'the result page will not include text "{text}"')
 def check_for_missing_text(context, text):
     assert not context.browser.is_text_present(text)
+
+
+@then(u'the page will include form value "{text}"')
+def check_for_form_value(context, text):
+    assert context.browser.find_by_value(text)
 
 
 @then(u'count of tag "{text}" is "{number}"')

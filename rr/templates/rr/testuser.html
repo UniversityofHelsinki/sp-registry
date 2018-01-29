@@ -4,9 +4,13 @@
 {% load static %}
 {% block content %}
 <h1>{% trans "Test users" %} - <small>{{ object }}</small></h1>
+<div class="alert alert-success" role="alert">
 <p>{% trans "These users are added to the test IdP database and can be used to test this SP against the test IdP." %}</p>
+</div>
 <h2>{% trans "List of users" %}</h2>
+<div class="alert alert-success" role="alert">
 <p>{% trans "Click the username to configure user attribute values." %}</p>
+</div>
 {% if object_list %}
 <form action="" method='POST'>
 {% csrf_token %}
@@ -43,7 +47,7 @@
     {% csrf_token %}
     {% bootstrap_form form layout='horizontal' %}
     {% buttons %}
-    <p><button type="submit" name="add_testuser" class="btn btn-primary">{% trans "Submit" %}</button></p>
+    <p><button type="submit" name="add_testuser" class="btn btn-primary">{% trans "Save" %}</button></p>
     {% endbuttons %}
 </form>
 {% endif %}

@@ -3,7 +3,9 @@
 {% load bootstrap4 %}
 {% block content %}
 <h1>{% trans "Test user attribute values" %} - <small>{{ object }}</small></h1>
+<div class="alert alert-success" role="alert">
 <p>{% trans "Listing all attributes requested by this service provider." %}</p>
+</div>
 <form action="" method='POST'>
 {% csrf_token %}
 <p><input class="btn btn-primary" type="submit" name="reset_userdata" value="{% trans "Reset name based data" %}" /> <input class="btn btn-primary" type="submit" name="reset_otherdata" value="{% trans "Reset other data with random values" %}" /></p>
@@ -13,7 +15,7 @@
     {% csrf_token %}
     {% bootstrap_form form layout='horizontal' %}
     {% buttons %}
-    <p><button type="submit" name="save_data" class="btn btn-primary">{% trans "Submit" %}</button></p>
+    <p><button type="submit" name="save_data" class="btn btn-primary">{% trans "Save" %}</button></p>
     {% endbuttons %}
 </form>
 {% endblock %}

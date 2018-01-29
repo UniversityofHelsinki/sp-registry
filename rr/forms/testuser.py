@@ -8,7 +8,7 @@ from django.forms.widgets import TextInput
 
 class TestUserForm(ModelForm):
 
-    userdata = BooleanField(required=False, label=_("Generate attribute data based for name and username based fields."))
+    userdata = BooleanField(required=False, label=_("Generate attribute data for name and username based fields."))
     otherdata = BooleanField(required=False, label=_("Generate random attribute data for other fields."))
 
     class Meta:

@@ -36,7 +36,7 @@ rKLt+NcwtbkI6weLISJu9lFZnPMYT7LpqDWD4aMHHUWr8THO0T6mbCeQRYMlfSpU
     context.browser.fill("certificate", certificate)
     context.browser.check("encryption")
     context.browser.check("signing")
-    context.browser.find_by_text('Submit').first.click()
+    context.browser.find_by_text('Save').first.click()
 
 
 @when(u'filling certificate form with another invalid certificate')
@@ -72,7 +72,7 @@ rKLt+NcwtbkI6weLISJu9lFZnPMYT7LpqDWD4aMHHUWr8THO0T6mbCeQRYMlfSpU
     context.browser.fill("certificate", certificate)
     context.browser.check("encryption")
     context.browser.check("signing")
-    context.browser.find_by_text('Submit').first.click()
+    context.browser.find_by_text('Save').first.click()
 
 
 @when(u'filling certificate form with valid certificate')
@@ -108,11 +108,11 @@ rKLt+NcwtbkI6weLISJu9lFZnPMYT7LpqDWD4aMHHUWr8THO0T6mbCeQRYMlfSpU
     context.browser.fill("certificate", certificate)
     context.browser.check("encryption")
     context.browser.check("signing")
-    context.browser.find_by_text('Submit').first.click()
+    context.browser.find_by_text('Save').first.click()
 
 
 @when(u'removing first certificate')
 def fill_basic_form(context):
     context.browser.check("1")
     context.browser.find_by_name('remove_certificate').first.click()
-
+    context.browser.find_by_text('Confirm').first.click()

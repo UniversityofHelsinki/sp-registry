@@ -4,8 +4,11 @@
 {% load static %}
 {% block content %}
 <h1>{% trans "Admins" %} - <small>{{ object }}</small></h1>
+<div class="alert alert-success" role="alert">
 <p>{% trans "Users who can manage this service provider. You can send invites through email." %}</p>
 <p>{% trans "Users without a University of Helsinki login account have to requisition a local account from IdP administrators." %}</p>
+</div>
+
 <h2>{% trans "List of admins" %}</h2>
 {% if object.admins.all %}
 <form action="" method='POST'>

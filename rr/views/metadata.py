@@ -10,6 +10,9 @@ from django.shortcuts import render
 from django.http.response import Http404
 from django.contrib.auth.decorators import login_required
 from lxml import etree, objectify
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 def metadata_extensions(element, sp):
@@ -269,6 +272,7 @@ def metadata(request, pk):
         else:
             sp = ServiceProvider.objects.get(pk=pk, admins=request.user, end_at=None)
     except ServiceProvider.DoesNotExist:
+        logger.debug("Tried to access unauthorized service provider")
         raise Http404("Service provider does not exist")
     if request.GET.get('validated', '') in ("false", "False"):
         validated = False

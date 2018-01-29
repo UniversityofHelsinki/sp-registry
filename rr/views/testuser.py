@@ -7,6 +7,9 @@ from django.http.response import Http404
 from django.contrib.auth.decorators import login_required
 from django.utils import timezone
 from random import randint
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 def generate_user_data(testuser, userdata=True, otherdata=True, scope="@example.org"):
@@ -112,6 +115,7 @@ def testuser_list(request, pk):
         else:
             sp = ServiceProvider.objects.get(pk=pk, admins=request.user, end_at=None)
     except ServiceProvider.DoesNotExist:
+        logger.debug("Tried to access unauthorized service provider")
         raise Http404(_("Service provided does not exist"))
     form = TestUserForm(sp=sp)
     if request.method == "POST":
@@ -125,6 +129,7 @@ def testuser_list(request, pk):
                 userdata = form.cleaned_data['userdata']
                 otherdata = form.cleaned_data['otherdata']
                 testuser = TestUser.objects.create(sp=sp, username=username, password=password, firstname=firstname, lastname=lastname, end_at=None)
+                logger.info("Test user %s added for %s", username, sp)
                 form = TestUserForm(sp=sp)
                 generate_user_data(testuser, userdata, otherdata)
         elif "remove_testuser" in request.POST:
@@ -134,6 +139,7 @@ def testuser_list(request, pk):
                     if testuser.sp == sp:
                         testuser.end_at = timezone.now()
                         testuser.save()
+                        logger.info("Test user %s removed from %s", testuser.username, sp)
     testusers = TestUser.objects.filter(sp=sp, end_at=None)
     return render(request, "rr/testuser.html", {'object_list': testusers,
                                                 'form': form,

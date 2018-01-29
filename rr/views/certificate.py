@@ -5,6 +5,9 @@ from django.shortcuts import render
 from django.http.response import Http404
 from django.contrib.auth.decorators import login_required
 from django.utils import timezone
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 @login_required
@@ -37,6 +40,7 @@ def certificate_list(request, pk):
         else:
             sp = ServiceProvider.objects.get(pk=pk, admins=request.user, end_at=None)
     except ServiceProvider.DoesNotExist:
+        logger.debug("Tried to access unauthorized service provider")
         raise Http404("Service provider does not exist")
     form = CertificateForm(sp=sp)
     if request.method == "POST":
@@ -53,6 +57,7 @@ def certificate_list(request, pk):
                     form = CertificateForm(sp=sp)
                     sp.modified = True
                     sp.save()
+                    logger.info("Certificated added for %s", sp)
         elif "remove_certificate" in request.POST:
             for key, value in request.POST.dict().items():
                 if value == "on":
@@ -62,6 +67,7 @@ def certificate_list(request, pk):
                         cert.save()
                         sp.modified = True
                         sp.save()
+                        logger.info("Certificated removed from %s", sp)
     certificates = Certificate.objects.filter(sp=sp, end_at=None)
     return render(request, "rr/certificate.html", {'object_list': certificates,
                                                    'form': form,

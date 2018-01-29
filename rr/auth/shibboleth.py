@@ -1,6 +1,9 @@
 from django.contrib.auth.models import User
 import re
 from django.conf import settings
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 class ShibbolethBackend:
@@ -22,8 +25,10 @@ class ShibbolethBackend:
                     user.first_name = first_name
                     user.last_name = last_name
                     user.save()
+                    logger.debug("Updated user information for user %s", username)
             except User.DoesNotExist:
                 # Create a new user with unusable password
+                logger.info("Created a new user: %s", username)
                 if "faculty" in affiliations or "staff" in affiliations:
                     active = True
                 else:

@@ -12,6 +12,9 @@ from django.http.response import HttpResponseRedirect
 from django.urls.base import reverse
 from django.shortcuts import render
 from django.utils.translation import ugettext_lazy as _
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 class ServiceProviderList(ListView):
@@ -73,9 +76,11 @@ class BasicInformationView(DetailView):
             sp.validated = timezone.now()
             sp.modified = False
             sp.save()
+            logger.info("SP %s validated by %s", sp, self.request.user)
             return HttpResponseRedirect(reverse('summary-view', args=(sp.pk,)))
         else:
             error_message = _("You should not be here.")
+            logger.warning("Tried to validate without superuser access")
             return render(request, "error.html", {'error_message': error_message})
 
     def get_queryset(self):
@@ -166,6 +171,7 @@ class BasicInformationCreate(CreateView):
         form.instance.updated_by = self.request.user
         super().form_valid(form)
         self.object.admins.add(self.request.user)
+        logger.info("SP %s created by %s", self.object, self.request.user)
         return HttpResponseRedirect(reverse('summary-view', args=(self.object.pk,)))
 
 
@@ -217,6 +223,7 @@ class BasicInformationUpdate(UpdateView):
             else:
                 self.object.modified = True
             self.object.save()
+            logger.info("SP %s updated by %s", self.object, self.request.user)
             return redirect_url
         else:
             return super().form_invalid(form)

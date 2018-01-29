@@ -6,6 +6,9 @@ from django.utils import timezone
 from django.template.loader import render_to_string
 from django.core.mail import send_mail
 from django.conf import settings
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 class KeystoreManager(models.Manager):
@@ -43,11 +46,14 @@ class KeystoreManager(models.Manager):
         try:
             keystore = self.get(activation_key=key)
         except self.model.DoesNotExist:
+            logger.info("Tried to access invalid invite key")
             return False
         if timezone.now().date() > keystore.valid_until:
+            logger.info("Tried to access old invite key")
             keystore.delete()
             return False
         keystore.sp.admins.add(user)
+        logger.info("Invite key for %s was activated by %s", keystore.sp, user)
         sp = keystore.sp.pk
         keystore.delete()
         return sp

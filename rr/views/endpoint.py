@@ -5,6 +5,9 @@ from django.shortcuts import render
 from django.http.response import Http404
 from django.contrib.auth.decorators import login_required
 from django.utils import timezone
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 @login_required
@@ -37,6 +40,7 @@ def endpoint_list(request, pk):
         else:
             sp = ServiceProvider.objects.get(pk=pk, admins=request.user, end_at=None)
     except ServiceProvider.DoesNotExist:
+        logger.debug("Tried to access unauthorized service provider")
         raise Http404("Service provider does not exist")
     form = EndpointForm(sp=sp)
     if request.method == "POST":
@@ -54,6 +58,7 @@ def endpoint_list(request, pk):
                                         index=index)
                 sp.modified = True
                 sp.save()
+                logger.info("Endpoint added for %s", sp)
                 form = EndpointForm(sp=sp)
         elif "remove_endpoint" in request.POST:
             for key, value in request.POST.dict().items():
@@ -64,6 +69,7 @@ def endpoint_list(request, pk):
                         endpoint.save()
                         sp.modified = True
                         sp.save()
+                        logger.info("Endpoint added for %s", sp)
     endpoints = Endpoint.objects.filter(sp=sp, end_at=None)
     return render(request, "rr/endpoint.html", {'object_list': endpoints,
                                                 'form': form,

@@ -8,6 +8,9 @@ from rr.models.serviceprovider import ServiceProvider
 from rr.forms.spadmin import SPAdminForm
 from django.http.response import Http404
 from django.contrib.auth.models import User
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 def get_hostname(request):
@@ -44,6 +47,7 @@ def admin_list(request, pk):
         else:
             sp = ServiceProvider.objects.get(pk=pk, admins=request.user, end_at=None)
     except ServiceProvider.DoesNotExist:
+        logger.debug("Tried to access unauthorized service provider")
         raise Http404("Service provider does not exist")
     form = SPAdminForm()
     if request.method == "POST":
@@ -52,17 +56,20 @@ def admin_list(request, pk):
             if form.is_valid():
                 email = form.cleaned_data['email']
                 Keystore.objects.create_key(sp=sp, creator=request.user, email=email, hostname=get_hostname(request))
+                logger.info("Invite for %s sent to %s by %s", sp, email, request.user)
                 form = SPAdminForm()
         elif "remove_invite" in request.POST:
             for key, value in request.POST.dict().items():
                 if value == "on":
                     invite = Keystore.objects.get(pk=key)
                     if invite.sp == sp:
+                        logger.info("Invite for %s to %s deleted by %s", invite.email, sp, request.user)
                         invite.delete()
         elif "remove_admin" in request.POST:
             for key, value in request.POST.dict().items():
                 if value == "on":
                     admin = User.objects.get(pk=key)
+                    logger.info("Admin %s deleted from %s by %s", admin, sp, request.user)
                     sp.admins.remove(admin)
                     try:
                         if request.user.is_superuser:
@@ -73,8 +80,8 @@ def admin_list(request, pk):
                         return HttpResponseRedirect(reverse('serviceprovider-list'))
     invites = Keystore.objects.filter(sp=sp)
     return render(request, "rr/spadmin.html", {'object_list': invites,
-                                             'form': form,
-                                             'object': sp})
+                                               'form': form,
+                                               'object': sp})
 
 
 @login_required

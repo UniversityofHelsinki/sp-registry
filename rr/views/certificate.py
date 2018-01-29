@@ -6,8 +6,34 @@ from django.http.response import Http404
 from django.contrib.auth.decorators import login_required
 from django.utils import timezone
 import logging
+from django.core.exceptions import PermissionDenied
 
 logger = logging.getLogger(__name__)
+
+
+@login_required
+def certificate_admin_list(request):
+    """
+    Displays a list of :model:`rr.Certificate`
+    including old certificates and weak keys.
+
+    Only available for super users.
+
+    **Context**
+
+    ``object_list``
+        List of :model:`rr.Certificate`.
+
+    **Template:**
+
+    :template:`rr/attribute_admin_list.html`
+    """
+    if not request.user.is_superuser:
+        raise PermissionDenied
+    weak_certificates = Certificate.objects.filter(end_at=None, key_size__lt=2048).order_by('key_size')
+    expired_certificates = Certificate.objects.filter(end_at=None, valid_until__lte=timezone.now()).order_by('valid_until')
+    return render(request, "rr/certificate_admin_list.html", {'weak_certificates': weak_certificates,
+                                                              'expired_certificates': expired_certificates, })
 
 
 @login_required

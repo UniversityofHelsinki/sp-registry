@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load bootstrap4 %}
+{% load static %}
+{% block content %}
+<h1>{% trans "Certificate administration" %}</h1>
+
+<h2>{% trans "Expired certificates" %}</h2>
+{% if expired_certificates %}
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">{% trans "SP" %}</th>
+      <th scope="col">{% trans "Valid until" %}</th>
+      <th scope="col">{% trans "Key size" %}</th>
+	  <th scope="col">{% trans "Signing" %}</th>
+      <th scope="col">{% trans "Encryption" %}</th>
+    </tr>
+  </thead>
+  <tbody>
+{% for certificate in expired_certificates %}
+    <tr>
+      <td><a href="{% url 'certificate-list' certificate.sp.pk %}">{{ certificate.sp }}</a></td>
+      <td>{{ certificate.valid_until }}</td>
+      <td>{{ certificate.key_size }}</td>
+      {% if certificate.signing %}<td class="text-success">&#10004;{% else %}<td>{% endif %}</td>
+      {% if certificate.encryption %}<td class="text-success">&#10004;{% else %}<td>{% endif %}</td>
+    </tr>
+{% endfor %}
+  </tbody>
+</table>
+{% endif %}
+
+<h2>{% trans "Weak certificates" %}</h2>
+{% if weak_certificates %}
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">{% trans "SP" %}</th>
+      <th scope="col">{% trans "Valid until" %}</th>
+      <th scope="col">{% trans "Key size" %}</th>
+	  <th scope="col">{% trans "Signing" %}</th>
+      <th scope="col">{% trans "Encryption" %}</th>
+    </tr>
+  </thead>
+  <tbody>
+{% for certificate in weak_certificates %}
+    <tr>
+      <td><a href="{% url 'certificate-list' certificate.sp.pk %}">{{ certificate.sp }}</a></td>
+      <td>{{ certificate.valid_until }}</td>
+      <td>{{ certificate.key_size }}</td>
+      {% if certificate.signing %}<td class="text-success">&#10004;{% else %}<td>{% endif %}</td>
+      {% if certificate.encryption %}<td class="text-success">&#10004;{% else %}<td>{% endif %}</td>
+    </tr>
+{% endfor %}
+  </tbody>
+</table>
+{% endif %}
+
+
+{% endblock %}

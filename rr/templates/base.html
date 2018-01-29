@@ -58,6 +58,7 @@
           <div class="dropdown-menu" aria-labelledby="navbarDropdown">
 {% if request.user.is_superuser %}
             <a class="dropdown-item" href="{% url 'attribute-admin-list' %}">{% trans "Attributes" %}</a>
+            <a class="dropdown-item" href="{% url 'certificate-admin-list' %}">{% trans "Certificates" %}</a>
             <a class="dropdown-item" href="/admin_django/">{% trans "Admin view" %}</a>
 {% endif %}
             <a class="dropdown-item" href="/logout/">{% trans "Logout" %}</a>

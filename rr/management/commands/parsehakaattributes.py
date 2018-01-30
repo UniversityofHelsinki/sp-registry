@@ -57,13 +57,17 @@ def haka_attribute_parser(filename):
 class Command(BaseCommand):
 
     def add_arguments(self, parser):
-        parser.add_argument('files', nargs='+', type=str)
+        parser.add_argument('-i', type=str, action='store', dest='input', help='Metadata input file name')
+        parser.add_argument('-o', type=str, action='store', dest='output', help='Attribute-filter output file name')
 
     def handle(self, *args, **options):
-        for file in options['files']:
-            data = haka_attribute_parser(file)
-            filename = "attribute-filter-haka.xml_" + date.today().strftime("%Y%m%d")
-            with open(filename, 'wb') as f:
+        metadata_input = options['input']
+        attribute_output = options['output']
+        if metadata_input and attribute_output:
+            data = haka_attribute_parser(metadata_input)
+            with open(attribute_output, 'wb') as f:
                 f.write('<?xml version="1.0" encoding="UTF-8"?>\n'.encode('utf-8'))
                 # Hack for correcting namespace definition by removing prefix.
                 f.write(data.replace(b'xmlns:xmlns', b'xmlns'))
+        else:
+            self.stdout.write("Please give both input and output files")

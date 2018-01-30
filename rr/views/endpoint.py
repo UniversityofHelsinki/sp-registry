@@ -58,7 +58,7 @@ def endpoint_list(request, pk):
                                         index=index)
                 sp.modified = True
                 sp.save()
-                logger.info("Endpoint added for %s", sp)
+                logger.info("Endpoint added for {sp} by {user}".format(sp=sp, user=request.user))
                 form = EndpointForm(sp=sp)
         elif "remove_endpoint" in request.POST:
             for key, value in request.POST.dict().items():
@@ -69,7 +69,7 @@ def endpoint_list(request, pk):
                         endpoint.save()
                         sp.modified = True
                         sp.save()
-                        logger.info("Endpoint added for %s", sp)
+                        logger.info("Endpoint removed from {sp} by {user}".format(sp=sp, user=request.user))
     endpoints = Endpoint.objects.filter(sp=sp, end_at=None)
     return render(request, "rr/endpoint.html", {'object_list': endpoints,
                                                 'form': form,

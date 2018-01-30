@@ -56,20 +56,20 @@ def admin_list(request, pk):
             if form.is_valid():
                 email = form.cleaned_data['email']
                 Keystore.objects.create_key(sp=sp, creator=request.user, email=email, hostname=get_hostname(request))
-                logger.info("Invite for %s sent to %s by %s", sp, email, request.user)
+                logger.info("Invite for {sp} sent to {email} by {user}".format(sp=sp, email=email, user=request.user))
                 form = SPAdminForm()
         elif "remove_invite" in request.POST:
             for key, value in request.POST.dict().items():
                 if value == "on":
                     invite = Keystore.objects.get(pk=key)
                     if invite.sp == sp:
-                        logger.info("Invite for %s to %s deleted by %s", invite.email, sp, request.user)
+                        logger.info("Invite for {email} to {sp} deleted by {user}".format(email=invite.email, sp=sp, user=request.user))
                         invite.delete()
         elif "remove_admin" in request.POST:
             for key, value in request.POST.dict().items():
                 if value == "on":
                     admin = User.objects.get(pk=key)
-                    logger.info("Admin %s deleted from %s by %s", admin, sp, request.user)
+                    logger.info("Admin {admin} removed from {sp} by {user}".format(admin=admin, sp=sp, user=request.user))
                     sp.admins.remove(admin)
                     try:
                         if request.user.is_superuser:

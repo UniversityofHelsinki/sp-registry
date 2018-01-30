@@ -58,7 +58,7 @@ def contact_list(request, pk):
                                        email=email)
                 sp.modified = True
                 sp.save()
-                logger.info("Contact added for %s", sp)
+                logger.info("Contact added for {sp} by {user}".format(sp=sp, user=request.user))
                 form = ContactForm(sp=sp)
         elif "remove_contact" in request.POST:
             for key, value in request.POST.dict().items():
@@ -69,7 +69,7 @@ def contact_list(request, pk):
                         contact.save()
                         sp.modified = True
                         sp.save()
-                        logger.info("Contact removed for %s", sp)
+                        logger.info("Contact removed from {sp} by {user}".format(sp=sp, user=request.user))
     contacts = Contact.objects.filter(sp=sp, end_at=None)
     return render(request, "rr/contact.html", {'object_list': contacts,
                                                'form': form,

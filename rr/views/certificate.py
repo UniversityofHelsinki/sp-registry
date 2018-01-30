@@ -83,7 +83,7 @@ def certificate_list(request, pk):
                     form = CertificateForm(sp=sp)
                     sp.modified = True
                     sp.save()
-                    logger.info("Certificated added for %s", sp)
+                    logger.info("Certificate added for {sp} by {user}".format(sp=sp, user=request.user))
         elif "remove_certificate" in request.POST:
             for key, value in request.POST.dict().items():
                 if value == "on":
@@ -93,7 +93,7 @@ def certificate_list(request, pk):
                         cert.save()
                         sp.modified = True
                         sp.save()
-                        logger.info("Certificated removed from %s", sp)
+                        logger.info("Certificate removed from {sp} by {user}".format(sp=sp, user=request.user))
     certificates = Certificate.objects.filter(sp=sp, end_at=None)
     return render(request, "rr/certificate.html", {'object_list': certificates,
                                                    'form': form,

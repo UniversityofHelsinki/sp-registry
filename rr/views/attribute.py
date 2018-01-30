@@ -55,7 +55,9 @@ def attribute_list(request, pk):
                     sp_attribute.save()
                     sp.modified = True
                     sp.save()
-                    logger.info("Attribute requisition for %s removed from %s", sp_attribute.attribute, sp)
+                    logger.info("Attribute requisition for {attribute} removed from {sp} by {user}".format(attribute=sp_attribute.attribute,
+                                                                                                           sp=sp,
+                                                                                                           user=request.user))
                 elif data:
                     if not sp_attribute:
                         attribute = Attribute.objects.filter(friendlyname=field.name).first()
@@ -64,14 +66,18 @@ def attribute_list(request, pk):
                                                    reason=data)
                         sp.modified = True
                         sp.save()
-                        logger.info("Attribute %s requested for %s", attribute, sp)
+                        logger.info("Attribute {attribute} requested for {sp} by {user}".format(attribute=attribute,
+                                                                                                sp=sp,
+                                                                                                user=request.user))
                     else:
                         if sp_attribute.reason != data:
                             sp_attribute.reason = data
                             sp_attribute.save()
                             sp.modified = True
                             sp.save()
-                            logger.info("Attribute %s reason updated for %s", sp_attribute.attribute, sp)
+                            logger.info("Attribute {attribute} reason updated for {sp} by {user}".format(attribute=sp_attribute.attribute,
+                                                                                                         sp=sp,
+                                                                                                         user=request.user))
         form = AttributeForm(request.POST, sp=sp)
     else:
         form = AttributeForm(sp=sp)

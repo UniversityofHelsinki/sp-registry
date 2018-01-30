@@ -53,7 +53,7 @@ class KeystoreManager(models.Manager):
             keystore.delete()
             return False
         keystore.sp.admins.add(user)
-        logger.info("Invite key for %s was activated by %s", keystore.sp, user)
+        logger.info("Invite for for {sp} was activated by {user}".format(sp=keystore.sp, user=user))
         sp = keystore.sp.pk
         keystore.delete()
         return sp

@@ -129,7 +129,7 @@ def testuser_list(request, pk):
                 userdata = form.cleaned_data['userdata']
                 otherdata = form.cleaned_data['otherdata']
                 testuser = TestUser.objects.create(sp=sp, username=username, password=password, firstname=firstname, lastname=lastname, end_at=None)
-                logger.info("Test user %s added for %s", username, sp)
+                logger.info("Test user {username} added for {sp}".format(username=username, sp=sp))
                 form = TestUserForm(sp=sp)
                 generate_user_data(testuser, userdata, otherdata)
         elif "remove_testuser" in request.POST:
@@ -139,7 +139,7 @@ def testuser_list(request, pk):
                     if testuser.sp == sp:
                         testuser.end_at = timezone.now()
                         testuser.save()
-                        logger.info("Test user %s removed from %s", testuser.username, sp)
+                        logger.info("Test user {username} removed from {sp}".format(username=testuser.username, sp=sp))
     testusers = TestUser.objects.filter(sp=sp, end_at=None)
     return render(request, "rr/testuser.html", {'object_list': testusers,
                                                 'form': form,

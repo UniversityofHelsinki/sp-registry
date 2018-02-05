@@ -55,7 +55,12 @@ class ServiceProvider(models.Model):
         elif get_language() == "sv" and self.name_sv:
             return self.name_sv
         else:
-            return self.name_en
+            if self.name_en:
+                return self.name_en
+            elif self.name_fi:
+                return self.name_fi
+            else:
+                return self.name_sv
 
     def description(self):
         if get_language() == "fi" and self.description_fi:
@@ -63,7 +68,12 @@ class ServiceProvider(models.Model):
         elif get_language() == "sv" and self.description_sv:
             return self.description_sv
         else:
-            return self.description_en
+            if self.description_en:
+                return self.description_en
+            elif self.description_fi:
+                return self.description_fi
+            else:
+                return self.description_sv
 
     def __str__(self):
         return self.entity_id

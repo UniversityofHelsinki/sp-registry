@@ -92,19 +92,13 @@ class BasicInformationView(DetailView):
     def get_missing_data(self, sp):
         missing = []
         if sp.test or sp.production:
-            if not sp.name_en:
-                missing.append(_(sp._meta.get_field('name_en').verbose_name))
+            if not sp.name_en and not sp.name_fi:
+                missing.append(_("Service name in English or in Finnish"))
+            if not sp.description_en and not sp.description_fi:
+                missing.append(_("Service description in English or in Finnish"))
             if sp.production:
-                if not sp.name_fi:
-                    missing.append(_(sp._meta.get_field('name_fi').verbose_name))
-                if not sp.description_en:
-                    missing.append(_(sp._meta.get_field('description_en').verbose_name))
-                if not sp.description_fi:
-                    missing.append(_(sp._meta.get_field('description_fi').verbose_name))
-                if not sp.privacypolicy_en and sp.attributes:
-                    missing.append(_(sp._meta.get_field('privacypolicy_en').verbose_name))
-                if not sp.privacypolicy_fi and sp.attributes:
-                    missing.append(_(sp._meta.get_field('privacypolicy_fi').verbose_name))
+                if not sp.privacypolicy_en and not sp.privacypolicy_fi and sp.attributes:
+                    missing.append(_("Privacy policy URL in English or in Finnish"))
             if not Certificate.objects.filter(sp=sp, end_at=None):
                 missing.append(_("Certificate"))
             if not Endpoint.objects.filter(sp=sp, end_at=None, type='AssertionConsumerService'):

@@ -15,11 +15,11 @@ class BasicInformationForm(ModelForm):
                   'saml_product', 'autoupdate_idp_metadata', 'notes', 'admin_notes']
         help_texts = {
             'entity_id': _('Should be URI including scheme, hostname of your application and path e.g. https://test.helsinki.fi/sp. <div class="text-danger">Required for both production and test use.</div>'),
-            'name_fi': _('Short and descriptive name for the service in Finnish. <div class="text-danger">Required for both production.</div>'),
+            'name_fi': _('Short and descriptive name for the service in Finnish. <div class="text-danger">Required for both production and test use.</div>'),
             'name_en': _('Short and descriptive name for the service in English. <div class="text-danger">Required for both production and test use.</div>'),
             'name_sv': _('Short and descriptive name for the service in Swedish.'),
-            'description_fi': _('Short (less than 140 characters) description of the service in Finnish. <div class="text-danger">Required for production use.</div>'),
-            'description_en': _('Short (less than 140 characters) description of the service in English. <div class="text-danger">Required for production use.</div>'),
+            'description_fi': _('Short (less than 140 characters) description of the service in Finnish. <div class="text-danger">Required for both production and test use.</div>'),
+            'description_en': _('Short (less than 140 characters) description of the service in English. <div class="text-danger">Required for both production and test use.</div>'),
             'description_sv': _('Short (less than 140 characters) description of the service in Swedish.'),
             'privacypolicy_fi': _('Link to privacy policy in Finnish. Link must be publicly accessible. <div class="text-danger">Required for production use if the service requests any personal information.</div>'),
             'privacypolicy_en': _('Link to privacy policy in English. Link must be publicly accessible. <div class="text-danger">Required for production use if the service requests any personal information.</div>'),

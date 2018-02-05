@@ -12,7 +12,7 @@ class BasicInformationForm(ModelForm):
                   'privacypolicy_fi', 'privacypolicy_en', 'privacypolicy_sv',
                   'login_page_url', 'discovery_service_url', 'name_format_transient', 'name_format_persistent',
                   'sign_assertions', 'sign_requests', 'sign_responses', 'encyrpt_assertions', 'production', 'test',
-                  'saml_product', 'autoupdate_idp_metadata', 'notes', 'admin_notes']
+                  'saml_product', 'autoupdate_idp_metadata', 'application_portfolio', 'notes', 'admin_notes']
         help_texts = {
             'entity_id': _('Should be URI including scheme, hostname of your application and path e.g. https://test.helsinki.fi/sp. <div class="text-danger">Required for both production and test use.</div>'),
             'name_fi': _('Short and descriptive name for the service in Finnish. <div class="text-danger">Required for both production and test use.</div>'),
@@ -36,6 +36,7 @@ class BasicInformationForm(ModelForm):
             'test': _('Publish this SP to test IdP using unvalidated data.'),
             'saml_product': _('For administrative use e.g. for testing different SPs during IdP updates.'),
             'autoupdate_idp_metadata': _('Does this SP automatically update IdP metadata?'),
+            'application_portfolio': _('Link to external application portfolio.'),
             'notes': _('Additional notes about this service.'),
             'admin_notes': _('Additional administrative notes. Writable only by registry admins but showed in summary to SP admins.'),
         }

@@ -43,3 +43,8 @@ def count_id(context, text, number):
 @then(u'the result page code include text "{text}"')
 def check_for_code_text(context, text):
     assert text in context.browser.html
+
+
+@then(u'logout"')
+def logout(context):
+    context.browser.find_by_text('Logout').first.click()

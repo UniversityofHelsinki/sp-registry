@@ -4,7 +4,7 @@
 {% load static %}
 {% load attribute_filters %}
 {% block content %}
-<h1>{% trans "Details" %} - <small>{{ object }}</small></h1>
+<h1>{% trans "Details" %}</h1>
 <table class="table table-sm">
   <tbody>
     <tr>
@@ -52,7 +52,35 @@
     </tr>
   </thead>
   <tbody>
-{% for f in object.get_all_fields %}
+{% for f in object.get_basic_fields %}
+{% if history_object %}
+    {% if f.value != history_object|get_item:f.name %}<tr class="table-warning">{% else %}<tr>{% endif %}
+      <td scope="row">{{ f.label }}</td>
+      {% if f.value == True %}<td class="text-success">&#10004;{% elif f.value == False %}<td class="text-danger">x{% else %}<td>{{ f.value }}{% endif %}</td>
+      {% if history_object|get_item:f.name == True %}<td class="text-success">&#10004;{% elif history_object|get_item:f.name == False %}<td class="text-danger">x{% else %}<td>{{ history_object|get_item:f.name }}{% endif %}</td>
+    </tr>
+{% else %}
+    <tr>
+      <td scope="row">{{ f.label }}</td>
+      {% if f.value == True %}<td class="text-success">&#10004;{% elif f.value == False %}<td class="text-danger">x{% else %}<td>{{ f.value }}{% endif %}</td>
+    </tr>
+{% endif %}
+{% endfor %}
+  </tbody>
+</table>
+<br>
+
+<h2>{% trans "Technical Attributes" %}</h2>
+<table class="table table-sm">
+  <thead>
+    <tr>
+      <th scope="col">{% trans "Attribute" %}</th>
+      <th scope="col">{% trans "Value" %}</th>{% if history_object %}
+      <th scope="col">{% trans "Validated value" %}</th>{% endif %}
+    </tr>
+  </thead>
+  <tbody>
+{% for f in object.get_technical_fields %}
 {% if history_object %}
     {% if f.value != history_object|get_item:f.name %}<tr class="table-warning">{% else %}<tr>{% endif %}
       <td scope="row">{{ f.label }}</td>

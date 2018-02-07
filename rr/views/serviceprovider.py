@@ -2,7 +2,7 @@ from rr.models.serviceprovider import ServiceProvider, SPAttribute
 from django.views.generic.edit import CreateView, UpdateView
 from django.views.generic.detail import DetailView
 from django.views.generic.list import ListView
-from rr.forms.serviceprovider import BasicInformationForm
+from rr.forms.serviceprovider import BasicInformationForm, TechnicalInformationForm, ServiceProviderCreateForm
 from django.utils import timezone
 from rr.models.certificate import Certificate
 from rr.models.contact import Contact
@@ -153,8 +153,9 @@ class BasicInformationCreate(CreateView):
     :template:`rr/serviceprovider_form.html`
     """
     model = ServiceProvider
-    form_class = BasicInformationForm
+    form_class = ServiceProviderCreateForm
     success_url = '#'
+    template_name_suffix = '_create_form'
 
     def get_form_kwargs(self):
         kwargs = super(BasicInformationCreate, self).get_form_kwargs()
@@ -185,6 +186,7 @@ class BasicInformationUpdate(UpdateView):
     model = ServiceProvider
     form_class = BasicInformationForm
     success_url = '#'
+    template_name_suffix = '_basic_form'
 
     def get_queryset(self):
         if self.request.user.is_superuser:
@@ -194,6 +196,61 @@ class BasicInformationUpdate(UpdateView):
 
     def get_form_kwargs(self):
         kwargs = super(BasicInformationUpdate, self).get_form_kwargs()
+        kwargs.update({'request': self.request})
+        return kwargs
+
+    def form_valid(self, form):
+        if form.has_changed():
+            sp = ServiceProvider.objects.get(pk=form.instance.pk)
+            # create a history copy if modifying validated SP
+            if sp.validated:
+                admins = sp.admins.all()
+                sp.history = sp.pk
+                sp.pk = None
+                sp.end_at = timezone.now()
+                sp.save()
+                sp.admins.set(admins)
+            redirect_url = super().form_valid(form)
+            self.object.updated_by = self.request.user
+            if not self.request.user.is_superuser or not sp.validated:
+                self.object.validated = None
+            if self.request.user.is_superuser and not sp.modified:
+                self.object.modified = False
+            else:
+                self.object.modified = True
+            self.object.save()
+            logger.info("SP %s updated by %s", self.object, self.request.user)
+            return redirect_url
+        else:
+            return super().form_invalid(form)
+
+
+class TechnicalInformationUpdate(UpdateView):
+    """
+    Displays a form for updating a :model:`rr.ServiceProvider`.
+
+    **Context**
+
+    ``form``
+        Form for :model:`rr.ServiceProvider`.
+
+    **Template:**
+
+    :template:`rr/serviceprovider_form.html`
+    """
+    model = ServiceProvider
+    form_class = TechnicalInformationForm
+    success_url = '#'
+    template_name_suffix = '_technical_form'
+
+    def get_queryset(self):
+        if self.request.user.is_superuser:
+            return ServiceProvider.objects.filter(end_at=None).order_by('entity_id')
+        else:
+            return ServiceProvider.objects.filter(admins=self.request.user, end_at=None).order_by('entity_id')
+
+    def get_form_kwargs(self):
+        kwargs = super(TechnicalInformationUpdate, self).get_form_kwargs()
         kwargs.update({'request': self.request})
         return kwargs
 

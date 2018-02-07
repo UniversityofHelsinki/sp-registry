@@ -3,7 +3,8 @@ from django.conf.urls import url, include
 from django.contrib import admin
 from django.contrib.auth.views import LogoutView, LoginView
 from django.contrib.auth.decorators import login_required
-from rr.views.serviceprovider import BasicInformationCreate, BasicInformationUpdate, BasicInformationView, ServiceProviderList
+from rr.views.serviceprovider import BasicInformationCreate, BasicInformationUpdate, BasicInformationView
+from rr.views.serviceprovider import ServiceProviderList, TechnicalInformationUpdate
 from rr.views.attribute import attribute_list, attribute_admin_list, attribute_view
 from rr.views.certificate import certificate_list, certificate_admin_list
 from rr.views.contact import contact_list
@@ -31,8 +32,9 @@ urlpatterns = [
     url(r'^contact/(?P<pk>[0-9]+)/$', contact_list, name='contact-list'),
     url(r'^endpoint/(?P<pk>[0-9]+)/$', endpoint_list, name='endpoint-list'),
     url(r'^metadata/(?P<pk>[0-9]+)/$', metadata, name='metadata-view'),
+    url(r'^technical/(?P<pk>[0-9]+)/$', login_required(TechnicalInformationUpdate.as_view()), name='technical-update'),
     url(r'^serviceprovider/add/$', login_required(BasicInformationCreate.as_view()), name='serviceprovider-add'),
-    url(r'^serviceprovider/update/(?P<pk>[0-9]+)/$', login_required(BasicInformationUpdate.as_view()), name='basicinformation-update'),
+    url(r'^serviceprovider/(?P<pk>[0-9]+)/$', login_required(BasicInformationUpdate.as_view()), name='basicinformation-update'),
     url(r'^summary/(?P<pk>[0-9]+)/$', login_required(BasicInformationView.as_view()), name='summary-view'),
     url(r'^testuser/(?P<pk>[0-9]+)/$', testuser_list, name='testuser-list'),
     url(r'^testuser/data/(?P<pk>[0-9]+)/$', testuser_attribute_data, name='testuser-attribute-data'),

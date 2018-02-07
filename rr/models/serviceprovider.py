@@ -105,6 +105,64 @@ class ServiceProvider(models.Model):
                 )
         return fields
 
+    def get_basic_fields(self):
+        """Returns a list of all field names on the instance."""
+        fields = []
+        for f in self._meta.fields:
+
+            fname = f.name
+            # resolve picklists/choices, with get_xyz_display() function
+            get_choice = 'get_'+fname+'_display'
+            if hasattr(self, get_choice):
+                value = getattr(self, get_choice)()
+            else:
+                try:
+                    value = getattr(self, fname)
+                except AttributeError:
+                    value = None
+            # only display fields with values and skip some fields entirely
+            if f.editable and f.name not in ('id', 'end_at', 'history', 'validated', 'modified', 'updated_by', 'entity_id',
+                                             'discovery_service_url', 'name_format_transient', 'name_format_persistent',
+                                             'sign_assertions', 'sign_requests', 'sign_responses', 'encyrpt_assertions',
+                                             'production', 'test', 'saml_product', 'autoupdate_idp_metadata'):
+                fields.append(
+                  {
+                   'label': f.verbose_name,
+                   'name': f.name,
+                   'value': value,
+                  }
+                )
+        return fields
+
+    def get_technical_fields(self):
+        """Returns a list of all field names on the instance."""
+        fields = []
+        for f in self._meta.fields:
+
+            fname = f.name
+            # resolve picklists/choices, with get_xyz_display() function
+            get_choice = 'get_'+fname+'_display'
+            if hasattr(self, get_choice):
+                value = getattr(self, get_choice)()
+            else:
+                try:
+                    value = getattr(self, fname)
+                except AttributeError:
+                    value = None
+            # only display fields with values and skip some fields entirely
+            if f.editable and f.name not in ('id', 'end_at', 'history', 'validated', 'modified', 'updated_by', 'name_fi', 'name_en',
+                                             'name_sv', 'description_fi', 'description_en', 'description_sv',
+                                             'privacypolicy_fi', 'privacypolicy_en', 'privacypolicy_sv',
+                                             'login_page_url', 'application_portfolio', 'notes', 'admin_notes'):
+                fields.append(
+                  {
+                   'label': f.verbose_name,
+                   'name': f.name,
+                   'value': value,
+                  }
+                )
+        return fields
+
 
 class SPAttribute(models.Model):
     """

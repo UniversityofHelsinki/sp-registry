@@ -4,7 +4,7 @@ Feature: Certificates
 Scenario: Certificate additions
 	Given test environment with logged in user exists
 	When clicking link with text "https://sp.example.org/sp"
-	And clicking link with text "Certificates"
+	And clicking visible link with text "Certificates"
 	And filling certificate form with invalid certificate
 	Then the result page will include text "Unable to load certificate"
 	When filling certificate form with another invalid certificate

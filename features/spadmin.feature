@@ -5,7 +5,7 @@ Scenario: Admin invitations
 	Given test environment with logged in user exists
 	And invite exists
 	When clicking link with text "https://sp.example.org/sp"
-	And clicking link with text "Admins"
+	And clicking visible link with text "Admins"
 	And filling invite form with email "tester@example.org"
 	Then the result page will include text "tester@example.org"
 	And there should be invitation in email

@@ -9,5 +9,5 @@ Scenario: Importing test metadata
 	When I login with "Myself" and "mysecretpassword"
 	Then the result page will include text "https://sp.example.org/sp"
 	When clicking link with text "https://sp.example.org/sp"
-	When clicking link with text "View Metadata"
+	When clicking visible link with text "View Metadata"
 	Then the page will have same metadata

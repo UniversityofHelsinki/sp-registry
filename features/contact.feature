@@ -4,7 +4,7 @@ Feature: Contacts
 Scenario: Contact modifications
 	Given test environment with logged in user exists
 	When clicking link with text "https://sp.example.org/sp"
-	And clicking link with text "Contacts"
+	And clicking visible link with text "Contacts"
 	And filling contact form with email "tester@example.org"
 	And filling contact form with email "tester.test@example.org"
 	And filling contact form with email "tester@example.org"

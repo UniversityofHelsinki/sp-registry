@@ -11,6 +11,15 @@ def click_link(context, text):
     context.browser.click_link_by_text(text)
 
 
+@when(u'clicking visible link with text "{text}"')
+def click_visible_link(context, text):
+    elements = context.browser.find_by_text(text)
+    for element in elements:
+        if element.visible:
+            element.click()
+            break
+
+
 @then(u'the result page will include text "{text}"')
 def check_for_text(context, text):
     assert context.browser.is_text_present(text)

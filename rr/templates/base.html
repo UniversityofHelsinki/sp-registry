@@ -128,7 +128,7 @@
         </li>
 {% if object.test %}
         <li class="nav-item">
-          <a class="nav-link {% if request.path|slice:":10" == "/testuser/" %}active{% endif %}" href="{% url 'testuser-list' object.pk %}">{% trans "Test IUsers" %}</a>
+          <a class="nav-link {% if request.path|slice:":10" == "/testuser/" %}active{% endif %}" href="{% url 'testuser-list' object.pk %}">{% trans "Test Users" %}</a>
         </li>
 {% endif %}
         <li class="nav-item">

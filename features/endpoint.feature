@@ -4,7 +4,7 @@ Feature: Endpoints
 Scenario: Endpoint modifications
 	Given test environment with logged in user exists
 	When clicking link with text "https://sp.example.org/sp"
-	And clicking link with text "SAML Endpoints"
+	And clicking visible link with text "SAML Endpoints"
 	And filling endpoint form with url "https://sp.example.org/Shibboleth.sso/SAML2/POST"
 	And filling endpoint form with url "https://sp.example.org/Shibboleth.sso/SAML2/POST/2"
 	And filling endpoint form with url "https://sp.example.org/Shibboleth.sso/SAML2/POST"

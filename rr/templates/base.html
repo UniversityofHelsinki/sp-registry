@@ -10,14 +10,25 @@
   <title>{% trans "Shibboleth Resource Registry" %}</title>
 </head>
 <body>
-<nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
     <a class="navbar-brand" href="{% url 'serviceprovider-list' %}">{% trans "SP Registry" %}</a>
+{% if object %}
+      <div class="navbar-brand d-sm-none">{{ object }}</div>
+{% endif %}
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
-    <div class="collapse navbar-collapse" id="nav">
-      <ul class="navbar-nav mr-auto">
+    <div class="collapse navbar-collapse" id="navbarCollapse">
+      <ul class="navbar-nav mr-auto d-lg-none">
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'serviceprovider-list' %}">{% trans "Service Providers" %}</a>
+        </li>
 {% if object %}
+        <div class="dropdown-divider"></div>
+        <li class="nav-item">
+          <div class="navbar-brand">{% trans "SP Configuration" %}</div>
+        </li>
+        <div class="dropdown-divider"></div>
         <li class="nav-item">
           <a class="nav-link" href="{% url 'summary-view' object.pk %}">{% trans "Summary" %}</a>
         </li>
@@ -48,21 +59,29 @@
           <a class="nav-link" href="{% url 'metadata-view' object.pk %}">{% trans "View Metadata" %}</a>
         </li>
 {% endif %}
+{% if request.user.is_superuser %}
+        <div class="dropdown-divider"></div>
+        <li class="nav-item">
+          <div class="navbar-brand">{% trans "Administration" %}</div>
+        </li>
+        <div class="dropdown-divider"></div>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'attribute-admin-list' %}">{% trans "Attributes" %}</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'certificate-admin-list' %}">{% trans "Certificates" %}</a>
+        </li>
+        <div class="dropdown-divider"></div>
+        <li class="nav-item">
+          <a class="nav-link" href="/admin_django/">{% trans "Database Admin" %}</a>
+        </li>
+{% endif %}
       </ul>
       <ul class="navbar-nav ml-auto">
+      <div class="dropdown-divider"></div>
 {% if user.is_authenticated %}
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="false" aria-expanded="false">
-            {% if request.user.first_name and request.user.last_name %}{{ request.user.first_name }} {{ request.user.last_name }}{% else %}{{ request.user.username }}{% endif %}
-          </a>
-          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-{% if request.user.is_superuser %}
-            <a class="dropdown-item" href="{% url 'attribute-admin-list' %}">{% trans "Attributes" %}</a>
-            <a class="dropdown-item" href="{% url 'certificate-admin-list' %}">{% trans "Certificates" %}</a>
-            <a class="dropdown-item" href="/admin_django/">{% trans "Admin view" %}</a>
-{% endif %}
-            <a class="dropdown-item" href="/logout/">{% trans "Logout" %}</a>
-          </div>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'logout' %}">{% trans "Logout" %}</a>
         </li>
 {% else %}
         <li class="nav-item">
@@ -72,10 +91,75 @@
        </ul>
     </div>
   </nav>
-  <main role="main" class="container">
+
+  <div class="container-fluid">
+    <div class="row">
+{% if user.is_authenticated %}
+      <nav class="col-lg-2 d-none d-lg-block sidebar bg-faded">
+        <ul class="nav nav-pills flex-column">
+        <li class="nav-item">
+          <a class="nav-link {% if request.path|slice:":6" == "/list/" %}active{% endif %}" href="{% url 'serviceprovider-list' %}">{% trans "Service Providers" %}</a>
+        </li>
+{% if object %}
+        <div class="dropdown-divider"></div>
+        <li class="nav-item">
+          <div class="navbar-brand">{% trans "SP Configuration" %}</div>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link {% if request.path|slice:":9" == "/summary/" %}active{% endif %}" href="{% url 'summary-view' object.pk %}">{% trans "Summary" %}</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link {% if request.path|slice:":24" == "/serviceprovider/update/" %}active{% endif %}" href="{% url 'basicinformation-update' object.pk %}">{% trans "Basic Information" %}</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link {% if request.path|slice:":11" == "/attribute/" %}active{% endif %}" href="{% url 'attribute-list' object.pk %}">{% trans "Attributes" %}</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link {% if request.path|slice:":13" == "/certificate/" %}active{% endif %}" href="{% url 'certificate-list' object.pk %}">{% trans "Certificates" %}</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link {% if request.path|slice:":10" == "/endpoint/" %}active{% endif %}" href="{% url 'endpoint-list' object.pk %}">{% trans "SAML Endpoints" %}</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link {% if request.path|slice:":9" == "/contact/" %}active{% endif %}" href="{% url 'contact-list' object.pk %}">{% trans "Contacts" %}</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link {% if request.path|slice:":7" == "/admin/" %}active{% endif %}" href="{% url 'admin-list' object.pk %}">{% trans "Admins" %}</a>
+        </li>
+{% if object.test %}
+        <li class="nav-item">
+          <a class="nav-link {% if request.path|slice:":10" == "/testuser/" %}active{% endif %}" href="{% url 'testuser-list' object.pk %}">{% trans "Test IUsers" %}</a>
+        </li>
+{% endif %}
+        <li class="nav-item">
+          <a class="nav-link {% if request.path|slice:":10" == "/metadata/" %}active{% endif %}" href="{% url 'metadata-view' object.pk %}">{% trans "View Metadata" %}</a>
+        </li>
+{% endif %}
+{% if request.user.is_superuser %}
+        <div class="dropdown-divider"></div>
+        <li class="nav-item">
+          <div class="navbar-brand">{% trans "Administration" %}</div>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link {% if request.path|slice:":16" == "/attribute/list/" %}active{% endif %}" href="{% url 'attribute-admin-list' %}">{% trans "Attributes" %}</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link {% if request.path|slice:":18" == "/certificate/list/" %}active{% endif %}" href="{% url 'certificate-admin-list' %}">{% trans "Certificates" %}</a>
+        </li>
+        <div class="dropdown-divider"></div>
+        <li class="nav-item">
+          <a class="nav-link" href="/admin_django/">{% trans "Database Admin" %}</a>
+        </li>
+{% endif %}
+        </ul>
+      </nav>
+{% endif %}
+      <main class="col-lg-10 offset-lg-2 col-xl-8 offset-xl-2 pt-3">
 	{% block content %}
 	{% endblock %}
-  </main>
+      </main>
+    </div>
+  </div>
   <script src="{% static "js/jquery-3.2.1.slim.min.js" %}"></script>
   <script src="{% static "js/popper.min.js" %}"></script>
   <script src="{% static "js/bootstrap.min.js" %}"></script>

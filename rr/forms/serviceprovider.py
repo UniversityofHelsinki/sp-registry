@@ -1,10 +1,13 @@
-from django.forms import ModelForm
+from django.forms import ModelForm, Form, BooleanField
 from rr.models.serviceprovider import ServiceProvider
 from django.utils.translation import ugettext_lazy as _
 from django.core.validators import URLValidator, ValidationError
 
 
 class BasicInformationForm(ModelForm):
+    """
+    Form for updating basic information from ServiceProvider object
+    """
 
     class Meta:
         model = ServiceProvider
@@ -28,6 +31,9 @@ class BasicInformationForm(ModelForm):
         }
 
     def __init__(self, *args, **kwargs):
+        """
+        Only show admin_notes field for superusers
+        """
         self.request = kwargs.pop('request', None)
         super(BasicInformationForm, self).__init__(*args, **kwargs)
         if not self.request.user.is_superuser:
@@ -35,6 +41,9 @@ class BasicInformationForm(ModelForm):
 
 
 class TechnicalInformationForm(ModelForm):
+    """
+    Form for updating technical information from ServiceProvider object
+    """
 
     class Meta:
         model = ServiceProvider
@@ -61,6 +70,9 @@ class TechnicalInformationForm(ModelForm):
         super(TechnicalInformationForm, self).__init__(*args, **kwargs)
 
     def clean_entity_id(self):
+        """
+        Allow only superusers set entity id something else than URL.
+        """
         entity_id = self.cleaned_data['entity_id']
         if not self.request.user.is_superuser and "entity_id" in self.changed_data:
             url_validator = URLValidator()
@@ -74,6 +86,9 @@ class TechnicalInformationForm(ModelForm):
 
 
 class ServiceProviderCreateForm(ModelForm):
+    """
+    Form for creating a service provider. Same as basic information form and entity_id.
+    """
 
     class Meta:
         model = ServiceProvider
@@ -101,6 +116,9 @@ class ServiceProviderCreateForm(ModelForm):
         super(ServiceProviderCreateForm, self).__init__(*args, **kwargs)
 
     def clean_entity_id(self):
+        """
+        Allow only superusers set entity id something else than URL.
+        """
         entity_id = self.cleaned_data['entity_id']
         if not self.request.user.is_superuser and "entity_id" in self.changed_data:
             url_validator = URLValidator()
@@ -111,4 +129,10 @@ class ServiceProviderCreateForm(ModelForm):
         if ServiceProvider.objects.filter(entity_id=entity_id, end_at=None, history=None).exclude(pk=self.instance.pk):
             raise ValidationError(_("Entity Id already exists"))
         return entity_id
-    
+
+
+class ServiceProviderCloseForm(Form):
+    """
+    Form for closing service provider.
+    """
+    confirm = BooleanField(help_text=_("Confirm closing"))

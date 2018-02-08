@@ -1,15 +1,16 @@
 from rr.models.serviceprovider import ServiceProvider, SPAttribute
-from django.views.generic.edit import CreateView, UpdateView
+from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views.generic.detail import DetailView
 from django.views.generic.list import ListView
-from rr.forms.serviceprovider import BasicInformationForm, TechnicalInformationForm, ServiceProviderCreateForm
+from rr.forms.serviceprovider import BasicInformationForm, TechnicalInformationForm, ServiceProviderCreateForm,\
+    ServiceProviderCloseForm
 from django.utils import timezone
 from rr.models.certificate import Certificate
 from rr.models.contact import Contact
 from rr.models.endpoint import Endpoint
 from django.db.models import Q
 from django.http.response import HttpResponseRedirect
-from django.urls.base import reverse
+from django.urls.base import reverse, reverse_lazy
 from django.shortcuts import render
 from django.utils.translation import ugettext_lazy as _
 import logging
@@ -278,3 +279,24 @@ class TechnicalInformationUpdate(UpdateView):
             return redirect_url
         else:
             return super().form_invalid(form)
+
+
+class ServiceProviderDelete(DeleteView):
+    model = ServiceProvider
+    success_url = reverse_lazy('serviceprovider-list')
+
+    def get_queryset(self):
+        if self.request.user.is_superuser:
+            return ServiceProvider.objects.filter(end_at=None).order_by('entity_id')
+        else:
+            return ServiceProvider.objects.filter(admins=self.request.user, end_at=None).order_by('entity_id')
+
+    def delete(self, request, *args, **kwargs):
+        """
+        Update regular delete function to set end_at null instead.
+        """
+        self.object = self.get_object()
+        success_url = self.get_success_url()
+        self.object.end_at = timezone.now()
+        self.object.save()
+        return HttpResponseRedirect(success_url)

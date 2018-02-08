@@ -201,4 +201,7 @@
 {% endfor %}
   </tbody>  
 </table>
+
+<h2>{% trans "Removing this service provider" %}</h2>
+<p><a href="{% url 'serviceprovider-delete' object.pk %}">{% trans "Click this link to remove this service provider" %}</a></p>
 {% endblock %}

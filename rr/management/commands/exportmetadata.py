@@ -82,7 +82,7 @@ class Command(BaseCommand):
                     metadata_spssodescriptor(EntityDescriptor, sp, validated)
                     metadata_contact(EntityDescriptor, sp, validated)
                 with open(metadata_output, 'wb') as f:
-                    f.write(etree.tostring(metadata, pretty_print=True))
+                    f.write(etree.tostring(metadata, pretty_print=True, encoding='UTF-8'))
             if attributefilter_output:
                 AttributeFilterPolicyGroup = etree.Element("AttributeFilterPolicyGroup", id="urn:mace:funet.fi:haka", nsmap={"xmlns": 'urn:mace:shibboleth:2.0:afp'})
                 AttributeFilterPolicyGroup.attrib['{urn:mace:shibboleth:2.0:afp}basic'] = "urn:mace:shibboleth:2.0:afp:mf:basic"
@@ -93,4 +93,4 @@ class Command(BaseCommand):
                 with open(attributefilter_output, 'wb') as f:
                     f.write('<?xml version="1.0" encoding="UTF-8"?>\n'.encode('utf-8'))
                     # Hack for correcting namespace definition by removing prefix.
-                    f.write(etree.tostring(AttributeFilterPolicyGroup, pretty_print=True).replace(b'xmlns:xmlns', b'xmlns'))
+                    f.write(etree.tostring(AttributeFilterPolicyGroup, pretty_print=True, encoding='UTF-8').replace(b'xmlns:xmlns', b'xmlns'))

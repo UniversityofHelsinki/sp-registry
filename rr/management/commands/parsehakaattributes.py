@@ -51,7 +51,7 @@ def haka_attribute_parser(filename):
                             AttributeRule = etree.SubElement(AttributeFilterPolicy, "AttributeRule", attributeID=attribute.attributeid)
                             PermitValueRule = etree.SubElement(AttributeRule, "PermitValueRule")
                             PermitValueRule.attrib['{http://www.w3.org/2001/XMLSchema-instance}type'] = "basic:ANY"
-    return(etree.tostring(AttributeFilterPolicyGroup, pretty_print=True))
+    return(etree.tostring(AttributeFilterPolicyGroup, pretty_print=True, encoding='UTF-8'))
 
 
 class Command(BaseCommand):

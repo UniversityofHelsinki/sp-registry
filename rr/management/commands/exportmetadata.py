@@ -9,9 +9,26 @@ Usage: ./manage.py exportmetadata -o <output-file-name> -p -t -i entityId [entit
 
 from lxml import etree, objectify
 from django.core.management.base import BaseCommand
-from datetime import date
-from rr.models.serviceprovider import ServiceProvider
+from rr.models.serviceprovider import ServiceProvider, SPAttribute
 from rr.views.metadata import metadata_spssodescriptor, metadata_contact
+
+
+def attributefilter_generate(element, sp, validated=True):
+    """
+    Using CamelCase instead of regular underscore attribute names in element tree.
+    """
+    if validated:
+        attributes = SPAttribute.objects.filter(sp=sp, end_at=None).exclude(validated=None)
+    else:
+        attributes = SPAttribute.objects.filter(sp=sp, end_at=None)
+    if attributes:
+        AttributeFilterPolicy = etree.SubElement(element, "AttributeFilterPolicy", id="hy-default-" + sp.entity_id)
+        PolicyRequirementRule = etree.SubElement(AttributeFilterPolicy, "PolicyRequirementRule", value=sp.entity_id)
+        PolicyRequirementRule.attrib['{http://www.w3.org/2001/XMLSchema-instance}type'] = "basic:AttributeRequesterString"
+        for attribute in attributes:
+            AttributeRule = etree.SubElement(AttributeFilterPolicy, "AttributeRule", attributeID=attribute.attribute.attributeid)
+            PermitValueRule = etree.SubElement(AttributeRule, "PermitValueRule")
+            PermitValueRule.attrib['{http://www.w3.org/2001/XMLSchema-instance}type'] = "basic:ANY"
 
 
 class Command(BaseCommand):
@@ -21,6 +38,7 @@ class Command(BaseCommand):
         parser.add_argument('-p', action='store_true', dest='production', help='Include production service providers')
         parser.add_argument('-t', action='store_true', dest='test', help='Include test service providers')
         parser.add_argument('-m', type=str, action='store', dest='metadata', help='Metadata output file name')
+        parser.add_argument('-a', type=str, action='store', dest='attributefilter', help='Attribute filter output file name')
         parser.add_argument('-i', type=str,  nargs='+', action='store', dest='include', help='List of included entityIDs')
         parser.add_argument('-u', action='store_true', dest='unvalidated', help='Use unvalidated data')
 
@@ -28,6 +46,7 @@ class Command(BaseCommand):
         production = options['production']
         test = options['test']
         metadata_output = options['metadata']
+        attributefilter_output = options['attributefilter']
         include = options['include']
         validated = not options['unvalidated']
         if not production and not test and not include:
@@ -55,14 +74,23 @@ class Command(BaseCommand):
                     serviceproviders = serviceproviders | ServiceProvider.objects.filter(entity_id=entity_id, end_at=None)
         # Create XML containing selected EntityDescriptors
         if serviceproviders:
-            metadata = etree.Element("EntitiesDescriptor", name="urn:mace:funet.fi:helsinki.fi")
-            metadata.attrib['{http://www.w3.org/2001/XMLSchema-instance}schemaLocation'] = "urn:oasis:names:tc:SAML:2.0:metadata saml-schema-metadata-2.0.xsd urn:mace:shibboleth:metadata:1.0 shibboleth-metadata-1.0.xsd http://www.w3.org/2000/09/xmldsig# xmldsig-core-schema.xsd"
-            for sp in serviceproviders:
-                EntityDescriptor = etree.SubElement(metadata, "EntityDescriptor", entityID=sp.entity_id)
-                metadata_spssodescriptor(EntityDescriptor, sp, validated)
-                metadata_contact(EntityDescriptor, sp, validated)
             if metadata_output:
+                metadata = etree.Element("EntitiesDescriptor", name="urn:mace:funet.fi:helsinki.fi")
+                metadata.attrib['{http://www.w3.org/2001/XMLSchema-instance}schemaLocation'] = "urn:oasis:names:tc:SAML:2.0:metadata saml-schema-metadata-2.0.xsd urn:mace:shibboleth:metadata:1.0 shibboleth-metadata-1.0.xsd http://www.w3.org/2000/09/xmldsig# xmldsig-core-schema.xsd"
+                for sp in serviceproviders:
+                    EntityDescriptor = etree.SubElement(metadata, "EntityDescriptor", entityID=sp.entity_id)
+                    metadata_spssodescriptor(EntityDescriptor, sp, validated)
+                    metadata_contact(EntityDescriptor, sp, validated)
                 with open(metadata_output, 'wb') as f:
                     f.write(etree.tostring(metadata, pretty_print=True))
-            else:
-                self.stdout.write(etree.tostring(metadata, pretty_print=True).decode('utf-8'))
+            if attributefilter_output:
+                AttributeFilterPolicyGroup = etree.Element("AttributeFilterPolicyGroup", id="urn:mace:funet.fi:haka", nsmap={"xmlns": 'urn:mace:shibboleth:2.0:afp'})
+                AttributeFilterPolicyGroup.attrib['{urn:mace:shibboleth:2.0:afp}basic'] = "urn:mace:shibboleth:2.0:afp:mf:basic"
+                AttributeFilterPolicyGroup.attrib['{urn:mace:shibboleth:2.0:afp}saml'] = "urn:mace:shibboleth:2.0:afp:mf:saml"
+                AttributeFilterPolicyGroup.attrib['{http://www.w3.org/2001/XMLSchema-instance}schemaLocation'] = "urn:mace:shibboleth:2.0:afp classpath:/schema/shibboleth-2.0-afp.xsd urn:mace:shibboleth:2.0:afp:mf:basic classpath:/schema/shibboleth-2.0-afp-mf-basic.xsd urn:mace:shibboleth:2.0:afp:mf:saml classpath:/schema/shibboleth-2.0-afp-mf-saml.xsd"
+                for sp in serviceproviders:
+                    attributefilter_generate(AttributeFilterPolicyGroup, sp, validated)
+                with open(attributefilter_output, 'wb') as f:
+                    f.write('<?xml version="1.0" encoding="UTF-8"?>\n'.encode('utf-8'))
+                    # Hack for correcting namespace definition by removing prefix.
+                    f.write(etree.tostring(AttributeFilterPolicyGroup, pretty_print=True).replace(b'xmlns:xmlns', b'xmlns'))

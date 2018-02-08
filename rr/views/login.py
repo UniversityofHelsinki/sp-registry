@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.views import View
 from django.contrib.auth import login
 from rr.auth.shibboleth import ShibbolethBackend
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import ugettext as _
 from django.http.response import HttpResponseRedirect
 from django.conf import settings
 from django.urls.base import reverse

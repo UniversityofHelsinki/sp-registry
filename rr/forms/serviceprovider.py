@@ -1,6 +1,6 @@
 from django.forms import ModelForm, Form, BooleanField
 from rr.models.serviceprovider import ServiceProvider
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import ugettext as _
 from django.core.validators import URLValidator, ValidationError
 
 

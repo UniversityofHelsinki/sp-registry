@@ -12,7 +12,7 @@ from django.db.models import Q
 from django.http.response import HttpResponseRedirect
 from django.urls.base import reverse, reverse_lazy
 from django.shortcuts import render
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import ugettext as _
 import logging
 
 logger = logging.getLogger(__name__)
@@ -94,21 +94,34 @@ class BasicInformationView(DetailView):
         missing = []
         if sp.test or sp.production:
             if not sp.name_en and not sp.name_fi:
-                missing.append(_("Service name in English or in Finnish"))
+                url = reverse("basicinformation-update", args=[sp.pk])
+                msg = _("Service name in English or in Finnish")
+                missing.append("<a href='" + url + "'>" + msg + "</a>")
             if not sp.description_en and not sp.description_fi:
-                missing.append(_("Service description in English or in Finnish"))
+                url = reverse("basicinformation-update", args=[sp.pk])
+                msg = _("Service description in English or in Finnish")
+                missing.append("<a href='" + url + "'>" + msg + "</a>")
             if sp.production:
                 if not sp.privacypolicy_en and not sp.privacypolicy_fi and sp.attributes:
-                    missing.append(_("Privacy policy URL in English or in Finnish"))
+                    url = reverse("basicinformation-update", args=[sp.pk])
+                    msg = _("Privacy policy URL in English or in Finnish")
+                    missing.append("<a href='" + url + "'>" + msg + "</a>")
             if not Certificate.objects.filter(sp=sp, end_at=None):
-                missing.append(_("Certificate"))
+                url = reverse("certificate-list", args=[sp.pk])
+                msg = _("Certificate")
+                missing.append("<a href='" + url + "'>" + msg + "</a>")
             if not Endpoint.objects.filter(sp=sp, end_at=None, type='AssertionConsumerService'):
-                missing.append(_("AssertionConsumerService endpoint"))
+                url = reverse("endpoint-list", args=[sp.pk])
+                msg = _("AssertionConsumerService endpoint")
+                missing.append("<a href='" + url + "'>" + msg + "</a>")
             if not Contact.objects.filter(sp=sp, end_at=None, type="technical"):
-                missing.append(_("Technical contact"))
+                url = reverse("contact-list", args=[sp.pk])
+                msg = _("Technical contact")
+                missing.append("<a href='" + url + "'>" + msg + "</a>")
             if not Contact.objects.filter(sp=sp, end_at=None, type="support"):
-                missing.append(_("Support contact"))
-
+                url = reverse("contact-list", args=[sp.pk])
+                msg = _("Support contact")
+                missing.append("<a href='" + url + "'>" + msg + "</a>")
         return missing
 
     def get_context_data(self, **kwargs):

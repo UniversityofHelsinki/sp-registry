@@ -1,5 +1,5 @@
 from django.forms import Form, EmailField
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import ugettext as _
 
 
 class SPAdminForm(Form):

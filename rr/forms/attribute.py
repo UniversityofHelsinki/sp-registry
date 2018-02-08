@@ -1,7 +1,6 @@
 from django.forms import Form, CharField
 from rr.models.serviceprovider import SPAttribute
 from rr.models.attribute import Attribute
-from django.utils.translation import ugettext_lazy as _
 from django.forms.widgets import TextInput
 
 

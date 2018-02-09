@@ -23,7 +23,7 @@ def load_certificate(certificate):
 
 
 class CertificateManager(models.Manager):
-    def add_certificate(self, certificate, sp, signing=None, encryption=None):
+    def add_certificate(self, certificate, sp, signing=None, encryption=None, validate=False):
         """
         Manager for adding a certificate to database.
         """
@@ -43,6 +43,10 @@ class CertificateManager(models.Manager):
         valid_from = cert.not_valid_before
         valid_until = cert.not_valid_after
         key_size = cert.public_key().key_size
+        if validate:
+            validated = timezone.now()
+        else:
+            validated = None
         try:
             self.create(sp=sp,
                         cn=cn,
@@ -54,7 +58,7 @@ class CertificateManager(models.Manager):
                             "-----BEGIN CERTIFICATE-----\n", "").replace("-----END CERTIFICATE-----\n", ""),
                         signing=signing,
                         encryption=encryption,
-                        validated=timezone.now())
+                        validated=validated)
         except ValueError:
             return False
         return True

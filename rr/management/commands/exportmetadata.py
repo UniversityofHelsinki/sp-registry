@@ -10,7 +10,7 @@ Usage: ./manage.py exportmetadata -o <output-file-name> -p -t -i entityId [entit
 from lxml import etree, objectify
 from django.core.management.base import BaseCommand
 from rr.models.serviceprovider import ServiceProvider, SPAttribute
-from rr.views.metadata import metadata_spssodescriptor, metadata_contact
+from rr.utils.metadata_generator import metadata_spssodescriptor, metadata_contact
 
 
 def attributefilter_generate(element, sp, validated=True):
@@ -75,22 +75,27 @@ class Command(BaseCommand):
         # Create XML containing selected EntityDescriptors
         if serviceproviders:
             if metadata_output:
-                metadata = etree.Element("EntitiesDescriptor", name="urn:mace:funet.fi:helsinki.fi")
-                metadata.attrib['{http://www.w3.org/2001/XMLSchema-instance}schemaLocation'] = "urn:oasis:names:tc:SAML:2.0:metadata saml-schema-metadata-2.0.xsd urn:mace:shibboleth:metadata:1.0 shibboleth-metadata-1.0.xsd http://www.w3.org/2000/09/xmldsig# xmldsig-core-schema.xsd"
+                metadata = etree.Element("EntitiesDescriptor", name="urn:mace:funet.fi:helsinki.fi", nsmap={"xmlns": 'urn:oasis:names:tc:SAML:2.0:metadata',
+                                                                                                            "ds": 'http://www.w3.org/2000/09/xmldsig#',
+                                                                                                            "mdui": 'urn:oasis:names:tc:SAML:metadata:ui',
+                                                                                                            "shibmd" : 'urn:mace:shibboleth:metadata:1.0',
+                                                                                                            "xsi": 'http://www.w3.org/2001/XMLSchema-instance'})
                 for sp in serviceproviders:
                     EntityDescriptor = etree.SubElement(metadata, "EntityDescriptor", entityID=sp.entity_id)
                     metadata_spssodescriptor(EntityDescriptor, sp, validated)
                     metadata_contact(EntityDescriptor, sp, validated)
                 with open(metadata_output, 'wb') as f:
-                    f.write(etree.tostring(metadata, pretty_print=True, encoding='UTF-8'))
+                    f.write('<?xml version="1.0" encoding="UTF-8"?>\n'.encode('utf-8'))
+                    # Hack for correcting namespace definition by removing prefix.
+                    f.write(etree.tostring(metadata, pretty_print=True, encoding='UTF-8').replace(b'xmlns:xmlns', b'xmlns'))
             if attributefilter_output:
-                AttributeFilterPolicyGroup = etree.Element("AttributeFilterPolicyGroup", id="urn:mace:funet.fi:haka", nsmap={"xmlns": 'urn:mace:shibboleth:2.0:afp'})
-                AttributeFilterPolicyGroup.attrib['{urn:mace:shibboleth:2.0:afp}basic'] = "urn:mace:shibboleth:2.0:afp:mf:basic"
-                AttributeFilterPolicyGroup.attrib['{urn:mace:shibboleth:2.0:afp}saml'] = "urn:mace:shibboleth:2.0:afp:mf:saml"
-                AttributeFilterPolicyGroup.attrib['{http://www.w3.org/2001/XMLSchema-instance}schemaLocation'] = "urn:mace:shibboleth:2.0:afp classpath:/schema/shibboleth-2.0-afp.xsd urn:mace:shibboleth:2.0:afp:mf:basic classpath:/schema/shibboleth-2.0-afp-mf-basic.xsd urn:mace:shibboleth:2.0:afp:mf:saml classpath:/schema/shibboleth-2.0-afp-mf-saml.xsd"
+                attributefilter = etree.Element("AttributeFilterPolicyGroup", id="urn:mace:funet.fi:haka", nsmap={"xmlns": 'urn:mace:shibboleth:2.0:afp'})
+                attributefilter.attrib['{urn:mace:shibboleth:2.0:afp}basic'] = "urn:mace:shibboleth:2.0:afp:mf:basic"
+                attributefilter.attrib['{urn:mace:shibboleth:2.0:afp}saml'] = "urn:mace:shibboleth:2.0:afp:mf:saml"
+                attributefilter.attrib['{http://www.w3.org/2001/XMLSchema-instance}schemaLocation'] = "urn:mace:shibboleth:2.0:afp classpath:/schema/shibboleth-2.0-afp.xsd urn:mace:shibboleth:2.0:afp:mf:basic classpath:/schema/shibboleth-2.0-afp-mf-basic.xsd urn:mace:shibboleth:2.0:afp:mf:saml classpath:/schema/shibboleth-2.0-afp-mf-saml.xsd"
                 for sp in serviceproviders:
-                    attributefilter_generate(AttributeFilterPolicyGroup, sp, validated)
+                    attributefilter_generate(attributefilter, sp, validated)
                 with open(attributefilter_output, 'wb') as f:
                     f.write('<?xml version="1.0" encoding="UTF-8"?>\n'.encode('utf-8'))
                     # Hack for correcting namespace definition by removing prefix.
-                    f.write(etree.tostring(AttributeFilterPolicyGroup, pretty_print=True, encoding='UTF-8').replace(b'xmlns:xmlns', b'xmlns'))
+                    f.write(etree.tostring(attributefilter, pretty_print=True, encoding='UTF-8').replace(b'xmlns:xmlns', b'xmlns'))

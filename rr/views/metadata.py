@@ -2,251 +2,18 @@
 Functions for genereating metadata of service providers
 """
 
-from rr.models.serviceprovider import ServiceProvider, SPAttribute
-from rr.models.certificate import Certificate
-from rr.models.contact import Contact
-from rr.models.endpoint import Endpoint
+from rr.models.serviceprovider import ServiceProvider
 from django.shortcuts import render
 from django.http.response import Http404
 from django.contrib.auth.decorators import login_required
-from lxml import etree, objectify
+from django.utils.translation import ugettext as _
 import logging
+from rr.utils.metadata_generator import metadata_generator
+from rr.forms.metadata import MetadataForm
+from lxml import etree
+from rr.utils.metadata_parser import metadata_parser
 
 logger = logging.getLogger(__name__)
-
-
-def metadata_extensions(element, sp):
-    """
-    Generates Extensions element for SP metadata XML
-
-    element: etree.Element object for previous level (SPSSODescriptor)
-    sp: ServiceProvider object
-    validated: if false, using unvalidated metadata
-
-    Using CamelCase instead of regular underscore attribute names in element tree.
-    """
-
-    Extensions = etree.SubElement(element, "Extensions")
-    if sp.discovery_service_url:
-        etree.SubElement(Extensions, "{urn:oasis:names:tc:SAML:profiles:SSO:idp-discovery-protocol}DiscoveryResponse",
-                         Binding="urn:oasis:names:tc:SAML:profiles:SSO:idp-discovery-protocol",
-                         Location=sp.discovery_service_url,
-                         index="1",
-                         nsmap={"idpdisc": 'urn:oasis:names:tc:SAML:profiles:SSO:idp-discovery-protocol'})
-    UIInfo = etree.SubElement(Extensions, "{urn:oasis:names:tc:SAML:metadata:ui}UIInfo",
-                              nsmap={"mdui": 'urn:oasis:names:tc:SAML:metadata:ui'})
-    if sp.name_fi:
-        DisplayName_fi = etree.SubElement(UIInfo, "{urn:oasis:names:tc:SAML:metadata:ui}DisplayName")
-        DisplayName_fi.attrib['{http://www.w3.org/XML/1998/namespace}lang'] = "fi"
-        DisplayName_fi.text = sp.name_fi
-    if sp.name_en:
-        DisplayName_en = etree.SubElement(UIInfo, "{urn:oasis:names:tc:SAML:metadata:ui}DisplayName")
-        DisplayName_en.attrib['{http://www.w3.org/XML/1998/namespace}lang'] = "en"
-        DisplayName_en.text = sp.name_en
-    if sp.name_sv:
-        DisplayName_sv = etree.SubElement(UIInfo, "{urn:oasis:names:tc:SAML:metadata:ui}DisplayName")
-        DisplayName_sv.attrib['{http://www.w3.org/XML/1998/namespace}lang'] = "sv"
-        DisplayName_sv.text = sp.name_sv
-
-    if sp.description_fi:
-        Description_fi = etree.SubElement(UIInfo, "{urn:oasis:names:tc:SAML:metadata:ui}Description")
-        Description_fi.attrib['{http://www.w3.org/XML/1998/namespace}lang'] = "fi"
-        Description_fi.text = sp.description_fi
-    if sp.description_en:
-        Description_en = etree.SubElement(UIInfo, "{urn:oasis:names:tc:SAML:metadata:ui}Description")
-        Description_en.attrib['{http://www.w3.org/XML/1998/namespace}lang'] = "en"
-        Description_en.text = sp.description_en
-    if sp.description_sv:
-        Description_sv = etree.SubElement(UIInfo, "{urn:oasis:names:tc:SAML:metadata:ui}Description")
-        Description_sv.attrib['{http://www.w3.org/XML/1998/namespace}lang'] = "sv"
-        Description_sv.text = sp.description_sv
-
-    if sp.privacypolicy_fi:
-        PrivacyStatementURL_fi = etree.SubElement(UIInfo, "{urn:oasis:names:tc:SAML:metadata:ui}PrivacyStatementURL")
-        PrivacyStatementURL_fi.attrib['{http://www.w3.org/XML/1998/namespace}lang'] = "fi"
-        PrivacyStatementURL_fi.text = sp.privacypolicy_fi
-    if sp.privacypolicy_en:
-        PrivacyStatementURL_en = etree.SubElement(UIInfo, "{urn:oasis:names:tc:SAML:metadata:ui}PrivacyStatementURL")
-        PrivacyStatementURL_en.attrib['{http://www.w3.org/XML/1998/namespace}lang'] = "en"
-        PrivacyStatementURL_en.text = sp.privacypolicy_en
-    if sp.privacypolicy_sv:
-        PrivacyStatementURL_sv = etree.SubElement(UIInfo, "{urn:oasis:names:tc:SAML:metadata:ui}PrivacyStatementURL")
-        PrivacyStatementURL_sv.attrib['{http://www.w3.org/XML/1998/namespace}lang'] = "sv"
-        PrivacyStatementURL_sv.text = sp.privacypolicy_sv
-
-
-def metadata_certificates(element, sp, validated=True):
-    """
-    Generates KeyDescriptor elements for SP metadata XML
-
-    element: etree.Element object for previous level (SPSSODescriptor)
-    sp: ServiceProvider object
-    validated: if false, using unvalidated metadata
-
-    Using CamelCase instead of regular underscore attribute names in element tree.
-    """
-    if validated:
-        certificates = Certificate.objects.filter(sp=sp, end_at=None).exclude(validated=None)
-    else:
-        certificates = Certificate.objects.filter(sp=sp, end_at=None)
-    for certificate in certificates:
-        KeyDescriptor = etree.SubElement(element, "KeyDescriptor",
-                                         nsmap={"ds": 'urn:oasis:names:tc:SAML:2.0:metadata'})
-        if certificate.signing and not certificate.encryption:
-            KeyDescriptor.attrib['use'] = 'signing'
-        if certificate.encryption and not certificate.signing:
-            KeyDescriptor.attrib['use'] = 'encryption'
-
-        KeyInfo = etree.SubElement(KeyDescriptor, "{urn:oasis:names:tc:SAML:2.0:metadata}KeyInfo",
-                                   nsmap={"ds": 'urn:oasis:names:tc:SAML:2.0:metadata'})
-        X509Data = etree.SubElement(KeyInfo, "{urn:oasis:names:tc:SAML:2.0:metadata}X509Data")
-        X509Certificate = etree.SubElement(X509Data, "{urn:oasis:names:tc:SAML:2.0:metadata}X509Certificate")
-        X509Certificate.text = certificate.certificate
-
-
-def metadata_nameidformat(element, sp):
-    """
-    Generates NameIDFormat elements for SP metadata XML
-
-    element: etree.Element object for previous level (SPSSODescriptor)
-    sp: ServiceProvider object
-    validated: if false, using unvalidated metadata
-    """
-
-    if sp.name_format_transient:
-        NameIDFormat = etree.SubElement(element, "NameIDFormat")
-        NameIDFormat.text = "urn:oasis:names:tc:SAML:2.0:nameid-format:transient"
-    if sp.name_format_persistent:
-        NameIDFormat = etree.SubElement(element, "NameIDFormat")
-        NameIDFormat.text = "urn:oasis:names:tc:SAML:2.0:nameid-format:persistent"
-
-
-def metadata_endpoints(element, sp, validated=True):
-    """
-    Generates EndPoint elements for SP metadata XML
-
-    element: etree.Element object for previous level (SPSSODescriptor)
-    sp: ServiceProvider object
-    validated: if false, using unvalidated metadata
-    """
-
-    if validated:
-        endpoints = Endpoint.objects.filter(sp=sp, end_at=None).exclude(validated=None)
-    else:
-        endpoints = Endpoint.objects.filter(sp=sp, end_at=None)
-    for endpoint in endpoints:
-        etree.SubElement(element, endpoint.type, Binding=endpoint.binding, Location=endpoint.url)
-
-
-def metadata_attributeconsumingservice(element, sp, validated=True):
-    """
-    Generates AttributeConsumingService element for SP metadata XML
-
-    element: etree.Element object for previous level (SPSSODescriptor)
-    sp: ServiceProvider object
-    validated: if false, using unvalidated metadata
-
-    Using CamelCase instead of regular underscore attribute names in element tree.
-    """
-
-    if validated:
-        attributes = SPAttribute.objects.filter(sp=sp).exclude(validated=None)
-    else:
-        attributes = SPAttribute.objects.filter(sp=sp)
-    AttributeConsumingService = etree.SubElement(element, "AttributeConsumingService", index="1")
-    if sp.name_fi:
-        DisplayName_fi = etree.SubElement(AttributeConsumingService, "ServiceName")
-        DisplayName_fi.attrib['{http://www.w3.org/XML/1998/namespace}lang'] = "fi"
-        DisplayName_fi.text = sp.name_fi
-    if sp.name_en:
-        DisplayName_en = etree.SubElement(AttributeConsumingService, "ServiceName")
-        DisplayName_en.attrib['{http://www.w3.org/XML/1998/namespace}lang'] = "en"
-        DisplayName_en.text = sp.name_en
-    if sp.name_sv:
-        DisplayName_sv = etree.SubElement(AttributeConsumingService, "ServiceName")
-        DisplayName_sv.attrib['{http://www.w3.org/XML/1998/namespace}lang'] = "sv"
-        DisplayName_sv.text = sp.name_sv
-
-    if sp.description_fi:
-        Description_fi = etree.SubElement(AttributeConsumingService, "ServiceDescription")
-        Description_fi.attrib['{http://www.w3.org/XML/1998/namespace}lang'] = "fi"
-        Description_fi.text = sp.description_fi
-    if sp.description_en:
-        Description_en = etree.SubElement(AttributeConsumingService, "ServiceDescription")
-        Description_en.attrib['{http://www.w3.org/XML/1998/namespace}lang'] = "en"
-        Description_en.text = sp.description_en
-    if sp.description_sv:
-        Description_sv = etree.SubElement(AttributeConsumingService, "ServiceDescription")
-        Description_sv.attrib['{http://www.w3.org/XML/1998/namespace}lang'] = "sv"
-        Description_sv.text = sp.description_sv
-
-    for attribute in attributes:
-        etree.SubElement(AttributeConsumingService, "RequestedAttribute",
-                         FriendlyName=attribute.attribute.friendlyname, Name=attribute.attribute.name,
-                         NameFormat=attribute.attribute.nameformat)
-
-
-def metadata_contact(element, sp, validated=True):
-    """
-    Generates ContactPerson elements for SP metadata XML
-
-    element: etree.Element object for previous level (EntityDescriptor)
-    sp: ServiceProvider object
-    validated: if false, using unvalidated metadata
-
-    Using CamelCase instead of regular underscore attribute names in element tree.
-    """
-
-    if validated:
-        contacts = Contact.objects.filter(sp=sp, end_at=None).exclude(validated=None)
-    else:
-        contacts = Contact.objects.filter(sp=sp, end_at=None)
-    for contact in contacts:
-        ContactPerson = etree.SubElement(element, "ContactPerson", contactType=contact.type)
-        GivenName = etree.SubElement(ContactPerson, "GivenName")
-        GivenName.text = contact.firstname
-        SurName = etree.SubElement(ContactPerson, "SurName")
-        SurName.text = contact.lastname
-        EmailAddress = etree.SubElement(ContactPerson, "EmailAddress")
-        EmailAddress.text = contact.email
-
-
-def metadata_spssodescriptor(element, sp, validated=True):
-    """
-    Generates SPSSODescriptor elements for SP metadata XML
-
-    element: etree.Element object for previous level (EntityDescriptor)
-    sp: ServiceProvider object
-    validated: if false, using unvalidated metadata
-
-    Using CamelCase instead of regular underscore attribute names in element tree.
-    """
-
-    SPSSODescriptor = etree.SubElement(element, "SPSSODescriptor", protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol")
-    metadata_extensions(SPSSODescriptor, sp)
-    metadata_certificates(SPSSODescriptor, sp, validated)
-    metadata_nameidformat(SPSSODescriptor, sp)
-    metadata_endpoints(SPSSODescriptor, sp, validated)
-    metadata_attributeconsumingservice(SPSSODescriptor, sp, validated)
-
-
-def metadata_generator(sp, validated=True):
-    """
-    Generates metadata for single SP.
-
-    sp: ServiceProvider object
-    validated: if false, using unvalidated metadata
-
-    Using CamelCase instead of regular underscore attribute names in element tree.
-    """
-
-    EntityDescriptor = etree.Element("EntityDescriptor",
-                                     schemaLocation="urn:oasis:names:tc:SAML:2.0:metadata",
-                                     entityID=sp.entity_id)
-    metadata_spssodescriptor(EntityDescriptor, sp, validated)
-    metadata_contact(EntityDescriptor, sp, validated)
-
-    return(etree.tostring(EntityDescriptor, pretty_print=True))
 
 
 @login_required
@@ -288,3 +55,39 @@ def metadata(request, pk):
     return render(request, "rr/metadata.html", {'object': sp,
                                                 'metadata': metadata,
                                                 'validated': validated})
+
+
+@login_required
+def metadata_import(request):
+    """
+    Includes a form for adding new :model:`rr.ServiceProvider`.
+
+    **Context**
+
+    ``form``
+        Text form for adding a certificate.
+
+    **Template:**
+
+    :template:`rr/metadata_import.html`
+    """
+    form = MetadataForm(user=request.user)
+    errors = []
+    sp = None
+    if request.method == "POST":
+        if "import_metadata" in request.POST:
+            form = MetadataForm(request.POST, user=request.user)
+            if form.is_valid():
+                metadata = form.cleaned_data['metadata']
+                disable_checks = request.POST.get('disable_checks', False)
+                validate = request.POST.get('validate', False)
+                parser = etree.XMLParser(ns_clean=True, remove_comments=True, remove_blank_text=True)
+                entity = etree.fromstring(metadata, parser)
+                sp, errors = metadata_parser(entity, overwrite=False, verbosity=2, validate=validate, disable_checks=disable_checks)
+                if sp:
+                    sp.admins.add(request.user)
+                    form = None
+                    logger.info("Metadata for SP %s imported by %s".format(sp=sp, user=request.user))
+    return render(request, "rr/metadata_import.html", {'form': form,
+                                                       'errors': errors,
+                                                       'sp': sp})

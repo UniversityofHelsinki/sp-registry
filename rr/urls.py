@@ -4,7 +4,8 @@ from django.contrib import admin
 from django.contrib.auth.views import LogoutView, LoginView
 from django.contrib.auth.decorators import login_required
 from rr.views.serviceprovider import BasicInformationCreate, BasicInformationUpdate, BasicInformationView,\
-    ServiceProviderDelete, ServiceProviderList, TechnicalInformationUpdate
+    ServiceProviderDelete, ServiceProviderList, TechnicalInformationUpdate,\
+    SingEncryptList
 from rr.views.attribute import attribute_list, attribute_admin_list, attribute_view
 from rr.views.certificate import certificate_list, certificate_admin_list
 from rr.views.contact import contact_list
@@ -37,6 +38,7 @@ urlpatterns = [
     url(r'^serviceprovider/add/$', login_required(BasicInformationCreate.as_view()), name='serviceprovider-add'),
     url(r'^serviceprovider/remove/(?P<pk>[0-9]+)/$', login_required(ServiceProviderDelete.as_view()), name='serviceprovider-delete'),
     url(r'^serviceprovider/(?P<pk>[0-9]+)/$', login_required(BasicInformationUpdate.as_view()), name='basicinformation-update'),
+    url(r'^sign_encrypt_list/$', login_required(SingEncryptList.as_view()), name='sign-encrypt-list'),
     url(r'^summary/(?P<pk>[0-9]+)/$', login_required(BasicInformationView.as_view()), name='summary-view'),
     url(r'^testuser/(?P<pk>[0-9]+)/$', testuser_list, name='testuser-list'),
     url(r'^testuser/data/(?P<pk>[0-9]+)/$', testuser_attribute_data, name='testuser-attribute-data'),

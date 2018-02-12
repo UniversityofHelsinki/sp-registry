@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load static %}
+{% block content %}
+<h1>{% trans "Service Provider Signing and Encryption" %}</h1>
+<div class="alert alert-success" role="alert">
+<p>{% trans "This list includes all service providers which do not have default signing and encryption attributes." %}</p>
+</div>
+<table class="table table-sm">
+  <thead>
+    <tr>
+      <th scope="col">{% trans "entityID" %}</th>
+      <th scope="col">{% trans "Sign assertions" %}</th>
+      <th scope="col">{% trans "Sign requests" %}</th>
+      <th scope="col">{% trans "Sign responses" %}</th>
+      <th scope="col">{% trans "Encrypt assertions" %}</th>
+    </tr>
+  </thead>
+  <tbody>
+  <form action="" method='POST'>
+  {% csrf_token %}
+{% for object in object_list %}
+{% if not object.sign_assertions or object.sign_requests or object.sign_responses or not object.encrypt_assertions %}
+    <tr>
+      <th scope="row"><a href="/summary/{{ object.pk }}/">{{ object.entity_id  }}</a></th>
+      {% if object.sign_assertions %}<td class="text-success">&#10004;{% else %}<td class="text-danger">&#10005;{% endif %}</td>
+      {% if object.sign_requests %}<td class="text-success">&#10004;{% else %}<td class="text-danger">&#10005;{% endif %}</td>
+      {% if object.sign_responses %}<td class="text-success">&#10004;{% else %}<td class="text-danger">&#10005;{% endif %}</td>
+      {% if object.encrypt_assertions %}<td class="text-success">&#10004;{% else %}<td class="text-danger">&#10005;{% endif %}</td>
+    </tr>
+{% endif %}
+{% empty %}
+    <tr>
+      <th scope="row">{% trans "You do not have access to any service providers." %}</th>
+      <td></td>
+      <td></td>
+    </tr>
+{% endfor %}
+  </form>
+  </tbody>
+</table>
+{% endblock %}

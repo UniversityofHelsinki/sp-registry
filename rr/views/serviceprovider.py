@@ -313,3 +313,28 @@ class ServiceProviderDelete(DeleteView):
         self.object.end_at = timezone.now()
         self.object.save()
         return HttpResponseRedirect(success_url)
+
+
+class SingEncryptList(ListView):
+    """
+    Displays a list of :model:`rr.ServiceProvider` where
+    signing and encryption attributes are not default
+
+
+    **Context**
+
+    ``object_list``
+        List of :model:`rr.ServiceProvider`.
+
+    **Template:**
+
+    :template:`rr/serviceprovider_list.html`
+    """
+    model = ServiceProvider
+    template_name_suffix = '_sign_encrypt_list'
+
+    def get_queryset(self):
+        if self.request.user.is_superuser:
+            return ServiceProvider.objects.filter(end_at=None).order_by('entity_id')
+        else:
+            return ServiceProvider.objects.filter(admins=self.request.user, end_at=None).order_by('entity_id')

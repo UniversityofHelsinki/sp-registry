@@ -23,8 +23,8 @@
       <td><a href="{% url 'certificate-list' certificate.sp.pk %}">{{ certificate.sp }}</a></td>
       <td>{{ certificate.valid_until }}</td>
       <td>{{ certificate.key_size }}</td>
-      {% if certificate.signing %}<td class="text-success">&#10004;{% else %}<td>{% endif %}</td>
-      {% if certificate.encryption %}<td class="text-success">&#10004;{% else %}<td>{% endif %}</td>
+      {% if certificate.signing %}<td class="text-success">&#10004;{% else %}<td class="text-danger">&#10005;{% endif %}</td>
+      {% if certificate.encryption %}<td class="text-success">&#10004;{% else %}<td class="text-danger">&#10005;{% endif %}</td>
     </tr>
 {% endfor %}
   </tbody>
@@ -49,8 +49,8 @@
       <td><a href="{% url 'certificate-list' certificate.sp.pk %}">{{ certificate.sp }}</a></td>
       <td>{{ certificate.valid_until }}</td>
       <td>{{ certificate.key_size }}</td>
-      {% if certificate.signing %}<td class="text-success">&#10004;{% else %}<td>{% endif %}</td>
-      {% if certificate.encryption %}<td class="text-success">&#10004;{% else %}<td>{% endif %}</td>
+      {% if certificate.signing %}<td class="text-success">&#10004;{% else %}<td class="text-danger">&#10005;{% endif %}</td>
+      {% if certificate.encryption %}<td class="text-success">&#10004;{% else %}<td class="text-danger">&#10005;{% endif %}</td>
     </tr>
 {% endfor %}
   </tbody>

@@ -21,7 +21,7 @@
       <th scope="row">{{ object.friendlyname }}</th>
       <td><a href="{% url 'attribute-view' object.pk %}">{{ object.attributeid }}</a></td>
       <td>{{ object.name }}</td>
-      <td>{{ object.public }}</td>
+      {% if object.public %}<td class="text-success">&#10004;{% else %}<td class="text-danger">&#10005;{% endif %}</td>
     </tr>
 {% empty %}
     <tr>

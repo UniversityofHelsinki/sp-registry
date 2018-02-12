@@ -56,8 +56,8 @@
 {% if history_object %}
     {% if f.value != history_object|get_item:f.name %}<tr class="table-warning">{% else %}<tr>{% endif %}
       <td scope="row">{{ f.label }}</td>
-      {% if f.value == True %}<td class="text-success">&#10004;{% elif f.value == False %}<td class="text-danger">x{% else %}<td>{{ f.value }}{% endif %}</td>
-      {% if history_object|get_item:f.name == True %}<td class="text-success">&#10004;{% elif history_object|get_item:f.name == False %}<td class="text-danger">x{% else %}<td>{{ history_object|get_item:f.name }}{% endif %}</td>
+      {% if f.value == True %}<td class="text-success">&#10004;{% elif f.value == False %}<td class="text-danger">&#10005;{% else %}<td>{{ f.value }}{% endif %}</td>
+      {% if history_object|get_item:f.name == True %}<td class="text-success">&#10004;{% elif history_object|get_item:f.name == False %}<td class="text-danger">&#10005;{% else %}<td>{{ history_object|get_item:f.name }}{% endif %}</td>
     </tr>
 {% else %}
     <tr>
@@ -85,7 +85,7 @@
     {% if f.value != history_object|get_item:f.name %}<tr class="table-warning">{% else %}<tr>{% endif %}
       <td scope="row">{{ f.label }}</td>
       {% if f.value == True %}<td class="text-success">&#10004;{% elif f.value == False %}<td class="text-danger">x{% else %}<td>{{ f.value }}{% endif %}</td>
-      {% if history_object|get_item:f.name == True %}<td class="text-success">&#10004;{% elif history_object|get_item:f.name == False %}<td class="text-danger">x{% else %}<td>{{ history_object|get_item:f.name }}{% endif %}</td>
+      {% if history_object|get_item:f.name == True %}<td class="text-success">&#10004;{% elif history_object|get_item:f.name == False %}<td class="text-danger">&#10005;{% else %}<td>{{ history_object|get_item:f.name }}{% endif %}</td>
     </tr>
 {% else %}
     <tr>

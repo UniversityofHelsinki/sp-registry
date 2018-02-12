@@ -25,8 +25,8 @@
     <tr>
       <th scope="row"><a href="/summary/{{ object.pk }}/">{{ object.entity_id  }}</a></th>
       <td>{{ object.name }}</td>
-      {% if object.production %}<td class="text-success">&#10004;{% else %}<td>{% endif %}</td>
-      {% if object.test %}<td class="text-success">&#10004;{% else %}<td>{% endif %}</td>
+      {% if object.production %}<td class="text-success">&#10004;{% else %}<td class="text-danger">&#10005;{% endif %}</td>
+      {% if object.test %}<td class="text-success">&#10004;{% else %}<td class="text-danger">&#10005;{% endif %}</td>
       {% if object.validated and not object.modified %}<td class="table-success">{% trans "OK "%}</td>{% else %}<td class="table-warning">{% trans "Modified "%}</td>{% endif %}
     </tr>
 {% empty %}

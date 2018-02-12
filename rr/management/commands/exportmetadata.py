@@ -75,11 +75,9 @@ class Command(BaseCommand):
         # Create XML containing selected EntityDescriptors
         if serviceproviders:
             if metadata_output:
-                metadata = etree.Element("EntitiesDescriptor", name="urn:mace:funet.fi:helsinki.fi", nsmap={"xmlns": 'urn:oasis:names:tc:SAML:2.0:metadata',
+                metadata = etree.Element("EntitiesDescriptor", Name="urn:mace:funet.fi:helsinki.fi", nsmap={"xmlns": 'urn:oasis:names:tc:SAML:2.0:metadata',
                                                                                                             "ds": 'http://www.w3.org/2000/09/xmldsig#',
-                                                                                                            "mdui": 'urn:oasis:names:tc:SAML:metadata:ui',
-                                                                                                            "shibmd" : 'urn:mace:shibboleth:metadata:1.0',
-                                                                                                            "xsi": 'http://www.w3.org/2001/XMLSchema-instance'})
+                                                                                                            "mdui": 'urn:oasis:names:tc:SAML:metadata:ui'})
                 for sp in serviceproviders:
                     EntityDescriptor = etree.SubElement(metadata, "EntityDescriptor", entityID=sp.entity_id)
                     metadata_spssodescriptor(EntityDescriptor, sp, validated)

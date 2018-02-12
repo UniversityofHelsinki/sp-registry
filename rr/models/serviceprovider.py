@@ -27,7 +27,7 @@ class ServiceProvider(models.Model):
     sign_assertions = models.BooleanField(default=True, verbose_name=_('Sign SSO assertions'))
     sign_requests = models.BooleanField(default=False, verbose_name=_('Sign SSO requests'))
     sign_responses = models.BooleanField(default=False, verbose_name=_('Sign SSO responses'))
-    encyrpt_assertions = models.BooleanField(default=True, verbose_name=_('Encrypt SSO assertions'))
+    encrypt_assertions = models.BooleanField(default=True, verbose_name=_('Encrypt SSO assertions'))
 
     production = models.BooleanField(default=False, verbose_name=_('Publish to production servers'))
     test = models.BooleanField(default=False, verbose_name=_('Publish to test servers'))
@@ -123,7 +123,7 @@ class ServiceProvider(models.Model):
             # only display fields with values and skip some fields entirely
             if f.editable and f.name not in ('id', 'end_at', 'history', 'validated', 'modified', 'updated_by', 'entity_id',
                                              'discovery_service_url', 'name_format_transient', 'name_format_persistent',
-                                             'sign_assertions', 'sign_requests', 'sign_responses', 'encyrpt_assertions',
+                                             'sign_assertions', 'sign_requests', 'sign_responses', 'encrypt_assertions',
                                              'production', 'test', 'saml_product', 'autoupdate_idp_metadata'):
                 fields.append(
                   {

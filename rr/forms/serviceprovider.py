@@ -48,7 +48,7 @@ class TechnicalInformationForm(ModelForm):
     class Meta:
         model = ServiceProvider
         fields = ['entity_id', 'discovery_service_url', 'name_format_transient', 'name_format_persistent',
-                  'sign_assertions', 'sign_requests', 'sign_responses', 'encyrpt_assertions', 'production', 'test',
+                  'sign_assertions', 'sign_requests', 'sign_responses', 'encrypt_assertions', 'production', 'test',
                   'saml_product', 'autoupdate_idp_metadata']
         help_texts = {
             'entity_id': _('Should be URI including scheme, hostname of your application and path e.g. https://test.helsinki.fi/sp. <div class="text-danger">Required for both production and test use.</div>'),
@@ -58,7 +58,7 @@ class TechnicalInformationForm(ModelForm):
             'sign_assertions': _('Sign SSO assertions. Defaults to False, do not change if you do not know what you are doing.'),
             'sign_requests': _('Sign SSO requests. Defaults to False, do not change if you do not know what you are doing.'),
             'sign_responses': _('Sign SSO responses. Defaults to True, do not change if you do not know what you are doing.'),
-            'encyrpt_assertions': _('Encrypt SSO assertions. Defaults to True, do not change if you do not know what you are doing.'),
+            'encrypt_assertions': _('Encrypt SSO assertions. Defaults to True, do not change if you do not know what you are doing.'),
             'production': _('Publish this SP to production IdP. Only validated data is used.'),
             'test': _('Publish this SP to test IdP using unvalidated data.'),
             'saml_product': _('For administrative use e.g. for testing different SPs during IdP updates.'),

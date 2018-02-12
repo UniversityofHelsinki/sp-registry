@@ -1,10 +1,7 @@
 """
 Command line script for exporting metadata
 
-Usage: ./manage.py exportmetadata -o <output-file-name> -p -t -i entityId [entityId]
--p                include production data
--t                include test data
--- unvalidated    use unvalidated metadata
+Usage help: ./manage.py cleandb -h
 """
 
 from lxml import etree, objectify

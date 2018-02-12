@@ -2,7 +2,7 @@
 Command line script for importing attribute filter.
 Import metadata first as this imports attributes only if entityID is found from database.
 
-Usage: ./manage.py importattributefilter -i <attritube-filter-file-name>
+Usage help: ./manage.py cleandb -h
 """
 
 from rr.models.serviceprovider import ServiceProvider, SPAttribute

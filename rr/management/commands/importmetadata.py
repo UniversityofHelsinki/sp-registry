@@ -1,7 +1,7 @@
 """
 Command line script for importing metadata.xml
 
-Usage: ./manage.py importmetadata -i <metadata-file-name>
+Usage help: ./manage.py cleandb -h
 """
 
 from rr.utils.metadata_parser import metadata_parser

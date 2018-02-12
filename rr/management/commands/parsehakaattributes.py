@@ -2,14 +2,12 @@
 Parse a Haka metadata file and print out attribute-filter for it.
 Short term manual hack for IdP 2 as Haka stopped releasing attribute-filter file.
 
-Usage: ./manage.py parsehakaattributes <metadata-file-name>
-Saves output to "attribute-filter-haka.xml_YYYYMMDD"
+Usage help: ./manage.py cleandb -h
 """
 
 from rr.models.attribute import Attribute
 from lxml import etree, objectify
 from django.core.management.base import BaseCommand
-from datetime import date
 
 
 def haka_attribute_parser(filename):

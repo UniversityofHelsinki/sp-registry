@@ -8,6 +8,7 @@ from rr.models.contact import Contact
 from rr.models.endpoint import Endpoint
 from lxml import etree, objectify
 import logging
+from rr.models.organization import Organization
 
 logger = logging.getLogger(__name__)
 
@@ -205,6 +206,61 @@ def metadata_contact(element, sp, validated=True):
         EmailAddress.text = contact.email
 
 
+def metadata_organization(element, sp):
+    """
+    Generates Organization elements for SP metadata XML
+
+    element: etree.Element object for previous level (EntityDescriptor)
+    sp: ServiceProvider object
+    validated: if false, using unvalidated metadata
+
+    Using CamelCase instead of regular underscore attribute names in element tree.
+    """
+
+    if sp.organization:
+        organization = sp.organization
+        Organization = etree.SubElement(element, "Organization")
+
+        if organization.name_fi:
+            DisplayName_fi = etree.SubElement(Organization, "OrganizationName")
+            DisplayName_fi.attrib['{http://www.w3.org/XML/1998/namespace}lang'] = "fi"
+            DisplayName_fi.text = organization.name_fi
+        if organization.name_en:
+            DisplayName_en = etree.SubElement(Organization, "OrganizationName")
+            DisplayName_en.attrib['{http://www.w3.org/XML/1998/namespace}lang'] = "en"
+            DisplayName_en.text = organization.name_en
+        if organization.name_sv:
+            DisplayName_sv = etree.SubElement(Organization, "OrganizationName")
+            DisplayName_sv.attrib['{http://www.w3.org/XML/1998/namespace}lang'] = "sv"
+            DisplayName_sv.text = organization.name_sv
+
+        if organization.description_fi:
+            Description_fi = etree.SubElement(Organization, "OrganizationDisplayName")
+            Description_fi.attrib['{http://www.w3.org/XML/1998/namespace}lang'] = "fi"
+            Description_fi.text = organization.description_fi
+        if organization.description_en:
+            Description_en = etree.SubElement(Organization, "OrganizationDisplayName")
+            Description_en.attrib['{http://www.w3.org/XML/1998/namespace}lang'] = "en"
+            Description_en.text = organization.description_en
+        if organization.description_sv:
+            Description_sv = etree.SubElement(Organization, "OrganizationDisplayName")
+            Description_sv.attrib['{http://www.w3.org/XML/1998/namespace}lang'] = "sv"
+            Description_sv.text = organization.description_sv
+
+        if organization.url_fi:
+            OrganizationURL_fi = etree.SubElement(Organization, "OrganizationURL")
+            OrganizationURL_fi.attrib['{http://www.w3.org/XML/1998/namespace}lang'] = "fi"
+            OrganizationURL_fi.text = organization.url_fi
+        if organization.url_en:
+            OrganizationURL_en = etree.SubElement(Organization, "OrganizationURL")
+            OrganizationURL_en.attrib['{http://www.w3.org/XML/1998/namespace}lang'] = "en"
+            OrganizationURL_en.text = organization.url_en
+        if organization.url_sv:
+            OrganizationURL_sv = etree.SubElement(Organization, "OrganizationURL")
+            OrganizationURL_sv.attrib['{http://www.w3.org/XML/1998/namespace}lang'] = "sv"
+            OrganizationURL_sv.text = organization.url_sv
+
+
 def metadata_spssodescriptor(element, sp, validated=True):
     """
     Generates SPSSODescriptor elements for SP metadata XML
@@ -240,6 +296,7 @@ def metadata_generator(sp, validated=True):
                                      nsmap={"ds": 'http://www.w3.org/2000/09/xmldsig#',
                                             "mdui": 'urn:oasis:names:tc:SAML:metadata:ui'})
     metadata_spssodescriptor(EntityDescriptor, sp, validated)
+    metadata_organization(EntityDescriptor, sp)
     metadata_contact(EntityDescriptor, sp, validated)
 
     return(etree.tostring(EntityDescriptor, pretty_print=True, encoding='UTF-8'))

@@ -2,6 +2,8 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.utils.translation import ugettext_lazy as _, get_language
 from rr.models.attribute import Attribute
+from rr.models.organization import Organization
+from django.core.validators import MaxLengthValidator
 
 
 class ServiceProvider(models.Model):
@@ -10,12 +12,16 @@ class ServiceProvider(models.Model):
     :model:`rr.Attribute` through :model:`rr.SPAttribute`
     """
     entity_id = models.CharField(max_length=255, verbose_name=_('Entity Id'))
-    name_fi = models.CharField(max_length=255, blank=True, verbose_name=_('Service Name (Finnish)'))
-    name_en = models.CharField(max_length=255, blank=True, verbose_name=_('Service Name (English)'))
-    name_sv = models.CharField(max_length=255, blank=True, verbose_name=_('Service Name (Swedish)'))
-    description_fi = models.CharField(max_length=255, blank=True, verbose_name=_('Service Description (Finnish)'))
-    description_en = models.CharField(max_length=255, blank=True, verbose_name=_('Service Description (English)'))
-    description_sv = models.CharField(max_length=255, blank=True, verbose_name=_('Service Description (Swedish)'))
+    organization = models.ForeignKey(Organization, blank=True, null=True, on_delete=models.SET_NULL, verbose_name=_('Organization'))
+    name_fi = models.CharField(max_length=70, blank=True, verbose_name=_('Service Name (Finnish)'), validators=[MaxLengthValidator(70)])
+    name_en = models.CharField(max_length=70, blank=True, verbose_name=_('Service Name (English)'), validators=[MaxLengthValidator(70)])
+    name_sv = models.CharField(max_length=70, blank=True, verbose_name=_('Service Name (Swedish)'), validators=[MaxLengthValidator(70)])
+    description_fi = models.CharField(max_length=140, blank=True, verbose_name=_('Service Description (Finnish)'),
+                                      validators=[MaxLengthValidator(140)])
+    description_en = models.CharField(max_length=140, blank=True, verbose_name=_('Service Description (English)'),
+                                      validators=[MaxLengthValidator(140)])
+    description_sv = models.CharField(max_length=140, blank=True, verbose_name=_('Service Description (Swedish)'),
+                                      validators=[MaxLengthValidator(140)])
     privacypolicy_fi = models.URLField(max_length=255, blank=True, verbose_name=_('Privacy Policy URL (Finnish)'))
     privacypolicy_en = models.URLField(max_length=255, blank=True, verbose_name=_('Privacy Policy URL (English)'))
     privacypolicy_sv = models.URLField(max_length=255, blank=True, verbose_name=_('Privacy Policy URL (Swedish)'))
@@ -40,7 +46,7 @@ class ServiceProvider(models.Model):
 
     # Attributes are linked through SPAttribute model to include reason and validation information
     attributes = models.ManyToManyField(Attribute, through='SPAttribute')
-    admins = models.ManyToManyField(User, related_name="admins")
+    admins = models.ManyToManyField(User, blank=True, related_name="admins")
 
     modified = models.BooleanField(default=True, verbose_name=_('Modified'))
     history = models.IntegerField(blank=True, null=True, verbose_name=_('History key'))
@@ -153,7 +159,7 @@ class ServiceProvider(models.Model):
             if f.editable and f.name not in ('id', 'end_at', 'history', 'validated', 'modified', 'updated_by', 'name_fi', 'name_en',
                                              'name_sv', 'description_fi', 'description_en', 'description_sv',
                                              'privacypolicy_fi', 'privacypolicy_en', 'privacypolicy_sv',
-                                             'login_page_url', 'application_portfolio', 'notes', 'admin_notes'):
+                                             'login_page_url', 'application_portfolio', 'notes', 'admin_notes' ,'organization'):
                 fields.append(
                   {
                    'label': f.verbose_name,

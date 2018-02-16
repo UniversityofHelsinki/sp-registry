@@ -11,16 +11,17 @@ class BasicInformationForm(ModelForm):
 
     class Meta:
         model = ServiceProvider
-        fields = ['name_fi', 'name_en', 'name_sv', 'description_fi', 'description_en', 'description_sv',
+        fields = ['organization', 'name_fi', 'name_en', 'name_sv', 'description_fi', 'description_en', 'description_sv',
                   'privacypolicy_fi', 'privacypolicy_en', 'privacypolicy_sv',
                   'login_page_url', 'application_portfolio', 'notes', 'admin_notes']
         help_texts = {
-            'name_fi': _('Short and descriptive name for the service in Finnish. <div class="text-danger">Required for both production and test use.</div>'),
-            'name_en': _('Short and descriptive name for the service in English. <div class="text-danger">Required for both production and test use.</div>'),
-            'name_sv': _('Short and descriptive name for the service in Swedish.'),
-            'description_fi': _('Short (less than 140 characters) description of the service in Finnish. <div class="text-danger">Required for both production and test use.</div>'),
-            'description_en': _('Short (less than 140 characters) description of the service in English. <div class="text-danger">Required for both production and test use.</div>'),
-            'description_sv': _('Short (less than 140 characters) description of the service in Swedish.'),
+            'organization': _('Organization name, only changeable by registry admins.'),
+            'name_fi': _('Short (max 70 characters) and descriptive name for the service in Finnish. <div class="text-danger">Required for both production and test use.</div>'),
+            'name_en': _('Short (max 70 characters) and descriptive name for the service in English. <div class="text-danger">Required for both production and test use.</div>'),
+            'name_sv': _('Short (max 70 characters) and descriptive name for the service in Swedish.'),
+            'description_fi': _('Short (max 140 characters) description of the service in Finnish. <div class="text-danger">Required for both production and test use.</div>'),
+            'description_en': _('Short (max 140 characters) description of the service in English. <div class="text-danger">Required for both production and test use.</div>'),
+            'description_sv': _('Short (max 140 characters) description of the service in Swedish.'),
             'privacypolicy_fi': _('Link to privacy policy in Finnish. Link must be publicly accessible. <div class="text-danger">Required for production use if the service requests any personal information.</div>'),
             'privacypolicy_en': _('Link to privacy policy in English. Link must be publicly accessible. <div class="text-danger">Required for production use if the service requests any personal information.</div>'),
             'privacypolicy_sv': _('Link to privacy policy in Swedish. Link must be publicly accessible.'),
@@ -38,6 +39,7 @@ class BasicInformationForm(ModelForm):
         super(BasicInformationForm, self).__init__(*args, **kwargs)
         if not self.request.user.is_superuser:
             del self.fields['admin_notes']
+            del self.fields['organization']
 
 
 class TechnicalInformationForm(ModelForm):
@@ -97,15 +99,15 @@ class ServiceProviderCreateForm(ModelForm):
                   'login_page_url', 'application_portfolio', 'notes']
         help_texts = {
             'entity_id': _('Should be URI including scheme, hostname of your application and path e.g. https://test.helsinki.fi/sp. <div class="text-danger">Required for both production and test use.</div>'),
-            'name_fi': _('Short and descriptive name for the service in Finnish. <div class="text-danger">Required for both production and test use.</div>'),
-            'name_en': _('Short and descriptive name for the service in English. <div class="text-danger">Required for both production and test use.</div>'),
-            'name_sv': _('Short and descriptive name for the service in Swedish.'),
-            'description_fi': _('Short (less than 140 characters) description of the service in Finnish. <div class="text-danger">Required for both production and test use.</div>'),
-            'description_en': _('Short (less than 140 characters) description of the service in English. <div class="text-danger">Required for both production and test use.</div>'),
-            'description_sv': _('Short (less than 140 characters) description of the service in Swedish.'),
+            'name_fi': _('Short (max 70 characters) and descriptive name for the service in Finnish. <div class="text-danger">Required for both production and test use.</div>'),
+            'name_en': _('Short (max 70 characters) and descriptive name for the service in English. <div class="text-danger">Required for both production and test use.</div>'),
+            'name_sv': _('Short (max 70 characters) and descriptive name for the service in Swedish.'),
+            'description_fi': _('Short (max 140 characters) description of the service in Finnish. <div class="text-danger">Required for both production and test use.</div>'),
+            'description_en': _('Short (max 140 characters) description of the service in English. <div class="text-danger">Required for both production and test use.</div>'),
+            'description_sv': _('Short (max 140 characters) description of the service in Swedish.'),
             'privacypolicy_fi': _('Link to privacy policy in Finnish. Link must be publicly accessible. <div class="text-danger">Required for production use if the service requests any personal information.</div>'),
             'privacypolicy_en': _('Link to privacy policy in English. Link must be publicly accessible. <div class="text-danger">Required for production use if the service requests any personal information.</div>'),
-            'privacypolicy_sv': _('Link to privacy policy in Swedish. Link must be publicly accessible.'),
+            'privacypolicy_sv': _('Link to privacy policy in Swedish. Link mustShort and descriptive name for the serviceShort and descriptive name for the service in Finnish. <div class="text-danger">Required for both production and test use.</div> in Finnish. <div class="text-danger">Required for both production and test use.</div> be publicly accessible.'),
             'login_page_url': _('Used for debugging and testing services.'),
             'application_portfolio': _('Link to external application portfolio.'),
             'notes': _('Additional notes about this service.'),

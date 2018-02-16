@@ -6,9 +6,11 @@ from rr.models.contact import Contact
 from rr.models.endpoint import Endpoint
 from rr.models.spadmin import Keystore
 from rr.models.testuser import TestUser, TestUserData
+from rr.models.organization import Organization
 
 
 admin.site.register(ServiceProvider)
+admin.site.register(Organization)
 admin.site.register(Attribute)
 admin.site.register(SPAttribute)
 admin.site.register(Certificate)

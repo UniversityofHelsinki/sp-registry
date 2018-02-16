@@ -7,7 +7,8 @@ Usage help: ./manage.py cleandb -h
 from lxml import etree, objectify
 from django.core.management.base import BaseCommand
 from rr.models.serviceprovider import ServiceProvider, SPAttribute
-from rr.utils.metadata_generator import metadata_spssodescriptor, metadata_contact
+from rr.utils.metadata_generator import metadata_spssodescriptor, metadata_contact,\
+    metadata_organization
 
 
 def attributefilter_generate(element, sp, validated=True):
@@ -79,6 +80,7 @@ class Command(BaseCommand):
                     EntityDescriptor = etree.SubElement(metadata, "EntityDescriptor", entityID=sp.entity_id)
                     metadata_spssodescriptor(EntityDescriptor, sp, validated)
                     metadata_contact(EntityDescriptor, sp, validated)
+                    metadata_organization(EntityDescriptor, sp)
                 with open(metadata_output, 'wb') as f:
                     f.write('<?xml version="1.0" encoding="UTF-8"?>\n'.encode('utf-8'))
                     # Hack for correcting namespace definition by removing prefix.

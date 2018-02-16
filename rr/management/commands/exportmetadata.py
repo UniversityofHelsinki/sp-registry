@@ -39,6 +39,7 @@ class Command(BaseCommand):
         parser.add_argument('-a', type=str, action='store', dest='attributefilter', help='Attribute filter output file name')
         parser.add_argument('-i', type=str,  nargs='+', action='store', dest='include', help='List of included entityIDs')
         parser.add_argument('-u', action='store_true', dest='unvalidated', help='Use unvalidated data')
+        parser.add_argument('-x', action='store_true', dest='privacypolicy', help='Replace missing privacypolicy for HY')
 
     def handle(self, *args, **options):
         production = options['production']
@@ -47,6 +48,7 @@ class Command(BaseCommand):
         attributefilter_output = options['attributefilter']
         include = options['include']
         validated = not options['unvalidated']
+        privacypolicy = options['privacypolicy']
         if not production and not test and not include:
             self.stdout.write("Give production, test or included entityIDs as command line arguments")
         if validated:
@@ -78,7 +80,7 @@ class Command(BaseCommand):
                                                                                                             "mdui": 'urn:oasis:names:tc:SAML:metadata:ui'})
                 for sp in serviceproviders:
                     EntityDescriptor = etree.SubElement(metadata, "EntityDescriptor", entityID=sp.entity_id)
-                    metadata_spssodescriptor(EntityDescriptor, sp, validated)
+                    metadata_spssodescriptor(EntityDescriptor, sp, validated, privacypolicy)
                     metadata_contact(EntityDescriptor, sp, validated)
                     metadata_organization(EntityDescriptor, sp)
                 with open(metadata_output, 'wb') as f:

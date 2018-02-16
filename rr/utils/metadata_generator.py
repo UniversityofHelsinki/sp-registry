@@ -13,7 +13,7 @@ from rr.models.organization import Organization
 logger = logging.getLogger(__name__)
 
 
-def metadata_extensions(element, sp):
+def metadata_extensions(element, sp, privacypolicy):
     """
     Generates Extensions element for SP metadata XML
 
@@ -62,14 +62,29 @@ def metadata_extensions(element, sp):
         PrivacyStatementURL_fi = etree.SubElement(UIInfo, "{urn:oasis:names:tc:SAML:metadata:ui}PrivacyStatementURL")
         PrivacyStatementURL_fi.attrib['{http://www.w3.org/XML/1998/namespace}lang'] = "fi"
         PrivacyStatementURL_fi.text = sp.privacypolicy_fi
+    else:
+        if sp.organization and sp.organization.name_fi == "Helsingin yliopisto" and privacypolicy:
+            PrivacyStatementURL_fi = etree.SubElement(UIInfo, "{urn:oasis:names:tc:SAML:metadata:ui}PrivacyStatementURL")
+            PrivacyStatementURL_fi.attrib['{http://www.w3.org/XML/1998/namespace}lang'] = "fi"
+            PrivacyStatementURL_fi.text = "https://www.helsinki.fi/fi/yliopisto/tietosuojaselosteet-0"
     if sp.privacypolicy_en:
         PrivacyStatementURL_en = etree.SubElement(UIInfo, "{urn:oasis:names:tc:SAML:metadata:ui}PrivacyStatementURL")
         PrivacyStatementURL_en.attrib['{http://www.w3.org/XML/1998/namespace}lang'] = "en"
         PrivacyStatementURL_en.text = sp.privacypolicy_en
+    else:
+        if sp.organization and sp.organization.name_fi == "Helsingin yliopisto" and privacypolicy:
+            PrivacyStatementURL_en = etree.SubElement(UIInfo, "{urn:oasis:names:tc:SAML:metadata:ui}PrivacyStatementURL")
+            PrivacyStatementURL_en.attrib['{http://www.w3.org/XML/1998/namespace}lang'] = "en"
+            PrivacyStatementURL_en.text = "https://www.helsinki.fi/fi/yliopisto/tietosuojaselosteet-0"
     if sp.privacypolicy_sv:
         PrivacyStatementURL_sv = etree.SubElement(UIInfo, "{urn:oasis:names:tc:SAML:metadata:ui}PrivacyStatementURL")
         PrivacyStatementURL_sv.attrib['{http://www.w3.org/XML/1998/namespace}lang'] = "sv"
         PrivacyStatementURL_sv.text = sp.privacypolicy_sv
+    else:
+        if sp.organization and sp.organization.name_fi == "Helsingin yliopisto" and privacypolicy:
+            PrivacyStatementURL_sv = etree.SubElement(UIInfo, "{urn:oasis:names:tc:SAML:metadata:ui}PrivacyStatementURL")
+            PrivacyStatementURL_sv.attrib['{http://www.w3.org/XML/1998/namespace}lang'] = "sv"
+            PrivacyStatementURL_sv.text = "https://www.helsinki.fi/fi/yliopisto/tietosuojaselosteet-0"
 
 
 def metadata_certificates(element, sp, validated=True):
@@ -261,7 +276,7 @@ def metadata_organization(element, sp):
             OrganizationURL_sv.text = organization.url_sv
 
 
-def metadata_spssodescriptor(element, sp, validated=True):
+def metadata_spssodescriptor(element, sp, validated=True, privacypolicy=False):
     """
     Generates SPSSODescriptor elements for SP metadata XML
 
@@ -273,7 +288,7 @@ def metadata_spssodescriptor(element, sp, validated=True):
     """
 
     SPSSODescriptor = etree.SubElement(element, "SPSSODescriptor", protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol")
-    metadata_extensions(SPSSODescriptor, sp)
+    metadata_extensions(SPSSODescriptor, sp, privacypolicy)
     metadata_certificates(SPSSODescriptor, sp, validated)
     metadata_nameidformat(SPSSODescriptor, sp)
     metadata_endpoints(SPSSODescriptor, sp, validated)

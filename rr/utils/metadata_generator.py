@@ -140,12 +140,25 @@ def metadata_endpoints(element, sp, validated=True):
     validated: if false, using unvalidated metadata
     """
 
+    saml2_support = False
+    saml1_support = False
     if validated:
         endpoints = Endpoint.objects.filter(sp=sp, end_at=None).exclude(validated=None)
     else:
         endpoints = Endpoint.objects.filter(sp=sp, end_at=None)
     for endpoint in endpoints:
         etree.SubElement(element, endpoint.type, Binding=endpoint.binding, Location=endpoint.url)
+        if endpoint.type == "AssertionConsumerService":
+            if endpoint.binding == "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST":
+                saml2_support = True
+            if endpoint.binding == "urn:oasis:names:tc:SAML:1.0:profiles:browser-post":
+                saml1_support = True
+    if saml2_support:
+        return 2
+    elif saml1_support:
+        return 1
+    else:
+        return 0
 
 
 def metadata_attributeconsumingservice(element, sp, validated=True):
@@ -291,7 +304,10 @@ def metadata_spssodescriptor(element, sp, validated=True, privacypolicy=False):
     metadata_extensions(SPSSODescriptor, sp, privacypolicy)
     metadata_certificates(SPSSODescriptor, sp, validated)
     metadata_nameidformat(SPSSODescriptor, sp)
-    metadata_endpoints(SPSSODescriptor, sp, validated)
+    protocol = metadata_endpoints(SPSSODescriptor, sp, validated)
+    if protocol == 1:
+        # Set protocol to SAML 1.1 if only 1 is supported
+        SPSSODescriptor.set("protocolSupportEnumeration", "urn:oasis:names:tc:SAML:1.1:protocol")
     metadata_attributeconsumingservice(SPSSODescriptor, sp, validated)
 
 

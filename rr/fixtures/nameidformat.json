@@ -1,0 +1,4 @@
+[{"model": "rr.nameidformat", "pk": 1, "fields": {"nameidformat": "urn:oasis:names:tc:SAML:2.0:nameid-format:transient", "public": true}},
+ {"model": "rr.nameidformat", "pk": 2, "fields": {"nameidformat": "urn:oasis:names:tc:SAML:2.0:nameid-format:persistent", "public": true}},
+ {"model": "rr.nameidformat", "pk": 3, "fields": {"nameidformat": "urn:mace:shibboleth:1.1:nameid-format:userid", "public": false}},
+ {"model": "rr.nameidformat", "pk": 4, "fields": {"nameidformat": "urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified", "public": false}}]

@@ -149,7 +149,6 @@ class BasicInformationView(DetailView):
             context['history_object'] = history
         if sp.production or sp.test:
             context['missing'] = self.get_missing_data(sp)
-
         return context
 
 
@@ -219,11 +218,13 @@ class BasicInformationUpdate(UpdateView):
             # create a history copy if modifying validated SP
             if sp.validated:
                 admins = sp.admins.all()
+                nameidformat = sp.nameidformat.all()
                 sp.history = sp.pk
                 sp.pk = None
                 sp.end_at = timezone.now()
                 sp.save()
                 sp.admins.set(admins)
+                sp.nameidformat.set(nameidformat)
             redirect_url = super().form_valid(form)
             self.object.updated_by = self.request.user
             if not self.request.user.is_superuser or not sp.validated:
@@ -274,11 +275,13 @@ class TechnicalInformationUpdate(UpdateView):
             # create a history copy if modifying validated SP
             if sp.validated:
                 admins = sp.admins.all()
+                nameidformat = sp.nameidformat.all()
                 sp.history = sp.pk
                 sp.pk = None
                 sp.end_at = timezone.now()
                 sp.save()
                 sp.admins.set(admins)
+                sp.nameidformat.set(nameidformat)
             redirect_url = super().form_valid(form)
             self.object.updated_by = self.request.user
             if not self.request.user.is_superuser or not sp.validated:

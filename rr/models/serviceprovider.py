@@ -4,6 +4,7 @@ from django.utils.translation import ugettext_lazy as _, get_language
 from rr.models.attribute import Attribute
 from rr.models.organization import Organization
 from django.core.validators import MaxLengthValidator
+from rr.models.nameidformat import NameIDFormat
 
 
 class ServiceProvider(models.Model):
@@ -27,8 +28,8 @@ class ServiceProvider(models.Model):
     privacypolicy_sv = models.URLField(max_length=255, blank=True, verbose_name=_('Privacy Policy URL (Swedish)'))
     login_page_url = models.URLField(max_length=255, blank=True, verbose_name=_('Service Login Page URL'))
     discovery_service_url = models.URLField(max_length=255, blank=True, verbose_name=_('Discovery Service URL'))
-    name_format_transient = models.BooleanField(default=False, verbose_name=_('nameid-format:transient'))
-    name_format_persistent = models.BooleanField(default=False, verbose_name=_('nameid-format:persistent'))
+
+    nameidformat = models.ManyToManyField(NameIDFormat, blank=True)
 
     sign_assertions = models.BooleanField(default=True, verbose_name=_('Sign SSO assertions'))
     sign_requests = models.BooleanField(default=False, verbose_name=_('Sign SSO requests'))
@@ -89,9 +90,8 @@ class ServiceProvider(models.Model):
         """Returns a list of all field names on the instance."""
         fields = []
         for f in self._meta.fields:
-
             fname = f.name
-            # resolve picklists/choices, with get_xyz_display() function
+            # resolve choices, with get_xyz_display() function
             get_choice = 'get_'+fname+'_display'
             if hasattr(self, get_choice):
                 value = getattr(self, get_choice)()
@@ -115,9 +115,8 @@ class ServiceProvider(models.Model):
         """Returns a list of all field names on the instance."""
         fields = []
         for f in self._meta.fields:
-
             fname = f.name
-            # resolve picklists/choices, with get_xyz_display() function
+            # resolve choices, with get_xyz_display() function
             get_choice = 'get_'+fname+'_display'
             if hasattr(self, get_choice):
                 value = getattr(self, get_choice)()
@@ -155,7 +154,7 @@ class ServiceProvider(models.Model):
                     value = getattr(self, fname)
                 except AttributeError:
                     value = None
-            # only display fields with values and skip some fields entirely
+            # Skip fields in list
             if f.editable and f.name not in ('id', 'end_at', 'history', 'validated', 'modified', 'updated_by', 'name_fi', 'name_en',
                                              'name_sv', 'description_fi', 'description_en', 'description_sv',
                                              'privacypolicy_fi', 'privacypolicy_en', 'privacypolicy_sv',

@@ -2,6 +2,8 @@ from django.forms import ModelForm, Form, BooleanField
 from rr.models.serviceprovider import ServiceProvider
 from django.utils.translation import ugettext as _
 from django.core.validators import URLValidator, ValidationError
+from rr.models.nameidformat import NameIDFormat
+from django.db.models import Q
 
 
 class BasicInformationForm(ModelForm):
@@ -49,14 +51,13 @@ class TechnicalInformationForm(ModelForm):
 
     class Meta:
         model = ServiceProvider
-        fields = ['entity_id', 'discovery_service_url', 'name_format_transient', 'name_format_persistent',
+        fields = ['entity_id', 'discovery_service_url', 'nameidformat',
                   'sign_assertions', 'sign_requests', 'sign_responses', 'encrypt_assertions', 'production', 'test',
                   'saml_product', 'autoupdate_idp_metadata']
         help_texts = {
             'entity_id': _('Should be URI including scheme, hostname of your application and path e.g. https://test.helsinki.fi/sp. <div class="text-danger">Required for both production and test use.</div>'),
             'discovery_service_url': _('For service providers supporting discovery service. Usually only valid if you are accepting logins for multiple IdPs.'),
-            'name_format_transient': _('Support for transient name identifier format. Check <a href="https://wiki.shibboleth.net/confluence/display/CONCEPT/NameIdentifiers" target="_blank">Shibboleth wiki</a> for more information.'),
-            'name_format_persistent': _('Support for persistent name identifier format. Check <a href="https://wiki.shibboleth.net/confluence/display/CONCEPT/NameIdentifiers" target="_blank">Shibboleth wiki</a> for more information.'),
+            'nameidformat': _('Support for name identifier formats. Check <a href="https://wiki.shibboleth.net/confluence/display/CONCEPT/NameIdentifiers" target="_blank">Shibboleth wiki</a> for more information.'),
             'sign_assertions': _('Sign SSO assertions. Defaults to False, do not change if you do not know what you are doing.'),
             'sign_requests': _('Sign SSO requests. Defaults to False, do not change if you do not know what you are doing.'),
             'sign_responses': _('Sign SSO responses. Defaults to True, do not change if you do not know what you are doing.'),
@@ -70,6 +71,9 @@ class TechnicalInformationForm(ModelForm):
     def __init__(self, *args, **kwargs):
         self.request = kwargs.pop('request', None)
         super(TechnicalInformationForm, self).__init__(*args, **kwargs)
+        if not self.request.user.is_superuser:
+            # Limit choices to public and current values
+            self.fields['nameidformat'].queryset = NameIDFormat.objects.filter(Q(public=True) | Q(pk__in=self.instance.nameidformat.all()))
 
     def clean_entity_id(self):
         """

@@ -9,6 +9,7 @@ from rr.models.endpoint import Endpoint
 from lxml import etree, objectify
 import logging
 from rr.models.organization import Organization
+from rr.models.nameidformat import NameIDFormat
 
 logger = logging.getLogger(__name__)
 
@@ -123,12 +124,11 @@ def metadata_nameidformat(element, sp):
     validated: if false, using unvalidated metadata
     """
 
-    if sp.name_format_transient:
+    nameidformats = sp.nameidformat.all()
+
+    for nameid in nameidformats:
         NameIDFormat = etree.SubElement(element, "NameIDFormat")
-        NameIDFormat.text = "urn:oasis:names:tc:SAML:2.0:nameid-format:transient"
-    if sp.name_format_persistent:
-        NameIDFormat = etree.SubElement(element, "NameIDFormat")
-        NameIDFormat.text = "urn:oasis:names:tc:SAML:2.0:nameid-format:persistent"
+        NameIDFormat.text = nameid.nameidformat
 
 
 def metadata_endpoints(element, sp, validated=True):

@@ -12,6 +12,7 @@ from lxml import etree, objectify
 from django.utils import timezone
 from django.utils.translation import ugettext as _
 import logging
+from rr.models.nameidformat import NameIDFormat
 
 logger = logging.getLogger(__name__)
 
@@ -78,13 +79,11 @@ def metadata_parser_keydescriptor(sp, element, validate, errors):
 
 
 def metadata_parser_nameidformat(sp, element, errors):
-    if element.text == "urn:oasis:names:tc:SAML:2.0:nameid-format:transient":
-        sp.name_format_transient = True
-    elif element.text == "urn:oasis:names:tc:SAML:2.0:nameid-format:persistent":
-        sp.name_format_persistent = True
-    else:
-        if element.text:
-            errors.append(sp.entity_id + " : " + _("Unsupported nameid-format") + " : " + element.text)
+    try:
+        nameid = NameIDFormat.objects.get(nameidformat=element.text)
+        sp.nameidformat.add(nameid)
+    except NameIDFormat.DoesNotExist:
+        errors.append(sp.entity_id + " : " + _("Unsupported nameid-format") + " : " + str(element.text))
 
 
 def metadata_parser_servicetype(sp, element, errors, validate, servicetype, disable_checks):

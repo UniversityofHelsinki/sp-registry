@@ -22,6 +22,8 @@
   <thead>
     <tr>
       <th scope="col">{% trans "SP" %}</th>
+      <th scope="col">{% trans "Prod" %}</th>
+      <th scope="col">{% trans "Test" %}</th>
       <th scope="col">{% trans "Reason" %}</th>
       <th scope="col">{% trans "Validated" %}</th>
     </tr>
@@ -30,6 +32,8 @@
 {% for object in object_list %}
     <tr>
       <th scope="row">{{ object.sp }}</th>
+      {% if object.sp.production %}<td class="text-success">&#10004;{% else %}<td class="text-danger">&#10005;{% endif %}</td>
+      {% if object.sp.test %}<td class="text-success">&#10004;{% else %}<td class="text-danger">&#10005;{% endif %}</td>
       <td>{{ object.reason }}</td>
       <td>{{ object.validated }}</td>
     </tr>

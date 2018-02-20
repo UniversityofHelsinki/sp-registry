@@ -31,9 +31,9 @@ class ServiceProvider(models.Model):
 
     nameidformat = models.ManyToManyField(NameIDFormat, blank=True)
 
-    sign_assertions = models.BooleanField(default=True, verbose_name=_('Sign SSO assertions'))
+    sign_assertions = models.BooleanField(default=False, verbose_name=_('Sign SSO assertions'))
     sign_requests = models.BooleanField(default=False, verbose_name=_('Sign SSO requests'))
-    sign_responses = models.BooleanField(default=False, verbose_name=_('Sign SSO responses'))
+    sign_responses = models.BooleanField(default=True, verbose_name=_('Sign SSO responses'))
     encrypt_assertions = models.BooleanField(default=True, verbose_name=_('Encrypt SSO assertions'))
 
     production = models.BooleanField(default=False, verbose_name=_('Publish to production servers'))

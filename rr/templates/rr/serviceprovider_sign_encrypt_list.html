@@ -20,7 +20,7 @@
   <form action="" method='POST'>
   {% csrf_token %}
 {% for object in object_list %}
-{% if not object.sign_assertions or object.sign_requests or object.sign_responses or not object.encrypt_assertions %}
+{% if object.sign_assertions or object.sign_requests or not object.sign_responses or not object.encrypt_assertions %}
     <tr>
       <th scope="row"><a href="/summary/{{ object.pk }}/">{{ object.entity_id  }}</a></th>
       {% if object.sign_assertions %}<td class="text-success">&#10004;{% else %}<td class="text-danger">&#10005;{% endif %}</td>

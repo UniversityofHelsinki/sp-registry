@@ -301,6 +301,10 @@ def metadata_spssodescriptor(element, sp, validated=True, privacypolicy=False):
     """
 
     SPSSODescriptor = etree.SubElement(element, "SPSSODescriptor", protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol")
+    if sp.sign_assertions:
+        SPSSODescriptor.set("WantAssertionsSigned", "true")
+    if sp.sign_requests:
+        SPSSODescriptor.set("AuthnRequestsSigned", "true")
     metadata_extensions(SPSSODescriptor, sp, privacypolicy)
     metadata_certificates(SPSSODescriptor, sp, validated)
     metadata_nameidformat(SPSSODescriptor, sp)

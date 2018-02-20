@@ -153,6 +153,10 @@ def metadata_parser_attributeconsumingservice(sp, element, validate, errors):
 
 
 def metadata_parser_ssodescriptor(sp, element, validate, errors, disable_checks):
+    if element.get("AuthnRequestsSigned") == "true" or element.get("AuthnRequestsSigned") == "1":
+        sp.sign_requests = True
+    if element.get("WantAssertionsSigned") == "true" or element.get("WantAssertionsSigned") == "1":
+        sp.sign_assertions = True
     # AuthnRequestsSigned = element.get("AuthnRequestsSigned")
     for child in element:
         if etree.QName(child.tag).localname == "Extensions":

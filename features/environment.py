@@ -17,7 +17,7 @@ def before_feature(context, feature):
 
 
 def before_scenario(context, scenario):
-    context.fixtures = ['attribute.json']
+    context.fixtures = ['attribute.json', 'nameidformat.json']
 
 
 def after_step(context, step):

@@ -12,7 +12,7 @@ def load_test_metadata(context):
 @then(u'the page will have same metadata')
 def check_for_text(context):
     assert context.browser.is_text_present("""<EntityDescriptor xmlns:ds="http://www.w3.org/2000/09/xmldsig#" xmlns:mdui="urn:oasis:names:tc:SAML:metadata:ui" entityID="https://sp.example.org/sp" schemaLocation="urn:oasis:names:tc:SAML:2.0:metadata">
-  <SPSSODescriptor protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol">
+  <SPSSODescriptor protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol" AuthnRequestsSigned="true">
     <Extensions>
       <mdui:UIInfo>
         <mdui:DisplayName xml:lang="fi">Testiohjelma</mdui:DisplayName>

@@ -10,7 +10,7 @@ Scenario: Certificate additions
 	When filling certificate form with another invalid certificate
 	Then the result page will include text "Unable to load certificate"
 	When filling certificate form with valid certificate
-	Then the result page will include text "Jan. 14, 2028, 11:10 a.m."
+	Then the result page will include text "Jan. 14, 2028,"
 	And the result page will include text "4096"
 	When filling certificate form with valid certificate
 	Then the result page will include text "Certificate already exists"

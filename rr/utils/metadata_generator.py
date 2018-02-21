@@ -2,7 +2,7 @@
 Functions for genereating metadata of service providers
 """
 
-from rr.models.serviceprovider import SPAttribute
+from rr.models.serviceprovider import SPAttribute, ServiceProvider
 from rr.models.certificate import Certificate
 from rr.models.contact import Contact
 from rr.models.endpoint import Endpoint
@@ -335,3 +335,49 @@ def metadata_generator(sp, validated=True):
     metadata_contact(EntityDescriptor, sp, validated)
 
     return(etree.tostring(EntityDescriptor, pretty_print=True, encoding='UTF-8'))
+
+
+def metadata_generator_list(serviceproviders, validated, privacypolicy):
+    """
+    Generates metadata for list of serviceproviders.
+
+    sp: ServiceProvider QuerySet
+    validated: if false, using unvalidated metadata
+    privacypolicy: replace privacy policy if missing
+
+    Using CamelCase instead of regular underscore attribute names in element tree.
+    """
+    metadata = etree.Element("EntitiesDescriptor", Name="urn:mace:funet.fi:helsinki.fi", nsmap={"xmlns": 'urn:oasis:names:tc:SAML:2.0:metadata',
+                                                                                                "ds": 'http://www.w3.org/2000/09/xmldsig#',
+                                                                                                "mdui": 'urn:oasis:names:tc:SAML:metadata:ui'})
+    for sp in serviceproviders:
+        EntityDescriptor = etree.SubElement(metadata, "EntityDescriptor", entityID=sp.entity_id)
+        metadata_spssodescriptor(EntityDescriptor, sp, validated, privacypolicy)
+        metadata_contact(EntityDescriptor, sp, validated)
+        metadata_organization(EntityDescriptor, sp)
+    return metadata
+
+
+def get_service_providers(validated=True, production=False, test=False, include=None):
+    if validated:
+        serviceproviders = ServiceProvider.objects.none()
+        sp_loop = ServiceProvider.objects.filter(end_at=None)
+        for sp in sp_loop:
+            if not sp.validated:
+                sp = ServiceProvider.objects.filter(history=sp.pk).exclude(validated=None).last()
+            if sp and production and sp.production:
+                serviceproviders = serviceproviders | ServiceProvider.objects.filter(pk=sp.pk)
+            if sp and test and sp.test:
+                serviceproviders = serviceproviders | ServiceProvider.objects.filter(pk=sp.pk)
+            if sp and include and sp.entity_id in include:
+                serviceproviders = serviceproviders | ServiceProvider.objects.filter(pk=sp.pk)
+    else:
+        serviceproviders = ServiceProvider.objects.none()
+        if production:
+            serviceproviders = serviceproviders | ServiceProvider.objects.filter(end_at=None, production=True)
+        if test:
+            serviceproviders = serviceproviders | ServiceProvider.objects.filter(end_at=None, test=True)
+        if include:
+            for entity_id in include:
+                serviceproviders = serviceproviders | ServiceProvider.objects.filter(entity_id=entity_id, end_at=None)
+    return serviceproviders

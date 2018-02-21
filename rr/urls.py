@@ -10,7 +10,7 @@ from rr.views.attribute import attribute_list, attribute_admin_list, attribute_v
 from rr.views.certificate import certificate_list, certificate_admin_list
 from rr.views.contact import contact_list
 from rr.views.endpoint import endpoint_list
-from rr.views.metadata import metadata, metadata_import
+from rr.views.metadata import metadata, metadata_import, metadata_management
 from rr.views.login import ShibbolethLoginView
 from rr.views.spadmin import activate_key, admin_list
 from rr.views.testuser import testuser_list, testuser_attribute_data
@@ -33,6 +33,7 @@ urlpatterns = [
     url(r'^contact/(?P<pk>[0-9]+)/$', contact_list, name='contact-list'),
     url(r'^endpoint/(?P<pk>[0-9]+)/$', endpoint_list, name='endpoint-list'),
     url(r'^metadata/import/$', metadata_import, name='metadata-import'),
+    url(r'^metadata/manage/$', metadata_management, name='metadata-manage'),
     url(r'^metadata/(?P<pk>[0-9]+)/$', metadata, name='metadata-view'),
     url(r'^technical/(?P<pk>[0-9]+)/$', login_required(TechnicalInformationUpdate.as_view()), name='technical-update'),
     url(r'^serviceprovider/add/$', login_required(BasicInformationCreate.as_view()), name='serviceprovider-add'),

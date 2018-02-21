@@ -1,4 +1,4 @@
-from django.forms import Form, Textarea
+from django.forms import Form, Textarea, HiddenInput
 from django.utils.translation import ugettext as _
 from django.forms.fields import CharField, BooleanField
 from lxml import etree
@@ -44,3 +44,17 @@ class MetadataForm(Form):
                 raise ValidationError(_("Entity Id should be URI, please contact IdP admins if this is not possible."))
         if ServiceProvider.objects.filter(entity_id=entity_id, end_at=None, history=None):
             raise ValidationError(_("Entity Id already exists"))
+
+
+class MetadataCommitForm(Form):
+    """
+    Form for committing metadata.
+    """
+    commit_message = CharField(initial='Metadata update', help_text=_("Commit message"))
+    diff_hash = CharField()
+
+    def __init__(self, *args, **kwargs):
+        self.diff_hash = kwargs.pop('diff_hash', None)
+        super(MetadataCommitForm, self).__init__(*args, **kwargs)
+        self.fields['diff_hash'].widget = HiddenInput()
+        self.fields['diff_hash'].initial = self.diff_hash

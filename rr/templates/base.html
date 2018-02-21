@@ -74,6 +74,12 @@
         <li class="nav-item">
           <a class="nav-link" href="{% url 'certificate-admin-list' %}">{% trans "Certificates" %}</a>
         </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'sign-encrypt-list' %}">{% trans "Sign and Encrypt" %}</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'metadata-manage' %}">{% trans "Manage metadata" %}</a>
+        </li>
         <div class="dropdown-divider"></div>
         <li class="nav-item">
           <a class="nav-link" href="/admin_django/">{% trans "Database Admin" %}</a>
@@ -155,6 +161,10 @@
         <li class="nav-item">
           <a class="nav-link {% if request.path|slice:":19" == "/sign_encrypt_list/" %}active{% endif %}" href="{% url 'sign-encrypt-list' %}">{% trans "Sign and Encrypt" %}</a>
         </li>
+        <li class="nav-item">
+          <a class="nav-link {% if request.path|slice:":17" == "/metadata/manage/" %}active{% endif %}" href="{% url 'metadata-manage' %}">{% trans "Manage metadata" %}</a>
+        </li>
+       
         <div class="dropdown-divider"></div>
         <li class="nav-item">
           <a class="nav-link" href="/admin_django/">{% trans "Database Admin" %}</a>

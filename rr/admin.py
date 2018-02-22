@@ -8,6 +8,7 @@ from rr.models.spadmin import Keystore
 from rr.models.testuser import TestUser, TestUserData
 from rr.models.organization import Organization
 from rr.models.nameidformat import NameIDFormat
+from rr.models.email import Template
 
 
 admin.site.register(ServiceProvider)
@@ -21,3 +22,4 @@ admin.site.register(Keystore)
 admin.site.register(NameIDFormat)
 admin.site.register(TestUser)
 admin.site.register(TestUserData)
+admin.site.register(Template)

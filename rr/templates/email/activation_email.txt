@@ -1,11 +1,11 @@
-{{ creator }} has added you management rights to service provider
-with entityID {{ sp }}.
+{{ creator }} has added you management rights for the service provider
+with entityID {{ entity_id }}.
 
 You may use following link to gain management rights.
 
-{{ hostname }}/invite/{{activation_key}}
+{{ activation_link }}
 
 After clicking the link, you will be asked to log in using University of
 Helsinki single sign on system.
 
-The activation key is valid until {{ valid|date:'j.n.Y' }}.
+The activation key is valid until {{ valid_until }}.

@@ -69,11 +69,27 @@
 {% endif %}
 {% if form %}
 <h2>{% trans "Add admin" %}</h2>
+{% if error %}
+<div class="alert alert-danger" role="alert">
+<p>{{ error }}</p>
+</div>
+{% endif %}
+{% if subject and message %}
+<h4>{% trans "Example message" %}</h4>
+{% trans "Subject" %}
+<div class="alert alert-info" role="alert">
+<pre>{{ subject }}</pre>
+</div>
+{% trans "Body" %}
+<div class="alert alert-info" role="alert">
+<pre>{{ message }}</pre>
+</div>
+{% endif %}
 <form action="" method="post" class="form">
     {% csrf_token %}
     {% bootstrap_form form layout='horizontal' %}
     {% buttons %}
-    <p><button type="submit" name="add_invite" class="btn btn-primary">{% trans "Send invitation" %}</button></p>
+    <p><button type="submit" name="add_invite" class="btn btn-primary">{% trans "Send invitation" %}</button> <button type="submit" name="show_message" class="btn btn-info">{% trans "Show message" %}</button></p>
     {% endbuttons %}
 </form>
 {% endif %}

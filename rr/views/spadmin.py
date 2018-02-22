@@ -9,6 +9,13 @@ from rr.forms.spadmin import SPAdminForm
 from django.http.response import Http404
 from django.contrib.auth.models import User
 import logging
+from rr.models.email import Template
+from django.template.loader import render_to_string
+from django.template.engine import Engine
+from django.template.context import Context
+from django.core.mail import send_mail
+from django.conf import settings
+
 
 logger = logging.getLogger(__name__)
 
@@ -18,6 +25,19 @@ def get_hostname(request):
         return 'https://' + request.META.get('HTTP_HOST', '')
     else:
         return 'http://' + request.META.get('HTTP_HOST', '')
+
+
+def get_activation_link(request, key):
+    return get_hostname(request) + "/invite/" + key.activation_key
+
+
+def render_email(request, text, key):
+    context = Engine().from_string(text).render(Context({'creator': key.creator.first_name + " " + key.creator.last_name,
+                                                         'entity_id': key.sp.entity_id,
+                                                         'activation_link': get_activation_link(request, key),
+                                                         'valid_until': key.valid_until,
+                                                         }))
+    return context
 
 
 @login_required
@@ -49,15 +69,51 @@ def admin_list(request, pk):
     except ServiceProvider.DoesNotExist:
         logger.debug("Tried to access unauthorized service provider")
         raise Http404("Service provider does not exist")
-    form = SPAdminForm()
+    form = SPAdminForm(superuser=request.user.is_superuser)
+    subject = None
+    message = None
+    error = None
     if request.method == "POST":
-        if "add_invite" in request.POST:
-            form = SPAdminForm(request.POST)
+        if "add_invite" in request.POST or "show_message" in request.POST:
+            if "add_invite" in request.POST:
+                send = True
+            else:
+                send = False
+            print(send)
+            form = SPAdminForm(request.POST, superuser=request.user.is_superuser)
             if form.is_valid():
                 email = form.cleaned_data['email']
-                Keystore.objects.create_key(sp=sp, creator=request.user, email=email, hostname=get_hostname(request))
-                logger.info("Invite for {sp} sent to {email} by {user}".format(sp=sp, email=email, user=request.user))
-                form = SPAdminForm()
+                template = request.POST.get('template', None)
+                print(template)
+                if template:
+                    try:
+                        template = Template.objects.get(pk=template)
+                    except Template.DoesNotExist:
+                        template = None
+                key = Keystore.objects.create_key(sp=sp, creator=request.user, email=email)
+                if template:
+                    print(template.title)
+                    subject = render_email(request, template.title, key)
+                    print(subject)
+                    message = render_email(request, template.body, key)
+                else:
+                    subject = render_to_string('email/activation_email_subject.txt')
+                    message = render_to_string('email/activation_email.txt',
+                                               {'creator': key.creator.first_name + " " + key.creator.last_name,
+                                                'entity_id': key.sp.entity_id,
+                                                'activation_link': get_activation_link(request, key),
+                                                'valid_until': key.valid_until.strftime("%d.%m.%Y")})
+                if get_activation_link(request, key) not in message:
+                   send = False
+                   error = _("Template is missing activation link. Please include {{ activation_link }} to message.")
+                if send:
+                    send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, [email], fail_silently=False)
+                    logger.info("Invite for {sp} sent to {email} by {user}".format(sp=sp, email=email, user=request.user))
+                    form = SPAdminForm(superuser=request.user.is_superuser)
+                    subject = None
+                    message = None
+                else:
+                    key.delete()
         elif "remove_invite" in request.POST:
             for key, value in request.POST.dict().items():
                 if value == "on":
@@ -81,7 +137,10 @@ def admin_list(request, pk):
     invites = Keystore.objects.filter(sp=sp)
     return render(request, "rr/spadmin.html", {'object_list': invites,
                                                'form': form,
-                                               'object': sp})
+                                               'object': sp,
+                                               'subject': subject,
+                                               'message': message,
+                                               'error': error})
 
 
 @login_required

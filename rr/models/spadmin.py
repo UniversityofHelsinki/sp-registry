@@ -3,9 +3,6 @@ from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.models import User
 from rr.models.serviceprovider import ServiceProvider
 from django.utils import timezone
-from django.template.loader import render_to_string
-from django.core.mail import send_mail
-from django.conf import settings
 import logging
 
 logger = logging.getLogger(__name__)
@@ -15,7 +12,7 @@ class KeystoreManager(models.Manager):
     """
     Manager for Keystore
     """
-    def create_key(self, sp, creator, email, hostname):
+    def create_key(self, sp, creator, email):
         """
         Creates invitation key for a SP
         Sends it to user by email, using templates/email to generate content
@@ -28,16 +25,8 @@ class KeystoreManager(models.Manager):
         from dateutil.relativedelta import relativedelta
         date = timezone.now() + relativedelta(months=1)
         activation_key = hashlib.sha1(str(random.random()).encode('utf-8')).hexdigest()
-        self.create(sp=sp, creator=creator, activation_key=activation_key, email=email, valid_until=date)
-        subject = render_to_string('email/activation_email_subject.txt')
-        message = render_to_string('email/activation_email.txt',
-                                   {'creator': creator.first_name + " " + creator.last_name,
-                                    'sp': sp.entity_id,
-                                    'activation_key': activation_key,
-                                    'valid': date.date,
-                                    'hostname': hostname})
-        send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, [email], fail_silently=False)
-        return activation_key
+        key = self.create(sp=sp, creator=creator, activation_key=activation_key, email=email, valid_until=date)
+        return key
 
     def activate_key(self, user, key):
         """

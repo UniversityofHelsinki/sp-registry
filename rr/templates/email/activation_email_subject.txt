@@ -1,1 +1,1 @@
-Access key for managing SP
+Access key for managing the service provider

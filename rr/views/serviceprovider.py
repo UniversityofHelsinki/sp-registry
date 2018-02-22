@@ -61,7 +61,7 @@ class BasicInformationView(DetailView):
         if self.request.user.is_superuser:
             modify_date = request.POST.get('modify_date')
             sp = self.get_object()
-            if modify_date == sp.updated_at.strftime("%Y%m%d%H%M%S"):
+            if modify_date == sp.updated_at.strftime("%Y%m%d%H%M%S%f"):
                 for attribute in SPAttribute.objects.filter(sp=sp, end_at=None, validated=None):
                     attribute.validated = timezone.now()
                     attribute.save()
@@ -127,6 +127,7 @@ class BasicInformationView(DetailView):
     def get_context_data(self, **kwargs):
         context = super(BasicInformationView, self).get_context_data(**kwargs)
         sp = context['object']
+        context['modify_date'] = sp.updated_at.strftime("%Y%m%d%H%M%S%f")
         history = ServiceProvider.objects.filter(history=sp.pk).exclude(validated=None).last()
         if not context['object'].validated and history:
             context['attributes'] = SPAttribute.objects.filter(Q(sp=sp, end_at__gte=history.created_at) | Q(sp=sp, end_at=None))

@@ -36,7 +36,7 @@
 <form action="" method='POST'>
 {% csrf_token %}
 <input type='hidden' name="object" value="{{ object.pk }}" />
-<input type='hidden' name="modify_date" value="{{ object.updated_at|date:'YmdHis' }}" />
+<input type='hidden' name="modify_date" value="{{ modify_date }}" />
 <p><input class="btn btn-success" type="submit" name="validate_changes" value="{% trans "Validate changes" %}" /></p>
 </form>
 <br>

@@ -2,6 +2,7 @@
 {% load i18n %}
 {% load static %}
 {% load bootstrap4 %}
+{% load attribute_filters %}
 {% block content %}
 <h1>{% trans "University of Helsinki - Service Provider Registry" %}</h1>
 {% if user.is_authenticated %}
@@ -26,6 +27,11 @@
 		</form>
 		<br>
 		<p><a href="{% url 'password_reset' %}">{% trans "Lost password? Reset it here. You may use same form to get forgotten username." %}</a></p>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md">
+		<p><a href="{% privacy_policy_url "PRIVACY_POLICY_URL" %}">{% trans "Data privacy information of the service" %}</a></p>
     </div>
   </div>
   <div class="row">

@@ -48,4 +48,7 @@
 {{ diff }}
 </code></pre>
 {% endif %}
+{% if not diff and not error %}
+<p>{% trans "There are no uncommitted changes." %}
+{% endif %}
 {% endblock %}

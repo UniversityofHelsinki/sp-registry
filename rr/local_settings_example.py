@@ -76,6 +76,8 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 DEFAULT_FROM_EMAIL = 'noreply@example.org'
 DEFAULT_CONTACT_EMAIL = 'contact@example.org'
 
+PRIVACY_POLICY_URL = 'https://example.org/DataPrivacyPolicy.pdf'
+
 TEST_SCREENSHOT_DIR = '/path/to/test-screenshots/'
 
 SAML_LOGIN_URL = 'https://localhost/Shibboleth.sso/?target=https://localhost/login/?next='

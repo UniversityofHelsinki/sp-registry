@@ -111,7 +111,7 @@ class ServiceProviderCreateForm(ModelForm):
             'description_sv': _('Short (max 140 characters) description of the service in Swedish.'),
             'privacypolicy_fi': _('Link to privacy policy in Finnish. Link must be publicly accessible. <div class="text-danger">Required for production use if the service requests any personal information.</div>'),
             'privacypolicy_en': _('Link to privacy policy in English. Link must be publicly accessible. <div class="text-danger">Required for production use if the service requests any personal information.</div>'),
-            'privacypolicy_sv': _('Link to privacy policy in Swedish. Link mustShort and descriptive name for the serviceShort and descriptive name for the service in Finnish. <div class="text-danger">Required for both production and test use.</div> in Finnish. <div class="text-danger">Required for both production and test use.</div> be publicly accessible.'),
+            'privacypolicy_sv': _('Link to privacy policy in Swedish. Link must be publicly accessible.'),
             'login_page_url': _('Used for debugging and testing services.'),
             'application_portfolio': _('Link to external application portfolio.'),
             'notes': _('Additional notes about this service.'),

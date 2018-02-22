@@ -74,10 +74,10 @@ class BasicInformationView(DetailView):
                 for endpoint in Endpoint.objects.filter(sp=sp, end_at=None, validated=None):
                     endpoint.validated = timezone.now()
                     endpoint.save()
-            sp.validated = timezone.now()
-            sp.modified = False
-            sp.save()
-            logger.info("SP {sp} validated by {user}".format(sp=sp, user=self.request.user))
+                sp.validated = timezone.now()
+                sp.modified = False
+                sp.save()
+                logger.info("SP {sp} validated by {user}".format(sp=sp, user=self.request.user))
             return HttpResponseRedirect(reverse('summary-view', args=(sp.pk,)))
         else:
             error_message = _("You should not be here.")

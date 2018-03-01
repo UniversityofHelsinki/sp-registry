@@ -5,6 +5,7 @@ from rr.models.attribute import Attribute
 from rr.models.organization import Organization
 from django.core.validators import MaxLengthValidator
 from rr.models.nameidformat import NameIDFormat
+from rr.utils.notifications import admin_notification_modified_sp
 
 
 class ServiceProvider(models.Model):
@@ -158,7 +159,7 @@ class ServiceProvider(models.Model):
             if f.editable and f.name not in ('id', 'end_at', 'history', 'validated', 'modified', 'updated_by', 'name_fi', 'name_en',
                                              'name_sv', 'description_fi', 'description_en', 'description_sv',
                                              'privacypolicy_fi', 'privacypolicy_en', 'privacypolicy_sv',
-                                             'login_page_url', 'application_portfolio', 'notes', 'admin_notes' ,'organization'):
+                                             'login_page_url', 'application_portfolio', 'notes', 'admin_notes', 'organization'):
                 fields.append(
                   {
                    'label': f.verbose_name,
@@ -167,6 +168,16 @@ class ServiceProvider(models.Model):
                   }
                 )
         return fields
+
+    def save_modified(self, *args, **kwargs):
+        """ Save model and send notification if it was unmodified """
+        if self.modified:
+            self.save()
+        else:
+            self.modified = True
+            self.save()
+            modified_sp = ServiceProvider.objects.filter(end_at=None, modified=True).order_by('entity_id')
+            admin_notification_modified_sp(modified_sp)
 
 
 class SPAttribute(models.Model):

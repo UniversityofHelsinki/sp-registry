@@ -15,12 +15,17 @@ from django.template.engine import Engine
 from django.template.context import Context
 from django.core.mail import send_mail
 from django.conf import settings
+from smtplib import SMTPException
+from django.core.mail.message import BadHeaderError
 
 
 logger = logging.getLogger(__name__)
 
 
 def get_hostname(request):
+    """
+    Create URI with scheme and hostname
+    """
     if request.is_secure():
         return 'https://' + request.META.get('HTTP_HOST', '')
     else:
@@ -28,16 +33,49 @@ def get_hostname(request):
 
 
 def get_activation_link(request, key):
+    """
+    Create invite activation link URI
+    """
     return get_hostname(request) + "/invite/" + key.activation_key
 
 
 def render_email(request, text, key):
+    """
+    Render invite email context from template object.
+    """
     context = Engine().from_string(text).render(Context({'creator': key.creator.first_name + " " + key.creator.last_name,
                                                          'entity_id': key.sp.entity_id,
                                                          'activation_link': get_activation_link(request, key),
                                                          'valid_until': key.valid_until,
                                                          }))
     return context
+
+
+def create_invite_email(request, key, template):
+    """
+    Return subject and message for email, rendered from template if found.
+    Return error if action link is not found from email.
+    """
+    if template:
+        try:
+            template = Template.objects.get(pk=template)
+        except Template.DoesNotExist:
+            template = None
+    if template:
+        subject = render_email(request, template.title, key)
+        message = render_email(request, template.body, key)
+    else:
+        subject = render_to_string('email/activation_email_subject.txt')
+        message = render_to_string('email/activation_email.txt',
+                                   {'creator': key.creator.first_name + " " + key.creator.last_name,
+                                    'entity_id': key.sp.entity_id,
+                                    'activation_link': get_activation_link(request, key),
+                                    'valid_until': key.valid_until.strftime("%d.%m.%Y")})
+    if get_activation_link(request, key) not in message:
+        error = _("Template is missing activation link. Please include {{ activation_link }} to message.")
+    else:
+        error = None
+    return subject, message, error
 
 
 @login_required
@@ -79,39 +117,27 @@ def admin_list(request, pk):
                 send = True
             else:
                 send = False
-            print(send)
             form = SPAdminForm(request.POST, superuser=request.user.is_superuser)
             if form.is_valid():
                 email = form.cleaned_data['email']
                 template = request.POST.get('template', None)
-                print(template)
-                if template:
-                    try:
-                        template = Template.objects.get(pk=template)
-                    except Template.DoesNotExist:
-                        template = None
                 key = Keystore.objects.create_key(sp=sp, creator=request.user, email=email)
-                if template:
-                    print(template.title)
-                    subject = render_email(request, template.title, key)
-                    print(subject)
-                    message = render_email(request, template.body, key)
-                else:
-                    subject = render_to_string('email/activation_email_subject.txt')
-                    message = render_to_string('email/activation_email.txt',
-                                               {'creator': key.creator.first_name + " " + key.creator.last_name,
-                                                'entity_id': key.sp.entity_id,
-                                                'activation_link': get_activation_link(request, key),
-                                                'valid_until': key.valid_until.strftime("%d.%m.%Y")})
-                if get_activation_link(request, key) not in message:
-                   send = False
-                   error = _("Template is missing activation link. Please include {{ activation_link }} to message.")
-                if send:
-                    send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, [email], fail_silently=False)
-                    logger.info("Invite for {sp} sent to {email} by {user}".format(sp=sp, email=email, user=request.user))
-                    form = SPAdminForm(superuser=request.user.is_superuser)
-                    subject = None
-                    message = None
+                subject, message, error = create_invite_email(request, key, template)
+                if send and not error:
+                    try:
+                        send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, [email], fail_silently=False)
+                        logger.info("Invite for {sp} sent to {email} by {user}".format(sp=sp, email=email, user=request.user))
+                        form = SPAdminForm(superuser=request.user.is_superuser)
+                        subject = None
+                        message = None
+                    except SMTPException:
+                        logger.warning("Could not send invite to {email}".format(email=email))
+                        error = _("Could not send email.")
+                        key.delete()
+                    except BadHeaderError:
+                        logger.warning("Email from {user} contained invalid headers.".format(user=request.user))
+                        error = _("Invalid header found, could not send email.")
+                        key.delete()
                 else:
                     key.delete()
         elif "remove_invite" in request.POST:

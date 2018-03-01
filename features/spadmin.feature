@@ -8,7 +8,7 @@ Scenario: Admin invitations
 	And clicking visible link with text "Admins"
 	And filling invite form with email "tester@example.org"
 	Then the result page will include text "tester@example.org"
-	And there should be invitation in email
+	And message "0" in mailbox should have "Teemu Testeri has added you" in body
 	When removing admin
 	Then the result page will not include text "https://sp.example.org/sp"
 	When I visit the "/invite/f5bc2a80eba67ca71df3dc740caf22a6eed7b2f3"

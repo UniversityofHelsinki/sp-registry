@@ -8,6 +8,7 @@ from django.http.response import Http404
 from django.utils import timezone
 from django.core.exceptions import PermissionDenied
 import logging
+from rr.utils.notifications import admin_notification_modified_sp
 
 logger = logging.getLogger(__name__)
 
@@ -53,8 +54,7 @@ def attribute_list(request, pk):
                 if sp_attribute and not data:
                     sp_attribute.end_at = timezone.now()
                     sp_attribute.save()
-                    sp.modified = True
-                    sp.save()
+                    sp.save_modified()
                     logger.info("Attribute requisition for {attribute} removed from {sp} by {user}".format(attribute=sp_attribute.attribute,
                                                                                                            sp=sp,
                                                                                                            user=request.user))
@@ -64,8 +64,7 @@ def attribute_list(request, pk):
                         SPAttribute.objects.create(sp=sp,
                                                    attribute=attribute,
                                                    reason=data)
-                        sp.modified = True
-                        sp.save()
+                        sp.save_modified()
                         logger.info("Attribute {attribute} requested for {sp} by {user}".format(attribute=attribute,
                                                                                                 sp=sp,
                                                                                                 user=request.user))
@@ -73,8 +72,7 @@ def attribute_list(request, pk):
                         if sp_attribute.reason != data:
                             sp_attribute.reason = data
                             sp_attribute.save()
-                            sp.modified = True
-                            sp.save()
+                            sp.save_modified()
                             logger.info("Attribute {attribute} reason updated for {sp} by {user}".format(attribute=sp_attribute.attribute,
                                                                                                          sp=sp,
                                                                                                          user=request.user))

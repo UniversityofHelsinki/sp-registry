@@ -4,6 +4,8 @@ from django.utils.translation import ugettext as _
 from django.core.validators import URLValidator, ValidationError
 from rr.models.nameidformat import NameIDFormat
 from django.db.models import Q
+from django.forms.fields import CharField
+from django.forms.widgets import HiddenInput
 
 
 class BasicInformationForm(ModelForm):
@@ -142,3 +144,17 @@ class ServiceProviderCloseForm(Form):
     Form for closing service provider.
     """
     confirm = BooleanField(help_text=_("Confirm closing"))
+
+
+class ServiceProviderValidationForm(Form):
+    """
+    Form for validation service provider.
+    """
+    no_email = BooleanField(required=False, help_text=_("Do not send validation email to SP admins."))
+    modified_date = CharField()
+
+    def __init__(self, *args, **kwargs):
+        self.modified_date = kwargs.pop('modified_date', None)
+        super(ServiceProviderValidationForm, self).__init__(*args, **kwargs)
+        self.fields['modified_date'].widget = HiddenInput()
+        self.fields['modified_date'].initial = self.modified_date

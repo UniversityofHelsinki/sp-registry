@@ -1,7 +1,7 @@
 Feature: Service provider
 	Modifying service provider basic and techincal information and testing differences
 
-Scenario: Basic information modifications
+Scenario: Basic information modifications and validation
 	Given test environment with logged in user exists
 	Then the result page will include text "https://sp.example.org/sp"
 	When clicking link with text "https://sp.example.org/sp"
@@ -12,6 +12,8 @@ Scenario: Basic information modifications
 	And clicking visible link with text "Summary"
 	Then the result page will include text "My new program name"
 	And the result page will include text "My program name"
+	And message "0" in mailbox should have "[SP-Registry] Changes waiting for validation" in subject
+	
 
 Scenario: Technical information modifications
 	Given test environment with logged in user exists
@@ -24,4 +26,3 @@ Scenario: Technical information modifications
 	When filling technical information form
 	And clicking visible link with text "Summary"
 	Then the result page will include text "https://sp.example.org/sp"
-	

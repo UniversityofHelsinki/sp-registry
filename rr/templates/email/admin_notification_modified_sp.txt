@@ -1,0 +1,4 @@
+SAML SP-Registry has following service providers with changes waiting for
+validation:
+{% for sp in modified_sp %}
+- {{ sp.entity_id }}{% endfor %}

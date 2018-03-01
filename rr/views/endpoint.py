@@ -56,8 +56,7 @@ def endpoint_list(request, pk):
                                         binding=binding,
                                         url=url,
                                         index=index)
-                sp.modified = True
-                sp.save()
+                sp.save_modified()
                 logger.info("Endpoint added for {sp} by {user}".format(sp=sp, user=request.user))
                 form = EndpointForm(sp=sp)
         elif "remove_endpoint" in request.POST:
@@ -67,8 +66,7 @@ def endpoint_list(request, pk):
                     if endpoint.sp == sp:
                         endpoint.end_at = timezone.now()
                         endpoint.save()
-                        sp.modified = True
-                        sp.save()
+                        sp.save_modified()
                         logger.info("Endpoint removed from {sp} by {user}".format(sp=sp, user=request.user))
     endpoints = Endpoint.objects.filter(sp=sp, end_at=None)
     return render(request, "rr/endpoint.html", {'object_list': endpoints,

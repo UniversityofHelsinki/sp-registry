@@ -21,6 +21,23 @@ def create_test_environment(context):
     context.browser.find_by_text('Submit').first.click()
 
 
+@given(u'test environment with logged in superuser exists')
+def create_test_environment_with_superuser(context):
+    username = "myself"
+    password = "mysecretpassword"
+    u = User.objects.create_superuser(username=username, email="superuser@example.org", password=password)
+    u.first_name = "Teemu"
+    u.last_name = "Testeri"
+    u.save()
+    sp = ServiceProvider.objects.create(entity_id="https://sp.example.org/sp", name_en="My program name", validated=timezone.now(), modified=False)
+    sp.admins.add(u)
+    ServiceProvider.objects.create(entity_id="https://sp.example.com/sp", name_en="SP without admins", validated=timezone.now(), modified=False)
+    context.browser.visit(context.base_url)
+    context.browser.fill("username", username)
+    context.browser.fill("password", password)
+    context.browser.find_by_text('Submit').first.click()
+
+
 @given(u'invite exists')
 def create_invite(context):
     sp = ServiceProvider.objects.get(entity_id="https://sp.example.org/sp")

@@ -1,1 +1,1 @@
-Access key for managing the service provider
+[SP-Registry] Access key for managing the service provider

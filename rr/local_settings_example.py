@@ -75,6 +75,7 @@ TIME_ZONE = 'EET'
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 DEFAULT_FROM_EMAIL = 'noreply@example.org'
 DEFAULT_CONTACT_EMAIL = 'contact@example.org'
+ADMIN_NOTIFICATION_EMAIL = 'idp-admins@example.org'
 
 PRIVACY_POLICY_URL = 'https://example.org/DataPrivacyPolicy.pdf'
 

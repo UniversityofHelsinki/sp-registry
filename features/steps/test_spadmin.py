@@ -19,8 +19,3 @@ def remove_admin(context):
 def remove_invite(context):
     context.browser.check("1")
     context.browser.find_by_name('remove_invite').first.click()
-
-
-@then('there should be invitation in email')
-def impl(context):
-    assert "Teemu Testeri has added you" in mail.outbox[0].body

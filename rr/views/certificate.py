@@ -81,8 +81,7 @@ def certificate_list(request, pk):
                     encryption = True
                 if Certificate.objects.add_certificate(certificate, sp, signing=signing, encryption=encryption):
                     form = CertificateForm(sp=sp)
-                    sp.modified = True
-                    sp.save()
+                    sp.save_modified()
                     logger.info("Certificate added for {sp} by {user}".format(sp=sp, user=request.user))
         elif "remove_certificate" in request.POST:
             for key, value in request.POST.dict().items():
@@ -91,8 +90,7 @@ def certificate_list(request, pk):
                     if cert.sp == sp:
                         cert.end_at = timezone.now()
                         cert.save()
-                        sp.modified = True
-                        sp.save()
+                        sp.save_modified()
                         logger.info("Certificate removed from {sp} by {user}".format(sp=sp, user=request.user))
     certificates = Certificate.objects.filter(sp=sp, end_at=None)
     return render(request, "rr/certificate.html", {'object_list': certificates,

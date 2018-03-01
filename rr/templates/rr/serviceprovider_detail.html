@@ -30,14 +30,15 @@
 </div>
 {% endif %}
 
-{% if request.user.is_superuser and object.modified %}
+{% if form %}
 <h2>{% trans "Validate changes" %}</h2>
 <p>{% trans "This object has changed. Click the button to validate all changes listed below." %}</p>
 <form action="" method='POST'>
-{% csrf_token %}
-<input type='hidden' name="object" value="{{ object.pk }}" />
-<input type='hidden' name="modify_date" value="{{ modify_date }}" />
-<p><input class="btn btn-success" type="submit" name="validate_changes" value="{% trans "Validate changes" %}" /></p>
+    {% csrf_token %}
+    {% bootstrap_form form %}
+    {% buttons %}
+    <p><input class="btn btn-success" type="submit" name="validate_changes" value="{% trans "Validate changes" %}" /></p>
+    {% endbuttons %}
 </form>
 <br>
 {% endif %}

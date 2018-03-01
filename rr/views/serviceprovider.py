@@ -3,7 +3,7 @@ from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views.generic.detail import DetailView
 from django.views.generic.list import ListView
 from rr.forms.serviceprovider import BasicInformationForm, TechnicalInformationForm, ServiceProviderCreateForm,\
-    ServiceProviderCloseForm
+    ServiceProviderCloseForm, ServiceProviderValidationForm
 from django.utils import timezone
 from rr.models.certificate import Certificate
 from rr.models.contact import Contact
@@ -14,6 +14,7 @@ from django.urls.base import reverse, reverse_lazy
 from django.shortcuts import render
 from django.utils.translation import ugettext as _
 import logging
+from rr.utils.notifications import validation_notification
 
 logger = logging.getLogger(__name__)
 
@@ -59,9 +60,10 @@ class BasicInformationView(DetailView):
 
     def post(self, request, *args, **kwargs):
         if self.request.user.is_superuser:
-            modify_date = request.POST.get('modify_date')
+            modified_date = request.POST.get('modified_date')
+            no_email = request.POST.get('no_email')
             sp = self.get_object()
-            if modify_date == sp.updated_at.strftime("%Y%m%d%H%M%S%f"):
+            if modified_date == sp.updated_at.strftime("%Y%m%d%H%M%S%f"):
                 for attribute in SPAttribute.objects.filter(sp=sp, end_at=None, validated=None):
                     attribute.validated = timezone.now()
                     attribute.save()
@@ -77,6 +79,8 @@ class BasicInformationView(DetailView):
                 sp.validated = timezone.now()
                 sp.modified = False
                 sp.save()
+                if not no_email:
+                    validation_notification(sp)
                 logger.info("SP {sp} validated by {user}".format(sp=sp, user=self.request.user))
             return HttpResponseRedirect(reverse('summary-view', args=(sp.pk,)))
         else:
@@ -127,7 +131,6 @@ class BasicInformationView(DetailView):
     def get_context_data(self, **kwargs):
         context = super(BasicInformationView, self).get_context_data(**kwargs)
         sp = context['object']
-        context['modify_date'] = sp.updated_at.strftime("%Y%m%d%H%M%S%f")
         history = ServiceProvider.objects.filter(history=sp.pk).exclude(validated=None).last()
         if not context['object'].validated and history:
             context['attributes'] = SPAttribute.objects.filter(Q(sp=sp, end_at__gte=history.created_at) | Q(sp=sp, end_at=None))
@@ -150,6 +153,10 @@ class BasicInformationView(DetailView):
             context['history_object'] = history
         if sp.production or sp.test:
             context['missing'] = self.get_missing_data(sp)
+        if self.request.user.is_superuser and sp.modified:
+            context['form'] = ServiceProviderValidationForm(modified_date=sp.updated_at.strftime("%Y%m%d%H%M%S%f"))
+        else:
+            context['form'] = None
         return context
 
 
@@ -228,13 +235,8 @@ class BasicInformationUpdate(UpdateView):
                 sp.nameidformat.set(nameidformat)
             redirect_url = super().form_valid(form)
             self.object.updated_by = self.request.user
-            if not self.request.user.is_superuser or not sp.validated:
-                self.object.validated = None
-            if self.request.user.is_superuser and not sp.modified:
-                self.object.modified = False
-            else:
-                self.object.modified = True
-            self.object.save()
+            self.object.validated = None
+            self.object.save_modified()
             logger.info("SP %s updated by %s", self.object, self.request.user)
             return redirect_url
         else:
@@ -285,13 +287,8 @@ class TechnicalInformationUpdate(UpdateView):
                 sp.nameidformat.set(nameidformat)
             redirect_url = super().form_valid(form)
             self.object.updated_by = self.request.user
-            if not self.request.user.is_superuser or not sp.validated:
-                self.object.validated = None
-            if self.request.user.is_superuser and not sp.modified:
-                self.object.modified = False
-            else:
-                self.object.modified = True
-            self.object.save()
+            self.object.validated = None
+            self.object.save_modified()
             logger.info("SP %s updated by %s", self.object, self.request.user)
             return redirect_url
         else:

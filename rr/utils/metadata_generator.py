@@ -153,7 +153,9 @@ def metadata_endpoints(element, sp, validated=True):
                 saml2_support = True
             if endpoint.binding == "urn:oasis:names:tc:SAML:1.0:profiles:browser-post":
                 saml1_support = True
-    if saml2_support:
+    if saml2_support and saml1_support:
+        return 3
+    elif saml2_support:
         return 2
     elif saml1_support:
         return 1
@@ -300,7 +302,7 @@ def metadata_spssodescriptor(element, sp, validated=True, privacypolicy=False):
     Using CamelCase instead of regular underscore attribute names in element tree.
     """
 
-    SPSSODescriptor = etree.SubElement(element, "SPSSODescriptor", protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol")
+    SPSSODescriptor = etree.SubElement(element, "SPSSODescriptor")
     if sp.sign_assertions:
         SPSSODescriptor.set("WantAssertionsSigned", "true")
     if sp.sign_requests:
@@ -309,9 +311,14 @@ def metadata_spssodescriptor(element, sp, validated=True, privacypolicy=False):
     metadata_certificates(SPSSODescriptor, sp, validated)
     metadata_nameidformat(SPSSODescriptor, sp)
     protocol = metadata_endpoints(SPSSODescriptor, sp, validated)
-    if protocol == 1:
-        # Set protocol to SAML 1.1 if only 1 is supported
-        SPSSODescriptor.set("protocolSupportEnumeration", "urn:oasis:names:tc:SAML:1.1:protocol")
+    # Set protocol support according to endpoints
+    if protocol == 3:
+        SPSSODescriptor.set("protocolSupportEnumeration", "urn:oasis:names:tc:SAML:2.0:protocol urn:oasis:names:tc:SAML:1.1:protocol urn:oasis:names:tc:SAML:1.0:protocol")
+    elif protocol == 1:
+        SPSSODescriptor.set("protocolSupportEnumeration", "urn:oasis:names:tc:SAML:1.1:protocol urn:oasis:names:tc:SAML:1.0:protocol")
+    else:
+        SPSSODescriptor.set("protocolSupportEnumeration", "urn:oasis:names:tc:SAML:2.0:protocol")
+
     metadata_attributeconsumingservice(SPSSODescriptor, sp, validated)
 
 

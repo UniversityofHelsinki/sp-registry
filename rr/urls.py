@@ -15,6 +15,11 @@ from rr.views.login import ShibbolethLoginView
 from rr.views.spadmin import activate_key, admin_list
 from rr.views.testuser import testuser_list, testuser_attribute_data
 
+# Overwrite default status handlers
+handler400 = 'rr.views.handlers.bad_request'
+handler403 = 'rr.views.handlers.permission_denied'
+handler404 = 'rr.views.handlers.page_not_found'
+handler500 = 'rr.views.handlers.server_error'
 
 urlpatterns = [
     url(r'^admin_django/doc/', include('django.contrib.admindocs.urls')),

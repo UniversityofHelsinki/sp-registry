@@ -15,6 +15,7 @@ from django.shortcuts import render
 from django.utils.translation import ugettext as _
 import logging
 from rr.utils.notifications import validation_notification
+from django.core.exceptions import PermissionDenied
 
 logger = logging.getLogger(__name__)
 
@@ -338,4 +339,4 @@ class SingEncryptList(ListView):
         if self.request.user.is_superuser:
             return ServiceProvider.objects.filter(end_at=None).order_by('entity_id')
         else:
-            return ServiceProvider.objects.filter(admins=self.request.user, end_at=None).order_by('entity_id')
+            raise PermissionDenied

@@ -48,6 +48,7 @@ urlpatterns = [
     url(r'^summary/(?P<pk>[0-9]+)/$', login_required(BasicInformationView.as_view()), name='summary-view'),
     url(r'^testuser/(?P<pk>[0-9]+)/$', testuser_list, name='testuser-list'),
     url(r'^testuser/data/(?P<pk>[0-9]+)/$', testuser_attribute_data, name='testuser-attribute-data'),
-    url(r'^invite/(?P<invite_key>[\w+\s-]+)/$', activate_key, name='invite-activate'),
+    url(r'^invite/$', activate_key, name='invite-activate'),
+    url(r'^invite/(?P<invite_key>[\w+\s-]+)/$', activate_key, name='invite-activate-key'),
     url('^', include('django.contrib.auth.urls')),
 ]

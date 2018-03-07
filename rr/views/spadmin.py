@@ -36,7 +36,7 @@ def get_activation_link(request, key):
     """
     Create invite activation link URI
     """
-    return get_hostname(request) + "/invite/" + key.activation_key
+    return get_hostname(request) + "/invite/?key=" + key.activation_key
 
 
 def render_email(request, text, key):
@@ -177,7 +177,9 @@ def activate_key(request, invite_key=""):
 
     Redirects to summary-view.
     """
-
+    get_key = request.GET.get('key', '')
+    if get_key:
+        invite_key = get_key 
     sp = Keystore.objects.activate_key(user=request.user,
                                        key=invite_key)
     if sp:

@@ -13,10 +13,10 @@
     <tr>
       <th scope="col">{% trans "entityID" %}</th>
       <th scope="col">{% trans "Name" %}</th>
-      <th scope="col">{% trans "Prod" %}</th>
-      <th scope="col">{% trans "Test" %}</th>
-      <th scope="col">{% trans "Status" %}</th>{% if user.is_superuser %}
-      <th scope="col">{% trans "#A/I*" %}</th>{% endif %}
+      <th scope="col" data-toggle="tooltip" data-placement="top" title="{% trans "Publish to production IdP" %}">{% trans "Prod" %}</th>
+      <th scope="col" data-toggle="tooltip" data-placement="top" title="{% trans "Publish to test IdP" %}">{% trans "Test" %}</th>
+      <th scope="col" data-toggle="tooltip" data-placement="top" title="{% trans "OK / Modified, modified are waiting for validation" %}">{% trans "Status" %}</th>{% if user.is_superuser %}
+      <th scope="col" data-toggle="tooltip" data-placement="top" title="{% trans "Number of admins (invites)" %}">{% trans "A/I" %}</th>{% endif %}
     </tr>
   </thead>
   <tbody>
@@ -24,8 +24,8 @@
   {% csrf_token %}
 {% for object in object_list %}
     <tr>
-      <th scope="row"><a href="/summary/{{ object.pk }}/">{{ object.entity_id  }}</a></th>
-      <td>{{ object.name }}</td>
+      <th scope="row">{% if object.entity_id|length > 60 %}<a data-toggle="tooltip" data-placement="top" title="{{ object.entity_id }}" href="/summary/{{ object.pk }}/">{{ object.entity_id|truncatechars:60 }}{% else %}<a href="/summary/{{ object.pk }}/">{{ object.entity_id }}{% endif %}</a></th>
+      {% if object.name|length > 50 %}<td data-toggle="tooltip" data-placement="top" title="{{ object.name }}" href="/summary/{{ object.pk }}/">{{ object.name|truncatechars:50 }}{% else %}<td>{{ object.name }}{% endif %}</td>
       {% if object.production %}<td class="text-success">&#10004;{% else %}<td class="text-danger">&#10005;{% endif %}</td>
       {% if object.test %}<td class="text-success">&#10004;{% else %}<td class="text-danger">&#10005;{% endif %}</td>
       {% if object.validated and not object.modified %}<td class="table-success">{% trans "OK "%}</td>{% else %}<td class="table-warning">{% trans "Modified "%}</td>{% endif %}{% if user.is_superuser %}
@@ -41,5 +41,11 @@
   </form>
   </tbody>
 </table>
-{% if user.is_superuser %}<p>* Number of admins (invites).</p>{% endif %}
+{% endblock %}
+{% block javascript %}
+<script>
+$(function () {
+	  $('[data-toggle="tooltip"]').tooltip()
+	})
+</script>
 {% endblock %}

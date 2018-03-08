@@ -16,7 +16,7 @@
       <th scope="col">{% trans "Prod" %}</th>
       <th scope="col">{% trans "Test" %}</th>
       <th scope="col">{% trans "Status" %}</th>{% if user.is_superuser %}
-      <th scope="col">{% trans "#Admins" %}</th>{% endif %}
+      <th scope="col">{% trans "#A/I*" %}</th>{% endif %}
     </tr>
   </thead>
   <tbody>
@@ -29,7 +29,7 @@
       {% if object.production %}<td class="text-success">&#10004;{% else %}<td class="text-danger">&#10005;{% endif %}</td>
       {% if object.test %}<td class="text-success">&#10004;{% else %}<td class="text-danger">&#10005;{% endif %}</td>
       {% if object.validated and not object.modified %}<td class="table-success">{% trans "OK "%}</td>{% else %}<td class="table-warning">{% trans "Modified "%}</td>{% endif %}{% if user.is_superuser %}
-      {% if not object.admins.count %}<td class="text-danger">&#10005;{% else %}<td>{{ object.admins.count }}{% endif %}{% endif %}
+      {% if not object.admins.count %}<td class="text-danger">&#10005;{% else %}<td>{{ object.admins.count }}{% endif %}  {% if object.keystore_set.count %}({{ object.keystore_set.count }}){% endif %}</td>{% endif %}
     </tr>
 {% empty %}
     <tr>
@@ -41,4 +41,5 @@
   </form>
   </tbody>
 </table>
+{% if user.is_superuser %}<p>* Number of admins (invites).</p>{% endif %}
 {% endblock %}

@@ -51,23 +51,27 @@ class Command(BaseCommand):
         privacypolicy = options['privacypolicy']
         if not production and not test and not include:
             self.stdout.write("Give production, test or included entityIDs as command line arguments")
-        serviceproviders = get_service_providers(validated, production, test, include)
         # Create XML containing selected EntityDescriptors
-        if serviceproviders:
-            if metadata_output:
-                metadata = metadata_generator_list(serviceproviders, validated, privacypolicy)
-                with open(metadata_output, 'wb') as f:
-                    f.write('<?xml version="1.0" encoding="UTF-8"?>\n'.encode('utf-8'))
-                    # Hack for correcting namespace definition by removing prefix.
-                    f.write(etree.tostring(metadata, pretty_print=True, encoding='UTF-8').replace(b'xmlns:xmlns', b'xmlns'))
-            if attributefilter_output:
-                attributefilter = etree.Element("AttributeFilterPolicyGroup", id="urn:mace:funet.fi:haka", nsmap={"xmlns": 'urn:mace:shibboleth:2.0:afp'})
-                attributefilter.attrib['{urn:mace:shibboleth:2.0:afp}basic'] = "urn:mace:shibboleth:2.0:afp:mf:basic"
-                attributefilter.attrib['{urn:mace:shibboleth:2.0:afp}saml'] = "urn:mace:shibboleth:2.0:afp:mf:saml"
-                attributefilter.attrib['{http://www.w3.org/2001/XMLSchema-instance}schemaLocation'] = "urn:mace:shibboleth:2.0:afp classpath:/schema/shibboleth-2.0-afp.xsd urn:mace:shibboleth:2.0:afp:mf:basic classpath:/schema/shibboleth-2.0-afp-mf-basic.xsd urn:mace:shibboleth:2.0:afp:mf:saml classpath:/schema/shibboleth-2.0-afp-mf-saml.xsd"
-                for sp in serviceproviders:
+        if metadata_output:
+            metadata = metadata_generator_list(validated, privacypolicy, production, test, include)
+            with open(metadata_output, 'wb') as f:
+                f.write('<?xml version="1.0" encoding="UTF-8"?>\n'.encode('utf-8'))
+                # Hack for correcting namespace definition by removing prefix.
+                f.write(etree.tostring(metadata, pretty_print=True, encoding='UTF-8').replace(b'xmlns:xmlns', b'xmlns'))
+        if attributefilter_output:
+            attributefilter = etree.Element("AttributeFilterPolicyGroup", id="urn:mace:funet.fi:haka", nsmap={"xmlns": 'urn:mace:shibboleth:2.0:afp'})
+            attributefilter.attrib['{urn:mace:shibboleth:2.0:afp}basic'] = "urn:mace:shibboleth:2.0:afp:mf:basic"
+            attributefilter.attrib['{urn:mace:shibboleth:2.0:afp}saml'] = "urn:mace:shibboleth:2.0:afp:mf:saml"
+            attributefilter.attrib['{http://www.w3.org/2001/XMLSchema-instance}schemaLocation'] = "urn:mace:shibboleth:2.0:afp classpath:/schema/shibboleth-2.0-afp.xsd urn:mace:shibboleth:2.0:afp:mf:basic classpath:/schema/shibboleth-2.0-afp-mf-basic.xsd urn:mace:shibboleth:2.0:afp:mf:saml classpath:/schema/shibboleth-2.0-afp-mf-saml.xsd"
+            serviceproviders = ServiceProvider.objects.filter(end_at=None)
+            for sp in serviceproviders:
+                if production and sp.production:
                     attributefilter_generate(attributefilter, sp, validated)
-                with open(attributefilter_output, 'wb') as f:
-                    f.write('<?xml version="1.0" encoding="UTF-8"?>\n'.encode('utf-8'))
-                    # Hack for correcting namespace definition by removing prefix.
-                    f.write(etree.tostring(attributefilter, pretty_print=True, encoding='UTF-8').replace(b'xmlns:xmlns', b'xmlns'))
+                elif test and sp.test:
+                    attributefilter_generate(attributefilter, sp, validated)
+                elif include and sp.entity_id in include:
+                    attributefilter_generate(attributefilter, sp, validated)
+            with open(attributefilter_output, 'wb') as f:
+                f.write('<?xml version="1.0" encoding="UTF-8"?>\n'.encode('utf-8'))
+                # Hack for correcting namespace definition by removing prefix.
+                f.write(etree.tostring(attributefilter, pretty_print=True, encoding='UTF-8').replace(b'xmlns:xmlns', b'xmlns'))

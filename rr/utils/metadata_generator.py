@@ -6,10 +6,11 @@ from rr.models.serviceprovider import SPAttribute, ServiceProvider
 from rr.models.certificate import Certificate
 from rr.models.contact import Contact
 from rr.models.endpoint import Endpoint
-from lxml import etree, objectify
+from lxml import etree
 import logging
 from rr.models.organization import Organization
 from rr.models.nameidformat import NameIDFormat
+from django.db.models import Q
 
 logger = logging.getLogger(__name__)
 
@@ -99,7 +100,7 @@ def metadata_certificates(element, sp, validated=True):
     Using CamelCase instead of regular underscore attribute names in element tree.
     """
     if validated:
-        certificates = Certificate.objects.filter(sp=sp, end_at=None).exclude(validated=None)
+        certificates = Certificate.objects.filter(sp=sp).filter(Q(end_at=None) | Q(end_at__gt=sp.validated)).exclude(validated=None)
     else:
         certificates = Certificate.objects.filter(sp=sp, end_at=None)
     for certificate in certificates:
@@ -143,7 +144,7 @@ def metadata_endpoints(element, sp, validated=True):
     saml2_support = False
     saml1_support = False
     if validated:
-        endpoints = Endpoint.objects.filter(sp=sp, end_at=None).exclude(validated=None)
+        endpoints = Endpoint.objects.filter(sp=sp).filter(Q(end_at=None) | Q(end_at__gt=sp.validated)).exclude(validated=None)
     else:
         endpoints = Endpoint.objects.filter(sp=sp, end_at=None)
     for endpoint in endpoints:
@@ -163,48 +164,62 @@ def metadata_endpoints(element, sp, validated=True):
         return 0
 
 
-def metadata_attributeconsumingservice(element, sp, validated=True):
+def metadata_attributeconsumingservice_meta(element, sp):
+    """
+    Generates AttributeConsumingService element meta for SP metadata XML
+
+    element: etree.Element object for previous level (AttributeConsumingService)
+    sp: ServiceProvider object
+
+    Using CamelCase instead of regular underscore attribute names in element tree.
+    """
+    if sp.name_fi:
+        DisplayName_fi = etree.SubElement(element, "ServiceName")
+        DisplayName_fi.attrib['{http://www.w3.org/XML/1998/namespace}lang'] = "fi"
+        DisplayName_fi.text = sp.name_fi
+    if sp.name_en:
+        DisplayName_en = etree.SubElement(element, "ServiceName")
+        DisplayName_en.attrib['{http://www.w3.org/XML/1998/namespace}lang'] = "en"
+        DisplayName_en.text = sp.name_en
+    if sp.name_sv:
+        DisplayName_sv = etree.SubElement(element, "ServiceName")
+        DisplayName_sv.attrib['{http://www.w3.org/XML/1998/namespace}lang'] = "sv"
+        DisplayName_sv.text = sp.name_sv
+
+    if sp.description_fi:
+        Description_fi = etree.SubElement(element, "ServiceDescription")
+        Description_fi.attrib['{http://www.w3.org/XML/1998/namespace}lang'] = "fi"
+        Description_fi.text = sp.description_fi
+    if sp.description_en:
+        Description_en = etree.SubElement(element, "ServiceDescription")
+        Description_en.attrib['{http://www.w3.org/XML/1998/namespace}lang'] = "en"
+        Description_en.text = sp.description_en
+    if sp.description_sv:
+        Description_sv = etree.SubElement(element, "ServiceDescription")
+        Description_sv.attrib['{http://www.w3.org/XML/1998/namespace}lang'] = "sv"
+        Description_sv.text = sp.description_sv
+
+
+def metadata_attributeconsumingservice(element, sp, history, validated=True):
     """
     Generates AttributeConsumingService element for SP metadata XML
 
     element: etree.Element object for previous level (SPSSODescriptor)
     sp: ServiceProvider object
+    history: ServiceProvider object if using validated data and most recent is not validated
     validated: if false, using unvalidated metadata
 
     Using CamelCase instead of regular underscore attribute names in element tree.
     """
-
-    if validated:
-        attributes = SPAttribute.objects.filter(sp=sp).exclude(validated=None)
-    else:
-        attributes = SPAttribute.objects.filter(sp=sp)
     AttributeConsumingService = etree.SubElement(element, "AttributeConsumingService", index="1")
-    if sp.name_fi:
-        DisplayName_fi = etree.SubElement(AttributeConsumingService, "ServiceName")
-        DisplayName_fi.attrib['{http://www.w3.org/XML/1998/namespace}lang'] = "fi"
-        DisplayName_fi.text = sp.name_fi
-    if sp.name_en:
-        DisplayName_en = etree.SubElement(AttributeConsumingService, "ServiceName")
-        DisplayName_en.attrib['{http://www.w3.org/XML/1998/namespace}lang'] = "en"
-        DisplayName_en.text = sp.name_en
-    if sp.name_sv:
-        DisplayName_sv = etree.SubElement(AttributeConsumingService, "ServiceName")
-        DisplayName_sv.attrib['{http://www.w3.org/XML/1998/namespace}lang'] = "sv"
-        DisplayName_sv.text = sp.name_sv
-
-    if sp.description_fi:
-        Description_fi = etree.SubElement(AttributeConsumingService, "ServiceDescription")
-        Description_fi.attrib['{http://www.w3.org/XML/1998/namespace}lang'] = "fi"
-        Description_fi.text = sp.description_fi
-    if sp.description_en:
-        Description_en = etree.SubElement(AttributeConsumingService, "ServiceDescription")
-        Description_en.attrib['{http://www.w3.org/XML/1998/namespace}lang'] = "en"
-        Description_en.text = sp.description_en
-    if sp.description_sv:
-        Description_sv = etree.SubElement(AttributeConsumingService, "ServiceDescription")
-        Description_sv.attrib['{http://www.w3.org/XML/1998/namespace}lang'] = "sv"
-        Description_sv.text = sp.description_sv
-
+    if history:
+        metadata_attributeconsumingservice_meta(AttributeConsumingService, history)
+    else:
+        metadata_attributeconsumingservice_meta(AttributeConsumingService, sp)
+    if validated:
+        attributes = SPAttribute.objects.filter(sp=sp).filter(Q(end_at=None) | Q(end_at__gt=sp.validated)).exclude(validated=None)
+    else:
+        attributes = SPAttribute.objects.filter(sp=sp, end_at=None)
     for attribute in attributes:
         etree.SubElement(AttributeConsumingService, "RequestedAttribute",
                          FriendlyName=attribute.attribute.friendlyname, Name=attribute.attribute.name,
@@ -223,7 +238,7 @@ def metadata_contact(element, sp, validated=True):
     """
 
     if validated:
-        contacts = Contact.objects.filter(sp=sp, end_at=None).exclude(validated=None)
+        contacts = Contact.objects.filter(sp=sp).filter(Q(end_at=None) | Q(end_at__gt=sp.validated)).exclude(validated=None)
     else:
         contacts = Contact.objects.filter(sp=sp, end_at=None)
     for contact in contacts:
@@ -291,25 +306,37 @@ def metadata_organization(element, sp):
             OrganizationURL_sv.text = organization.url_sv
 
 
-def metadata_spssodescriptor(element, sp, validated=True, privacypolicy=False):
+def metadata_spssodescriptor(element, sp, history, validated=True, privacypolicy=False):
     """
     Generates SPSSODescriptor elements for SP metadata XML
 
     element: etree.Element object for previous level (EntityDescriptor)
     sp: ServiceProvider object
+    history: ServiceProvider object if using validated data and most recent is not validated
     validated: if false, using unvalidated metadata
+    privacypolicy: fill empty privacypolicy URLs with default value
 
     Using CamelCase instead of regular underscore attribute names in element tree.
     """
 
     SPSSODescriptor = etree.SubElement(element, "SPSSODescriptor")
-    if sp.sign_assertions:
-        SPSSODescriptor.set("WantAssertionsSigned", "true")
-    if sp.sign_requests:
-        SPSSODescriptor.set("AuthnRequestsSigned", "true")
-    metadata_extensions(SPSSODescriptor, sp, privacypolicy)
+    if history:
+        if history.sign_assertions:
+            SPSSODescriptor.set("WantAssertionsSigned", "true")
+        if history.sign_requests:
+            SPSSODescriptor.set("AuthnRequestsSigned", "true")
+        metadata_extensions(SPSSODescriptor, history, privacypolicy)
+    else:
+        if sp.sign_assertions:
+            SPSSODescriptor.set("WantAssertionsSigned", "true")
+        if sp.sign_requests:
+            SPSSODescriptor.set("AuthnRequestsSigned", "true")
+        metadata_extensions(SPSSODescriptor, sp, privacypolicy)
     metadata_certificates(SPSSODescriptor, sp, validated)
-    metadata_nameidformat(SPSSODescriptor, sp)
+    if history:
+        metadata_nameidformat(SPSSODescriptor, history)
+    else:
+        metadata_nameidformat(SPSSODescriptor, sp)
     protocol = metadata_endpoints(SPSSODescriptor, sp, validated)
     # Set protocol support according to endpoints
     if protocol == 3:
@@ -319,72 +346,75 @@ def metadata_spssodescriptor(element, sp, validated=True, privacypolicy=False):
     else:
         SPSSODescriptor.set("protocolSupportEnumeration", "urn:oasis:names:tc:SAML:2.0:protocol")
 
-    metadata_attributeconsumingservice(SPSSODescriptor, sp, validated)
+    metadata_attributeconsumingservice(SPSSODescriptor, sp, history, validated)
 
 
-def metadata_generator(sp, validated=True):
+def metadata_generator(sp, validated=True, privacypolicy=False, tree=None):
     """
     Generates metadata for single SP.
 
     sp: ServiceProvider object
     validated: if false, using unvalidated metadata
+    privacypolicy: fill empty privacypolicy URLs with default value
+    tree: use as root if given, generate new root if not
+
+    return tree
 
     Using CamelCase instead of regular underscore attribute names in element tree.
     """
-
-    EntityDescriptor = etree.Element("EntityDescriptor",
-                                     schemaLocation="urn:oasis:names:tc:SAML:2.0:metadata",
-                                     entityID=sp.entity_id,
-                                     nsmap={"ds": 'http://www.w3.org/2000/09/xmldsig#',
-                                            "mdui": 'urn:oasis:names:tc:SAML:metadata:ui'})
-    metadata_spssodescriptor(EntityDescriptor, sp, validated)
-    metadata_organization(EntityDescriptor, sp)
+    if validated and not sp.validated:
+        history = ServiceProvider.objects.filter(history=sp.pk).exclude(validated=None).last()
+        if not history:
+            return tree
+    else:
+        history = None
+    if history:
+        entity_id = history.entity_id
+    else:
+        entity_id = sp.entity_id
+    if tree:
+        EntityDescriptor = etree.SubElement(tree, "EntityDescriptor", entityID=entity_id)
+    else:
+        EntityDescriptor = etree.Element("EntityDescriptor",
+                                         entityID=entity_id,
+                                         nsmap={"xmlns": 'urn:oasis:names:tc:SAML:2.0:metadata',
+                                                "ds": 'http://www.w3.org/2000/09/xmldsig#',
+                                                "mdui": 'urn:oasis:names:tc:SAML:metadata:ui'})
+    metadata_spssodescriptor(EntityDescriptor, sp, history, validated, privacypolicy)
     metadata_contact(EntityDescriptor, sp, validated)
+    if history:
+        metadata_organization(EntityDescriptor, history)
+    else:
+        metadata_organization(EntityDescriptor, sp)
+    if tree:
+        return tree
+    else:
+        return EntityDescriptor
 
-    return(etree.tostring(EntityDescriptor, pretty_print=True, encoding='UTF-8'))
 
-
-def metadata_generator_list(serviceproviders, validated, privacypolicy):
+def metadata_generator_list(validated=True, privacypolicy=False, production=False, test=False, include=None):
     """
     Generates metadata for list of serviceproviders.
 
-    sp: ServiceProvider QuerySet
     validated: if false, using unvalidated metadata
     privacypolicy: replace privacy policy if missing
+    production: include production SPs
+    test: include test SPs
+    include: include listed SPs
+
+    return tree
 
     Using CamelCase instead of regular underscore attribute names in element tree.
     """
-    metadata = etree.Element("EntitiesDescriptor", Name="urn:mace:funet.fi:helsinki.fi", nsmap={"xmlns": 'urn:oasis:names:tc:SAML:2.0:metadata',
-                                                                                                "ds": 'http://www.w3.org/2000/09/xmldsig#',
-                                                                                                "mdui": 'urn:oasis:names:tc:SAML:metadata:ui'})
+    tree = etree.Element("EntitiesDescriptor", Name="urn:mace:funet.fi:helsinki.fi", nsmap={"xmlns": 'urn:oasis:names:tc:SAML:2.0:metadata',
+                                                                                            "ds": 'http://www.w3.org/2000/09/xmldsig#',
+                                                                                            "mdui": 'urn:oasis:names:tc:SAML:metadata:ui'})
+    serviceproviders = ServiceProvider.objects.filter(end_at=None)
     for sp in serviceproviders:
-        EntityDescriptor = etree.SubElement(metadata, "EntityDescriptor", entityID=sp.entity_id)
-        metadata_spssodescriptor(EntityDescriptor, sp, validated, privacypolicy)
-        metadata_contact(EntityDescriptor, sp, validated)
-        metadata_organization(EntityDescriptor, sp)
-    return metadata
-
-
-def get_service_providers(validated=True, production=False, test=False, include=None):
-    if validated:
-        serviceproviders = ServiceProvider.objects.none()
-        sp_loop = ServiceProvider.objects.filter(end_at=None)
-        for sp in sp_loop:
-            if not sp.validated:
-                sp = ServiceProvider.objects.filter(history=sp.pk).exclude(validated=None).last()
-            if sp and production and sp.production:
-                serviceproviders = serviceproviders | ServiceProvider.objects.filter(pk=sp.pk)
-            if sp and test and sp.test:
-                serviceproviders = serviceproviders | ServiceProvider.objects.filter(pk=sp.pk)
-            if sp and include and sp.entity_id in include:
-                serviceproviders = serviceproviders | ServiceProvider.objects.filter(pk=sp.pk)
-    else:
-        serviceproviders = ServiceProvider.objects.none()
-        if production:
-            serviceproviders = serviceproviders | ServiceProvider.objects.filter(end_at=None, production=True)
-        if test:
-            serviceproviders = serviceproviders | ServiceProvider.objects.filter(end_at=None, test=True)
-        if include:
-            for entity_id in include:
-                serviceproviders = serviceproviders | ServiceProvider.objects.filter(entity_id=entity_id, end_at=None)
-    return serviceproviders
+        if production and sp.production:
+            metadata_generator(sp, validated, privacypolicy, tree)
+        elif test and sp.test:
+            metadata_generator(sp, validated, privacypolicy, tree)
+        elif include and sp.entity_id in include:
+            metadata_generator(sp, validated, privacypolicy, tree)
+    return tree

@@ -8,8 +8,8 @@ from django.http.response import Http404
 from django.contrib.auth.decorators import login_required
 from django.utils.translation import ugettext as _
 import logging
-from rr.utils.metadata_generator import metadata_generator,\
-    get_service_providers, metadata_generator_list
+from rr.utils.metadata_generator import metadata_generator
+from rr.utils.metadata_generator import metadata_generator_list
 from rr.forms.metadata import MetadataForm, MetadataCommitForm
 from lxml import etree
 from rr.utils.metadata_parser import metadata_parser
@@ -57,7 +57,8 @@ def metadata(request, pk):
     if validated and not sp.validated:
         metadata_sp = ServiceProvider.objects.filter(history=sp.pk).exclude(validated=None).last()
     if metadata_sp:
-        metadata = metadata_generator(sp=metadata_sp, validated=validated)
+        tree = metadata_generator(sp=metadata_sp, validated=validated)
+        metadata = etree.tostring(tree, pretty_print=True, encoding='UTF-8').replace(b'xmlns:xmlns', b'xmlns')
     else:
         metadata = None
     return render(request, "rr/metadata.html", {'object': sp,
@@ -175,17 +176,15 @@ def metadata_management(request):
             else:
                 error = _("Metadata file has changed, please try again.")
     if not error:
-        # Load service providers and write metadata to file
-        serviceproviders = get_service_providers(validated=True, production=True)
-        if serviceproviders:
-                metadata = metadata_generator_list(serviceproviders, validated=True, privacypolicy=True)
-                metadata_file = join(settings.METADATA_GIT_REPOSITORIO, settings.METADATA_FILENAME)
-                with open(metadata_file, 'wb') as f:
-                    f.write('<?xml version="1.0" encoding="UTF-8"?>\n'.encode('utf-8'))
-                    # Hack for correcting namespace definition by removing prefix.
-                    f.write(etree.tostring(metadata, pretty_print=True, encoding='UTF-8').replace(b'xmlns:xmlns', b'xmlns'))
-                    # update diff
-                    diff = repo.git.diff('HEAD')
+        # Generate metadata and write it to file
+        metadata = metadata_generator_list(validated=True, privacypolicy=True, production=True)
+        metadata_file = join(settings.METADATA_GIT_REPOSITORIO, settings.METADATA_FILENAME)
+        with open(metadata_file, 'wb') as f:
+            f.write('<?xml version="1.0" encoding="UTF-8"?>\n'.encode('utf-8'))
+            # Hack for correcting namespace definition by removing prefix.
+            f.write(etree.tostring(metadata, pretty_print=True, encoding='UTF-8').replace(b'xmlns:xmlns', b'xmlns'))
+            # update diff
+            diff = repo.git.diff('HEAD')
     diff_hash = hashlib.md5(diff.encode('utf-8')).hexdigest()
     form = MetadataCommitForm(diff_hash=diff_hash)
     return render(request, "rr/metadata_management.html", {'form': form,

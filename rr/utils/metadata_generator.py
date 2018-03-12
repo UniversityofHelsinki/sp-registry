@@ -89,18 +89,18 @@ def metadata_extensions(element, sp, privacypolicy):
             PrivacyStatementURL_sv.text = "https://www.helsinki.fi/fi/yliopisto/tietosuojaselosteet-0"
 
 
-def metadata_certificates(element, sp, validated=True):
+def metadata_certificates(element, sp, validation_date):
     """
     Generates KeyDescriptor elements for SP metadata XML
 
     element: etree.Element object for previous level (SPSSODescriptor)
     sp: ServiceProvider object
-    validated: if false, using unvalidated metadata
+    validation_date: if None, using unvalidated metadata
 
     Using CamelCase instead of regular underscore attribute names in element tree.
     """
-    if validated:
-        certificates = Certificate.objects.filter(sp=sp).filter(Q(end_at=None) | Q(end_at__gt=sp.validated)).exclude(validated=None)
+    if validation_date:
+        certificates = Certificate.objects.filter(sp=sp).filter(Q(end_at=None) | Q(end_at__gt=validation_date)).exclude(validated=None)
     else:
         certificates = Certificate.objects.filter(sp=sp, end_at=None)
     for certificate in certificates:
@@ -132,19 +132,19 @@ def metadata_nameidformat(element, sp):
         NameIDFormat.text = nameid.nameidformat
 
 
-def metadata_endpoints(element, sp, validated=True):
+def metadata_endpoints(element, sp, validation_date):
     """
     Generates EndPoint elements for SP metadata XML
 
     element: etree.Element object for previous level (SPSSODescriptor)
     sp: ServiceProvider object
-    validated: if false, using unvalidated metadata
+    validation_date: if None, using unvalidated metadata
     """
 
     saml2_support = False
     saml1_support = False
-    if validated:
-        endpoints = Endpoint.objects.filter(sp=sp).filter(Q(end_at=None) | Q(end_at__gt=sp.validated)).exclude(validated=None)
+    if validation_date:
+        endpoints = Endpoint.objects.filter(sp=sp).filter(Q(end_at=None) | Q(end_at__gt=validation_date)).exclude(validated=None)
     else:
         endpoints = Endpoint.objects.filter(sp=sp, end_at=None)
     for endpoint in endpoints:
@@ -200,14 +200,14 @@ def metadata_attributeconsumingservice_meta(element, sp):
         Description_sv.text = sp.description_sv
 
 
-def metadata_attributeconsumingservice(element, sp, history, validated=True):
+def metadata_attributeconsumingservice(element, sp, history, validation_date):
     """
     Generates AttributeConsumingService element for SP metadata XML
 
     element: etree.Element object for previous level (SPSSODescriptor)
     sp: ServiceProvider object
     history: ServiceProvider object if using validated data and most recent is not validated
-    validated: if false, using unvalidated metadata
+    validation_date: if None, using unvalidated metadata
 
     Using CamelCase instead of regular underscore attribute names in element tree.
     """
@@ -216,8 +216,8 @@ def metadata_attributeconsumingservice(element, sp, history, validated=True):
         metadata_attributeconsumingservice_meta(AttributeConsumingService, history)
     else:
         metadata_attributeconsumingservice_meta(AttributeConsumingService, sp)
-    if validated:
-        attributes = SPAttribute.objects.filter(sp=sp).filter(Q(end_at=None) | Q(end_at__gt=sp.validated)).exclude(validated=None)
+    if validation_date:
+        attributes = SPAttribute.objects.filter(sp=sp).filter(Q(end_at=None) | Q(end_at__gt=validation_date)).exclude(validated=None)
     else:
         attributes = SPAttribute.objects.filter(sp=sp, end_at=None)
     for attribute in attributes:
@@ -226,19 +226,19 @@ def metadata_attributeconsumingservice(element, sp, history, validated=True):
                          NameFormat=attribute.attribute.nameformat)
 
 
-def metadata_contact(element, sp, validated=True):
+def metadata_contact(element, sp, validation_date):
     """
     Generates ContactPerson elements for SP metadata XML
 
     element: etree.Element object for previous level (EntityDescriptor)
     sp: ServiceProvider object
-    validated: if false, using unvalidated metadata
+    validation_date: if None, using unvalidated metadata
 
     Using CamelCase instead of regular underscore attribute names in element tree.
     """
 
-    if validated:
-        contacts = Contact.objects.filter(sp=sp).filter(Q(end_at=None) | Q(end_at__gt=sp.validated)).exclude(validated=None)
+    if validation_date:
+        contacts = Contact.objects.filter(sp=sp).filter(Q(end_at=None) | Q(end_at__gt=validation_date)).exclude(validated=None)
     else:
         contacts = Contact.objects.filter(sp=sp, end_at=None)
     for contact in contacts:
@@ -257,7 +257,6 @@ def metadata_organization(element, sp):
 
     element: etree.Element object for previous level (EntityDescriptor)
     sp: ServiceProvider object
-    validated: if false, using unvalidated metadata
 
     Using CamelCase instead of regular underscore attribute names in element tree.
     """
@@ -306,14 +305,14 @@ def metadata_organization(element, sp):
             OrganizationURL_sv.text = organization.url_sv
 
 
-def metadata_spssodescriptor(element, sp, history, validated=True, privacypolicy=False):
+def metadata_spssodescriptor(element, sp, history, validation_date, privacypolicy=False):
     """
     Generates SPSSODescriptor elements for SP metadata XML
 
     element: etree.Element object for previous level (EntityDescriptor)
     sp: ServiceProvider object
     history: ServiceProvider object if using validated data and most recent is not validated
-    validated: if false, using unvalidated metadata
+    validation_date: if None, using unvalidated metadata
     privacypolicy: fill empty privacypolicy URLs with default value
 
     Using CamelCase instead of regular underscore attribute names in element tree.
@@ -332,12 +331,12 @@ def metadata_spssodescriptor(element, sp, history, validated=True, privacypolicy
         if sp.sign_requests:
             SPSSODescriptor.set("AuthnRequestsSigned", "true")
         metadata_extensions(SPSSODescriptor, sp, privacypolicy)
-    metadata_certificates(SPSSODescriptor, sp, validated)
+    metadata_certificates(SPSSODescriptor, sp, validation_date)
     if history:
         metadata_nameidformat(SPSSODescriptor, history)
     else:
         metadata_nameidformat(SPSSODescriptor, sp)
-    protocol = metadata_endpoints(SPSSODescriptor, sp, validated)
+    protocol = metadata_endpoints(SPSSODescriptor, sp, validation_date)
     # Set protocol support according to endpoints
     if protocol == 3:
         SPSSODescriptor.set("protocolSupportEnumeration", "urn:oasis:names:tc:SAML:2.0:protocol urn:oasis:names:tc:SAML:1.1:protocol urn:oasis:names:tc:SAML:1.0:protocol")
@@ -346,7 +345,7 @@ def metadata_spssodescriptor(element, sp, history, validated=True, privacypolicy
     else:
         SPSSODescriptor.set("protocolSupportEnumeration", "urn:oasis:names:tc:SAML:2.0:protocol")
 
-    metadata_attributeconsumingservice(SPSSODescriptor, sp, history, validated)
+    metadata_attributeconsumingservice(SPSSODescriptor, sp, history, validation_date)
 
 
 def metadata_generator(sp, validated=True, privacypolicy=False, tree=None):
@@ -362,17 +361,24 @@ def metadata_generator(sp, validated=True, privacypolicy=False, tree=None):
 
     Using CamelCase instead of regular underscore attribute names in element tree.
     """
+    # Set history object if using validated metadata and newest version is not validated.
+    # Set validation_date to last point where metadata was validated
     if validated and not sp.validated:
         history = ServiceProvider.objects.filter(history=sp.pk).exclude(validated=None).last()
         if not history:
             return tree
+        validation_date = history.validated
     else:
         history = None
+        if validated:
+            validation_date = sp.validated
+        else:
+            validation_date = None
     if history:
         entity_id = history.entity_id
     else:
         entity_id = sp.entity_id
-    if tree:
+    if tree is not None:
         EntityDescriptor = etree.SubElement(tree, "EntityDescriptor", entityID=entity_id)
     else:
         EntityDescriptor = etree.Element("EntityDescriptor",
@@ -380,13 +386,13 @@ def metadata_generator(sp, validated=True, privacypolicy=False, tree=None):
                                          nsmap={"xmlns": 'urn:oasis:names:tc:SAML:2.0:metadata',
                                                 "ds": 'http://www.w3.org/2000/09/xmldsig#',
                                                 "mdui": 'urn:oasis:names:tc:SAML:metadata:ui'})
-    metadata_spssodescriptor(EntityDescriptor, sp, history, validated, privacypolicy)
-    metadata_contact(EntityDescriptor, sp, validated)
+    metadata_spssodescriptor(EntityDescriptor, sp, history, validation_date, privacypolicy)
+    metadata_contact(EntityDescriptor, sp, validation_date)
     if history:
         metadata_organization(EntityDescriptor, history)
     else:
         metadata_organization(EntityDescriptor, sp)
-    if tree:
+    if tree is not None:
         return tree
     else:
         return EntityDescriptor

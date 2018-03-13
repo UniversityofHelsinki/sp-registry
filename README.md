@@ -24,6 +24,78 @@ Includes validation of attributes for production use.
 * settings : settings for development and production
 * testdata : generated data for tests
 
+## Documentation
+Project uses Django admin docs for development documentation:
+https://docs.djangoproject.com/en/1.11/ref/contrib/admin/admindocs/
+
+## Usage
+### Users
+Users log with SSO. Staff and faculty will get automatic activation, you will have to activate others through Django admin backend.
+
+You may add local accounts with Django admin backend
+
+Create a superuser with
+"./manage.py createsuperuser" command
+
+### Menu structure
+#### If you have logged in
+* Service Providers
+  * Lists all user's services, everything for site admins
+  * Click the entityID for more information
+  * Anyone who has access to site, may create a new SP
+
+#### If you have seleceted a service
+* Summary
+  * SP summary and possible modifications since last validation.
+  * Validation for site admins
+  * Possibility to remove SP, if it is validated and not in production or test use
+* Basic Information
+  * Basic administrative information and notes
+  * Admin notes is only shown here if admin. It is shown to users in Summary view
+* Technical Attributes
+  * Techical attributes like entity_id, publishing to production etc.
+     * Entity Id must be in URI format and unique in the system
+     * site admins may override the URI requirement
+* Attributes
+  * Attribute requisitions and reasons for them
+  * Only listing attributes that are marked for publishing
+* Certificates
+  * Certificates for the service
+* SAML Endpoints
+  * Allows only SAML2 bindings, admins may override this with metadata import
+* Contacts
+  * Technical, administrative and support contacts for the service
+* Admins
+  * SP admins who can access and modify this SP in the registy
+  * New admins may be invited by email, invitations are valid for 30 days
+* View Metadata
+  * Shows SP metadata. You may choose between validated and unvalidated metadata
+
+#### For site admins
+* Attributes
+  * All attributes in the service
+  * By clicking the attribyte, you get list of SPs requesting it
+  * Modification through Django Admin backend
+* Certificates
+  * Lists expired and less than 2048 bit certificates
+* Sign and Encrypt
+  * Lists SPs which have non-default sining and encryption flags
+* Database Admin
+  * Django Admin backend
+
+### Command line commands
+For more information run "./manage.py <command> -h"
+* cleandb
+  * Cleans old services or personal information from the db
+* exportmetadata
+  * Exporting metadata or attribute filter
+* importattributefilter
+  * Importing attributes from old attributefilter
+* importmetadata
+  * Importing metadata from file
+* parsehakaattributes
+  * Reads metadata file and outpus attributefilter from it
+
 ## Installation
 ### Requirements
 Currently uses Django 1.11 (LTS version, support until Apr 2020)
@@ -71,7 +143,7 @@ Alias /static/ /path/to/rr/static/
     Require all granted
 </Directory>
 
-<Directory /path/to/rr/rr>
+<Directory /path/to/rr>
     <Files wsgi.py>
         Require all granted
     </Files>

@@ -25,7 +25,7 @@ LOGGING = {
         },
         'file': {
             'class': 'logging.FileHandler',
-            'filename': 'log/dev.log',
+            'filename': 'dev.log',
             'formatter': 'file',
         },
     },

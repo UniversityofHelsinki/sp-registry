@@ -21,7 +21,7 @@ LOGGING = {
         },
         'file': {
             'class': 'logging.FileHandler',
-            'filename': 'log/production.log',
+            'filename': 'production.log',
             'formatter': 'file',
         },
     },

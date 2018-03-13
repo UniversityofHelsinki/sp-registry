@@ -21,7 +21,7 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 # Email address used as send address
 SERVER_EMAIL = 'noreply@example.org'
 # Will receive notifications of changes in metadata and also if error 500 occurs
-ADMINS = 'idp-admins@example.org'
+ADMINS = ['idp-admins@example.org']
 # Contact email shown in login page if user account is not activated automatically
 DEFAULT_CONTACT_EMAIL = 'contact@example.org'
 # Privacy policy url shown in login page

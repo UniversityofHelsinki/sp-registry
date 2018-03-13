@@ -21,7 +21,7 @@ def admin_notification_modified_sp(modified_sp):
         message = render_to_string('email/admin_notification_modified_sp.txt',
                                    {'modified_sp': modified_sp})
         try:
-            send_mail(subject, message, settings.SERVER_EMAIL, [settings.ADMINS], fail_silently=False)
+            send_mail(subject, message, settings.SERVER_EMAIL, settings.ADMINS, fail_silently=False)
         except SMTPException:
             logger.error("SMTP error when sending admin notification.")
         except BadHeaderError:

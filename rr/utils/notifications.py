@@ -21,7 +21,7 @@ def admin_notification_modified_sp(modified_sp):
         message = render_to_string('email/admin_notification_modified_sp.txt',
                                    {'modified_sp': modified_sp})
         try:
-            send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, [settings.ADMIN_NOTIFICATION_EMAIL], fail_silently=False)
+            send_mail(subject, message, settings.SERVER_EMAIL, [settings.ADMINS], fail_silently=False)
         except SMTPException:
             logger.error("SMTP error when sending admin notification.")
         except BadHeaderError:
@@ -41,7 +41,7 @@ def validation_notification(sp):
         message = render_to_string('email/validation_notification.txt',
                                    {'entity_id': sp.entity_id})
         try:
-            send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, admin_emails, fail_silently=False)
+            send_mail(subject, message, settings.SERVER_EMAIL, admin_emails, fail_silently=False)
         except SMTPException:
             logger.warning("SMTP error when sending validation notification.")
         except BadHeaderError:

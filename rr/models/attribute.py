@@ -5,7 +5,7 @@ from django.utils.translation import ugettext_lazy as _
 class Attribute(models.Model):
     """
     Stores attribute information for available SAML attributes.
-    Public flag controls if attribute is visilible to users.
+    Public flag controls attribute visibility to users.
     """
     friendlyname = models.CharField(max_length=255, verbose_name=_('Attribute FriendlyName'))
     info = models.TextField(blank=True, verbose_name=_('Attribute information'))

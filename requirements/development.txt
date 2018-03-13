@@ -1,0 +1,33 @@
+# Requirements for develepment/testing environment
+-r common.txt
+alabaster>=0.7.10
+attrs>=17.4.0
+Babel>=2.5.3
+behave>=1.2.6
+behave-django>=1.1.0
+certifi>=2018.1.18
+chardet>=3.0.4
+factory-boy>=2.10.0
+Faker>=0.8.12
+imagesize>=1.0.0
+inflection>=0.3.1
+Jinja2>=2.10
+MarkupSafe>=1.0
+packaging>=17.1
+parse>=1.8.2
+parse-type>=0.4.2
+pluggy>=0.6.0
+py>=1.5.2
+Pygments>=2.2.0
+pyparsing>=2.2.0
+pytest>=3.4.2
+pytest-factoryboy>=2.0.1
+python-dateutil>=2.7.0
+requests>=2.18.4
+selenium>=3.11.0
+snowballstemmer>=1.2.1
+Sphinx>=1.7.1
+sphinxcontrib-websupport>=1.0.1
+splinter>=0.7.7
+text-unidecode>=1.2
+urllib3>=1.22

@@ -125,7 +125,7 @@ def admin_list(request, pk):
                 subject, message, error = create_invite_email(request, key, template)
                 if send and not error:
                     try:
-                        send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, [email], fail_silently=False)
+                        send_mail(subject, message, settings.SERVER_EMAIL, [email], fail_silently=False)
                         logger.info("Invite for {sp} sent to {email} by {user}".format(sp=sp, email=email, user=request.user))
                         form = SPAdminForm(superuser=request.user.is_superuser)
                         subject = None

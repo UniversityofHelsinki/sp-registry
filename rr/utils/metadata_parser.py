@@ -18,6 +18,12 @@ logger = logging.getLogger(__name__)
 
 
 def metadata_parser_uiinfo(sp, element):
+    """
+    Parses SP metadata extesions UIinfo
+
+    sp: ServiceProvider object where information is saved
+    element: lxml element which is parsed
+    """
     for child in element:
         if etree.QName(child.tag).localname == "DisplayName":
             if child.values()[0] == "fi":
@@ -43,10 +49,22 @@ def metadata_parser_uiinfo(sp, element):
 
 
 def metadata_parser_requestinitiator(sp, element):
+    """
+    Parses SP metadata extesions request initiator
+
+    sp: ServiceProvider object where information is saved
+    element: lxml element which is parsed
+    """
     sp.login_page_url = element.get("Location", "")
 
 
 def metadata_parser_extensions(sp, element):
+    """
+    Parses SP metadata extesions
+
+    sp: ServiceProvider object where information is saved
+    element: lxml element which is parsed
+    """
     for child in element:
         if etree.QName(child.tag).localname == "UIInfo":
             metadata_parser_uiinfo(sp, child)
@@ -55,6 +73,14 @@ def metadata_parser_extensions(sp, element):
 
 
 def metadata_parser_keydescriptor(sp, element, validate, errors):
+    """
+    Parses SP certificates
+
+    sp: ServiceProvider object where information is linked
+    element: lxml element which is parsed
+    validate: automatically validate added metadata
+    errors: list of errors
+    """
     signing = False
     encryption = False
     key_use = element.get("use")
@@ -79,6 +105,13 @@ def metadata_parser_keydescriptor(sp, element, validate, errors):
 
 
 def metadata_parser_nameidformat(sp, element, errors):
+    """
+    Parses SP nameidformat
+
+    sp: ServiceProvider object where information is saved
+    element: lxml element which is parsed
+    errors: list of errors
+    """
     try:
         nameid = NameIDFormat.objects.get(nameidformat=element.text)
         sp.nameidformat.add(nameid)
@@ -86,7 +119,17 @@ def metadata_parser_nameidformat(sp, element, errors):
         errors.append(sp.entity_id + " : " + _("Unsupported nameid-format") + " : " + str(element.text))
 
 
-def metadata_parser_servicetype(sp, element, errors, validate, servicetype, disable_checks):
+def metadata_parser_servicetype(sp, element, validate, errors, servicetype, disable_checks):
+    """
+    Parses SP endpoint bindings for a certain servicetype
+
+    sp: ServiceProvider object where information is linked
+    element: lxml element which is parsed
+    validate: automatically validate added metadata
+    errors: list of errors
+    servicetype: parsed servicetype
+    disalbe_checks: disable checks for endpoint bindingchoices, creating a new if nesessary
+    """
     binding = element.get("Binding")
     location = element.get("Location")
     index = element.get("Index")
@@ -114,6 +157,14 @@ def metadata_parser_servicetype(sp, element, errors, validate, servicetype, disa
 
 
 def metadata_parser_attributeconsumingservice(sp, element, validate, errors):
+    """
+    Parses SP attribute consuming service
+
+    sp: ServiceProvider object where information is saved or linked
+    element: lxml element which is parsed
+    validate: automatically validate added metadata
+    errors: list of errors
+    """
     for child in element:
         if etree.QName(child.tag).localname == "RequestedAttribute":
             friendlyname = child.get("FriendlyName")
@@ -153,6 +204,15 @@ def metadata_parser_attributeconsumingservice(sp, element, validate, errors):
 
 
 def metadata_parser_ssodescriptor(sp, element, validate, errors, disable_checks):
+    """
+    Parses SP SSODescriptor
+
+    sp: ServiceProvider object where information is saved or linked
+    element: lxml element which is parsed
+    validate: automatically validate added metadata
+    errors: list of errors
+    disalbe_checks: disable checks for endpoint bindingchoices, creating a new if nesessary
+    """
     if element.get("AuthnRequestsSigned") == "true" or element.get("AuthnRequestsSigned") == "1":
         sp.sign_requests = True
     if element.get("WantAssertionsSigned") == "true" or element.get("WantAssertionsSigned") == "1":
@@ -167,12 +227,19 @@ def metadata_parser_ssodescriptor(sp, element, validate, errors, disable_checks)
             metadata_parser_nameidformat(sp, child, errors)
         for servicetype in ["ArtifactResolutionService", "SingleLogoutService", "AssertionConsumerService"]:
             if etree.QName(child.tag).localname == servicetype:
-                metadata_parser_servicetype(sp, child, errors, validate, servicetype, disable_checks)
+                metadata_parser_servicetype(sp, child, validate, errors, servicetype, disable_checks)
         if etree.QName(child.tag).localname == "AttributeConsumingService":
             metadata_parser_attributeconsumingservice(sp, child, validate, errors)
 
 
 def metadata_parser_contact(sp, element, validate):
+    """
+    Parses SP contact information
+
+    sp: ServiceProvider object where information is linked
+    element: lxml element which is parsed
+    validate: automatically validate added metadata
+    """
     contacttype = element.get("contactType")
     if contacttype == "technical" or contacttype == "administrative" or contacttype == "support":
         firstname = ""
@@ -207,6 +274,17 @@ def metadata_parser_contact(sp, element, validate):
 
 
 def metadata_parser(entity, overwrite, verbosity, validate=False, disable_checks=False):
+    """
+    Parses metadata and saves information to SP-object
+
+    entity: lxml entity for one SP
+    overwrite: replace/add data for existing SP
+    verbosity: verbosity level for errors
+    validate: automatically validate added metadata
+    disalbe_checks: disable checks for endpoint bindingchoices, creating a new if nesessary
+
+    return sp and possible errors
+    """
     errors = []
     entityID = entity.get("entityID")
     skip = False

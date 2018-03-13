@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.views import View
 from django.contrib.auth import login
-from rr.auth.shibboleth import ShibbolethBackend
+from auth.shibboleth import ShibbolethBackend
 from django.utils.translation import ugettext as _
 from django.http.response import HttpResponseRedirect
 from django.conf import settings
@@ -22,7 +22,7 @@ class ShibbolethLoginView(View):
         user = ShibbolethBackend.authenticate(self, request)
         if user:
             if user.is_active:
-                login(request, user, backend='rr.auth.shibboleth.ShibbolethBackend')
+                login(request, user, backend='auth.shibboleth.ShibbolethBackend')
                 logger.info("User {user} logged in".format(user=user))
                 if redirect_to == request.path:
                     error_message = _("Redirection loop for authenticated user detected. Check that your LOGIN_REDIRECT_URL doesn't point to a login page.")

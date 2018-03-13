@@ -59,6 +59,7 @@ class ServiceProvider(models.Model):
     validated = models.DateTimeField(null=True, blank=True, verbose_name=_('Validated on'))
 
     def name(self):
+        """Returns name in current language, or in priority order en->fi->sv if current is not available"""
         if get_language() == "fi" and self.name_fi:
             return self.name_fi
         elif get_language() == "sv" and self.name_sv:
@@ -72,6 +73,7 @@ class ServiceProvider(models.Model):
                 return self.name_sv
 
     def description(self):
+        """Returns description in current language, or in priority order en->fi->sv if current is not available"""
         if get_language() == "fi" and self.description_fi:
             return self.description_fi
         elif get_language() == "sv" and self.description_sv:
@@ -113,7 +115,7 @@ class ServiceProvider(models.Model):
         return fields
 
     def get_basic_fields(self):
-        """Returns a list of all field names on the instance."""
+        """Returns a list of basic information field names on the instance."""
         fields = []
         for f in self._meta.fields:
             fname = f.name
@@ -141,7 +143,7 @@ class ServiceProvider(models.Model):
         return fields
 
     def get_technical_fields(self):
-        """Returns a list of all field names on the instance."""
+        """Returns a list of technical information field names on the instance."""
         fields = []
         for f in self._meta.fields:
 
@@ -170,7 +172,7 @@ class ServiceProvider(models.Model):
         return fields
 
     def save_modified(self, *args, **kwargs):
-        """ Save model and send notification if it was unmodified """
+        """ Saves model and send notification if it was unmodified """
         if self.modified:
             self.save()
         else:
@@ -182,7 +184,7 @@ class ServiceProvider(models.Model):
 
 class SPAttribute(models.Model):
     """
-    Stores iformation for SP attributes, related to :model:`rr.ServiceProvider`
+    Stores information for SP attributes, related to :model:`rr.ServiceProvider`
     and :model:`rr.Attribute`
     """
     attribute = models.ForeignKey(Attribute, on_delete=models.CASCADE)

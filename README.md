@@ -5,9 +5,28 @@ SP administrators can add new SPs and update information.
 SP metadata can be updated to test IdPs automatically.
 Includes validation of attributes for production use.
 
+## Project structure
+* auth : Shibboleth authentication backend for Django
+* features : Tests using behave
+* log : log directory
+* requirements : requirements files for development and production
+* rr : main SP Resource Registry program
+  * fixtures : json fixtures for models
+  * forms : forms
+  * management : command line tools
+  * migrations : database migration history
+  * models : database models
+  * static : static files
+  * templates : templates
+  * templatetags : template functions
+  * utils : generic functions, i.e. metadata generation and parsing
+  * views : views
+* settings : settings for development and production
+* testdata : generated data for tests
+
 ## Installation
 ### Requirements
-Currently uses Django 1.11 (LTS version until Apr 2020)
+Currently uses Django 1.11 (LTS version, support until Apr 2020)
 * Python 3.4-3.6
 * MySQL/MariaDB 5.5+
 * Requires dev libraries for Python and MySQL/MariaDB for compiling python mysqlclient.
@@ -19,9 +38,10 @@ Tested on 16.04 LTS
 1. Install apt requirements: "sudo apt install python3.5 python3.5-venv python3.5-dev mariadb-server python-mysqldb libmariadb-client-lgpl-dev libmysqlclient-dev libapache2-mod-wsgi-py3"
 1. Clone source from git
 1. Set up Python virtual environment "pyvenv3.5 /path/to/venv" and activate it "source /path/to/venv/bin/activate"
-1. Install requirements "pip install -r requirements.txt"
+1. Install requirements "pip install -r requirements/[production|development].txt"
 1. Set up database (Mysql)
-1. Copy rr/local_settings_example.py to rr/local_settings.py and modify
+1. Copy settings/local_settings_example.py to settings/local_settings.py and modify
+1. Modify manage.py config file setting
 1. Run migrations: "./manage.py migrate"
 1. Collect statistics: "./manage.py collectstatic"
 1. Set up apache, wsgi and shibd

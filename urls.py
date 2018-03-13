@@ -1,6 +1,3 @@
-"""
-URL config for SP-registry
-"""
 from django.conf.urls import url, include
 from django.contrib import admin
 from django.contrib.auth.views import LogoutView, LoginView

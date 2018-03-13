@@ -113,9 +113,10 @@ Tested on 16.04 LTS
 1. Install requirements "pip install -r requirements/[production|development].txt"
 1. Set up database (Mysql)
 1. Copy settings/local_settings_example.py to settings/local_settings.py and modify
-1. Modify manage.py config file setting
-1. Run migrations: "./manage.py migrate"
-1. Collect statistics: "./manage.py collectstatic"
+1. Modify manage.py to point django config file to production or development
+1. Run db migrations: "./manage.py migrate"
+1. Collect static files "./manage.py collectstatic"
+1. Load fixtures: "./manage.py loaddata rr/fixtures/attribute.json rr/fixtures/nameidformat.json"
 1. Set up apache, wsgi and shibd
 
 ### Shibboleth

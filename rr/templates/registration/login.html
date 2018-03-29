@@ -4,21 +4,27 @@
 {% load bootstrap4 %}
 {% load attribute_filters %}
 {% block content %}
-<h1>{% trans "University of Helsinki - Service Provider Registry" %}</h1>
+<h1 class="text-center">{% trans "Service Provider Registry" %}</h1>
+<h2 class="text-center">{% trans "University of Helsinki" %}</h2>
 {% if user.is_authenticated %}
 <h3>{% trans "You have already logged in" %}</h3>
 <a href="{% url 'logout' %}"><button type="button" class="btn btn-primary">{% trans "Logout" %}</button></a>
 {% else %}
-  <div class="row">
-    <div class="col-md">
-    	<h4>{% trans "Login using SSO" %}</h4>
+  <Br/>
+  <div class="row justify-content-md-center text-center">
+    <div class="col col-md-5">
+    	<h4>{% trans "Login using Single Sign-On" %}</h4>
     	<br>
     	<div class="text-center">
     	<a href="{{ SAML_LOGIN_URL }}{% firstof next '/' %}"><img src="{% static "login-hy-idp.gif" %}" alt="SSO Login"/></a>
     	</div>
     </div>
-    <div class="col-md">
+  </div>
+  <Br/><Br/>
+  <div class="row justify-content-md-center text-center">
+    <div class="col col-md-5">
 		<h4>{% trans "Login using a local account" %}</h4>
+		<p>{% trans "Use this only if you do not have University of Helsinki user account." %}</p>
 		<form method="post" action="{% url 'login' %}">
 		{% csrf_token %}
 		{% bootstrap_form form %}
@@ -26,11 +32,11 @@
 		<input type="hidden" name="next" value="{% firstof next '/' %}" />
 		</form>
 		<br>
-		<p><a href="{% url 'password_reset' %}">{% trans "Lost password? Reset it here. You may use same form to get forgotten username." %}</a></p>
     </div>
   </div>
-  <div class="row">
-    <div class="col-md">
+  <div class="row text-center">
+    <div class="col">
+		<p><a href="{% url 'password_reset' %}">{% trans "Lost password? Reset it here. You may use same form to get forgotten username." %}</a></p>
 		<p><a href="{% privacy_policy_url "PRIVACY_POLICY_URL" %}">{% trans "Data privacy information of the service" %}</a></p>
     </div>
   </div>

@@ -101,7 +101,7 @@ def attribute_admin_list(request):
     """
     if not request.user.is_superuser:
         raise PermissionDenied
-    attributes = Attribute.objects.filter()
+    attributes = Attribute.objects.all().order_by('friendlyname')
     return render(request, "rr/attribute_admin_list.html", {'object_list': attributes})
 
 

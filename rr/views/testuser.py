@@ -1,6 +1,6 @@
 from rr.models.serviceprovider import ServiceProvider
 from rr.models.testuser import TestUser, TestUserData
-from rr.forms.testuser import TestUserForm, TestUserDataForm
+from rr.forms.testuser import TestUserForm, TestUserDataForm, PasswordResetForm
 from rr.models.attribute import Attribute
 from rr.utils.testuser_generator import generate_user_data
 from django.shortcuts import render
@@ -8,6 +8,7 @@ from django.http.response import Http404
 from django.contrib.auth.decorators import login_required
 from django.utils import timezone
 import logging
+import hashlib
 
 logger = logging.getLogger(__name__)
 
@@ -50,7 +51,7 @@ def testuser_list(request, pk):
             form = TestUserForm(request.POST, sp=sp)
             if form.is_valid():
                 username = form.cleaned_data['username']
-                password = form.cleaned_data['password']
+                password = hashlib.sha256(form.cleaned_data['password'].encode('utf-8')).hexdigest()
                 firstname = form.cleaned_data['firstname']
                 lastname = form.cleaned_data['lastname']
                 userdata = form.cleaned_data['userdata']
@@ -105,6 +106,8 @@ def testuser_attribute_data(request, pk):
         raise Http404(_("User provided does not exist"))
     if not request.user.is_superuser and not ServiceProvider.objects.get(pk=testuser.pk, admins=request.user, end_at=None):
         raise Http404(_("User provided does not exist"))
+    form = TestUserDataForm(user=testuser)
+    password_form = PasswordResetForm()
     if request.method == "POST":
         if "save_data" in request.POST:
             form = TestUserDataForm(request.POST, user=testuser)
@@ -126,12 +129,15 @@ def testuser_attribute_data(request, pk):
                                 userdata.save()
         if "reset_userdata" in request.POST:
             generate_user_data(testuser, userdata=True, otherdata=False)
-            form = TestUserDataForm(user=testuser)
         if "reset_otherdata" in request.POST:
             generate_user_data(testuser, userdata=False, otherdata=True)
-            form = TestUserDataForm(user=testuser)
-    else:
-        form = TestUserDataForm(user=testuser)
+        if "reset_password" in request.POST:
+            password_form = PasswordResetForm(request.POST)
+            if password_form.is_valid():
+                password = hashlib.sha256(password_form.cleaned_data['password'].encode('utf-8')).hexdigest()
+                testuser.password = password
+                testuser.save()
     return render(request, "rr/testuser_attribute_data.html", {'form': form,
+                                                               'password_form': password_form,
                                                                'object': testuser.sp,
                                                                'testuser': testuser})

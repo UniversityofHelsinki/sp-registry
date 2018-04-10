@@ -6,6 +6,13 @@
 <div class="alert alert-success" role="alert">
 <p>{% trans "Listing all attributes requested by this service provider." %}</p>
 </div>
+<form action="" method="post" class="form">
+    {% csrf_token %}
+    {% bootstrap_form password_form layout='horizontal' %}
+    {% buttons %}
+    <p><button type="submit" name="reset_password" class="btn btn-primary">{% trans "Reset password" %}</button></p>
+    {% endbuttons %}
+</form>
 <form action="" method='POST'>
 {% csrf_token %}
 <p><input class="btn btn-primary" type="submit" name="reset_userdata" value="{% trans "Reset name based data" %}" /> <input class="btn btn-primary" type="submit" name="reset_otherdata" value="{% trans "Reset other data with random values" %}" /></p>

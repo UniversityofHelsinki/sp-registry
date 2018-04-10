@@ -1,4 +1,4 @@
-from django.forms import ModelForm, Form, CharField, BooleanField
+from django.forms import ModelForm, Form, CharField, BooleanField, PasswordInput
 from rr.models.serviceprovider import SPAttribute
 from rr.models.testuser import TestUser, TestUserData
 from django.core.validators import ValidationError
@@ -14,6 +14,7 @@ class TestUserForm(ModelForm):
     class Meta:
         model = TestUser
         fields = ['username', 'password', 'firstname', 'lastname']
+        widgets = {'password': PasswordInput()}
 
     def __init__(self, *args, **kwargs):
         self.sp = kwargs.pop('sp', None)
@@ -24,6 +25,11 @@ class TestUserForm(ModelForm):
         username = cleaned_data.get("username")
         if TestUser.objects.filter(sp=self.sp, username=username, end_at=None).exists():
             raise ValidationError(_("Username already exists"))
+
+
+class PasswordResetForm(Form):
+
+    password = CharField(widget=PasswordInput)
 
 
 class TestUserDataForm(Form):

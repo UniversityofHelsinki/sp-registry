@@ -10,7 +10,7 @@ class TestUser(models.Model):
     """
     sp = models.ForeignKey(ServiceProvider, on_delete=models.CASCADE)
     username = models.CharField(max_length=255, verbose_name=_('Login name'))
-    password = models.CharField(max_length=255, verbose_name=_('Password'))
+    password = models.CharField(max_length=64, verbose_name=_('Password'))
     firstname = models.CharField(blank=True, null=True, max_length=255, verbose_name=_('First name'))
     lastname = models.CharField(blank=True, null=True, max_length=255, verbose_name=_('Last name'))
     created_at = models.DateTimeField(auto_now_add=True, verbose_name=_('Created at'))

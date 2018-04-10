@@ -11,6 +11,9 @@ from django.utils import timezone
 from dateutil.relativedelta import relativedelta
 from rr.models.contact import Contact
 from rr.models.spadmin import Keystore
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 class Command(BaseCommand):
@@ -23,19 +26,21 @@ class Command(BaseCommand):
         parser.add_argument('-i', action='store_true', dest='remove_invite', help='Remove expired invites')
         parser.add_argument('-l', action='store_true', dest='list_only', help='List only, do not remove')
 
+    def output(self, text):
+        if self.list_only:
+            print("(List only) " + text)
+        else:
+            logger.info(text)
+
     def handle(self, *args, **options):
         days = options['days']
         remove_sp = options['remove_sp']
         remove_contact = options['remove_contact']
         remove_user = options['remove_user']
         remove_invite = options['remove_invite']
-        list_only = options['list_only']
+        self.list_only = options['list_only']
 
         # Set date range to one year if not given
-        if list_only:
-            prefix = "(List only) "
-        else:
-            prefix = ""
         if days is None:
             days = 365
         if days >= 0:
@@ -45,35 +50,35 @@ class Command(BaseCommand):
                     # Check for history versions
                     for sp in ServiceProvider.objects.filter(history=provider.pk):
                         if remove_sp:
-                            print(prefix + "Removing service provider (history): " + sp.entity_id)
-                            if not list_only:
+                            self.output("Removing service provider (history): " + sp.entity_id)
+                            if not self.list_only:
                                 sp.delete()
                         elif remove_contact:
                             for contact in Contact.objects.filter(sp=sp):
-                                print(prefix + sp.entity_id + ": Removing contact (history): " + contact.firstname + " " + contact.lastname)
-                                if not list_only:
+                                self.output(sp.entity_id + ": Removing contact (history): " + contact.firstname + " " + contact.lastname)
+                                if not self.list_only:
                                     contact.delete()
                     if remove_sp:
-                        print(prefix + "Removing service provider: " + provider.entity_id)
-                        if not list_only:
+                        self.output("Removing service provider: " + provider.entity_id)
+                        if not self.list_only:
                             provider.delete()
                     elif remove_contact:
                         for contact in Contact.objects.filter(sp=provider):
-                            print(prefix + provider.entity_id + ": Removing contact: " + contact.firstname + " " + contact.lastname)
-                            if not list_only:
+                            self.output(provider.entity_id + ": Removing contact: " + contact.firstname + " " + contact.lastname)
+                            if not self.list_only:
                                 contact.delete()
             if remove_user:
                 # Remove users without SPs and no recent logins
                 for user in User.objects.filter(last_login__gte=remove_time):
                     if not ServiceProvider.objects.filter(admins=user):
-                        print(prefix + "Removing user: " + user.username)
-                        if not list_only:
+                        self.output("Removing user: " + user.username)
+                        if not self.list_only:
                             user.delete()
             if remove_invite:
                 expired_invites = Keystore.objects.filter(valid_until__lt=timezone.now())
                 for invite in expired_invites:
-                    print(prefix + "Removing invite: " + invite.sp.entity_id + " " + invite.valid_until.strftime('%Y-%m-%d') + " " + invite.email)
-                    if not list_only:
+                    self.output("Removing invite: " + invite.sp.entity_id + " " + invite.valid_until.strftime('%Y-%m-%d') + " " + invite.email)
+                    if not self.list_only:
                         invite.delete()
         else:
             print("Error: -d must be positive")

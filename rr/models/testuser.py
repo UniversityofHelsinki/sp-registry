@@ -29,3 +29,15 @@ class TestUserData(models.Model):
     attribute = models.ForeignKey(Attribute, on_delete=models.CASCADE)
     user = models.ForeignKey(TestUser, on_delete=models.CASCADE)
     value = models.CharField(blank=True, null=True, max_length=511, verbose_name=_('Attribute value'))
+    username = models.CharField(max_length=255, verbose_name=_('Login name'))
+    friendlyname = models.CharField(max_length=255, verbose_name=_('Attribute FriendlyName'))
+    entity_id = models.CharField(max_length=255, verbose_name=_('Entity Id'))
+
+    def save(self, *args, **kwargs):
+        self.username = self.user.username
+        self.friendlyname = self.attribute.friendlyname
+        self.entity_id = self.user.sp.entity_id
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return '%s %s %s' % (self.entity_id, self.username, self.friendlyname)

@@ -16,7 +16,7 @@ def admin_notification_modified_sp(modified_sp):
     """
     Sends list of modified SPs to ADMIN_NOTIFICATION_EMAIL
     """
-    if modified_sp:
+    if modified_sp and settings.ADMINS:
         subject = render_to_string('email/admin_notification_modified_sp_subject.txt')
         message = render_to_string('email/admin_notification_modified_sp.txt',
                                    {'modified_sp': modified_sp})

@@ -4,11 +4,10 @@ Command line script for exporting metadata
 Usage help: ./manage.py cleandb -h
 """
 
-from lxml import etree, objectify
+from lxml import etree
 from django.core.management.base import BaseCommand
 from rr.models.serviceprovider import ServiceProvider, SPAttribute
-from rr.utils.metadata_generator import metadata_spssodescriptor, metadata_contact,\
-    metadata_organization, get_service_providers, metadata_generator_list
+from rr.utils.metadata_generator import metadata_generator_list
 
 
 def attributefilter_generate(element, sp, validated=True):

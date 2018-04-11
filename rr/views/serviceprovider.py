@@ -8,6 +8,7 @@ from django.utils import timezone
 from rr.models.certificate import Certificate
 from rr.models.contact import Contact
 from rr.models.endpoint import Endpoint
+from rr.models.testuser import update_entity_ids
 from django.db.models import Q
 from django.http.response import HttpResponseRedirect
 from django.urls.base import reverse, reverse_lazy
@@ -289,6 +290,9 @@ class TechnicalInformationUpdate(UpdateView):
             redirect_url = super().form_valid(form)
             self.object.updated_by = self.request.user
             self.object.validated = None
+            # Update entity_ids for testusers if it has changed
+            if 'entity_id' in form.changed_data:
+                update_entity_ids(self.object)
             self.object.save_modified()
             logger.info("SP %s updated by %s", self.object, self.request.user)
             return redirect_url

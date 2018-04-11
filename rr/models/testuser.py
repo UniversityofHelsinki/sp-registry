@@ -2,6 +2,7 @@ from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from rr.models.serviceprovider import ServiceProvider
 from rr.models.attribute import Attribute
+from django.contrib.admin.models import CHANGE
 
 
 class TestUser(models.Model):
@@ -41,3 +42,14 @@ class TestUserData(models.Model):
 
     def __str__(self):
         return '%s %s %s' % (self.entity_id, self.username, self.friendlyname)
+
+
+def update_entity_ids(sp):
+    """
+    Update entity_id values for TestUserData in case of entity_id change
+    """
+    user_data = TestUserData.objects.filter(user__sp=sp)
+    for data in user_data:
+        if data.entity_id != data.user.sp.entity_id:
+            data.entity_id = data.user.sp.entity_id
+            data.save()

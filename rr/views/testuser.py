@@ -129,8 +129,10 @@ def testuser_attribute_data(request, pk):
                                 userdata.save()
         if "reset_userdata" in request.POST:
             generate_user_data(testuser, userdata=True, otherdata=False)
+            form = TestUserDataForm(user=testuser)
         if "reset_otherdata" in request.POST:
             generate_user_data(testuser, userdata=False, otherdata=True)
+            form = TestUserDataForm(user=testuser)
         if "reset_password" in request.POST:
             password_form = PasswordResetForm(request.POST)
             if password_form.is_valid():

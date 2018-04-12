@@ -41,7 +41,7 @@ class ServiceProvider(models.Model):
     test = models.BooleanField(default=False, verbose_name=_('Publish to test servers'))
 
     saml_product = models.CharField(max_length=255, blank=True, verbose_name=_('SAML product this service is using'))
-    autoupdate_idp_metadata = models.BooleanField(default=False, verbose_name=_('Does SP automatically update IdP metadata?'))
+    autoupdate_idp_metadata = models.BooleanField(default=False, verbose_name=_('SP updates IdP metadata automatically'))
     application_portfolio = models.URLField(max_length=255, blank=True, verbose_name=_('Application portfolio URL'))
     notes = models.TextField(blank=True, verbose_name=_('Additional notes'))
     admin_notes = models.TextField(blank=True, verbose_name=_('Admin notes'))

@@ -67,7 +67,7 @@ class TechnicalInformationForm(ModelForm):
             'production': _('Publish this SP to the production IdP. Only validated data is used.'),
             'test': _('Publish this SP to the test IdP using unvalidated data.'),
             'saml_product': _('For administrative use e.g. for testing different SPs during IdP updates.'),
-            'autoupdate_idp_metadata': _('Does this SP automatically update IdP metadata?'),
+            'autoupdate_idp_metadata': _('Does this SP automatically update IdP metadata at least once a day?'),
         }
 
     def __init__(self, *args, **kwargs):

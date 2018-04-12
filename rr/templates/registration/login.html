@@ -24,27 +24,30 @@
   <div class="row justify-content-md-center text-center">
     <div class="col col-md-5">
 		<h4>{% trans "Login using a local account" %}</h4>
+		<br>
+		<button class="btn btn-outline-dark" type="button" data-toggle="collapse" data-target="#local_login" aria-expanded="false" aria-controls="local_login" name="local_login">
+    	Show login form
+ 		</button>
+		<div class="collapse" id="local_login">
+		<br>
 		<p>{% trans "Use this only if you do not have University of Helsinki user account." %}</p>
 		<form method="post" action="{% url 'login' %}">
 		{% csrf_token %}
 		{% bootstrap_form form %}
-		<button type="submit" class="btn btn-default">{% trans "Submit" %}</button>
+		<button type="submit" class="btn btn-primary">{% trans "Submit" %}</button>
 		<input type="hidden" name="next" value="{% firstof next '/' %}" />
 		</form>
 		<br>
+		<p><a href="{% url 'password_reset' %}">{% trans "Lost password? Reset it here. You may use same form to get forgotten username." %}</a></p>
+		</div>
+		<br><br>
     </div>
   </div>
   <div class="row text-center">
     <div class="col">
-		<p><a href="{% url 'password_reset' %}">{% trans "Lost password? Reset it here. You may use same form to get forgotten username." %}</a></p>
 		<p><a href="{% privacy_policy_url "PRIVACY_POLICY_URL" %}">{% trans "Data privacy information of the service" %}</a></p>
-    </div>
-  </div>
-  <div class="row">
-    <div class="col-md">
 		<p>{% trans "This site uses cookies to save session information between page changes. By logging in to the site, you are agreeing to our use of cookies." %}</p>
     </div>
   </div>
-
 {% endif %}
 {% endblock %}

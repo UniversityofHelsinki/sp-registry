@@ -33,6 +33,7 @@ def add_admin(context, username, entity_id):
 
 @when(u'I login with "{username}" and "{password}"')
 def login(context, username, password):
+    context.browser.find_by_name('local_login').first.click()
     context.browser.fill("username", username)
     context.browser.fill("password", password)
     context.browser.find_by_text('Submit').first.click()

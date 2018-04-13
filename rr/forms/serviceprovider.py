@@ -5,7 +5,8 @@ from django.core.validators import URLValidator, ValidationError
 from rr.models.nameidformat import NameIDFormat
 from django.db.models import Q
 from django.forms.fields import CharField
-from django.forms.widgets import HiddenInput
+from django.forms.widgets import HiddenInput, Textarea, CheckboxInput
+import re
 
 
 class BasicInformationForm(ModelForm):
@@ -91,6 +92,62 @@ class TechnicalInformationForm(ModelForm):
         if ServiceProvider.objects.filter(entity_id=entity_id, end_at=None, history=None).exclude(pk=self.instance.pk):
             raise ValidationError(_("Entity Id already exists"))
         return entity_id
+
+
+class LdapTechnicalInformationForm(ModelForm):
+    """
+    Form for updating LDAP technical information from ServiceProvider object
+    """
+
+    class Meta:
+        model = ServiceProvider
+        fields = ['server_names', 'target_group', 'service_account', 'service_account_contact', 'local_storage_users',
+                  'local_storage_passwords', 'local_storage_passwords_info', 'local_storage_groups']
+        widgets = {
+          'service_account_contact': Textarea(attrs={'rows': 2}),
+          'local_storage_passwords_info': Textarea(attrs={'rows': 5}),
+          'service_account': CheckboxInput(attrs={'class': 'hideCheck1'}),
+          'local_storage_passwords': CheckboxInput(attrs={'class': 'hideCheck2'}),
+        }
+        help_texts = {
+            'server_names': _('Full server names (not IPs), separated by space. User for access control.'),
+            'target_group': _('What is the target group (users) of this service?'),
+            'service_account': _('Separate service account is used for LDAP queries (recommended way).'),
+            'service_account_contact': _('Email and phone number for delivering service account credentials.'),
+            'local_storage_users': _('Service stores user name and released attributes locally.'),
+            'local_storage_passwords': _('Service stores user passwords locally.'),
+            'local_storage_passwords_info': _('Why is this service storing user passwords locally and how? This is not generally a good idea.'),
+            'local_storage_groups': _('Service stores requested groups and their memberlists locally.'),
+        }
+
+    def __init__(self, *args, **kwargs):
+        self.request = kwargs.pop('request', None)
+        super(LdapTechnicalInformationForm, self).__init__(*args, **kwargs)
+
+    def clean_server_names(self):
+        """
+        Check server names format
+        """
+        server_names = self.cleaned_data['server_names']
+        server_names_list = server_names.split(" ")
+        pattern = re.compile("^(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\-]*[a-zA-Z0-9])\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9\-]*[A-Za-z0-9])$")
+        for server_name in server_names_list:
+            if not pattern.match(server_name):
+                raise ValidationError(_("Invalid list of server names."))
+        return server_names
+
+    def clean(self):
+        cleaned_data = super().clean()
+        service_account = cleaned_data.get("service_account")
+        service_account_contact = cleaned_data.get("service_account_contact")
+        local_storage_passwords = cleaned_data.get("local_storage_passwords")
+        local_storage_passwords_info = cleaned_data.get("local_storage_passwords_info")
+        if service_account:
+            if not service_account_contact:
+                self.add_error('service_account_contact', "Please give contact information.")
+        if local_storage_passwords:
+            if not local_storage_passwords_info:
+                self.add_error('local_storage_passwords_info', "Please give a reason for saving passwords.")
 
 
 class ServiceProviderCreateForm(ModelForm):

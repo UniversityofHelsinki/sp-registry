@@ -7,7 +7,8 @@
 <p>{% trans "This list includes all service providers you currently have administration access." %}</p>
 </div>
 <p><a href="{% url 'serviceprovider-add' %}"><button type="button" class="btn btn-primary btn-lg btn-block">{% trans "Add a new service provider" %}</button></a></p>
-
+{% if object_list %}
+<h2>{% trans "SAML Providers" %}</h2>
 <table class="table table-sm">
   <thead>
     <tr>
@@ -41,6 +42,42 @@
   </form>
   </tbody>
 </table>
+{% endif %}
+{% if ldap_providers %}
+<h2>{% trans "LDAP Providers" %}</h2>
+<table class="table table-sm">
+  <thead>
+    <tr>
+      <th scope="col">{% trans "Server names" %}</th>
+      <th scope="col">{% trans "Name" %}</th>
+      <th scope="col" data-toggle="tooltip" data-placement="top" title="{% trans "Publish to production" %}">{% trans "Prod" %}</th>
+      <th scope="col" data-toggle="tooltip" data-placement="top" title="{% trans "OK / Modified, modified are waiting for validation" %}">{% trans "Status" %}</th>{% if user.is_superuser %}
+      <th scope="col" data-toggle="tooltip" data-placement="top" title="{% trans "Number of admins (invites)" %}">{% trans "A/I" %}</th>{% endif %}
+    </tr>
+  </thead>
+  <tbody>
+  <form action="" method='POST'>
+  {% csrf_token %}
+{% for object in ldap_providers %}
+    <tr>
+      <th scope="row">{% if object.server_names|length > 60 %}<a data-toggle="tooltip" data-placement="top" title="{{ object.server_names }}" href="/summary/{{ object.pk }}/">{{ object.server_names|truncatechars:60 }}{% else %}<a href="/summary/{{ object.pk }}/">{{ object.server_names }}{% endif %}</a></th>
+      {% if object.name|length > 50 %}<td data-toggle="tooltip" data-placement="top" title="{{ object.name }}" href="/summary/{{ object.pk }}/">{{ object.name|truncatechars:50 }}{% else %}<td>{{ object.name }}{% endif %}</td>
+      {% if object.production %}<td class="text-success">&#10004;{% else %}<td class="text-danger">&#10005;{% endif %}</td>
+      {% if object.validated and not object.modified %}<td class="table-success">{% trans "OK "%}</td>{% else %}<td class="table-warning">{% trans "Modified "%}</td>{% endif %}{% if user.is_superuser %}
+      {% if not object.admins.count %}<td class="text-danger">&#10005;{% else %}<td>{{ object.admins.count }}{% endif %}  {% if object.keystore_set.count %}({{ object.keystore_set.count }}){% endif %}</td>{% endif %}
+    </tr>
+{% empty %}
+    <tr>
+      <th scope="row">{% trans "You do not have access to any service providers." %}</th>
+      <td></td>
+      <td></td>
+    </tr>
+{% endfor %}
+  </form>
+  </tbody>
+</table>
+{% endif %}
+
 {% endblock %}
 {% block javascript %}
 <script>

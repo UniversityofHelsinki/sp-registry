@@ -21,7 +21,7 @@ def create_superuser(context, username):
 
 @given(u'sp "{entity_id}" exists')
 def create_sp(context, entity_id):
-    ServiceProvider.objects.create(entity_id=entity_id)
+    ServiceProvider.objects.create(entity_id=entity_id, service_type="saml")
 
 
 @given(u'user "{username}" is "{entity_id}" admin')

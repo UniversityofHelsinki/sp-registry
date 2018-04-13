@@ -13,9 +13,27 @@ def create_test_environment(context):
     u.first_name = "Teemu"
     u.last_name = "Testeri"
     u.save()
-    sp = ServiceProvider.objects.create(entity_id="https://sp.example.org/sp", name_en="My program name", validated=timezone.now(), modified=False)
+    sp = ServiceProvider.objects.create(entity_id="https://sp.example.org/sp", service_type="saml", name_en="My program name", validated=timezone.now(), modified=False)
     sp.admins.add(u)
-    ServiceProvider.objects.create(entity_id="https://sp.example.com/sp", name_en="SP without admins", validated=timezone.now(), modified=False)
+    ServiceProvider.objects.create(entity_id="https://sp.example.com/sp", service_type="saml", name_en="SP without admins", validated=timezone.now(), modified=False)
+    context.browser.visit(context.base_url)
+    context.browser.find_by_name('local_login').first.click()
+    context.browser.fill("username", username)
+    context.browser.fill("password", password)
+    context.browser.find_by_text('Submit').first.click()
+
+
+@given(u'test environment with LDAP service and logged in user exists')
+def create_ldap_test_environment(context):
+    username = "myself"
+    password = "mysecretpassword"
+    u = User.objects.create_user(username=username, password=password)
+    u.first_name = "Teemu"
+    u.last_name = "Testeri"
+    u.save()
+    sp = ServiceProvider.objects.create(entity_id="ldap-1", service_type="ldap", server_names="ldap.example.org", name_en="My program name", validated=timezone.now(), modified=False)
+    sp.admins.add(u)
+    ServiceProvider.objects.create(entity_id="ldap-2", service_type="ldap", server_names="ldap.example.com ldap2.example.com", name_en="SP without admins", validated=timezone.now(), modified=False)
     context.browser.visit(context.base_url)
     context.browser.find_by_name('local_login').first.click()
     context.browser.fill("username", username)
@@ -31,9 +49,9 @@ def create_test_environment_with_superuser(context):
     u.first_name = "Teemu"
     u.last_name = "Testeri"
     u.save()
-    sp = ServiceProvider.objects.create(entity_id="https://sp.example.org/sp", name_en="My program name", validated=timezone.now(), modified=False)
+    sp = ServiceProvider.objects.create(entity_id="https://sp.example.org/sp", service_type="saml", name_en="My program name", validated=timezone.now(), modified=False)
     sp.admins.add(u)
-    ServiceProvider.objects.create(entity_id="https://sp.example.com/sp", name_en="SP without admins", validated=timezone.now(), modified=False)
+    ServiceProvider.objects.create(entity_id="https://sp.example.com/sp", service_type="saml", name_en="SP without admins", validated=timezone.now(), modified=False)
     context.browser.visit(context.base_url)
     context.browser.find_by_name('local_login').first.click()
     context.browser.fill("username", username)

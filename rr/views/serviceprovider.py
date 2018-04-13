@@ -3,7 +3,8 @@ from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views.generic.detail import DetailView
 from django.views.generic.list import ListView
 from rr.forms.serviceprovider import BasicInformationForm, TechnicalInformationForm, ServiceProviderCreateForm,\
-    ServiceProviderCloseForm, ServiceProviderValidationForm
+    ServiceProviderCloseForm, ServiceProviderValidationForm,\
+    LdapTechnicalInformationForm
 from django.utils import timezone
 from rr.models.certificate import Certificate
 from rr.models.contact import Contact
@@ -40,9 +41,17 @@ class ServiceProviderList(ListView):
 
     def get_queryset(self):
         if self.request.user.is_superuser:
-            return ServiceProvider.objects.filter(end_at=None).order_by('entity_id')
+            return ServiceProvider.objects.filter(end_at=None, service_type="saml").order_by('entity_id')
         else:
-            return ServiceProvider.objects.filter(admins=self.request.user, end_at=None).order_by('entity_id')
+            return ServiceProvider.objects.filter(admins=self.request.user, end_at=None, service_type="saml").order_by('entity_id')
+
+    def get_context_data(self, **kwargs):
+        context = super(ServiceProviderList, self).get_context_data(**kwargs)
+        if self.request.user.is_superuser:
+            context['ldap_providers'] = ServiceProvider.objects.filter(end_at=None, service_type="ldap").order_by('server_names')
+        else:
+            context['ldap_providers'] = ServiceProvider.objects.filter(admins=self.request.user, end_at=None, service_type="ldap").order_by('server_names')
+        return context
 
 
 class BasicInformationView(DetailView):
@@ -256,7 +265,7 @@ class TechnicalInformationUpdate(UpdateView):
 
     **Template:**
 
-    :template:`rr/serviceprovider_form.html`
+    :template:`rr/serviceprovider_technical_form.html`
     """
     model = ServiceProvider
     form_class = TechnicalInformationForm
@@ -265,9 +274,9 @@ class TechnicalInformationUpdate(UpdateView):
 
     def get_queryset(self):
         if self.request.user.is_superuser:
-            return ServiceProvider.objects.filter(end_at=None).order_by('entity_id')
+            return ServiceProvider.objects.filter(end_at=None, service_type="saml").order_by('entity_id')
         else:
-            return ServiceProvider.objects.filter(admins=self.request.user, end_at=None).order_by('entity_id')
+            return ServiceProvider.objects.filter(admins=self.request.user, service_type="saml", end_at=None).order_by('entity_id')
 
     def get_form_kwargs(self):
         kwargs = super(TechnicalInformationUpdate, self).get_form_kwargs()
@@ -293,6 +302,58 @@ class TechnicalInformationUpdate(UpdateView):
             # Update entity_ids for testusers if it has changed
             if 'entity_id' in form.changed_data:
                 update_entity_ids(self.object)
+            self.object.save_modified()
+            logger.info("SP %s updated by %s", self.object, self.request.user)
+            return redirect_url
+        else:
+            return super().form_invalid(form)
+
+
+class LdapTechnicalInformationUpdate(UpdateView):
+    """
+    Displays a form for updating a :model:`rr.ServiceProvider`.
+
+    **Context**
+
+    ``form``
+        Form for :model:`rr.ServiceProvider`.
+
+    **Template:**
+
+    :template:`rr/serviceprovider_ldap_technical_form.html`
+    """
+    model = ServiceProvider
+    form_class = LdapTechnicalInformationForm
+    success_url = '#'
+    template_name_suffix = '_ldap_technical_form'
+
+    def get_queryset(self):
+        if self.request.user.is_superuser:
+            return ServiceProvider.objects.filter(end_at=None, service_type="ldap").order_by('entity_id')
+        else:
+            return ServiceProvider.objects.filter(admins=self.request.user, service_type="ldap", end_at=None).order_by('entity_id')
+
+    def get_form_kwargs(self):
+        kwargs = super(LdapTechnicalInformationUpdate, self).get_form_kwargs()
+        kwargs.update({'request': self.request})
+        return kwargs
+
+    def form_valid(self, form):
+        if form.has_changed():
+            sp = ServiceProvider.objects.get(pk=form.instance.pk)
+            # create a history copy if modifying validated SP
+            if sp.validated:
+                admins = sp.admins.all()
+                nameidformat = sp.nameidformat.all()
+                sp.history = sp.pk
+                sp.pk = None
+                sp.end_at = timezone.now()
+                sp.save()
+                sp.admins.set(admins)
+                sp.nameidformat.set(nameidformat)
+            redirect_url = super().form_valid(form)
+            self.object.updated_by = self.request.user
+            self.object.validated = None
             self.object.save_modified()
             logger.info("SP %s updated by %s", self.object, self.request.user)
             return redirect_url

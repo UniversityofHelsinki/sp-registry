@@ -77,7 +77,7 @@
   </tbody>
 </table>
 <br>
-
+{% if object.service_type == "saml" %}
 <h2>{% trans "Technical attributes" %}</h2>
 <table class="table table-sm">
   <thead>
@@ -105,7 +105,35 @@
   </tbody>
 </table>
 <br>
-
+{% elif object.service_type == "ldap" %}
+<h2>{% trans "Technical attributes" %}</h2>
+<table class="table table-sm">
+  <thead>
+    <tr>
+      <th scope="col">{% trans "Attribute" %}</th>
+      <th scope="col">{% trans "Value" %}</th>{% if history_object %}
+      <th scope="col">{% trans "Validated value" %}</th>{% endif %}
+    </tr>
+  </thead>
+  <tbody>
+{% for f in object.get_ldap_technical_fields %}
+{% if history_object %}
+    {% if f.value != history_object|get_item:f.name %}<tr class="table-warning">{% else %}<tr>{% endif %}
+      <td scope="row">{{ f.label }}</td>
+      {% if f.value == True %}<td class="text-success">&#10004;{% elif f.value == False %}<td class="text-danger">x{% else %}<td>{{ f.value }}{% endif %}</td>
+      {% if history_object|get_item:f.name == True %}<td class="text-success">&#10004;{% elif history_object|get_item:f.name == False %}<td class="text-danger">&#10005;{% else %}<td>{{ history_object|get_item:f.name }}{% endif %}</td>
+    </tr>
+{% else %}
+    <tr>
+      <td scope="row">{{ f.label }}</td>
+      {% if f.value == True %}<td class="text-success">&#10004;{% elif f.value == False %}<td class="text-danger">x{% else %}<td>{{ f.value }}{% endif %}</td>
+    </tr>
+{% endif %}
+{% endfor %}
+  </tbody>
+</table>
+<br>
+{% endif %}
 <h2>{% trans "Registry administrators" %}</h2>
 <table class="table table-sm">
   <thead>
@@ -143,7 +171,7 @@
   </tbody>
 </table>
 <br>
-
+{% if object.service_type == "saml" %}
 <h2>{% trans "Certificates" %}</h2>
 <table class="table table-sm">
   <thead>
@@ -164,7 +192,7 @@
   </tbody>
 </table>
 <br>
-
+{% endif %}
 <h2>{% trans "Contacts" %}</h2>
 <table class="table table-sm">
   <thead>
@@ -187,7 +215,7 @@
   </tbody>
 </table>
 <br>
-
+{% if object.service_type == "saml" %}
 <h2>{% trans "SAML endpoints" %}</h2>
 <table class="table table-sm">
   <thead>
@@ -212,5 +240,6 @@
 {% if object.validated and not object.production and not object.test %}
 <h2>{% trans "Removing this service provider" %}</h2>
 <p><a href="{% url 'serviceprovider-delete' object.pk %}">{% trans "Click this link to remove this service provider" %}</a></p>
+{% endif %}
 {% endif %}
 {% endblock %}

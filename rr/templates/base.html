@@ -35,18 +35,26 @@
         <li class="nav-item">
           <a class="nav-link" href="{% url 'basicinformation-update' object.pk %}">{% trans "Basic Information" %}</a>
         </li>
+{% if object.service_type == "saml" %}
         <li class="nav-item">
           <a class="nav-link" href="{% url 'technical-update' object.pk %}">{% trans "Technical Attributes" %}</a>
         </li>
+{% elif object.service_type == "ldap" %}
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'ldap-technical-update' object.pk %}">{% trans "Technical Attributes" %}</a>
+        </li>
+{% endif %}
         <li class="nav-item">
           <a class="nav-link" href="{% url 'attribute-list' object.pk %}">{% trans "Attributes" %}</a>
         </li>
+{% if object.service_type == "saml" %}
         <li class="nav-item">
           <a class="nav-link" href="{% url 'certificate-list' object.pk %}">{% trans "Certificates" %}</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="{% url 'endpoint-list' object.pk %}">{% trans "SAML Endpoints" %}</a>
         </li>
+{% endif %}
         <li class="nav-item">
           <a class="nav-link" href="{% url 'contact-list' object.pk %}">{% trans "Contacts" %}</a>
         </li>
@@ -120,18 +128,26 @@
         <li class="nav-item">
           <a class="nav-link {% if request.path|slice:":18" == "/serviceprovider/" %}active{% endif %}" href="{% url 'basicinformation-update' object.pk %}">{% trans "Basic Information" %}</a>
         </li>
+{% if object.service_type == "saml" %}
         <li class="nav-item">
           <a class="nav-link {% if request.path|slice:":11" == "/technical/" %}active{% endif %}" href="{% url 'technical-update' object.pk %}">{% trans "Technical Attributes" %}</a>
         </li>
+{% elif object.service_type == "ldap" %}
+        <li class="nav-item">
+          <a class="nav-link {% if request.path|slice:":7" == "/ldap/" %}active{% endif %}" href="{% url 'ldap-technical-update' object.pk %}">{% trans "Technical Attributes" %}</a>
+        </li>
+{% endif %}
         <li class="nav-item">
           <a class="nav-link {% if request.path|slice:":11" == "/attribute/" %}active{% endif %}" href="{% url 'attribute-list' object.pk %}">{% trans "Attributes" %}</a>
         </li>
+{% if object.service_type == "saml" %}
         <li class="nav-item">
           <a class="nav-link {% if request.path|slice:":13" == "/certificate/" %}active{% endif %}" href="{% url 'certificate-list' object.pk %}">{% trans "Certificates" %}</a>
         </li>
         <li class="nav-item">
           <a class="nav-link {% if request.path|slice:":10" == "/endpoint/" %}active{% endif %}" href="{% url 'endpoint-list' object.pk %}">{% trans "SAML Endpoints" %}</a>
         </li>
+{% endif %}
         <li class="nav-item">
           <a class="nav-link {% if request.path|slice:":9" == "/contact/" %}active{% endif %}" href="{% url 'contact-list' object.pk %}">{% trans "Contacts" %}</a>
         </li>

@@ -13,7 +13,12 @@ class ServiceProvider(models.Model):
     Stores a service provider, related to :model:`auth.User` and
     :model:`rr.Attribute` through :model:`rr.SPAttribute`
     """
-    entity_id = models.CharField(max_length=255, verbose_name=_('Entity Id'))
+    entity_id = models.CharField(max_length=255, blank=True, verbose_name=_('Entity Id'))
+    SERVICETYPECHOICES = (('saml', _('SAML / Shibboleth')),
+                          ('ldap', _('LDAP')))
+    service_type = models.CharField(max_length=10, choices=SERVICETYPECHOICES, verbose_name=_('Service type (SAML/LDAP)'))
+
+    # Basic information
     organization = models.ForeignKey(Organization, blank=True, null=True, on_delete=models.SET_NULL, verbose_name=_('Organization'))
     name_fi = models.CharField(max_length=70, blank=True, verbose_name=_('Service Name (Finnish)'), validators=[MaxLengthValidator(70)])
     name_en = models.CharField(max_length=70, blank=True, verbose_name=_('Service Name (English)'), validators=[MaxLengthValidator(70)])
@@ -28,6 +33,11 @@ class ServiceProvider(models.Model):
     privacypolicy_en = models.URLField(max_length=255, blank=True, verbose_name=_('Privacy Policy URL (English)'))
     privacypolicy_sv = models.URLField(max_length=255, blank=True, verbose_name=_('Privacy Policy URL (Swedish)'))
     login_page_url = models.URLField(max_length=255, blank=True, verbose_name=_('Service Login Page URL'))
+    application_portfolio = models.URLField(max_length=255, blank=True, verbose_name=_('Application portfolio URL'))
+    notes = models.TextField(blank=True, verbose_name=_('Additional notes'))
+    admin_notes = models.TextField(blank=True, verbose_name=_('Admin notes'))
+
+    # SAML Technical information
     discovery_service_url = models.URLField(max_length=255, blank=True, verbose_name=_('Discovery Service URL'))
 
     nameidformat = models.ManyToManyField(NameIDFormat, blank=True)
@@ -42,14 +52,27 @@ class ServiceProvider(models.Model):
 
     saml_product = models.CharField(max_length=255, blank=True, verbose_name=_('SAML product this service is using'))
     autoupdate_idp_metadata = models.BooleanField(default=False, verbose_name=_('SP updates IdP metadata automatically'))
-    application_portfolio = models.URLField(max_length=255, blank=True, verbose_name=_('Application portfolio URL'))
-    notes = models.TextField(blank=True, verbose_name=_('Additional notes'))
-    admin_notes = models.TextField(blank=True, verbose_name=_('Admin notes'))
+
+    # LDAP Technical information
+    server_names = models.CharField(max_length=511, blank=True, verbose_name=_('Server names (not IPs), separated with space'))
+    TARGETGROUPCHOICES = (('internet', _('Internet')),
+                          ('university', _('University of Helsinki users')),
+                          ('restricted', _('Restricted user group')))
+    target_group = models.CharField(max_length=10, blank=True, choices=TARGETGROUPCHOICES, verbose_name=_('Target group for the service'))
+    service_account = models.BooleanField(default=False, verbose_name=_('Does the service use a service account?'))
+    service_account_contact = models.TextField(blank=True,
+                                               verbose_name=_('Email address and phone number for delivering the service account credentials.'))
+    local_storage_users = models.BooleanField(default=False, verbose_name=_('Service stores a local copy of users and their information.'))
+    # Checking if user stores passwords so we can reject the application
+    local_storage_passwords = models.BooleanField(default=False, verbose_name=_('Service stores a local copy of user passwords.'))
+    local_storage_passwords_info = models.TextField(blank=True, verbose_name=_('How is this service storing the saved passwords and why?'))
+    local_storage_groups = models.BooleanField(default=False, verbose_name=_('Service stores a local copy of groups and group members.'))
 
     # Attributes are linked through SPAttribute model to include reason and validation information
     attributes = models.ManyToManyField(Attribute, through='SPAttribute')
     admins = models.ManyToManyField(User, blank=True, related_name="admins")
 
+    # Meta
     modified = models.BooleanField(default=True, verbose_name=_('Modified'))
     history = models.IntegerField(blank=True, null=True, verbose_name=_('History key'))
     created_at = models.DateTimeField(auto_now_add=True, verbose_name=_('Created at'))
@@ -129,10 +152,10 @@ class ServiceProvider(models.Model):
                 except AttributeError:
                     value = None
             # only display fields with values and skip some fields entirely
-            if f.editable and f.name not in ('id', 'end_at', 'history', 'validated', 'modified', 'updated_by', 'entity_id',
-                                             'discovery_service_url', 'name_format_transient', 'name_format_persistent',
-                                             'sign_assertions', 'sign_requests', 'sign_responses', 'encrypt_assertions',
-                                             'production', 'test', 'saml_product', 'autoupdate_idp_metadata'):
+            if f.editable and f.name in ('name_fi', 'name_en',
+                                         'name_sv', 'description_fi', 'description_en', 'description_sv',
+                                         'privacypolicy_fi', 'privacypolicy_en', 'privacypolicy_sv',
+                                         'login_page_url', 'application_portfolio', 'notes', 'admin_notes', 'organization'):
                 fields.append(
                   {
                    'label': f.verbose_name,
@@ -158,10 +181,36 @@ class ServiceProvider(models.Model):
                 except AttributeError:
                     value = None
             # Skip fields in list
-            if f.editable and f.name not in ('id', 'end_at', 'history', 'validated', 'modified', 'updated_by', 'name_fi', 'name_en',
-                                             'name_sv', 'description_fi', 'description_en', 'description_sv',
-                                             'privacypolicy_fi', 'privacypolicy_en', 'privacypolicy_sv',
-                                             'login_page_url', 'application_portfolio', 'notes', 'admin_notes', 'organization'):
+            if f.editable and f.name in ('entity_id', 'discovery_service_url', 'name_format_transient', 'name_format_persistent',
+                                         'sign_assertions', 'sign_requests', 'sign_responses', 'encrypt_assertions',
+                                         'production', 'test', 'saml_product', 'autoupdate_idp_metadata'):
+                fields.append(
+                  {
+                   'label': f.verbose_name,
+                   'name': f.name,
+                   'value': value,
+                  }
+                )
+        return fields
+
+    def get_ldap_technical_fields(self):
+        """Returns a list of LDAP technical information field names on the instance."""
+        fields = []
+        for f in self._meta.fields:
+
+            fname = f.name
+            # resolve picklists/choices, with get_xyz_display() function
+            get_choice = 'get_'+fname+'_display'
+            if hasattr(self, get_choice):
+                value = getattr(self, get_choice)()
+            else:
+                try:
+                    value = getattr(self, fname)
+                except AttributeError:
+                    value = None
+            # Skip fields in list
+            if f.editable and f.name in ('server_names', 'target_group', 'service_account', 'service_account_contact', 'local_storage_users',
+                                         'local_storage_passwords', 'local_storage_passwords_info', 'local_storage_groups'):
                 fields.append(
                   {
                    'label': f.verbose_name,

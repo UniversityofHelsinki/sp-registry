@@ -7,7 +7,7 @@ Scenario: Attribute modifications
 	And clicking visible link with text "Attributes"
 	And filling attribute form
 	When clicking visible link with text "Summary"
-	Then the result page will include text "funetEduPersonStudentID"
+	Then the result page will include text "schacPersonalUniqueCode"
 	And the result page will include text "Need this for authentication"
 	And the result page will include text "Basic contact address"
 	When clicking visible link with text "Attributes"

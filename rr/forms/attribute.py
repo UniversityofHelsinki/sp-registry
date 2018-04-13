@@ -12,7 +12,12 @@ class AttributeForm(Form):
     def __init__(self, *args, **kwargs):
         self.sp = kwargs.pop('sp')
         super(AttributeForm, self).__init__(*args, **kwargs)
-        attributes = Attribute.objects.filter(public=True).order_by('friendlyname')
+        if self.sp.service_type == "saml":
+            attributes = Attribute.objects.filter(public_saml=True).order_by('friendlyname')
+        elif self.sp.service_type == "ldap":
+            attributes = Attribute.objects.filter(public_ldap=True).order_by('friendlyname')
+        else:
+            attributes = Attribute.objects.none()
         for field in attributes:
             if field.schemalink:
                 help_text = '<a target="_blank" href="https://wiki.eduuni.fi/display/CSCHAKA/funetEduPersonSchema2dot2#funetEduPersonSchema2dot2-' + field.friendlyname + '">' + field.name + '</a>'

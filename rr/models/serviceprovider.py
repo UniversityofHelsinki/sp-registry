@@ -13,7 +13,7 @@ class ServiceProvider(models.Model):
     Stores a service provider, related to :model:`auth.User` and
     :model:`rr.Attribute` through :model:`rr.SPAttribute`
     """
-    entity_id = models.CharField(max_length=255, blank=True, verbose_name=_('Entity Id'))
+    entity_id = models.CharField(max_length=255, verbose_name=_('Entity Id'))
     SERVICETYPECHOICES = (('saml', _('SAML / Shibboleth')),
                           ('ldap', _('LDAP')))
     service_type = models.CharField(max_length=10, choices=SERVICETYPECHOICES, verbose_name=_('Service type (SAML/LDAP)'))

@@ -2,8 +2,8 @@ from django.conf.urls import url, include
 from django.contrib import admin
 from django.contrib.auth.views import LogoutView, LoginView
 from django.contrib.auth.decorators import login_required
-from rr.views.serviceprovider import BasicInformationCreate, BasicInformationUpdate, BasicInformationView,\
-    ServiceProviderDelete, ServiceProviderList, TechnicalInformationUpdate,\
+from rr.views.serviceprovider import SamlServiceProviderCreate, LdapServiceProviderCreate, BasicInformationUpdate,\
+    BasicInformationView, ServiceProviderDelete, ServiceProviderList, TechnicalInformationUpdate,\
     SingEncryptList, LdapTechnicalInformationUpdate
 from rr.views.attribute import attribute_list, attribute_admin_list, attribute_view
 from rr.views.certificate import certificate_list, certificate_admin_list
@@ -42,7 +42,8 @@ urlpatterns = [
     url(r'^metadata/(?P<pk>[0-9]+)/$', metadata, name='metadata-view'),
     url(r'^technical/(?P<pk>[0-9]+)/$', login_required(TechnicalInformationUpdate.as_view()), name='technical-update'),
     url(r'^ldap/(?P<pk>[0-9]+)/$', login_required(LdapTechnicalInformationUpdate.as_view()), name='ldap-technical-update'),
-    url(r'^serviceprovider/add/$', login_required(BasicInformationCreate.as_view()), name='serviceprovider-add'),
+    url(r'^serviceprovider/add/saml/$', login_required(SamlServiceProviderCreate.as_view()), name='saml-serviceprovider-add'),
+    url(r'^serviceprovider/add/ldap/$', login_required(LdapServiceProviderCreate.as_view()), name='ldap-serviceprovider-add'),
     url(r'^serviceprovider/remove/(?P<pk>[0-9]+)/$', login_required(ServiceProviderDelete.as_view()), name='serviceprovider-delete'),
     url(r'^serviceprovider/(?P<pk>[0-9]+)/$', login_required(BasicInformationUpdate.as_view()), name='basicinformation-update'),
     url(r'^sign_encrypt_list/$', login_required(SingEncryptList.as_view()), name='sign-encrypt-list'),

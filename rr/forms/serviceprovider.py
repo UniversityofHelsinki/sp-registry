@@ -21,11 +21,11 @@ class BasicInformationForm(ModelForm):
                   'login_page_url', 'application_portfolio', 'notes', 'admin_notes']
         help_texts = {
             'organization': _('Organization name, only changeable by registry admins.'),
-            'name_fi': _('Short (max 70 characters) and descriptive name for the service in Finnish. <div class="text-danger">Required for both production and test use.</div>'),
-            'name_en': _('Short (max 70 characters) and descriptive name for the service in English. <div class="text-danger">Required for both production and test use.</div>'),
+            'name_fi': _('Short (max 70 characters) and descriptive name for the service in Finnish. <div class="text-danger">Required.</div>'),
+            'name_en': _('Short (max 70 characters) and descriptive name for the service in English. <div class="text-danger">Required for production use.</div>'),
             'name_sv': _('Short (max 70 characters) and descriptive name for the service in Swedish.'),
-            'description_fi': _('Short (max 140 characters) description of the service in Finnish. <div class="text-danger">Required for both production and test use.</div>'),
-            'description_en': _('Short (max 140 characters) description of the service in English. <div class="text-danger">Required for both production and test use.</div>'),
+            'description_fi': _('Short (max 140 characters) description of the service in Finnish. <div class="text-danger">Required for production use.</div>'),
+            'description_en': _('Short (max 140 characters) description of the service in English. <div class="text-danger">Required for production use.</div>'),
             'description_sv': _('Short (max 140 characters) description of the service in Swedish.'),
             'privacypolicy_fi': _('Link to privacy policy in Finnish. Link must be publicly accessible. <div class="text-danger">Required for production use if the service requests any personal information.</div>'),
             'privacypolicy_en': _('Link to privacy policy in English. Link must be publicly accessible. <div class="text-danger">Required for production use if the service requests any personal information.</div>'),
@@ -58,7 +58,7 @@ class TechnicalInformationForm(ModelForm):
                   'sign_assertions', 'sign_requests', 'sign_responses', 'encrypt_assertions', 'production', 'test',
                   'saml_product', 'autoupdate_idp_metadata']
         help_texts = {
-            'entity_id': _('Should be URI including scheme, hostname of your application and path e.g. https://test.helsinki.fi/sp. <div class="text-danger">Required for both production and test use.</div>'),
+            'entity_id': _('Should be URI including scheme, hostname of your application and path e.g. https://test.helsinki.fi/sp. <div class="text-danger">Required.</div>'),
             'discovery_service_url': _('For service providers supporting discovery service. Usually only valid if you are accepting logins for multiple IdPs.'),
             'nameidformat': _('Support for name identifier formats. Check <a href="https://wiki.shibboleth.net/confluence/display/CONCEPT/NameIdentifiers" target="_blank">Shibboleth wiki</a> for more information.'),
             'sign_assertions': _('IdP sings attribute assertions sent to SP. Defaults to False because assertions are encrypted by default.'),
@@ -151,7 +151,7 @@ class LdapTechnicalInformationForm(ModelForm):
                 self.add_error('local_storage_passwords_info', "Please give a reason for saving passwords.")
 
 
-class ServiceProviderCreateForm(ModelForm):
+class SamlServiceProviderCreateForm(ModelForm):
     """
     Form for creating a service provider. Same as basic information form and entity_id.
     """
@@ -163,11 +163,11 @@ class ServiceProviderCreateForm(ModelForm):
                   'login_page_url', 'application_portfolio', 'notes']
         help_texts = {
             'entity_id': _('Should be URI including scheme, hostname of your application and path e.g. https://test.helsinki.fi/sp. <div class="text-danger">Required for both production and test use.</div>'),
-            'name_fi': _('Short (max 70 characters) and descriptive name for the service in Finnish. <div class="text-danger">Required for both production and test use.</div>'),
-            'name_en': _('Short (max 70 characters) and descriptive name for the service in English. <div class="text-danger">Required for both production and test use.</div>'),
+            'name_fi': _('Short (max 70 characters) and descriptive name for the service in Finnish. <div class="text-danger">Required.</div>'),
+            'name_en': _('Short (max 70 characters) and descriptive name for the service in English. <div class="text-danger">Required for production use.</div>'),
             'name_sv': _('Short (max 70 characters) and descriptive name for the service in Swedish.'),
-            'description_fi': _('Short (max 140 characters) description of the service in Finnish. <div class="text-danger">Required for both production and test use.</div>'),
-            'description_en': _('Short (max 140 characters) description of the service in English. <div class="text-danger">Required for both production and test use.</div>'),
+            'description_fi': _('Short (max 140 characters) description of the service in Finnish. <div class="text-danger">Required for production use.</div>'),
+            'description_en': _('Short (max 140 characters) description of the service in English. <div class="text-danger">Required for production use.</div>'),
             'description_sv': _('Short (max 140 characters) description of the service in Swedish.'),
             'privacypolicy_fi': _('Link to privacy policy in Finnish. Link must be publicly accessible. <div class="text-danger">Required for production use if the service requests any personal information.</div>'),
             'privacypolicy_en': _('Link to privacy policy in English. Link must be publicly accessible. <div class="text-danger">Required for production use if the service requests any personal information.</div>'),
@@ -179,7 +179,7 @@ class ServiceProviderCreateForm(ModelForm):
 
     def __init__(self, *args, **kwargs):
         self.request = kwargs.pop('request', None)
-        super(ServiceProviderCreateForm, self).__init__(*args, **kwargs)
+        super(SamlServiceProviderCreateForm, self).__init__(*args, **kwargs)
 
     def clean_entity_id(self):
         """
@@ -195,6 +195,49 @@ class ServiceProviderCreateForm(ModelForm):
         if ServiceProvider.objects.filter(entity_id=entity_id, end_at=None, history=None).exclude(pk=self.instance.pk):
             raise ValidationError(_("Entity Id already exists"))
         return entity_id
+
+
+class LdapServiceProviderCreateForm(ModelForm):
+    """
+    Form for creating a service provider. Same as basic information form and entity_id.
+    """
+
+    class Meta:
+        model = ServiceProvider
+        fields = ['server_names', 'name_fi', 'name_en', 'name_sv', 'description_fi', 'description_en', 'description_sv',
+                  'privacypolicy_fi', 'privacypolicy_en', 'privacypolicy_sv',
+                  'login_page_url', 'application_portfolio', 'notes']
+        help_texts = {
+            'server_names': _('Full server names (not IPs), separated by space. User for access control. <div class="text-danger">Required.</div>'),
+            'name_fi': _('Short (max 70 characters) and descriptive name for the service in Finnish. <div class="text-danger">Required. </div>'),
+            'name_en': _('Short (max 70 characters) and descriptive name for the service in English.'),
+            'name_sv': _('Short (max 70 characters) and descriptive name for the service in Swedish.'),
+            'description_fi': _('Short (max 140 characters) description of the service in Finnish. <div class="text-danger">Required.</div>'),
+            'description_en': _('Short (max 140 characters) description of the service in English.'),
+            'description_sv': _('Short (max 140 characters) description of the service in Swedish.'),
+            'privacypolicy_fi': _('Link to privacy policy in Finnish. Link must be publicly accessible. <div class="text-danger">Required if the service requests any personal information.</div>'),
+            'privacypolicy_en': _('Link to privacy policy in English. Link must be publicly accessible.'),
+            'privacypolicy_sv': _('Link to privacy policy in Swedish. Link must be publicly accessible.'),
+            'login_page_url': _('Used for debugging and testing services.'),
+            'application_portfolio': _('Link to external application portfolio.'),
+            'notes': _('Additional notes about this service.'),
+        }
+
+    def __init__(self, *args, **kwargs):
+        self.request = kwargs.pop('request', None)
+        super(LdapServiceProviderCreateForm, self).__init__(*args, **kwargs)
+
+    def clean_server_names(self):
+        """
+        Check server names format
+        """
+        server_names = self.cleaned_data['server_names']
+        server_names_list = server_names.split(" ")
+        pattern = re.compile("^(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\-]*[a-zA-Z0-9])\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9\-]*[A-Za-z0-9])$")
+        for server_name in server_names_list:
+            if not pattern.match(server_name):
+                raise ValidationError(_("Invalid list of server names."))
+        return server_names
 
 
 class ServiceProviderCloseForm(Form):

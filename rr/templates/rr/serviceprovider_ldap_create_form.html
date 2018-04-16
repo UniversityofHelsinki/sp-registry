@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load static %}
+{% load bootstrap4 %}
+{% block content %}
+<h1>{% trans "Adding a new service provider" %}</h1>
+<div class="alert alert-success" role="alert">
+<p>{% trans "This form is used to add new LDAP connection request." %}</p>
+<p><strong>{% trans "Required attributes for the production use. Some of the attributes are defined later in different forms." %}</strong></p>
+<ul>
+  <li>{% trans "Service name in English or in Finnish" %}</li>
+  <li>{% trans "Service description in English or in Finnish" %}</li>
+  <li>{% trans "Privacy policy URL in English or in Finnish" %}</li>
+  <li>{% trans "Server Names" %}</li>
+  <li>{% trans "Technical and support contacts" %}</li>
+</ul>
+<p><a href="{% url 'metadata-import' %}">{% trans "Add by importing service provider metadata" %}</a>
+</div>
+
+<form action="" method="post" class="form">
+    {% csrf_token %}
+    {% bootstrap_form form layout='horizontal' %}
+    {% buttons %}
+    <p><button type="submit" class="btn btn-primary">{% trans "Save" %}</button></p>
+    {% endbuttons %}
+</form>
+{% endblock %}
+{% block javascript %}
+<script src="{% static "js/jquery.are-you-sure.js" %}"></script>
+<script>
+$(function() {
+    $('form').areYouSure( {'message':'{% trans "You have modified the form without saving it." %}'} );
+})
+</script>
+{% endblock %}

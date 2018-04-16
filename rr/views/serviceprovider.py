@@ -2,8 +2,8 @@ from rr.models.serviceprovider import ServiceProvider, SPAttribute
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views.generic.detail import DetailView
 from django.views.generic.list import ListView
-from rr.forms.serviceprovider import BasicInformationForm, TechnicalInformationForm, ServiceProviderCreateForm,\
-    ServiceProviderCloseForm, ServiceProviderValidationForm,\
+from rr.forms.serviceprovider import BasicInformationForm, TechnicalInformationForm, SamlServiceProviderCreateForm,\
+    LdapServiceProviderCreateForm, ServiceProviderValidationForm,\
     LdapTechnicalInformationForm
 from django.utils import timezone
 from rr.models.certificate import Certificate
@@ -111,36 +111,37 @@ class BasicInformationView(DetailView):
 
     def get_missing_data(self, sp):
         missing = []
-        if sp.test or sp.production:
-            if not sp.name_en and not sp.name_fi:
-                url = reverse("basicinformation-update", args=[sp.pk])
-                msg = _("Service name in English or in Finnish")
-                missing.append("<a href='" + url + "'>" + msg + "</a>")
-            if not sp.description_en and not sp.description_fi:
-                url = reverse("basicinformation-update", args=[sp.pk])
-                msg = _("Service description in English or in Finnish")
-                missing.append("<a href='" + url + "'>" + msg + "</a>")
-            if sp.production:
-                if not sp.privacypolicy_en and not sp.privacypolicy_fi and sp.attributes:
+        if sp.service_type == "saml":
+            if sp.test or sp.production:
+                if not sp.name_en and not sp.name_fi:
                     url = reverse("basicinformation-update", args=[sp.pk])
-                    msg = _("Privacy policy URL in English or in Finnish")
+                    msg = _("Service name in English or in Finnish")
                     missing.append("<a href='" + url + "'>" + msg + "</a>")
-            if not Certificate.objects.filter(sp=sp, end_at=None):
-                url = reverse("certificate-list", args=[sp.pk])
-                msg = _("Certificate")
-                missing.append("<a href='" + url + "'>" + msg + "</a>")
-            if not Endpoint.objects.filter(sp=sp, end_at=None, type='AssertionConsumerService'):
-                url = reverse("endpoint-list", args=[sp.pk])
-                msg = _("AssertionConsumerService endpoint")
-                missing.append("<a href='" + url + "'>" + msg + "</a>")
-            if not Contact.objects.filter(sp=sp, end_at=None, type="technical"):
-                url = reverse("contact-list", args=[sp.pk])
-                msg = _("Technical contact")
-                missing.append("<a href='" + url + "'>" + msg + "</a>")
-            if not Contact.objects.filter(sp=sp, end_at=None, type="support"):
-                url = reverse("contact-list", args=[sp.pk])
-                msg = _("Support contact")
-                missing.append("<a href='" + url + "'>" + msg + "</a>")
+                if not sp.description_en and not sp.description_fi:
+                    url = reverse("basicinformation-update", args=[sp.pk])
+                    msg = _("Service description in English or in Finnish")
+                    missing.append("<a href='" + url + "'>" + msg + "</a>")
+                if sp.production:
+                    if not sp.privacypolicy_en and not sp.privacypolicy_fi and sp.attributes:
+                        url = reverse("basicinformation-update", args=[sp.pk])
+                        msg = _("Privacy policy URL in English or in Finnish")
+                        missing.append("<a href='" + url + "'>" + msg + "</a>")
+                if not Certificate.objects.filter(sp=sp, end_at=None):
+                    url = reverse("certificate-list", args=[sp.pk])
+                    msg = _("Certificate")
+                    missing.append("<a href='" + url + "'>" + msg + "</a>")
+                if not Endpoint.objects.filter(sp=sp, end_at=None, type='AssertionConsumerService'):
+                    url = reverse("endpoint-list", args=[sp.pk])
+                    msg = _("AssertionConsumerService endpoint")
+                    missing.append("<a href='" + url + "'>" + msg + "</a>")
+                if not Contact.objects.filter(sp=sp, end_at=None, type="technical"):
+                    url = reverse("contact-list", args=[sp.pk])
+                    msg = _("Technical contact")
+                    missing.append("<a href='" + url + "'>" + msg + "</a>")
+                if not Contact.objects.filter(sp=sp, end_at=None, type="support"):
+                    url = reverse("contact-list", args=[sp.pk])
+                    msg = _("Support contact")
+                    missing.append("<a href='" + url + "'>" + msg + "</a>")
         return missing
 
     def get_context_data(self, **kwargs):
@@ -178,7 +179,7 @@ class BasicInformationView(DetailView):
         return context
 
 
-class BasicInformationCreate(CreateView):
+class SamlServiceProviderCreate(CreateView):
     """
     Displays a form for creating a :model:`rr.ServiceProvider`.
 
@@ -192,17 +193,57 @@ class BasicInformationCreate(CreateView):
     :template:`rr/serviceprovider_form.html`
     """
     model = ServiceProvider
-    form_class = ServiceProviderCreateForm
+    form_class = SamlServiceProviderCreateForm
     success_url = '#'
-    template_name_suffix = '_create_form'
+    template_name_suffix = '_saml_create_form'
 
     def get_form_kwargs(self):
-        kwargs = super(BasicInformationCreate, self).get_form_kwargs()
+        kwargs = super(SamlServiceProviderCreate, self).get_form_kwargs()
         kwargs.update({'request': self.request})
         return kwargs
 
     def form_valid(self, form):
         form.instance.updated_by = self.request.user
+        form.instance.service_type = "saml"
+        super().form_valid(form)
+        self.object.admins.add(self.request.user)
+        logger.info("SP %s created by %s", self.object, self.request.user)
+        return HttpResponseRedirect(reverse('summary-view', args=(self.object.pk,)))
+
+
+class LdapServiceProviderCreate(CreateView):
+    """
+    Displays a form for creating a :model:`rr.ServiceProvider`.
+
+    **Context**
+
+    ``form``
+        Form for :model:`rr.ServiceProvider`.
+
+    **Template:**
+
+    :template:`rr/serviceprovider_form.html`
+    """
+    model = ServiceProvider
+    form_class = LdapServiceProviderCreateForm
+    success_url = '#'
+    template_name_suffix = '_ldap_create_form'
+
+    def get_form_kwargs(self):
+        kwargs = super(LdapServiceProviderCreate, self).get_form_kwargs()
+        kwargs.update({'request': self.request})
+        return kwargs
+
+    def form_valid(self, form):
+        form.instance.updated_by = self.request.user
+        form.instance.service_type = "ldap"
+        n = 1
+        while True:
+            entity_id = "ldap-" + str(n)
+            if not ServiceProvider.objects.filter(entity_id=entity_id).exists():
+                break
+            n = n + 1
+        form.instance.entity_id = entity_id
         super().form_valid(form)
         self.object.admins.add(self.request.user)
         logger.info("SP %s created by %s", self.object, self.request.user)

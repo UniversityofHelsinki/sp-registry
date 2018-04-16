@@ -6,9 +6,9 @@
 <div class="alert alert-success" role="alert">
 <p>{% trans "This list includes all service providers you currently have administration access." %}</p>
 </div>
-<p><a href="{% url 'serviceprovider-add' %}"><button type="button" class="btn btn-primary btn-lg btn-block">{% trans "Add a new service provider" %}</button></a></p>
-{% if object_list %}
 <h2>{% trans "SAML Providers" %}</h2>
+<p><a href="{% url 'saml-serviceprovider-add' %}"><button type="button" class="btn btn-primary btn-lg btn-block">{% trans "Add a new service provider" %}</button></a></p>
+{% if object_list %}
 <table class="table table-sm">
   <thead>
     <tr>
@@ -43,8 +43,9 @@
   </tbody>
 </table>
 {% endif %}
-{% if ldap_providers %}
 <h2>{% trans "LDAP Providers" %}</h2>
+<p><a href="{% url 'ldap-serviceprovider-add' %}"><button type="button" class="btn btn-primary btn-lg btn-block">{% trans "Add a new LDAP connection" %}</button></a></p>
+{% if ldap_providers %}
 <table class="table table-sm">
   <thead>
     <tr>

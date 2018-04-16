@@ -70,8 +70,8 @@ rKLt+NcwtbkI6weLISJu9lFZnPMYT7LpqDWD4aMHHUWr8THO0T6mbCeQRYMlfSpU
       <ServiceDescription xml:lang="fi">Testimetadata resurssirekisteriin</ServiceDescription>
       <ServiceDescription xml:lang="en">Testing metadata for resource registry</ServiceDescription>
       <ServiceDescription xml:lang="sv">Testa metadata för resursregistret</ServiceDescription>
-      <RequestedAttribute FriendlyName="funetEduPersonStudentID" Name="urn:oid:1.3.6.1.4.1.16161.1.1.10" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri"/>
       <RequestedAttribute FriendlyName="mail" Name="urn:oid:0.9.2342.19200300.100.1.3" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri"/>
+      <RequestedAttribute FriendlyName="schacPersonalUniqueCode" Name="urn:oid:1.3.6.1.4.1.25178.1.2.14" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri"/>
     </AttributeConsumingService>
   </SPSSODescriptor>
   <ContactPerson contactType="administrative">
@@ -151,8 +151,8 @@ rKLt+NcwtbkI6weLISJu9lFZnPMYT7LpqDWD4aMHHUWr8THO0T6mbCeQRYMlfSpU
     <AttributeConsumingService index="1">
       <ServiceName xml:lang="en">My program name</ServiceName>
       <RequestedAttribute FriendlyName="eduPersonScopedAffiliation" Name="urn:oid:1.3.6.1.4.1.5923.1.1.1.9" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri"/>
-      <RequestedAttribute FriendlyName="funetEduPersonStudentID" Name="urn:oid:1.3.6.1.4.1.16161.1.1.10" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri"/>
       <RequestedAttribute FriendlyName="mail" Name="urn:oid:0.9.2342.19200300.100.1.3" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri"/>
+      <RequestedAttribute FriendlyName="schacPersonalUniqueCode" Name="urn:oid:1.3.6.1.4.1.25178.1.2.14" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri"/>
     </AttributeConsumingService>
   </SPSSODescriptor>
   <ContactPerson contactType="administrative">

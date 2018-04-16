@@ -1,7 +1,7 @@
-Feature: Contacts
-	Adding contacts to registry 
+Feature: User groups
+	Adding userg roups to registry 
 
-Scenario: Contact modifications
+Scenario: User group modifications
 	Given test environment with logged in user exists
 	When clicking link with text "ldap.example.com ldap3.example.com"
 	And clicking visible link with text "User Groups"

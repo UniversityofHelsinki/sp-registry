@@ -300,9 +300,9 @@ def metadata_parser(entity, overwrite, verbosity, validate=False, disable_checks
                     errors.append(entityID + " : " + _("EntityID already exists, overwriting"))
         except ServiceProvider.DoesNotExist:
             if validate:
-                sp = ServiceProvider.objects.create(entity_id=entityID, validated=timezone.now(), modified=False)
+                sp = ServiceProvider.objects.create(entity_id=entityID, service_type="saml", validated=timezone.now(), modified=False)
             else:
-                sp = ServiceProvider.objects.create(entity_id=entityID, validated=None, modified=True)
+                sp = ServiceProvider.objects.create(entity_id=entityID, service_type="saml", validated=None, modified=True)
             if verbosity > 2:
                 errors.append(entityID + " : " + _("EntityID does not exist, creating"))
         if not skip:

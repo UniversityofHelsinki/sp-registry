@@ -415,7 +415,7 @@ def metadata_generator_list(validated=True, privacypolicy=False, production=Fals
     tree = etree.Element("EntitiesDescriptor", Name="urn:mace:funet.fi:helsinki.fi", nsmap={"xmlns": 'urn:oasis:names:tc:SAML:2.0:metadata',
                                                                                             "ds": 'http://www.w3.org/2000/09/xmldsig#',
                                                                                             "mdui": 'urn:oasis:names:tc:SAML:metadata:ui'})
-    serviceproviders = ServiceProvider.objects.filter(end_at=None)
+    serviceproviders = ServiceProvider.objects.filter(end_at=None, service_type="saml")
     for sp in serviceproviders:
         if production and sp.production:
             metadata_generator(sp, validated, privacypolicy, tree)

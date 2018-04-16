@@ -18,6 +18,7 @@ from django.utils.translation import ugettext as _
 import logging
 from rr.utils.notifications import validation_notification
 from django.core.exceptions import PermissionDenied
+from rr.models.usergroup import UserGroup
 
 logger = logging.getLogger(__name__)
 
@@ -87,6 +88,9 @@ class BasicInformationView(DetailView):
                 for endpoint in Endpoint.objects.filter(sp=sp, end_at=None, validated=None):
                     endpoint.validated = timezone.now()
                     endpoint.save()
+                for usergroup in UserGroup.objects.filter(sp=sp, end_at=None, validated=None):
+                    usergroup.validated = timezone.now()
+                    usergroup.save()
                 sp.validated = timezone.now()
                 sp.modified = False
                 sp.save()
@@ -148,18 +152,21 @@ class BasicInformationView(DetailView):
             context['certificates'] = Certificate.objects.filter(Q(sp=sp, end_at__gte=history.created_at) | Q(sp=sp, end_at=None))
             context['contacts'] = Contact.objects.filter(Q(sp=sp, end_at__gte=history.created_at) | Q(sp=sp, end_at=None))
             context['endpoints'] = Endpoint.objects.filter(Q(sp=sp, end_at__gte=history.created_at) | Q(sp=sp, end_at=None))
+            context['usergroups'] = UserGroup.objects.filter(Q(sp=sp, end_at__gte=history.created_at) | Q(sp=sp, end_at=None))
         elif context['object'].validated:
             history = None
             context['attributes'] = SPAttribute.objects.filter(Q(sp=sp, end_at__gte=sp.validated) | Q(sp=sp, end_at=None))
             context['certificates'] = Certificate.objects.filter(Q(sp=sp, end_at__gte=sp.validated) | Q(sp=sp, end_at=None))
             context['contacts'] = Contact.objects.filter(Q(sp=sp, end_at__gte=sp.validated) | Q(sp=sp, end_at=None))
             context['endpoints'] = Endpoint.objects.filter(Q(sp=sp, end_at__gte=sp.validated) | Q(sp=sp, end_at=None))
+            context['usergroups'] = UserGroup.objects.filter(Q(sp=sp, end_at__gte=sp.validated) | Q(sp=sp, end_at=None))
         else:
             history = None
             context['attributes'] = SPAttribute.objects.filter(Q(sp=sp, end_at__gte=sp.created_at) | Q(sp=sp, end_at=None))
             context['certificates'] = Certificate.objects.filter(Q(sp=sp, end_at__gte=sp.created_at) | Q(sp=sp, end_at=None))
             context['contacts'] = Contact.objects.filter(Q(sp=sp, end_at__gte=sp.created_at) | Q(sp=sp, end_at=None))
             context['endpoints'] = Endpoint.objects.filter(Q(sp=sp, end_at__gte=sp.created_at) | Q(sp=sp, end_at=None))
+            context['usergroups'] = UserGroup.objects.filter(Q(sp=sp, end_at__gte=sp.created_at) | Q(sp=sp, end_at=None))
         if history:
             context['history_object'] = history
         if sp.production or sp.test:

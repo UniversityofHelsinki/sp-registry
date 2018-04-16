@@ -102,7 +102,7 @@ class LdapTechnicalInformationForm(ModelForm):
     class Meta:
         model = ServiceProvider
         fields = ['server_names', 'target_group', 'service_account', 'service_account_contact', 'local_storage_users',
-                  'local_storage_passwords', 'local_storage_passwords_info', 'local_storage_groups']
+                  'local_storage_passwords', 'local_storage_passwords_info', 'local_storage_groups', 'production']
         widgets = {
           'service_account_contact': Textarea(attrs={'rows': 2}),
           'local_storage_passwords_info': Textarea(attrs={'rows': 5}),
@@ -117,7 +117,8 @@ class LdapTechnicalInformationForm(ModelForm):
             'local_storage_users': _('Service stores user name and released attributes locally.'),
             'local_storage_passwords': _('Service stores user passwords locally.'),
             'local_storage_passwords_info': _('Why is this service storing user passwords locally and how? This is not generally a good idea.'),
-            'local_storage_groups': _('Service stores requested groups and their memberlists locally.'),
+            'local_storage_groups': _('Service stores requested groups and their member lists locally.'),
+            'production': _('Publish this service to LDAP production servers.'),
         }
 
     def __init__(self, *args, **kwargs):

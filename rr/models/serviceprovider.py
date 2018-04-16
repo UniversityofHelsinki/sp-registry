@@ -210,7 +210,7 @@ class ServiceProvider(models.Model):
                     value = None
             # Skip fields in list
             if f.editable and f.name in ('server_names', 'target_group', 'service_account', 'service_account_contact', 'local_storage_users',
-                                         'local_storage_passwords', 'local_storage_passwords_info', 'local_storage_groups'):
+                                         'local_storage_passwords', 'local_storage_passwords_info', 'local_storage_groups', 'production'):
                 fields.append(
                   {
                    'label': f.verbose_name,

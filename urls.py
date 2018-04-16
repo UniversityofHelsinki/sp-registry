@@ -13,6 +13,7 @@ from rr.views.metadata import metadata, metadata_import, metadata_management
 from rr.views.login import ShibbolethLoginView
 from rr.views.spadmin import activate_key, admin_list
 from rr.views.testuser import testuser_list, testuser_attribute_data
+from rr.views.usergroup import usergroup_list
 
 # Overwrite default status handlers
 handler400 = 'rr.views.handlers.bad_request'
@@ -48,6 +49,7 @@ urlpatterns = [
     url(r'^summary/(?P<pk>[0-9]+)/$', login_required(BasicInformationView.as_view()), name='summary-view'),
     url(r'^testuser/(?P<pk>[0-9]+)/$', testuser_list, name='testuser-list'),
     url(r'^testuser/data/(?P<pk>[0-9]+)/$', testuser_attribute_data, name='testuser-attribute-data'),
+    url(r'^usergroup/(?P<pk>[0-9]+)/$', usergroup_list, name='usergroup-list'),
     url(r'^invite/$', activate_key, name='invite-activate'),
     url(r'^invite/(?P<invite_key>[\w+\s-]+)/$', activate_key, name='invite-activate-key'),
     url('^', include('django.contrib.auth.urls')),

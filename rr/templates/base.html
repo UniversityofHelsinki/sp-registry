@@ -55,6 +55,11 @@
           <a class="nav-link" href="{% url 'endpoint-list' object.pk %}">{% trans "SAML Endpoints" %}</a>
         </li>
 {% endif %}
+{% if object.service_type == "ldap" %}
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'usergroup-list' object.pk %}">{% trans "User Groups" %}</a>
+        </li>
+{% endif %}
         <li class="nav-item">
           <a class="nav-link" href="{% url 'contact-list' object.pk %}">{% trans "Contacts" %}</a>
         </li>
@@ -146,6 +151,11 @@
         </li>
         <li class="nav-item">
           <a class="nav-link {% if request.path|slice:":10" == "/endpoint/" %}active{% endif %}" href="{% url 'endpoint-list' object.pk %}">{% trans "SAML Endpoints" %}</a>
+        </li>
+{% endif %}
+{% if object.service_type == "ldap" %}
+        <li class="nav-item">
+          <a class="nav-link {% if request.path|slice:":11" == "/usergroup/" %}active{% endif %}" href="{% url 'usergroup-list' object.pk %}">{% trans "User Groups" %}</a>
         </li>
 {% endif %}
         <li class="nav-item">

@@ -3,7 +3,7 @@
 {% load static %}
 {% load bootstrap4 %}
 {% block content %}
-<h1>{% trans "Basic information" %} - <small>{{ object }}</small></h1>
+<h1>{% trans "Basic information" %} - <small>{% if object.service_type == "saml" %}{{ object }}{% elif object.service_type == "ldap" %}{{ object.server_names }}{% endif %}</small></h1>
 <div class="alert alert-success" role="alert">
 <p>{% trans "Basic information for your service provider. Necessary information for production use are marked." %}</p>
 </div>

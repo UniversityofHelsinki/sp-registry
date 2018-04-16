@@ -13,13 +13,12 @@ from rr.utils.metadata_generator import metadata_generator_list
 from rr.forms.metadata import MetadataForm, MetadataCommitForm
 from lxml import etree
 from rr.utils.metadata_parser import metadata_parser
-from git import Repo, NoSuchPathError
+from git import Repo
 from django.conf import settings
 from django.core.exceptions import PermissionDenied
 from os.path import join
 import hashlib
 from datetime import datetime
-from cgi import log
 
 logger = logging.getLogger(__name__)
 
@@ -43,9 +42,9 @@ def metadata(request, pk):
     """
     try:
         if request.user.is_superuser:
-            sp = ServiceProvider.objects.get(pk=pk, end_at=None)
+            sp = ServiceProvider.objects.get(pk=pk, end_at=None, service_type="saml")
         else:
-            sp = ServiceProvider.objects.get(pk=pk, admins=request.user, end_at=None)
+            sp = ServiceProvider.objects.get(pk=pk, admins=request.user, end_at=None, service_type="saml")
     except ServiceProvider.DoesNotExist:
         logger.debug("Tried to access unauthorized service provider")
         raise Http404("Service provider does not exist")

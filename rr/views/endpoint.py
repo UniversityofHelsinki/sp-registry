@@ -36,9 +36,9 @@ def endpoint_list(request, pk):
     """
     try:
         if request.user.is_superuser:
-            sp = ServiceProvider.objects.get(pk=pk, end_at=None)
+            sp = ServiceProvider.objects.get(pk=pk, end_at=None, service_type="saml")
         else:
-            sp = ServiceProvider.objects.get(pk=pk, admins=request.user, end_at=None)
+            sp = ServiceProvider.objects.get(pk=pk, admins=request.user, end_at=None, service_type="saml")
     except ServiceProvider.DoesNotExist:
         logger.debug("Tried to access unauthorized service provider")
         raise Http404("Service provider does not exist")

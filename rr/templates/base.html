@@ -71,9 +71,11 @@
           <a class="nav-link" href="{% url 'testuser-list' object.pk %}">{% trans "Test users" %}</a>
         </li>
 {% endif %}
+{% if object.service_type == "saml" %}
         <li class="nav-item">
           <a class="nav-link" href="{% url 'metadata-view' object.pk %}">{% trans "View Metadata" %}</a>
         </li>
+{% endif %}
 {% endif %}
 {% if user.is_superuser %}
         <div class="dropdown-divider"></div>
@@ -169,9 +171,11 @@
           <a class="nav-link {% if request.path|slice:":10" == "/testuser/" %}active{% endif %}" href="{% url 'testuser-list' object.pk %}">{% trans "Test Users" %}</a>
         </li>
 {% endif %}
+{% if object.service_type == "saml" %}
         <li class="nav-item">
           <a class="nav-link {% if request.path|slice:":10" == "/metadata/" %}active{% endif %}" href="{% url 'metadata-view' object.pk %}">{% trans "View Metadata" %}</a>
         </li>
+{% endif %}
 {% endif %}
 {% if user.is_superuser %}
         <div class="dropdown-divider"></div>

@@ -76,14 +76,20 @@ def ldap_metadata_generator(sp, validated=True, tree=None):
             validation_date = None
     if history:
         entity_id = history.entity_id
+        server_names = history.server_names
     else:
         entity_id = sp.entity_id
+        server_names = sp.server_names
     if validation_date:
-        entity = etree.SubElement(tree, "Entity", ID=entity_id, validated=validation_date.strftime('%Y%m%d %H:%M:%S'))
+        entity = etree.SubElement(tree, "Entity", ID=entity_id, validated=validation_date.strftime('%Y-%m-%dT%H:%M:%S%z'))
     else:
         entity = etree.SubElement(tree, "Entity", ID=entity_id, validated="false")
+    if server_names:
+        servers_element = etree.SubElement(entity, "Servers")
+        servers = server_names.splitlines()
+        for server in servers:
+            etree.SubElement(servers_element, "Server", name=server)
     if history:
-        etree.SubElement(entity, "ServerNames", value=history.server_names)
         etree.SubElement(entity, "TargetGroup", value=history.target_group)
         if history.service_account:
             etree.SubElement(entity, "ServiceAccount", value="true", contact=history.service_account_contact)
@@ -98,7 +104,6 @@ def ldap_metadata_generator(sp, validated=True, tree=None):
         else:
             etree.SubElement(entity, "LocalStorageGroups", value="false")
     else:
-        etree.SubElement(entity, "ServerNames", value=sp.server_names)
         etree.SubElement(entity, "TargetGroup", value=sp.target_group)
         if sp.service_account:
             etree.SubElement(entity, "ServiceAccount", value="true", contact=sp.service_account_contact)

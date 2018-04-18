@@ -54,19 +54,19 @@ class ServiceProvider(models.Model):
     autoupdate_idp_metadata = models.BooleanField(default=False, verbose_name=_('SP updates IdP metadata automatically'))
 
     # LDAP Technical information
-    server_names = models.CharField(max_length=511, blank=True, verbose_name=_('Server names (not IPs), separated with space'))
+    server_names = models.TextField(blank=True, verbose_name=_('Server names (not IPs), one per line'))
     TARGETGROUPCHOICES = (('internet', _('Internet')),
                           ('university', _('University of Helsinki users')),
                           ('restricted', _('Restricted user group')))
     target_group = models.CharField(max_length=10, blank=True, choices=TARGETGROUPCHOICES, verbose_name=_('Target group for the service'))
     service_account = models.BooleanField(default=False, verbose_name=_('Does the service use a service account?'))
     service_account_contact = models.TextField(blank=True,
-                                               verbose_name=_('Email address and phone number for delivering the service account credentials.'))
-    local_storage_users = models.BooleanField(default=False, verbose_name=_('Service stores a local copy of users and their information.'))
+                                               verbose_name=_('Email address and phone number for delivering the service account credentials'))
+    local_storage_users = models.BooleanField(default=False, verbose_name=_('Service stores a local copy of users and their information'))
     # Checking if user stores passwords so we can reject the application
-    local_storage_passwords = models.BooleanField(default=False, verbose_name=_('Service stores a local copy of user passwords.'))
+    local_storage_passwords = models.BooleanField(default=False, verbose_name=_('Service stores a local copy of user passwords'))
     local_storage_passwords_info = models.TextField(blank=True, verbose_name=_('How is this service storing the saved passwords and why?'))
-    local_storage_groups = models.BooleanField(default=False, verbose_name=_('Service stores a local copy of groups and group members.'))
+    local_storage_groups = models.BooleanField(default=False, verbose_name=_('Service stores a local copy of groups and group members'))
 
     # Attributes are linked through SPAttribute model to include reason and validation information
     attributes = models.ManyToManyField(Attribute, through='SPAttribute')

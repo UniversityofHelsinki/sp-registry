@@ -130,7 +130,7 @@ class LdapTechnicalInformationForm(ModelForm):
         Check server names format
         """
         server_names = self.cleaned_data['server_names']
-        server_names_list = server_names.split(" ")
+        server_names_list = server_names.splitlines()
         pattern = re.compile("^(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\-]*[a-zA-Z0-9])\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9\-]*[A-Za-z0-9])$")
         for server_name in server_names_list:
             if not pattern.match(server_name):
@@ -208,7 +208,7 @@ class LdapServiceProviderCreateForm(ModelForm):
                   'privacypolicy_fi', 'privacypolicy_en', 'privacypolicy_sv',
                   'login_page_url', 'application_portfolio', 'notes']
         help_texts = {
-            'server_names': _('Full server names (not IPs), separated by space. User for access control. <div class="text-danger">Required.</div>'),
+            'server_names': _('Full server names (not IPs), one per line. Used for access control. <div class="text-danger">Required.</div>'),
             'name_fi': _('Short (max 70 characters) and descriptive name for the service in Finnish. <div class="text-danger">Required. </div>'),
             'name_en': _('Short (max 70 characters) and descriptive name for the service in English.'),
             'name_sv': _('Short (max 70 characters) and descriptive name for the service in Swedish.'),
@@ -232,7 +232,7 @@ class LdapServiceProviderCreateForm(ModelForm):
         Check server names format
         """
         server_names = self.cleaned_data['server_names']
-        server_names_list = server_names.split(" ")
+        server_names_list = server_names.splitlines()
         pattern = re.compile("^(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\-]*[a-zA-Z0-9])\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9\-]*[A-Za-z0-9])$")
         for server_name in server_names_list:
             if not pattern.match(server_name):

@@ -44,7 +44,12 @@ def ldap_metadata_attributes(element, sp, validation_date):
     attribute_groups = attributes.order_by().values_list('attribute__group').distinct()
     entity = etree.SubElement(element, "AttributeGroups")
     for group in attribute_groups:
-        etree.SubElement(entity, "AttributeGroup", name=group[0])
+        if group[0]:
+            etree.SubElement(entity, "AttributeGroup", name=group[0])
+    attributes_without_group = attributes.filter(attribute__group="")
+    entity = etree.SubElement(element, "Attributes")
+    for attribute in attributes_without_group:
+        etree.SubElement(entity, "Attribute", friendlyName=attribute.attribute.friendlyname)
 
 
 def ldap_metadata_generator(sp, validated=True, tree=None):
@@ -73,8 +78,10 @@ def ldap_metadata_generator(sp, validated=True, tree=None):
         entity_id = history.entity_id
     else:
         entity_id = sp.entity_id
-    if tree is not None:
-        entity = etree.SubElement(tree, "Entity", ID=entity_id)
+    if validation_date:
+        entity = etree.SubElement(tree, "Entity", ID=entity_id, validated=validation_date.strftime('%Y%m%d %H:%M:%S'))
+    else:
+        entity = etree.SubElement(tree, "Entity", ID=entity_id, validated="false")
     if history:
         etree.SubElement(entity, "ServerNames", value=history.server_names)
         etree.SubElement(entity, "TargetGroup", value=history.target_group)
@@ -122,7 +129,7 @@ def ldap_metadata_generator_list(validated=True, production=False, include=None)
 
     Using CamelCase instead of regular underscore attribute names in element tree.
     """
-    tree = etree.Element("LdapEntities", Name="ldap.helsinki.fi")
+    tree = etree.Element("LdapEntities", Name="ldap2015.helsinki.fi")
     serviceproviders = ServiceProvider.objects.filter(end_at=None, service_type="ldap")
     for sp in serviceproviders:
         if production and sp.production:

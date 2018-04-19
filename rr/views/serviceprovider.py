@@ -19,6 +19,7 @@ import logging
 from rr.utils.notifications import validation_notification
 from django.core.exceptions import PermissionDenied
 from rr.models.usergroup import UserGroup
+from django.conf import settings
 
 logger = logging.getLogger(__name__)
 
@@ -41,6 +42,8 @@ class ServiceProviderList(ListView):
     model = ServiceProvider
 
     def get_queryset(self):
+        if not settings.ACTIVATE_SAML:
+            return ServiceProvider.objects.none()
         if self.request.user.is_superuser:
             return ServiceProvider.objects.filter(end_at=None, service_type="saml").order_by('entity_id')
         else:
@@ -48,10 +51,14 @@ class ServiceProviderList(ListView):
 
     def get_context_data(self, **kwargs):
         context = super(ServiceProviderList, self).get_context_data(**kwargs)
-        if self.request.user.is_superuser:
+        if not settings.ACTIVATE_LDAP:
+            context['ldap_providers'] = ServiceProvider.objects.none()
+        elif self.request.user.is_superuser:
             context['ldap_providers'] = ServiceProvider.objects.filter(end_at=None, service_type="ldap").order_by('server_names')
         else:
             context['ldap_providers'] = ServiceProvider.objects.filter(admins=self.request.user, end_at=None, service_type="ldap").order_by('server_names')
+        context['activate_saml'] = settings.ACTIVATE_SAML
+        context['activate_ldap'] = settings.ACTIVATE_LDAP
         return context
 
 

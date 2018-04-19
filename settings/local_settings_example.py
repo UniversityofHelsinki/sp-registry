@@ -17,6 +17,10 @@ DATABASES = {
 
 TIME_ZONE = 'EET'
 
+# Activate SAML/LDAP SP listing
+ACTIVATE_SAML = True
+ACTIVATE_LDAP = True
+
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 # Email address used as send address
 SERVER_EMAIL = 'noreply@example.org'

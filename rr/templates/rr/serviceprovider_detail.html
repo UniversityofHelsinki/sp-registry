@@ -4,7 +4,7 @@
 {% load static %}
 {% load attribute_filters %}
 {% block content %}
-<h1>{% trans "Details" %} - <small>{% if object.service_type == "saml" %}{{ object }}{% elif object.service_type == "ldap" %}{{ object.server_names }}{% endif %}</small></h1>
+<h1>{% trans "Details" %} - <small>{{ object.display_identifier }}</small></h1>
 <table class="table table-sm">
   <tbody>
     <tr>

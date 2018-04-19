@@ -81,6 +81,18 @@ class ServiceProvider(models.Model):
     updated_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, verbose_name=_('Updated by'))
     validated = models.DateTimeField(null=True, blank=True, verbose_name=_('Validated on'))
 
+    def display_identifier(self):
+        """Returns an entity_id for SAML service and first server for LDAP service (or entity_id if servers are not defined)"""
+        if self.service_type == "saml":
+            return self.entity_id
+        elif self.service_type == "ldap":
+            if self.server_names:
+                return self.server_names.splitlines()[0]
+            else:
+                return self.entity_id
+        else:
+            return None
+
     def name(self):
         """Returns name in current language, or in priority order en->fi->sv if current is not available"""
         if get_language() == "fi" and self.name_fi:

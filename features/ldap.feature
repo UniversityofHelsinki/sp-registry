@@ -11,5 +11,5 @@ Scenario: LDAP information modifications
 	And filling ldap technical information form with invalid information
 	Then the result page will include text "Invalid list of server names."
 	When filling ldap technical information form
-	And clicking visible link with text "Summary"
-	Then the result page will include text "ldap.example.org ldap2.example.org"
+	When clicking visible link with text "Summary"
+	Then the result page will include text "ldap-modified.example.org"

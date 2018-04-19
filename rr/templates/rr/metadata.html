@@ -2,7 +2,7 @@
 {% load i18n %}
 {% load bootstrap4 %}
 {% block content %}
-<h1>{% trans "Metadata" %} - <small>{{ object }}</small></h1>
+<h1>{% trans "Metadata" %} - <small>{{ object.display_identifier }}</small></h1>
 {% if validated %}
 <div class="alert alert-success" role="alert">
   {% trans "Displaying validated metadata. This is used for production IdP." %}

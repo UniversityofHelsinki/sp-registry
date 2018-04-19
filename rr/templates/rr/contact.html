@@ -3,7 +3,7 @@
 {% load bootstrap4 %}
 {% load static %}
 {% block content %}
-<h1>{% trans "Contacts" %} - <small>{% if object.service_type == "saml" %}{{ object }}{% elif object.service_type == "ldap" %}{{ object.server_names }}{% endif %}</small></h1>
+<h1>{% trans "Contacts" %} - <small>{{ object.display_identifier }}</small></h1>
 <div class="alert alert-success" role="alert">
 <p>{% trans "You need to specify at least support and technical contacts for production use." %}</p>
 </div>

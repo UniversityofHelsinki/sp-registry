@@ -3,7 +3,7 @@
 {% load bootstrap4 %}
 {% load static %}
 {% block content %}
-<h1 class="page-header">{% trans "Endpoints" %} - <small>{{ object }}</small></h1>
+<h1 class="page-header">{% trans "Endpoints" %} - <small>{{ object.display_identifier }}</small></h1>
 <div class="alert alert-success" role="alert">
 <p>{% trans "Endpoints are communication addresses for SP." %}</p>
 <p>{% trans "In most cases you only have to specify AssertionConsumerService with HTTP-POST binding." %}</p>

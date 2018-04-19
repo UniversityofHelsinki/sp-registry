@@ -26,7 +26,7 @@
   {% csrf_token %}
 {% for object in object_list %}
     <tr>
-      <th scope="row">{% if object.entity_id|length > 60 %}<a data-toggle="tooltip" data-placement="top" title="{{ object.entity_id }}" href="/summary/{{ object.pk }}/">{{ object.entity_id|truncatechars:60 }}{% else %}<a href="/summary/{{ object.pk }}/">{{ object.entity_id }}{% endif %}</a></th>
+      <th scope="row">{% if object.display_identifier|length > 60 %}<a data-toggle="tooltip" data-placement="top" title="{{ display_identifier }}" href="/summary/{{ object.pk }}/">{{ object.display_identifier|truncatechars:60 }}{% else %}<a href="/summary/{{ object.pk }}/">{{ object.display_identifier }}{% endif %}</a></th>
       {% if object.name|length > 50 %}<td data-toggle="tooltip" data-placement="top" title="{{ object.name }}" href="/summary/{{ object.pk }}/">{{ object.name|truncatechars:50 }}{% else %}<td>{{ object.name }}{% endif %}</td>
       {% if object.production %}<td class="text-success">&#10004;{% else %}<td class="text-danger">&#10005;{% endif %}</td>
       {% if object.test %}<td class="text-success">&#10004;{% else %}<td class="text-danger">&#10005;{% endif %}</td>
@@ -64,7 +64,7 @@
   {% csrf_token %}
 {% for object in ldap_providers %}
     <tr>
-      <th scope="row">{% if object.server_names|length > 60 %}<a data-toggle="tooltip" data-placement="top" title="{{ object.server_names }}" href="/summary/{{ object.pk }}/">{{ object.server_names|truncatechars:60 }}{% else %}<a href="/summary/{{ object.pk }}/">{{ object.server_names }}{% endif %}</a></th>
+      <th scope="row">{% if object.display_identifier|length > 60 %}<a data-toggle="tooltip" data-placement="top" title="{{ display_identifier }}" href="/summary/{{ object.pk }}/">{{ object.display_identifier|truncatechars:60 }}{% else %}<a href="/summary/{{ object.pk }}/">{{ object.display_identifier }}{% endif %}</a></th>
       {% if object.name|length > 50 %}<td data-toggle="tooltip" data-placement="top" title="{{ object.name }}" href="/summary/{{ object.pk }}/">{{ object.name|truncatechars:50 }}{% else %}<td>{{ object.name }}{% endif %}</td>
       {% if object.production %}<td class="text-success">&#10004;{% else %}<td class="text-danger">&#10005;{% endif %}</td>
       {% if object.validated and not object.modified %}<td class="table-success">{% trans "OK "%}</td>{% else %}<td class="table-warning">{% trans "Modified "%}</td>{% endif %}{% if user.is_superuser %}

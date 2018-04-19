@@ -8,5 +8,5 @@ def fill_techical_form_invalid(context):
 
 @when(u'filling ldap technical information form')
 def fill_technical_form(context):
-    context.browser.fill("server_names", "ldap.example.org ldap2.example.org")
+    context.browser.fill("server_names", "ldap-modified.example.org")
     context.browser.find_by_text('Save').first.click()

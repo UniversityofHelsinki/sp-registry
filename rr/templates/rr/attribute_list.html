@@ -3,7 +3,7 @@
 {% load bootstrap4 %}
 {% load static %}
 {% block content %}
-<h1>{% trans "Attributes" %} - <small>{% if object.service_type == "saml" %}{{ object }}{% elif object.service_type == "ldap" %}{{ object.server_names }}{% endif %}</small></h1>
+<h1>{% trans "Attributes" %} - <small>{{ object.display_identifier }}</small></h1>
 <div class="alert alert-success" role="alert">
 <p>{% trans "Give reasons for the attribute requisitions. Remove reason to remove requisition." %}</p>
 <p>{% trans "Attributes with green border are validated and attributes with red border still need to be validated." %}</p>

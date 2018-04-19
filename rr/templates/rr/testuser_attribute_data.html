@@ -2,7 +2,7 @@
 {% load i18n %}
 {% load bootstrap4 %}
 {% block content %}
-<h1>{% trans "Test user attribute values" %} - <small>{{ object }}</small></h1>
+<h1>{% trans "Test user attribute values" %} - <small>{{ object.display_identifier }}</small></h1>
 <div class="alert alert-success" role="alert">
 <p>{% trans "Listing all attributes requested by this service provider." %}</p>
 </div>

@@ -37,6 +37,9 @@ SAML_ATTR_LAST_NAME = 'shib_last_name'
 SAML_ATTR_EMAIL = 'shib_mail'
 SAML_ATTR_AFFILIATION = 'shib_affiliation'
 
+# Uncomment to redirect logout to local Shibboleth logout 
+# SHIBBOLETH_LOGOUT_URL = "/Shibboleth.sso/Logout"
+
 # Path to git repositorio
 METADATA_GIT_REPOSITORIO = '/path/to/metadata/git/repo/'
 # Metadata file used for upload

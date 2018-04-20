@@ -23,6 +23,8 @@ class ShibbolethLoginView(View):
         if user:
             if user.is_active:
                 login(request, user, backend='auth.shibboleth.ShibbolethBackend')
+                # Save login method to session
+                request.session['LOGIN_METHOD'] = "Shibboleth"
                 logger.info("User {user} logged in".format(user=user))
                 if redirect_to == request.path:
                     error_message = _("Redirection loop for authenticated user detected. Check that your LOGIN_REDIRECT_URL doesn't point to a login page.")
@@ -38,6 +40,18 @@ class ShibbolethLoginView(View):
         else:
             logger.debug("Failed Shibboleth login")
         return HttpResponseRedirect(reverse('serviceprovider-list'))
+
+
+def logout_redirect(request):
+    """
+    Redirect to Shibboleth logout url for SLO, if login method is Shibboleth
+    and url is configured. Otherwise use local logout.
+    """
+    login_method = request.session.get('LOGIN_METHOD', None)
+    if login_method == "Shibboleth" and settings.SHIBBOLETH_LOGOUT_URL:
+        return HttpResponseRedirect(settings.SHIBBOLETH_LOGOUT_URL)
+    else:
+        return HttpResponseRedirect(reverse('logout-local'))
 
 
 @receiver(user_logged_in)

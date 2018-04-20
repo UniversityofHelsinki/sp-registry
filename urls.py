@@ -10,7 +10,7 @@ from rr.views.certificate import certificate_list, certificate_admin_list
 from rr.views.contact import contact_list
 from rr.views.endpoint import endpoint_list
 from rr.views.metadata import metadata, metadata_import, metadata_management
-from rr.views.login import ShibbolethLoginView
+from rr.views.login import ShibbolethLoginView, logout_redirect
 from rr.views.spadmin import activate_key, admin_list
 from rr.views.testuser import testuser_list, testuser_attribute_data
 
@@ -26,7 +26,8 @@ urlpatterns = [
     url(r'^$', login_required(ServiceProviderList.as_view()), name='front-page'),
     url(r'^login/$', LoginView.as_view(), name='login'),
     url(r'^login/shibboleth/$', ShibbolethLoginView.as_view(), name='shibboleth-login'),
-    url(r'^logout/$', LogoutView.as_view(template_name="registration/logout.html"), name='logout'),
+    url(r'^logout/$', logout_redirect, name='logout'),
+    url(r'^logout/local/$', LogoutView.as_view(template_name="registration/logout.html", redirect_field_name='return'), name='logout-local'),
     url(r'^list/$', login_required(ServiceProviderList.as_view()), name='serviceprovider-list'),
     url(r'^admin/(?P<pk>[0-9]+)/$', admin_list, name='admin-list'),
     url(r'^attribute/(?P<pk>[0-9]+)/$', attribute_list, name='attribute-list'),

@@ -2,6 +2,7 @@ from django.forms import Form, CharField
 from rr.models.serviceprovider import SPAttribute
 from rr.models.attribute import Attribute
 from django.forms.widgets import TextInput
+from django.db.models import Q
 
 
 class AttributeForm(Form):
@@ -12,7 +13,7 @@ class AttributeForm(Form):
     def __init__(self, *args, **kwargs):
         self.sp = kwargs.pop('sp')
         super(AttributeForm, self).__init__(*args, **kwargs)
-        attributes = Attribute.objects.filter(public=True).order_by('friendlyname')
+        attributes = Attribute.objects.filter(Q(public=True) | Q(spattribute__sp=self.sp, spattribute__end_at=None)).order_by('friendlyname')
         for field in attributes:
             if field.schemalink:
                 help_text = '<a target="_blank" href="https://wiki.eduuni.fi/display/CSCHAKA/funetEduPersonSchema2dot2#funetEduPersonSchema2dot2-' + field.friendlyname + '">' + field.name + '</a>'

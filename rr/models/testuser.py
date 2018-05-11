@@ -2,7 +2,6 @@ from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from rr.models.serviceprovider import ServiceProvider
 from rr.models.attribute import Attribute
-from django.contrib.admin.models import CHANGE
 
 
 class TestUser(models.Model):

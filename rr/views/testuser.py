@@ -1,3 +1,4 @@
+from django.utils.translation import ugettext_lazy as _
 from rr.models.serviceprovider import ServiceProvider
 from rr.models.testuser import TestUser, TestUserData
 from rr.forms.testuser import TestUserForm, TestUserDataForm, PasswordResetForm
@@ -104,7 +105,7 @@ def testuser_attribute_data(request, pk):
         testuser = TestUser.objects.get(pk=pk, end_at=None)
     except TestUser.DoesNotExist:
         raise Http404(_("User provided does not exist"))
-    if not request.user.is_superuser and not ServiceProvider.objects.get(pk=testuser.pk, admins=request.user, end_at=None):
+    if not request.user.is_superuser and not ServiceProvider.objects.filter(pk=testuser.sp.pk, admins=request.user, end_at=None).first():
         raise Http404(_("User provided does not exist"))
     form = TestUserDataForm(user=testuser)
     password_form = PasswordResetForm()

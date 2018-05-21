@@ -3,8 +3,22 @@
 {% load bootstrap4 %}
 {% load static %}
 {% block content %}
-<h1>{% trans "Email addresses" %} - <small>{{ object }}</small></h1>
-
+<h1>{% trans "Emails" %}</h1>
+{% if success %}
+<p>{% trans "Emails have been sent." %}</p>
+{% if errors %}
+<p>{% trans "Sending failed to following addresses:" %}</p>
+<table class="table">
+<tbody>
+{% for email in errors %}
+    <tr>
+      <td>{{ email }}</td>
+    </tr>
+{% endfor %}
+  </tbody>
+</table>
+{% endif %}
+{% else %}
 {% if form %}
 <form action="" method="post" class="form">
     {% csrf_token %}
@@ -34,5 +48,5 @@
   </tbody>
 </table>
 {% endif %}
-
+{% endif %}
 {% endblock %}

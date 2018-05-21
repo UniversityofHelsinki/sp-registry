@@ -1,4 +1,5 @@
 import logging
+from django.utils.translation import ugettext as _
 from django.shortcuts import render
 from django.db.models.functions import Lower
 from django.contrib.auth.decorators import login_required
@@ -48,6 +49,7 @@ def email_list(request):
     subject = None
     message = None
     errors = []
+    success = None
     if request.method == "POST":
         form = EmailSelectForm(request.POST)
         if "send_email" in request.POST:
@@ -91,9 +93,12 @@ def email_list(request):
                         except SMTPException:
                             logger.warning("Could not send invite to {email}".format(email=email))
                             errors.append(email)
+                    form = EmailSelectForm()
+                    success = _("Emails have been sent")
     return render(request, "rr/email.html", {'object_list': sorted(emails),
                                              'form': form,
                                              'subject': subject,
                                              'message': message,
-                                             'errors': errors})
+                                             'errors': errors,
+                                             'success': success})
     

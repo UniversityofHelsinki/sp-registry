@@ -8,4 +8,5 @@ Scenario: Admin invitations
 	And filling email form
 	Then the result page will include text "superuser@example.org"
 	When sending email form
-	Then message "0" in mailbox should have "This is my message to SP admins." in body
+	Then the result page will include text "Emails have been sent."
+	And message "0" in mailbox should have "This is my message to SP admins." in body

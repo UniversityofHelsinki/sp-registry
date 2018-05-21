@@ -179,7 +179,7 @@ def activate_key(request, invite_key=""):
     """
     get_key = request.GET.get('key', '')
     if get_key:
-        invite_key = get_key 
+        invite_key = get_key
     sp = Keystore.objects.activate_key(user=request.user,
                                        key=invite_key)
     if sp:

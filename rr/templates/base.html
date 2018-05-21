@@ -78,6 +78,9 @@
           <a class="nav-link" href="{% url 'sign-encrypt-list' %}">{% trans "Sign and Encrypt" %}</a>
         </li>
         <li class="nav-item">
+          <a class="nav-link" href="{% url 'email-list' %}">{% trans "Emails" %}</a>
+        </li>
+        <li class="nav-item">
           <a class="nav-link" href="{% url 'metadata-manage' %}">{% trans "Manage metadata" %}</a>
         </li>
         <div class="dropdown-divider"></div>
@@ -160,6 +163,9 @@
         </li>
         <li class="nav-item">
           <a class="nav-link {% if request.path|slice:":19" == "/sign_encrypt_list/" %}active{% endif %}" href="{% url 'sign-encrypt-list' %}">{% trans "Sign and Encrypt" %}</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link {% if request.path|slice:":7" == "/email/" %}active{% endif %}" href="{% url 'email-list' %}">{% trans "Emails" %}</a>
         </li>
         <li class="nav-item">
           <a class="nav-link {% if request.path|slice:":17" == "/metadata/manage/" %}active{% endif %}" href="{% url 'metadata-manage' %}">{% trans "Manage metadata" %}</a>

@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load bootstrap4 %}
+{% load static %}
+{% block content %}
+<h1>{% trans "Email addresses" %} - <small>{{ object }}</small></h1>
+
+{% if form %}
+<form action="" method="post" class="form">
+    {% csrf_token %}
+    {% bootstrap_form form layout='horizontal' %}
+    {% buttons %}
+    <p><button type="submit" name="show_message" class="btn btn-info">{% trans "List emails / Show message" %}</button> {% if subject and message %}<button type="submit" name="send_email" class="btn btn-warning">{% trans "Send email" %}</button> {% endif %}</p>
+    {% endbuttons %}
+</form>
+{% endif %}
+{% if subject %}
+<h2>{% trans "Subject" %}</h2>
+<pre>{{ subject }}</pre>
+{% endif %}
+{% if message %}
+<h2>{% trans "Message" %}</h2>
+<pre>{{ message }}</pre>
+{% endif %}
+{% if object_list %}
+<h2>{% trans "Email addresses" %}</h2>
+<table class="table">
+<tbody>
+{% for email in object_list %}
+    <tr>
+      <td>{{ email }}</td>
+    </tr>
+{% endfor %}
+  </tbody>
+</table>
+{% endif %}
+
+{% endblock %}

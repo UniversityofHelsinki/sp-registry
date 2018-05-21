@@ -13,6 +13,7 @@ from rr.views.metadata import metadata, metadata_import, metadata_management
 from rr.views.login import ShibbolethLoginView, logout_redirect
 from rr.views.spadmin import activate_key, admin_list
 from rr.views.testuser import testuser_list, testuser_attribute_data
+from rr.views.email import email_list
 
 # Overwrite default status handlers
 handler400 = 'rr.views.handlers.bad_request'
@@ -37,6 +38,7 @@ urlpatterns = [
     url(r'^certificate/list/$', certificate_admin_list, name='certificate-admin-list'),
     url(r'^contact/(?P<pk>[0-9]+)/$', contact_list, name='contact-list'),
     url(r'^endpoint/(?P<pk>[0-9]+)/$', endpoint_list, name='endpoint-list'),
+    url(r'^email/$', email_list, name='email-list'),
     url(r'^metadata/import/$', metadata_import, name='metadata-import'),
     url(r'^metadata/manage/$', metadata_management, name='metadata-manage'),
     url(r'^metadata/(?P<pk>[0-9]+)/$', metadata, name='metadata-view'),

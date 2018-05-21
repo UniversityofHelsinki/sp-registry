@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from rr.models.serviceprovider import ServiceProvider
 from rr.models.spadmin import Keystore
 from django.utils import timezone
+from rr.models.email import Template
 
 
 @given(u'test environment with logged in user exists')
@@ -12,6 +13,7 @@ def create_test_environment(context):
     u = User.objects.create_user(username=username, password=password)
     u.first_name = "Teemu"
     u.last_name = "Testeri"
+    u.email = "user@example.org"
     u.save()
     sp = ServiceProvider.objects.create(entity_id="https://sp.example.org/sp", name_en="My program name", validated=timezone.now(), modified=False)
     sp.admins.add(u)
@@ -31,7 +33,7 @@ def create_test_environment_with_superuser(context):
     u.first_name = "Teemu"
     u.last_name = "Testeri"
     u.save()
-    sp = ServiceProvider.objects.create(entity_id="https://sp.example.org/sp", name_en="My program name", validated=timezone.now(), modified=False)
+    sp = ServiceProvider.objects.create(entity_id="https://sp.example.org/sp", name_en="My program name", validated=timezone.now(), modified=False, test=True)
     sp.admins.add(u)
     ServiceProvider.objects.create(entity_id="https://sp.example.com/sp", name_en="SP without admins", validated=timezone.now(), modified=False)
     context.browser.visit(context.base_url)
@@ -50,3 +52,8 @@ def create_invite(context):
                             activation_key="f5bc2a80eba67ca71df3dc740caf22a6eed7b2f3",
                             email="test@example.org",
                             valid_until=timezone.now())
+
+
+@given(u'email template exists')
+def create_email_template(context):
+    Template.objects.create(title="Testing template", body="This is my message to SP admins.")

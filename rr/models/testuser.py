@@ -13,6 +13,7 @@ class TestUser(models.Model):
     password = models.CharField(max_length=64, verbose_name=_('Password'))
     firstname = models.CharField(blank=True, null=True, max_length=255, verbose_name=_('First name'))
     lastname = models.CharField(blank=True, null=True, max_length=255, verbose_name=_('Last name'))
+    valid_for = models.ManyToManyField(ServiceProvider, blank=True, related_name="valid_for", verbose_name=_('Valid for selected SPs'))
     created_at = models.DateTimeField(auto_now_add=True, verbose_name=_('Created at'))
     updated_at = models.DateTimeField(auto_now=True, verbose_name=_('Updated at'))
     end_at = models.DateTimeField(blank=True, null=True, verbose_name=_('Entry end time'))

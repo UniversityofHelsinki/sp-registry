@@ -1,9 +1,10 @@
 from django.forms import ModelForm, Form, CharField, BooleanField, PasswordInput
-from rr.models.serviceprovider import SPAttribute
+from rr.models.serviceprovider import SPAttribute, ServiceProvider
 from rr.models.testuser import TestUser, TestUserData
 from django.core.validators import ValidationError
 from django.utils.translation import ugettext as _
 from django.forms.widgets import TextInput
+from django.db.models import Q
 
 
 class TestUserForm(ModelForm):
@@ -13,12 +14,14 @@ class TestUserForm(ModelForm):
 
     class Meta:
         model = TestUser
-        fields = ['username', 'password', 'firstname', 'lastname']
+        fields = ['username', 'password', 'firstname', 'lastname', 'valid_for']
         widgets = {'password': PasswordInput()}
 
     def __init__(self, *args, **kwargs):
         self.sp = kwargs.pop('sp', None)
+        self.admin = kwargs.pop('admin', None)
         super(TestUserForm, self).__init__(*args, **kwargs)
+        self.fields['valid_for'].queryset = ServiceProvider.objects.filter(Q(end_at=None, test=True, admins=self.admin) | Q(pk=self.sp.pk))
 
     def clean(self):
         cleaned_data = super().clean()
@@ -27,9 +30,19 @@ class TestUserForm(ModelForm):
             raise ValidationError(_("Username already exists"))
 
 
-class PasswordResetForm(Form):
+class TestUserUpdateForm(ModelForm):
 
-    password = CharField(widget=PasswordInput)
+    class Meta:
+        model = TestUser
+        fields = ['password', 'firstname', 'lastname', 'valid_for']
+        widgets = {'password': PasswordInput()}
+
+    def __init__(self, *args, **kwargs):
+        self.sp = kwargs.pop('sp', None)
+        self.admin = kwargs.pop('admin', None)
+        super(TestUserUpdateForm, self).__init__(*args, **kwargs)
+        self.fields['password'].required = False
+        self.fields['valid_for'].queryset = ServiceProvider.objects.filter(Q(end_at=None, test=True, admins=self.admin) | Q(pk=self.sp.pk) | Q(pk__in=self.instance.valid_for.all())).distinct()
 
 
 class TestUserDataForm(Form):

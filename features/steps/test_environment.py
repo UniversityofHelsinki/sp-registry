@@ -25,6 +25,13 @@ def create_test_environment(context):
     context.browser.find_by_text('Submit').first.click()
 
 
+@given(u'additional SP with admin exists')
+def create_additional_SP(context):
+    u = User.objects.all().first()
+    sp = ServiceProvider.objects.create(entity_id="https://sp.example.net/sp", name_en="Additional SP", production=True, test=True, validated=timezone.now(), modified=False)
+    sp.admins.add(u)
+
+
 @given(u'test environment with logged in superuser exists')
 def create_test_environment_with_superuser(context):
     username = "myself"

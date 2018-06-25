@@ -46,6 +46,11 @@ def check_for_form_value(context, text):
     assert context.browser.find_by_value(text)
 
 
+@then(u'the page will not include form value "{text}"')
+def check_for_form_value_negation(context, text):
+    assert not context.browser.find_by_value(text)
+
+
 @then(u'count of tag "{text}" is "{number}"')
 def count_id(context, text, number):
     assert len(context.browser.find_by_tag(text)) == int(number)

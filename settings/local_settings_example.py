@@ -40,6 +40,9 @@ SAML_ATTR_AFFILIATION = 'shib_affiliation'
 # Uncomment to redirect logout to local Shibboleth logout 
 # SHIBBOLETH_LOGOUT_URL = "/Shibboleth.sso/Logout"
 
+ATTRIBUTE_TEST_SERVICE = True
+ATTRIBUTE_TEST_SERVICE_LOGOUT_URL = 'https://localhost/testservice/Shibboleth.sso/Logout'
+
 # Path to git repositorio
 METADATA_GIT_REPOSITORIO = '/path/to/metadata/git/repo/'
 # Metadata file used for upload

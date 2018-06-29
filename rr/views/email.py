@@ -72,7 +72,7 @@ def email_list(request):
                     template = None
             service_providers = ServiceProvider.objects.filter(end_at=None)
             for sp in service_providers:
-                if (production_sp and sp.production) or (test_sp and sp.test) or (str(sp.pk) in individual_sp):
+                if (production_sp and sp.production) or (test_sp and sp.test) or (sp in individual_sp):
                     if admin_emails:
                         emails.update(sp.admins.values_list(Lower('email'), flat=True))
                     if technical_contacts:

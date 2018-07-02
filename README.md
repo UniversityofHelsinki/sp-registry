@@ -163,6 +163,15 @@ SSLOptions +StdEnvVars
 </VirtualHost>
 ```
 
+## Attribute test service
+Attribute test service lists all user's attributes and validates them against the optional regex filters.
+
+Attributes shown in the test service, validation regex and Shibboleth environment variable names are defined in Attribute model objects.
+Non public attributes are only listed if user has some value in the attribute.
+
+This service can be made available in different Apache virtual host by pointing it to the wsgi_attributetest.py.
+It should also have it's own Shibboleth ApplicationOverride, with all the attributes enabled.
+
 ## Tests
 ### Requirements
 Splinter is used for automated browser tests.

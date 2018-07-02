@@ -17,6 +17,10 @@ DATABASES = {
 
 TIME_ZONE = 'EET'
 
+# Attribute test service
+ATTRIBUTE_TEST_SERVICE = True
+ATTRIBUTE_TEST_SERVICE_LOGOUT_URL = 'https://localhost:8080/testservice/Shibboleth.sso/Logout'
+
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 # Email address used as send address
 SERVER_EMAIL = 'noreply@example.org'
@@ -37,7 +41,7 @@ SAML_ATTR_LAST_NAME = 'shib_last_name'
 SAML_ATTR_EMAIL = 'shib_mail'
 SAML_ATTR_AFFILIATION = 'shib_affiliation'
 
-# Uncomment to redirect logout to local Shibboleth logout 
+# Uncomment to redirect logout to local Shibboleth logout
 # SHIBBOLETH_LOGOUT_URL = "/Shibboleth.sso/Logout"
 
 ATTRIBUTE_TEST_SERVICE = True

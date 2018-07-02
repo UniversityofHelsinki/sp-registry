@@ -14,7 +14,6 @@ from rr.views.login import ShibbolethLoginView, logout_redirect
 from rr.views.spadmin import activate_key, admin_list
 from rr.views.testuser import testuser_list, testuser_attribute_data
 from rr.views.email import email_list
-from rr.views.attribute_test_service import attribute_test_service
 
 # Overwrite default status handlers
 handler400 = 'rr.views.handlers.bad_request'
@@ -53,6 +52,5 @@ urlpatterns = [
     url(r'^testuser/data/(?P<pk>[0-9]+)/$', testuser_attribute_data, name='testuser-attribute-data'),
     url(r'^invite/$', activate_key, name='invite-activate'),
     url(r'^invite/(?P<invite_key>[\w+\s-]+)/$', activate_key, name='invite-activate-key'),
-    url(r'^testservice/$', attribute_test_service, name='attribute-test-service'),
     url('^', include('django.contrib.auth.urls')),
 ]

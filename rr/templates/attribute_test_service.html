@@ -45,10 +45,10 @@
   </thead>
   <tbody>
 {% for object in object_list %}
-    <tr>
+    {% if object.icon == "invalid" %}<tr class="table-danger">{% else %}<tr>{% endif %}
       {% if object.icon == "valid" %}<td class="text-success">&#10004;{% elif object.icon == "invalid" %}<td class="text-danger">&#10006;{% elif object.icon == "optional" %}<td class="text-info">&#128712;{% endif %}</td>
       <td>{{ object.friendlyname }}<Br><small>{{ object.name }}</small></td>
-      <td>{{ object.value }}</td>
+      <td>{{ object.value|safe }}</td>
       <td>{{ object.regex }}</td>
     </tr>
 {% endfor %}

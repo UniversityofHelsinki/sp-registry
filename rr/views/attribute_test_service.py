@@ -45,7 +45,7 @@ def attribute_test_service(request):
             else:
                 icon = "optional"
         if attribute.public or value:
-            object_list.append({'friendlyname': attribute.friendlyname, 'name': attribute.name, 'value': value, 'regex': regex, 'icon': icon})
+            object_list.append({'friendlyname': attribute.friendlyname, 'name': attribute.name, 'value': value.replace(";", "<br>"), 'regex': regex, 'icon': icon})
     if hasattr(settings, 'ATTRIBUTE_TEST_SERVICE_LOGOUT_URL'):
         logout_url = settings.ATTRIBUTE_TEST_SERVICE_LOGOUT_URL
     else:

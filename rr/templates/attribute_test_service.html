@@ -14,21 +14,22 @@
     <div class="row">
       <main class="col-lg-10 offset-lg-2 col-xl-8 offset-xl-2 pt-3">
 <h1>{% trans "Attribute test service" %}</h1>
-
+<p>This service lists all attributes that can be released to service providers by the login service.</p>
+<p>Some deprecated attributes may be hidden from the view if they don't contain any value for you.</p>
 <p>The following icons are used to represent the status of each attribute: </p>
 <table class="table table-sm">
   <tbody>
     <tr>
       <td class="text-success">&#10004;</td>
-      <td>{% trans "Attribute was released and it has reasonably correct value." %}</td>
+      <td>{% trans "Attribute was released and it has a seemingly correct value." %}</td>
     </tr>
     <tr>
       <td class="text-danger">&#10006;</td>
-      <td>{% trans "A mandatory attribute was not released or the attribute's value is not within the accepted value range." %}</td>
+      <td>{% trans "Attribute marked as a mandatory was not released or the attribute's value is not within the accepted value range." %}</td>
     </tr>
     <tr>
       <td class="text-info">&#128712;</td>
-      <td>{% trans "An optional attribute was not released." %}</td>
+      <td>{% trans "This attribute is an optional and doesn't have any value for you. Not all attributes are available for all users." %}</td>
     </tr>
   </tbody>
 </table>
@@ -55,6 +56,7 @@
   </tbody>
 </table>
 {% if logout_url %}<a href="{{ logout_url }}"><button type="button" class="btn btn-primary">{% trans "Logout using Single Logout" %}</button></a>{% endif %}
+<p></p>
       </main>
     </div>
   </div>

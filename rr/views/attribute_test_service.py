@@ -28,7 +28,7 @@ def attribute_test_service(request):
     attributes = Attribute.objects.filter(test_service=True).order_by('friendlyname')
     object_list = []
     for attribute in attributes:
-        value = request.META.get(attribute.shib_env, '')
+        value = request.META.get(attribute.shib_env, '').encode('latin1').decode('utf-8', 'ignore')
         regex = attribute.regex_test
         if value:
             if regex:

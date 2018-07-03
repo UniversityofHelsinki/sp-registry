@@ -8,7 +8,6 @@ from django.http.response import Http404
 from django.utils import timezone
 from django.core.exceptions import PermissionDenied
 import logging
-from rr.utils.notifications import admin_notification_modified_sp
 
 logger = logging.getLogger(__name__)
 
@@ -46,7 +45,7 @@ def attribute_list(request, pk):
         logger.debug("Tried to access unauthorized service provider")
         raise Http404(_("Service provider does not exist"))
     if request.method == "POST":
-        form = AttributeForm(request.POST, sp=sp)
+        form = AttributeForm(request.POST, sp=sp, is_admin=request.user.is_superuser)
         if form.is_valid():
             for field in form:
                 data = form.cleaned_data.get(field.name)
@@ -76,9 +75,9 @@ def attribute_list(request, pk):
                             logger.info("Attribute {attribute} reason updated for {sp} by {user}".format(attribute=sp_attribute.attribute,
                                                                                                          sp=sp,
                                                                                                          user=request.user))
-        form = AttributeForm(request.POST, sp=sp)
+        form = AttributeForm(request.POST, sp=sp, is_admin=request.user.is_superuser)
     else:
-        form = AttributeForm(sp=sp)
+        form = AttributeForm(sp=sp, is_admin=request.user.is_superuser)
     return render(request, "rr/attribute_list.html", {'form': form,
                                                       'object': sp})
 

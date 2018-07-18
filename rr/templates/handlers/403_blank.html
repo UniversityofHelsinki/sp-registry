@@ -1,0 +1,17 @@
+{% load i18n %}
+{% load static %}
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link rel="stylesheet" href="{% static "css/bootstrap.min.css" %}">
+  <link href="{% static "css/custom.css" %}" rel="stylesheet">
+  <title>{% trans "Error" %}</title>
+</head>
+<body>
+<h1>{% trans "Permission denied" %}</h1>
+<p>{% trans "You have insufficient user rights to access this page." %}</p>
+<button class="btn btn-primary" onclick="window.history.back();">{% trans "Return to previous page" %}</button>
+</body>
+</html>

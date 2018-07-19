@@ -26,7 +26,7 @@ class TestUserForm(ModelForm):
     def clean(self):
         cleaned_data = super().clean()
         username = cleaned_data.get("username")
-        if TestUser.objects.filter(sp=self.sp, username=username, end_at=None).exists():
+        if TestUser.objects.filter(username=username, end_at=None).exists():
             raise ValidationError(_("Username already exists"))
 
 

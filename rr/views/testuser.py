@@ -28,6 +28,9 @@ def testuser_list(request, pk):
     ``object_list``
         List of :model:`rr.TestUser`.
 
+    ``object_list_external``
+        List of :model:`rr.TestUser`.
+
     ``form``
         ModelForm for creating a :model:`rr.TestUser`
 
@@ -72,8 +75,19 @@ def testuser_list(request, pk):
                         testuser.end_at = timezone.now()
                         testuser.save()
                         logger.info("Test user {username} removed from {sp}".format(username=testuser.username, sp=sp))
+        elif "remove_testuser_external" in request.POST:
+            for key, value in request.POST.dict().items():
+                if value == "on":
+                    testuser = TestUser.objects.get(pk=key)
+                    print(testuser)
+                    if sp in testuser.valid_for.all() and testuser.sp != sp:
+                        print("remove")
+                        testuser.valid_for.remove(sp)
+                        logger.info("External test user {username} removed from {sp}".format(username=testuser.username, sp=sp))
     testusers = TestUser.objects.filter(sp=sp, end_at=None)
+    testusers_external = TestUser.objects.filter(valid_for=sp).exclude(sp=sp)
     return render(request, "rr/testuser.html", {'object_list': testusers,
+                                                'object_list_external': testusers_external,
                                                 'form': form,
                                                 'object': sp})
 

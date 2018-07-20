@@ -21,7 +21,10 @@ Scenario: Creating test users
     When I visit the "/"
     And clicking link with text "https://sp.example.net/sp"
 	And clicking visible link with text "Test Users"
-	And filling test user form
+	Then the result page will include text "External test users"
+	And the result page will include text "shholmes"
+	When removing external test user
+	Then the result page will not include text "shholmes"
+	When filling test user form
     Then the result page will include text "Username already exists"
     And the result page will not include text "shholmes"
-    

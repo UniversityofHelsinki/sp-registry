@@ -56,8 +56,8 @@ class TestUserDataForm(Form):
         attributes = SPAttribute.objects.filter(sp=self.user.sp, end_at=None)
         for field in attributes:
             self.fields[field.attribute.friendlyname] = CharField(label=field.attribute.friendlyname, max_length=511, required=False)
-            attribute = TestUserData.objects.filter(user=self.user, attribute=field.attribute).first()
-            if attribute:
-                self.fields[field.attribute.friendlyname].initial = attribute.value
+            attribute_values = TestUserData.objects.filter(user=self.user, attribute=field.attribute).values_list('value')
+            if attribute_values:
+                self.fields[field.attribute.friendlyname].initial = ';'.join(a[0] for a in attribute_values)
             else:
                 self.fields[field.attribute.friendlyname].widget = TextInput(attrs={'placeholder': ''})

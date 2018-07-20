@@ -19,6 +19,9 @@
 <p><input class="btn btn-primary" type="submit" name="reset_userdata" value="{% trans "Reset name based data" %}" /> <input class="btn btn-primary" type="submit" name="reset_otherdata" value="{% trans "Reset other data with random values" %}" /></p>
 </form>
 <h2>{% trans "Attribute values" %}</h2>
+<div class="alert alert-info" role="alert">
+<p>{% trans "Multiple values can be separated by semicolon." %}</p>
+</div>
 <form action="" method="post" class="form">
     {% csrf_token %}
     {% bootstrap_form form layout='horizontal' %}

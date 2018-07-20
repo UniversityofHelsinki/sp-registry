@@ -122,19 +122,14 @@ def testuser_attribute_data(request, pk):
             if form.is_valid():
                 for field in form:
                     data = form.cleaned_data.get(field.name)
-                    userdata = TestUserData.objects.filter(user=testuser, attribute__friendlyname=field.name).first()
-                    if userdata and not data:
-                        userdata.delete()
-                    elif data:
-                        if not userdata:
+                    values = data.split(';')
+                    TestUserData.objects.filter(user=testuser, attribute__friendlyname=field.name).delete()
+                    for value in values:
+                        if value:
                             attribute = Attribute.objects.filter(friendlyname=field.name).first()
                             TestUserData.objects.create(user=testuser,
                                                         attribute=attribute,
-                                                        value=data)
-                        else:
-                            if userdata.value != data:
-                                userdata.value = data
-                                userdata.save()
+                                                        value=value)
         if "reset_userdata" in request.POST:
             generate_user_data(testuser, userdata=True, otherdata=False)
             form = TestUserDataForm(user=testuser)

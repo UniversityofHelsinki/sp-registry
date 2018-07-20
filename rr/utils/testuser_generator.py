@@ -44,10 +44,10 @@ def generate_user_data(testuser, userdata=True, otherdata=True, scope="@example.
                                                       defaults={'value': str(randint(100000, 999999))})
             if attribute.attribute.friendlyname == "eduPersonAffiliation":
                 TestUserData.objects.update_or_create(user=testuser, attribute=attribute.attribute,
-                                                      defaults={'value': "member;staff;employee;student"})
+                                                      defaults={'value': "affiliate"})
             if attribute.attribute.friendlyname == "eduPersonScopedAffiliation":
                 TestUserData.objects.update_or_create(user=testuser, attribute=attribute.attribute,
-                                                      defaults={'value': "member" + scope + ";staff" + scope + ";employee" + scope + ";student" + scope})
+                                                      defaults={'value': "affiliate" + scope})
             if attribute.attribute.friendlyname == "eduPersonPrimaryAffiliation":
                 TestUserData.objects.update_or_create(user=testuser, attribute=attribute.attribute,
                                                       defaults={'value': "employee"})

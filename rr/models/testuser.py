@@ -9,7 +9,7 @@ class TestUser(models.Model):
     Stores a test user, related to :model:`rr.ServiceProvider`
     """
     sp = models.ForeignKey(ServiceProvider, on_delete=models.CASCADE)
-    username = models.CharField(max_length=255, verbose_name=_('Login name'))
+    username = models.CharField(max_length=50, verbose_name=_('Login name'))
     password = models.CharField(max_length=64, verbose_name=_('Password'))
     firstname = models.CharField(blank=True, null=True, max_length=255, verbose_name=_('First name'))
     lastname = models.CharField(blank=True, null=True, max_length=255, verbose_name=_('Last name'))
@@ -30,7 +30,7 @@ class TestUserData(models.Model):
     attribute = models.ForeignKey(Attribute, on_delete=models.CASCADE)
     user = models.ForeignKey(TestUser, on_delete=models.CASCADE)
     value = models.CharField(blank=True, null=True, max_length=511, verbose_name=_('Attribute value'))
-    username = models.CharField(max_length=255, verbose_name=_('Login name'))
+    username = models.CharField(max_length=50, verbose_name=_('Login name'))
     friendlyname = models.CharField(max_length=255, verbose_name=_('Attribute FriendlyName'))
     entity_id = models.CharField(max_length=255, verbose_name=_('Entity Id'))
 
@@ -42,6 +42,11 @@ class TestUserData(models.Model):
 
     def __str__(self):
         return '%s %s %s' % (self.entity_id, self.username, self.friendlyname)
+
+    class Meta:
+        indexes = [
+            models.Index(fields=['username']),
+        ]
 
 
 def update_entity_ids(sp):

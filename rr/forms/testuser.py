@@ -21,7 +21,7 @@ class TestUserForm(ModelForm):
         self.sp = kwargs.pop('sp', None)
         self.admin = kwargs.pop('admin', None)
         super(TestUserForm, self).__init__(*args, **kwargs)
-        self.fields['valid_for'].queryset = ServiceProvider.objects.filter(Q(end_at=None, test=True, admins=self.admin) | Q(pk=self.sp.pk))
+        self.fields['valid_for'].queryset = ServiceProvider.objects.filter(Q(end_at=None, test=True, admins=self.admin) | Q(pk=self.sp.pk)).distinct()
 
     def clean(self):
         cleaned_data = super().clean()

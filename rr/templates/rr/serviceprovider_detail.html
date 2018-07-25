@@ -16,6 +16,13 @@
 </table>
 <br>
 
+{% if not object.production and not object.test %}
+<div class="alert alert-info" role="alert">
+<p>{% trans "This service provider is currently not published to the production or the test IdPs. You may publish this SP in the Technical Attributes page." %}</p>
+<p>{% trans "You may also remove this SP from the registry by using the link at the bottom of this page." %}</p>
+</div>
+{% endif %}
+
 {% if missing %}
 <div class="alert alert-info" role="alert">
 <h2>{% trans "Missing data" %}</h2>

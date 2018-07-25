@@ -21,7 +21,7 @@ class BasicInformationForm(ModelForm):
                   'privacypolicy_sv', 'login_page_url', 'application_portfolio', 'notes',
                   'admin_notes']
         help_texts = {
-            'organization': _('Organization name, only changeable by registry admins.'),
+            'organization': _('Organization name, only changeable by the registry admins.'),
             'name_fi': _('Short (max 70 characters) and descriptive name for the service '
                          'in Finnish.<div class="text-danger">'
                          'Required for both production and test use.</div>'),
@@ -93,8 +93,13 @@ class TechnicalInformationForm(ModelForm):
             'encrypt_assertions': _('IdP encrypts attribute assertions sent to SP. Defaults to '
                                     'True. Do not change unless you are using a SP that does '
                                     'not support encryption.'),
-            'production': _('Publish this SP to the production IdP. Only validated data is used.'),
-            'test': _('Publish this SP to the test IdP using unvalidated data.'),
+            'production': _('Publish this SP to the production IdP. Only validated data is used. '
+                            'Any changes to production SPs must be validated by the IdP '
+                            'administrators before coming into effect.'
+                            '<div class="text-danger">Required for production use.</div>'),
+            'test': _('Publish this SP to the test IdP using unvalidated data. '
+                      'Any changes might take up to 15 minutes until they are published to '
+                      'the test IdP.'),
             'saml_product': _('For administrative use e.g. for testing different SPs during IdP '
                               'updates.'),
             'autoupdate_idp_metadata': _('Does this SP automatically update IdP metadata at least '

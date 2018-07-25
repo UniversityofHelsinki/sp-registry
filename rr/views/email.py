@@ -1,16 +1,19 @@
 import logging
-from django.utils.translation import ugettext as _
-from django.shortcuts import render
-from django.db.models.functions import Lower
+
+from smtplib import SMTPException
+
+from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import PermissionDenied
-from rr.models.serviceprovider import ServiceProvider
-from rr.models.contact import Contact
-from rr.forms.email import EmailSelectForm
 from django.core.mail import send_mail
-from django.conf import settings
-from smtplib import SMTPException
+from django.db.models.functions import Lower
+from django.shortcuts import render
+from django.utils.translation import ugettext as _
+
+from rr.forms.email import EmailSelectForm
+from rr.models.contact import Contact
 from rr.models.email import Template
+from rr.models.serviceprovider import ServiceProvider
 
 logger = logging.getLogger(__name__)
 
@@ -19,7 +22,7 @@ logger = logging.getLogger(__name__)
 def email_list(request):
     """
     Displays a list of email addresses and
-    send template emails
+    send template email
 
     **Context**
 
@@ -72,15 +75,22 @@ def email_list(request):
                     template = None
             service_providers = ServiceProvider.objects.filter(end_at=None)
             for sp in service_providers:
-                if (production_sp and sp.production) or (test_sp and sp.test) or (sp in individual_sp):
+                if (production_sp and sp.production) or (test_sp and sp.test) \
+                            or (sp in individual_sp):
                     if admin_emails:
                         emails.update(sp.admins.values_list(Lower('email'), flat=True))
                     if technical_contacts:
-                        emails.update(Contact.objects.filter(sp=sp, type="technical", end_at=None).values_list(Lower('email'), flat=True))
+                        emails.update(Contact.objects.filter(
+                            sp=sp, type="technical", end_at=None).values_list(Lower('email'),
+                                                                              flat=True))
                     if administrative_contacts:
-                        emails.update(Contact.objects.filter(sp=sp, type="administrative", end_at=None).values_list(Lower('email'), flat=True))
+                        emails.update(Contact.objects.filter(
+                            sp=sp, type="administrative", end_at=None).values_list(Lower('email'),
+                                                                                   flat=True))
                     if support_contacts:
-                        emails.update(Contact.objects.filter(sp=sp, type="support", end_at=None).values_list(Lower('email'), flat=True))
+                        emails.update(Contact.objects.filter(
+                            sp=sp, type="support", end_at=None).values_list(Lower('email'),
+                                                                            flat=True))
             emails.discard("")
             if template and template.title and template.body:
                 subject = template.title
@@ -88,13 +98,16 @@ def email_list(request):
                 if send:
                     for email in emails:
                         try:
-                            send_mail(subject, message, settings.SERVER_EMAIL, [email], fail_silently=False)
-                            logger.info("Sent email to {email} by {user}".format(email=email, user=request.user))
+                            send_mail(subject, message, settings.SERVER_EMAIL, [email],
+                                      fail_silently=False)
+                            logger.info("Sent email to {email} by {user}"
+                                        .format(email=email, user=request.user))
                         except SMTPException:
-                            logger.warning("Could not send invite to {email}".format(email=email))
+                            logger.warning("Could not send invite to {email}"
+                                           .format(email=email))
                             errors.append(email)
                     form = EmailSelectForm()
-                    success = _("Emails have been sent")
+                    success = _("Email have been sent")
     return render(request, "rr/email.html", {'object_list': sorted(emails),
                                              'form': form,
                                              'subject': subject,

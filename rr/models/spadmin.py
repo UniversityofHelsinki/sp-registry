@@ -1,9 +1,11 @@
-from django.db import models
-from django.utils.translation import ugettext_lazy as _
-from django.contrib.auth.models import User
-from rr.models.serviceprovider import ServiceProvider
-from django.utils import timezone
 import logging
+
+from django.contrib.auth.models import User
+from django.db import models
+from django.utils import timezone
+from django.utils.translation import ugettext_lazy as _
+
+from rr.models.serviceprovider import ServiceProvider
 
 logger = logging.getLogger(__name__)
 
@@ -25,7 +27,8 @@ class KeystoreManager(models.Manager):
         from dateutil.relativedelta import relativedelta
         date = timezone.now() + relativedelta(months=1)
         activation_key = hashlib.sha1(str(random.random()).encode('utf-8')).hexdigest()
-        key = self.create(sp=sp, creator=creator, activation_key=activation_key, email=email, valid_until=date)
+        key = self.create(sp=sp, creator=creator, activation_key=activation_key, email=email,
+                          valid_until=date)
         return key
 
     def activate_key(self, user, key):
@@ -42,7 +45,8 @@ class KeystoreManager(models.Manager):
             keystore.delete()
             return False
         keystore.sp.admins.add(user)
-        logger.info("Invite for for {sp} was activated by {user}".format(sp=keystore.sp, user=user))
+        logger.info("Invite for for {sp} was activated by {user}".format(sp=keystore.sp,
+                                                                         user=user))
         sp = keystore.sp.pk
         keystore.delete()
         return sp

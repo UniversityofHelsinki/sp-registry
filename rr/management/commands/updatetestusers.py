@@ -5,6 +5,7 @@ Usage: ./manage.py updatetestusers
 """
 
 from django.core.management.base import BaseCommand
+
 from rr.models.testuser import TestUser
 
 

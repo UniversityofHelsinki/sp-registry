@@ -1,11 +1,14 @@
-from rr.models.serviceprovider import ServiceProvider
-from rr.models.endpoint import Endpoint
-from rr.forms.endpoint import EndpointForm
-from django.shortcuts import render
-from django.http.response import Http404
-from django.contrib.auth.decorators import login_required
-from django.utils import timezone
 import logging
+
+from django.contrib.auth.decorators import login_required
+from django.http.response import Http404
+from django.shortcuts import render
+from django.utils import timezone
+
+from rr.forms.endpoint import EndpointForm
+from rr.models.endpoint import Endpoint
+from rr.models.serviceprovider import ServiceProvider
+
 
 logger = logging.getLogger(__name__)
 
@@ -57,7 +60,8 @@ def endpoint_list(request, pk):
                                         url=url,
                                         index=index)
                 sp.save_modified()
-                logger.info("Endpoint added for {sp} by {user}".format(sp=sp, user=request.user))
+                logger.info("Endpoint added for {sp} by {user}"
+                            .format(sp=sp, user=request.user))
                 form = EndpointForm(sp=sp)
         elif "remove_endpoint" in request.POST:
             for key, value in request.POST.dict().items():
@@ -67,7 +71,8 @@ def endpoint_list(request, pk):
                         endpoint.end_at = timezone.now()
                         endpoint.save()
                         sp.save_modified()
-                        logger.info("Endpoint removed from {sp} by {user}".format(sp=sp, user=request.user))
+                        logger.info("Endpoint removed from {sp} by {user}"
+                                    .format(sp=sp, user=request.user))
     endpoints = Endpoint.objects.filter(sp=sp, end_at=None)
     return render(request, "rr/endpoint.html", {'object_list': endpoints,
                                                 'form': form,

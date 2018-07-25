@@ -1,5 +1,7 @@
 from behave import when, then, given
+
 from django.contrib.auth.models import User
+
 from rr.models.serviceprovider import ServiceProvider
 
 
@@ -13,7 +15,8 @@ def create_user(context, username):
 
 @given(u'superuser "{username}" exists')
 def create_superuser(context, username):
-    u = User.objects.create_superuser(username=username, password='mysecretpassword', email="master.guy@example.org")
+    u = User.objects.create_superuser(username=username, password='mysecretpassword',
+                                      email="master.guy@example.org")
     u.first_name = "Master"
     u.last_name = "Guy"
     u.save()

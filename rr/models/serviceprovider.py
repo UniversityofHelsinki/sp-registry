@@ -1,10 +1,11 @@
-from django.db import models
 from django.contrib.auth.models import User
-from django.utils.translation import ugettext_lazy as _, get_language
-from rr.models.attribute import Attribute
-from rr.models.organization import Organization
 from django.core.validators import MaxLengthValidator
+from django.db import models
+from django.utils.translation import ugettext_lazy as _, get_language
+
+from rr.models.attribute import Attribute
 from rr.models.nameidformat import NameIDFormat
+from rr.models.organization import Organization
 from rr.utils.notifications import admin_notification_modified_sp
 
 
@@ -14,35 +15,56 @@ class ServiceProvider(models.Model):
     :model:`rr.Attribute` through :model:`rr.SPAttribute`
     """
     entity_id = models.CharField(max_length=255, verbose_name=_('Entity Id'))
-    organization = models.ForeignKey(Organization, blank=True, null=True, on_delete=models.SET_NULL, verbose_name=_('Organization'))
-    name_fi = models.CharField(max_length=70, blank=True, verbose_name=_('Service Name (Finnish)'), validators=[MaxLengthValidator(70)])
-    name_en = models.CharField(max_length=70, blank=True, verbose_name=_('Service Name (English)'), validators=[MaxLengthValidator(70)])
-    name_sv = models.CharField(max_length=70, blank=True, verbose_name=_('Service Name (Swedish)'), validators=[MaxLengthValidator(70)])
-    description_fi = models.CharField(max_length=140, blank=True, verbose_name=_('Service Description (Finnish)'),
+    organization = models.ForeignKey(Organization, blank=True, null=True,
+                                     on_delete=models.SET_NULL, verbose_name=_('Organization'))
+    name_fi = models.CharField(max_length=70, blank=True,
+                               verbose_name=_('Service Name (Finnish)'),
+                               validators=[MaxLengthValidator(70)])
+    name_en = models.CharField(max_length=70, blank=True,
+                               verbose_name=_('Service Name (English)'),
+                               validators=[MaxLengthValidator(70)])
+    name_sv = models.CharField(max_length=70, blank=True,
+                               verbose_name=_('Service Name (Swedish)'),
+                               validators=[MaxLengthValidator(70)])
+    description_fi = models.CharField(max_length=140, blank=True,
+                                      verbose_name=_('Service Description (Finnish)'),
                                       validators=[MaxLengthValidator(140)])
-    description_en = models.CharField(max_length=140, blank=True, verbose_name=_('Service Description (English)'),
+    description_en = models.CharField(max_length=140, blank=True,
+                                      verbose_name=_('Service Description (English)'),
                                       validators=[MaxLengthValidator(140)])
-    description_sv = models.CharField(max_length=140, blank=True, verbose_name=_('Service Description (Swedish)'),
+    description_sv = models.CharField(max_length=140, blank=True,
+                                      verbose_name=_('Service Description (Swedish)'),
                                       validators=[MaxLengthValidator(140)])
-    privacypolicy_fi = models.URLField(max_length=255, blank=True, verbose_name=_('Privacy Policy URL (Finnish)'))
-    privacypolicy_en = models.URLField(max_length=255, blank=True, verbose_name=_('Privacy Policy URL (English)'))
-    privacypolicy_sv = models.URLField(max_length=255, blank=True, verbose_name=_('Privacy Policy URL (Swedish)'))
-    login_page_url = models.URLField(max_length=255, blank=True, verbose_name=_('Service Login Page URL'))
-    discovery_service_url = models.URLField(max_length=255, blank=True, verbose_name=_('Discovery Service URL'))
+    privacypolicy_fi = models.URLField(max_length=255, blank=True,
+                                       verbose_name=_('Privacy Policy URL (Finnish)'))
+    privacypolicy_en = models.URLField(max_length=255, blank=True,
+                                       verbose_name=_('Privacy Policy URL (English)'))
+    privacypolicy_sv = models.URLField(max_length=255, blank=True,
+                                       verbose_name=_('Privacy Policy URL (Swedish)'))
+    login_page_url = models.URLField(max_length=255, blank=True,
+                                     verbose_name=_('Service Login Page URL'))
+    discovery_service_url = models.URLField(max_length=255, blank=True,
+                                            verbose_name=_('Discovery Service URL'))
 
     nameidformat = models.ManyToManyField(NameIDFormat, blank=True)
 
     sign_assertions = models.BooleanField(default=False, verbose_name=_('Sign SSO assertions'))
     sign_requests = models.BooleanField(default=False, verbose_name=_('Sign SSO requests'))
     sign_responses = models.BooleanField(default=True, verbose_name=_('Sign SSO responses'))
-    encrypt_assertions = models.BooleanField(default=True, verbose_name=_('Encrypt SSO assertions'))
+    encrypt_assertions = models.BooleanField(default=True,
+                                             verbose_name=_('Encrypt SSO assertions'))
 
-    production = models.BooleanField(default=False, verbose_name=_('Publish to production servers'))
+    production = models.BooleanField(default=False,
+                                     verbose_name=_('Publish to production servers'))
     test = models.BooleanField(default=False, verbose_name=_('Publish to test servers'))
 
-    saml_product = models.CharField(max_length=255, blank=True, verbose_name=_('SAML product this service is using'))
-    autoupdate_idp_metadata = models.BooleanField(default=False, verbose_name=_('SP updates IdP metadata automatically'))
-    application_portfolio = models.URLField(max_length=255, blank=True, verbose_name=_('Application portfolio URL'))
+    saml_product = models.CharField(max_length=255, blank=True,
+                                    verbose_name=_('SAML product this service is using'))
+    autoupdate_idp_metadata = models.BooleanField(
+        default=False,
+        verbose_name=_('SP updates IdP metadata automatically'))
+    application_portfolio = models.URLField(max_length=255, blank=True,
+                                            verbose_name=_('Application portfolio URL'))
     notes = models.TextField(blank=True, verbose_name=_('Additional notes'))
     admin_notes = models.TextField(blank=True, verbose_name=_('Admin notes'))
 
@@ -55,11 +77,13 @@ class ServiceProvider(models.Model):
     created_at = models.DateTimeField(auto_now_add=True, verbose_name=_('Created at'))
     updated_at = models.DateTimeField(auto_now=True, verbose_name=_('Updated at'))
     end_at = models.DateTimeField(blank=True, null=True, verbose_name=_('Entry end time'))
-    updated_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, verbose_name=_('Updated by'))
+    updated_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True,
+                                   verbose_name=_('Updated by'))
     validated = models.DateTimeField(null=True, blank=True, verbose_name=_('Validated on'))
 
     def name(self):
-        """Returns name in current language, or in priority order en->fi->sv if current is not available"""
+        """Returns name in current language, or in priority order
+           en->fi->sv if current is not available"""
         if get_language() == "fi" and self.name_fi:
             return self.name_fi
         elif get_language() == "sv" and self.name_sv:
@@ -73,7 +97,8 @@ class ServiceProvider(models.Model):
                 return self.name_sv
 
     def description(self):
-        """Returns description in current language, or in priority order en->fi->sv if current is not available"""
+        """Returns description in current language, or in priority order
+           en->fi->sv if current is not available"""
         if get_language() == "fi" and self.description_fi:
             return self.description_fi
         elif get_language() == "sv" and self.description_sv:
@@ -129,10 +154,12 @@ class ServiceProvider(models.Model):
                 except AttributeError:
                     value = None
             # only display fields with values and skip some fields entirely
-            if f.editable and f.name not in ('id', 'end_at', 'history', 'validated', 'modified', 'updated_by', 'entity_id',
-                                             'discovery_service_url', 'name_format_transient', 'name_format_persistent',
-                                             'sign_assertions', 'sign_requests', 'sign_responses', 'encrypt_assertions',
-                                             'production', 'test', 'saml_product', 'autoupdate_idp_metadata'):
+            if f.editable and f.name not in ('id', 'end_at', 'history', 'validated', 'modified',
+                                             'updated_by', 'entity_id', 'discovery_service_url',
+                                             'name_format_transient', 'name_format_persistent',
+                                             'sign_assertions', 'sign_requests', 'sign_responses',
+                                             'encrypt_assertions', 'production', 'test',
+                                             'saml_product', 'autoupdate_idp_metadata'):
                 fields.append(
                   {
                    'label': f.verbose_name,
@@ -158,10 +185,13 @@ class ServiceProvider(models.Model):
                 except AttributeError:
                     value = None
             # Skip fields in list
-            if f.editable and f.name not in ('id', 'end_at', 'history', 'validated', 'modified', 'updated_by', 'name_fi', 'name_en',
-                                             'name_sv', 'description_fi', 'description_en', 'description_sv',
-                                             'privacypolicy_fi', 'privacypolicy_en', 'privacypolicy_sv',
-                                             'login_page_url', 'application_portfolio', 'notes', 'admin_notes', 'organization'):
+            if f.editable and f.name not in ('id', 'end_at', 'history', 'validated', 'modified',
+                                             'updated_by', 'name_fi', 'name_en', 'name_sv',
+                                             'description_fi', 'description_en', 'description_sv',
+                                             'privacypolicy_fi', 'privacypolicy_en',
+                                             'privacypolicy_sv', 'login_page_url',
+                                             'application_portfolio', 'notes', 'admin_notes',
+                                             'organization'):
                 fields.append(
                   {
                    'label': f.verbose_name,
@@ -178,7 +208,8 @@ class ServiceProvider(models.Model):
         else:
             self.modified = True
             self.save()
-            modified_sp = ServiceProvider.objects.filter(end_at=None, modified=True).order_by('entity_id')
+            modified_sp = ServiceProvider.objects.filter(end_at=None,
+                                                         modified=True).order_by('entity_id')
             admin_notification_modified_sp(modified_sp)
 
 
@@ -189,7 +220,8 @@ class SPAttribute(models.Model):
     """
     attribute = models.ForeignKey(Attribute, on_delete=models.CASCADE)
     sp = models.ForeignKey(ServiceProvider, on_delete=models.CASCADE)
-    reason = models.CharField(max_length=255, verbose_name=_('Reason for the attribute requisition'))
+    reason = models.CharField(max_length=255,
+                              verbose_name=_('Reason for the attribute requisition'))
     created_at = models.DateTimeField(auto_now_add=True, verbose_name=_('Created at'))
     updated_at = models.DateTimeField(auto_now=True, verbose_name=_('Updated at'))
     end_at = models.DateTimeField(blank=True, null=True, verbose_name=_('Entry end time'))

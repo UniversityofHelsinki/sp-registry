@@ -1,7 +1,8 @@
-from django.forms import ModelForm
-from rr.models.endpoint import Endpoint
 from django.core.validators import ValidationError
+from django.forms import ModelForm
 from django.utils.translation import ugettext as _
+
+from rr.models.endpoint import Endpoint
 
 
 class EndpointForm(ModelForm):
@@ -19,5 +20,6 @@ class EndpointForm(ModelForm):
         binding = cleaned_data.get("binding")
         location = cleaned_data.get("url")
         index = cleaned_data.get("index")
-        if Endpoint.objects.filter(sp=self.sp, type=servicetype, binding=binding, url=location, index=index, end_at=None).exists():
+        if Endpoint.objects.filter(sp=self.sp, type=servicetype, binding=binding, url=location,
+                                   index=index, end_at=None).exists():
             raise ValidationError(_("Endpoint already exists"))

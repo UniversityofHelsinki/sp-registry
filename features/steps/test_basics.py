@@ -1,4 +1,5 @@
 from behave import when, then, given
+
 from django.core import mail
 
 

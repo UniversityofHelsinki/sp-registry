@@ -2,24 +2,27 @@
 Functions for genereating metadata of service providers
 """
 
-from rr.models.serviceprovider import ServiceProvider
-from django.shortcuts import render
-from django.http.response import Http404
-from django.contrib.auth.decorators import login_required
-from django.utils.translation import ugettext as _
+import hashlib
 import logging
+from datetime import datetime
+from os.path import join
+
+from git import Repo
+from lxml import etree
+
+from django.conf import settings
+from django.contrib.auth.decorators import login_required
+from django.core.exceptions import PermissionDenied
+from django.http.response import Http404
+from django.shortcuts import render
+from django.utils.translation import ugettext as _
+
+from rr.forms.metadata import MetadataForm, MetadataCommitForm
+from rr.models.serviceprovider import ServiceProvider
 from rr.utils.metadata_generator import metadata_generator
 from rr.utils.metadata_generator import metadata_generator_list
-from rr.forms.metadata import MetadataForm, MetadataCommitForm
-from lxml import etree
 from rr.utils.metadata_parser import metadata_parser
-from git import Repo, NoSuchPathError
-from django.conf import settings
-from django.core.exceptions import PermissionDenied
-from os.path import join
-import hashlib
-from datetime import datetime
-from cgi import log
+from git.exc import InvalidGitRepositoryError, NoSuchPathError
 
 logger = logging.getLogger(__name__)
 
@@ -58,7 +61,8 @@ def metadata(request, pk):
         metadata_sp = ServiceProvider.objects.filter(history=sp.pk).exclude(validated=None).last()
     if metadata_sp:
         tree = metadata_generator(sp=metadata_sp, validated=validated)
-        metadata = etree.tostring(tree, pretty_print=True, encoding='UTF-8').replace(b'xmlns:xmlns', b'xmlns')
+        metadata = etree.tostring(tree, pretty_print=True,
+                                  encoding='UTF-8').replace(b'xmlns:xmlns', b'xmlns')
     else:
         metadata = None
     return render(request, "rr/metadata.html", {'object': sp,
@@ -90,13 +94,16 @@ def metadata_import(request):
                 metadata = form.cleaned_data['metadata']
                 disable_checks = request.POST.get('disable_checks', False)
                 validate = request.POST.get('validate', False)
-                parser = etree.XMLParser(ns_clean=True, remove_comments=True, remove_blank_text=True)
+                parser = etree.XMLParser(ns_clean=True, remove_comments=True,
+                                         remove_blank_text=True)
                 entity = etree.fromstring(metadata, parser)
-                sp, errors = metadata_parser(entity, overwrite=False, verbosity=2, validate=validate, disable_checks=disable_checks)
+                sp, errors = metadata_parser(entity, overwrite=False, verbosity=2,
+                                             validate=validate, disable_checks=disable_checks)
                 if sp:
                     sp.admins.add(request.user)
                     form = None
-                    logger.info("Metadata for SP %s imported by %s".format(sp=sp, user=request.user))
+                    logger.info("Metadata for SP %s imported by %s"
+                                .format(sp=sp, user=request.user))
     return render(request, "rr/metadata_import.html", {'form': form,
                                                        'errors': errors,
                                                        'sp': sp})
@@ -146,12 +153,14 @@ def metadata_management(request):
         raise PermissionDenied
     try:
         repo = Repo(settings.METADATA_GIT_REPOSITORIO)
-    except:
-        error_message = _("Repository not found.")
+    except InvalidGitRepositoryError:
+        error_message = _("Git repository appears to have an invalid format.")
+        return render(request, "error.html", {'error_message': error_message})
+    except NoSuchPathError:
+        error_message = _("Repository path could not be accessed.")
         return render(request, "error.html", {'error_message': error_message})
     origin = repo.remotes.origin
     diff = repo.git.diff('HEAD')
-    # Load maximum 5 last commits
     log = last_commits(repo, 5)
     if repo.commit().hexsha != origin.fetch()[0].commit.hexsha:
         error = _("Remote repository not matching local, please fix manually.")
@@ -167,7 +176,6 @@ def metadata_management(request):
                 repo.index.add([settings.METADATA_FILENAME])
                 repo.index.commit(commit_message)
                 origin.push()
-                # update last commits
                 log = last_commits(repo, 5)
                 if repo.commit().hexsha != origin.fetch()[0].commit.hexsha:
                     error = _("Pushing to remote did not work, please fix manually.")
@@ -182,8 +190,8 @@ def metadata_management(request):
         with open(metadata_file, 'wb') as f:
             f.write('<?xml version="1.0" encoding="UTF-8"?>\n'.encode('utf-8'))
             # Hack for correcting namespace definition by removing prefix.
-            f.write(etree.tostring(metadata, pretty_print=True, encoding='UTF-8').replace(b'xmlns:xmlns', b'xmlns'))
-            # update diff
+            f.write(etree.tostring(metadata, pretty_print=True,
+                                   encoding='UTF-8').replace(b'xmlns:xmlns', b'xmlns'))
             diff = repo.git.diff('HEAD')
     diff_hash = hashlib.md5(diff.encode('utf-8')).hexdigest()
     form = MetadataCommitForm(diff_hash=diff_hash)

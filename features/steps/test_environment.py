@@ -1,9 +1,11 @@
 from behave import when, then, given
+
 from django.contrib.auth.models import User
+from django.utils import timezone
+
+from rr.models.email import Template
 from rr.models.serviceprovider import ServiceProvider
 from rr.models.spadmin import Keystore
-from django.utils import timezone
-from rr.models.email import Template
 
 
 @given(u'test environment with logged in user exists')
@@ -15,9 +17,13 @@ def create_test_environment(context):
     u.last_name = "Testeri"
     u.email = "user@example.org"
     u.save()
-    sp = ServiceProvider.objects.create(entity_id="https://sp.example.org/sp", name_en="My program name", validated=timezone.now(), modified=False)
+    sp = ServiceProvider.objects.create(entity_id="https://sp.example.org/sp",
+                                        name_en="My program name",
+                                        validated=timezone.now(), modified=False)
     sp.admins.add(u)
-    ServiceProvider.objects.create(entity_id="https://sp.example.com/sp", name_en="SP without admins", validated=timezone.now(), modified=False)
+    ServiceProvider.objects.create(entity_id="https://sp.example.com/sp",
+                                   name_en="SP without admins",
+                                   validated=timezone.now(), modified=False)
     context.browser.visit(context.base_url)
     context.browser.find_by_name('local_login').first.click()
     context.browser.fill("username", username)
@@ -28,7 +34,10 @@ def create_test_environment(context):
 @given(u'additional SP with admin exists')
 def create_additional_SP(context):
     u = User.objects.all().first()
-    sp = ServiceProvider.objects.create(entity_id="https://sp.example.net/sp", name_en="Additional SP", production=True, test=True, validated=timezone.now(), modified=False)
+    sp = ServiceProvider.objects.create(entity_id="https://sp.example.net/sp",
+                                        name_en="Additional SP",
+                                        production=True, test=True,
+                                        validated=timezone.now(), modified=False)
     sp.admins.add(u)
 
 
@@ -36,13 +45,18 @@ def create_additional_SP(context):
 def create_test_environment_with_superuser(context):
     username = "myself"
     password = "mysecretpassword"
-    u = User.objects.create_superuser(username=username, email="superuser@example.org", password=password)
+    u = User.objects.create_superuser(username=username, email="superuser@example.org",
+                                      password=password)
     u.first_name = "Teemu"
     u.last_name = "Testeri"
     u.save()
-    sp = ServiceProvider.objects.create(entity_id="https://sp.example.org/sp", name_en="My program name", validated=timezone.now(), modified=False, test=True)
+    sp = ServiceProvider.objects.create(entity_id="https://sp.example.org/sp",
+                                        name_en="My program name", validated=timezone.now(),
+                                        modified=False, test=True)
     sp.admins.add(u)
-    ServiceProvider.objects.create(entity_id="https://sp.example.com/sp", name_en="SP without admins", validated=timezone.now(), modified=False)
+    ServiceProvider.objects.create(entity_id="https://sp.example.com/sp",
+                                   name_en="SP without admins",
+                                   validated=timezone.now(), modified=False)
     context.browser.visit(context.base_url)
     context.browser.find_by_name('local_login').first.click()
     context.browser.fill("username", username)

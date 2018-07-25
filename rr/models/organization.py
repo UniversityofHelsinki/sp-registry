@@ -6,15 +6,24 @@ class Organization(models.Model):
     """
     Stores an organization, related to :model:`rr.ServiceProvider`
     """
-    name_fi = models.CharField(max_length=255, blank=True, verbose_name=_('Organization Name (Finnish)'))
-    name_en = models.CharField(max_length=255, blank=True, verbose_name=_('Organization Name (English)'))
-    name_sv = models.CharField(max_length=255, blank=True, verbose_name=_('Organization Name (Swedish)'))
-    description_fi = models.CharField(max_length=255, blank=True, verbose_name=_('Organization Description (Finnish)'))
-    description_en = models.CharField(max_length=255, blank=True, verbose_name=_('Organization Description (English)'))
-    description_sv = models.CharField(max_length=255, blank=True, verbose_name=_('Organization Description (Swedish)'))
-    url_fi = models.URLField(max_length=255, blank=True, verbose_name=_('Organization URL (Finnish)'))
-    url_en = models.URLField(max_length=255, blank=True, verbose_name=_('Organization URL (English)'))
-    url_sv = models.URLField(max_length=255, blank=True, verbose_name=_('Organization URL (Swedish)'))
+    name_fi = models.CharField(max_length=255, blank=True,
+                               verbose_name=_('Organization Name (Finnish)'))
+    name_en = models.CharField(max_length=255, blank=True,
+                               verbose_name=_('Organization Name (English)'))
+    name_sv = models.CharField(max_length=255, blank=True,
+                               verbose_name=_('Organization Name (Swedish)'))
+    description_fi = models.CharField(max_length=255, blank=True,
+                                      verbose_name=_('Organization Description (Finnish)'))
+    description_en = models.CharField(max_length=255, blank=True,
+                                      verbose_name=_('Organization Description (English)'))
+    description_sv = models.CharField(max_length=255, blank=True,
+                                      verbose_name=_('Organization Description (Swedish)'))
+    url_fi = models.URLField(max_length=255, blank=True,
+                             verbose_name=_('Organization URL (Finnish)'))
+    url_en = models.URLField(max_length=255, blank=True,
+                             verbose_name=_('Organization URL (English)'))
+    url_sv = models.URLField(max_length=255, blank=True,
+                             verbose_name=_('Organization URL (Swedish)'))
 
     def __str__(self):
         if get_language() == "fi" and self.name_fi:

@@ -1,13 +1,15 @@
+import logging
+
+from django.contrib.auth.decorators import login_required
+from django.core.exceptions import PermissionDenied
+from django.http.response import Http404
+from django.shortcuts import render
+from django.utils import timezone
+from django.utils.translation import ugettext as _
+
+from rr.forms.attribute import AttributeForm
 from rr.models.attribute import Attribute
 from rr.models.serviceprovider import ServiceProvider, SPAttribute
-from rr.forms.attribute import AttributeForm
-from django.contrib.auth.decorators import login_required
-from django.utils.translation import ugettext as _
-from django.shortcuts import render
-from django.http.response import Http404
-from django.utils import timezone
-from django.core.exceptions import PermissionDenied
-import logging
 
 logger = logging.getLogger(__name__)
 
@@ -49,32 +51,30 @@ def attribute_list(request, pk):
         if form.is_valid():
             for field in form:
                 data = form.cleaned_data.get(field.name)
-                sp_attribute = SPAttribute.objects.filter(sp=sp, attribute__friendlyname=field.name, end_at=None).first()
+                sp_attribute = SPAttribute.objects.filter(sp=sp, attribute__friendlyname=field.name,
+                                                          end_at=None).first()
                 if sp_attribute and not data:
                     sp_attribute.end_at = timezone.now()
                     sp_attribute.save()
                     sp.save_modified()
-                    logger.info("Attribute requisition for {attribute} removed from {sp} by {user}".format(attribute=sp_attribute.attribute,
-                                                                                                           sp=sp,
-                                                                                                           user=request.user))
+                    logger.info("Attribute requisition for {attribute} removed from {sp} by {user}"
+                                .format(attribute=sp_attribute.attribute, sp=sp,
+                                        user=request.user))
                 elif data:
                     if not sp_attribute:
                         attribute = Attribute.objects.filter(friendlyname=field.name).first()
-                        SPAttribute.objects.create(sp=sp,
-                                                   attribute=attribute,
-                                                   reason=data)
+                        SPAttribute.objects.create(sp=sp, attribute=attribute, reason=data)
                         sp.save_modified()
-                        logger.info("Attribute {attribute} requested for {sp} by {user}".format(attribute=attribute,
-                                                                                                sp=sp,
-                                                                                                user=request.user))
+                        logger.info("Attribute {attribute} requested for {sp} by {user}"
+                                    .format(attribute=attribute, sp=sp, user=request.user))
                     else:
                         if sp_attribute.reason != data:
                             sp_attribute.reason = data
                             sp_attribute.save()
                             sp.save_modified()
-                            logger.info("Attribute {attribute} reason updated for {sp} by {user}".format(attribute=sp_attribute.attribute,
-                                                                                                         sp=sp,
-                                                                                                         user=request.user))
+                            logger.info("Attribute {attribute} reason updated for {sp} by {user}"
+                                        .format(attribute=sp_attribute.attribute, sp=sp,
+                                                user=request.user))
         form = AttributeForm(request.POST, sp=sp, is_admin=request.user.is_superuser)
     else:
         form = AttributeForm(sp=sp, is_admin=request.user.is_superuser)
@@ -131,6 +131,7 @@ def attribute_view(request, pk):
         attribute = Attribute.objects.get(pk=pk)
     except ServiceProvider.DoesNotExist:
         raise Http404(_("Attribute proviced does not exist"))
-    attributes = SPAttribute.objects.filter(attribute=attribute, end_at=None).order_by('sp__entity_id')
+    attributes = SPAttribute.objects.filter(attribute=attribute,
+                                            end_at=None).order_by('sp__entity_id')
     return render(request, "rr/attribute_admin_view.html", {'object_list': attributes,
                                                             'attribute': attribute})

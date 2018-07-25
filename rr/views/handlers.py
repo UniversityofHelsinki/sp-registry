@@ -1,8 +1,9 @@
 """"
 Custom handlers for status pages
 """
-from django.shortcuts import render
 import logging
+
+from django.shortcuts import render
 
 logger = logging.getLogger(__name__)
 

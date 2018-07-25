@@ -1,5 +1,4 @@
 from behave import when, then, given
-from django.core import mail
 
 
 @when(u'filling invite form with email "{email}"')

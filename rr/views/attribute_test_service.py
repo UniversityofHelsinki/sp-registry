@@ -1,10 +1,11 @@
-from rr.models.attribute import Attribute
-from django.utils.translation import ugettext as _
-from django.shortcuts import render
-from django.http.response import Http404
 from django.conf import settings
-from django.core.validators import RegexValidator
 from django.core.exceptions import ValidationError
+from django.core.validators import RegexValidator
+from django.http.response import Http404
+from django.shortcuts import render
+from django.utils.translation import ugettext as _
+
+from rr.models.attribute import Attribute
 
 
 def attribute_test_service(request):
@@ -45,7 +46,10 @@ def attribute_test_service(request):
             else:
                 icon = "optional"
         if attribute.public or value:
-            object_list.append({'friendlyname': attribute.friendlyname, 'name': attribute.name, 'value': value.replace(";", "<br>"), 'regex': regex, 'icon': icon})
+            object_list.append({'friendlyname': attribute.friendlyname,
+                                'name': attribute.name,
+                                'value': value.replace(";", "<br>"),
+                                'regex': regex, 'icon': icon})
     if hasattr(settings, 'ATTRIBUTE_TEST_SERVICE_LOGOUT_URL'):
         logout_url = settings.ATTRIBUTE_TEST_SERVICE_LOGOUT_URL
     else:

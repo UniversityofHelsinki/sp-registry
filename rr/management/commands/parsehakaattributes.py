@@ -4,10 +4,11 @@ Short term manual hack for IdP 2 as Haka stopped releasing attribute-filter file
 
 Usage help: ./manage.py cleandb -h
 """
+from lxml import etree
+
+from django.core.management.base import BaseCommand
 
 from rr.models.attribute import Attribute
-from lxml import etree, objectify
-from django.core.management.base import BaseCommand
 
 
 def haka_attribute_parser(filename):
@@ -17,10 +18,22 @@ def haka_attribute_parser(filename):
     parser = etree.XMLParser(ns_clean=True, remove_comments=True, remove_blank_text=True)
     tree = etree.parse(filename, parser)
     root = tree.getroot()
-    AttributeFilterPolicyGroup = etree.Element("AttributeFilterPolicyGroup", id="urn:mace:funet.fi:haka", nsmap={"xmlns": 'urn:mace:shibboleth:2.0:afp'})
-    AttributeFilterPolicyGroup.attrib['{urn:mace:shibboleth:2.0:afp}basic'] = "urn:mace:shibboleth:2.0:afp:mf:basic"
-    AttributeFilterPolicyGroup.attrib['{urn:mace:shibboleth:2.0:afp}saml'] = "urn:mace:shibboleth:2.0:afp:mf:saml"
-    AttributeFilterPolicyGroup.attrib['{http://www.w3.org/2001/XMLSchema-instance}schemaLocation'] = "urn:mace:shibboleth:2.0:afp classpath:/schema/shibboleth-2.0-afp.xsd urn:mace:shibboleth:2.0:afp:mf:basic classpath:/schema/shibboleth-2.0-afp-mf-basic.xsd urn:mace:shibboleth:2.0:afp:mf:saml classpath:/schema/shibboleth-2.0-afp-mf-saml.xsd"
+    AttributeFilterPolicyGroup = etree.Element("AttributeFilterPolicyGroup",
+                                               id="urn:mace:funet.fi:haka",
+                                               nsmap={"xmlns": 'urn:mace:shibboleth:2.0:afp'})
+    AttributeFilterPolicyGroup.attrib[
+        '{urn:mace:shibboleth:2.0:afp}basic'
+        ] = "urn:mace:shibboleth:2.0:afp:mf:basic"
+    AttributeFilterPolicyGroup.attrib[
+        '{urn:mace:shibboleth:2.0:afp}saml'
+        ] = "urn:mace:shibboleth:2.0:afp:mf:saml"
+    AttributeFilterPolicyGroup.attrib[
+        '{http://www.w3.org/2001/XMLSchema-instance}schemaLocation'
+        ] = "urn:mace:shibboleth:2.0:afp classpath:/schema/shibboleth-2.0-afp.xsd " \
+        "urn:mace:shibboleth:2.0:afp:mf:basic " \
+        "classpath:/schema/shibboleth-2.0-afp-mf-basic.xsd " \
+        "urn:mace:shibboleth:2.0:afp:mf:saml " \
+        "classpath:/schema/shibboleth-2.0-afp-mf-saml.xsd"
     for a in root:
         entityID = a.get("entityID")
         if entityID:
@@ -36,27 +49,41 @@ def haka_attribute_parser(filename):
                                     if friendlyname:
                                         attribute = Attribute.objects.filter(name=name).first()
                                         if not attribute:
-                                            attribute = Attribute.objects.filter(friendlyname=friendlyname).first()
+                                            attribute = Attribute.objects.filter(
+                                                friendlyname=friendlyname).first()
                                         if attribute:
                                             attributes.append(attribute)
                                         else:
-                                            print("Could not add attribute " + friendlyname + ", " + name + " for " + entityID)
+                                            print("Could not add attribute " + friendlyname + ", "
+                                                  + name + " for " + entityID)
                     if attributes:
-                        AttributeFilterPolicy = etree.SubElement(AttributeFilterPolicyGroup, "AttributeFilterPolicy", id="haka-default-" + entityID)
-                        PolicyRequirementRule = etree.SubElement(AttributeFilterPolicy, "PolicyRequirementRule", value=entityID)
-                        PolicyRequirementRule.attrib['{http://www.w3.org/2001/XMLSchema-instance}type'] = "basic:AttributeRequesterString"
+                        AttributeFilterPolicy = etree.SubElement(AttributeFilterPolicyGroup,
+                                                                 "AttributeFilterPolicy",
+                                                                 id="haka-default-" + entityID)
+                        PolicyRequirementRule = etree.SubElement(AttributeFilterPolicy,
+                                                                 "PolicyRequirementRule",
+                                                                 value=entityID)
+                        PolicyRequirementRule.attrib[
+                            '{http://www.w3.org/2001/XMLSchema-instance}type'
+                            ] = "basic:AttributeRequesterString"
                         for attribute in attributes:
-                            AttributeRule = etree.SubElement(AttributeFilterPolicy, "AttributeRule", attributeID=attribute.attributeid)
+                            AttributeRule = etree.SubElement(AttributeFilterPolicy,
+                                                             "AttributeRule",
+                                                             attributeID=attribute.attributeid)
                             PermitValueRule = etree.SubElement(AttributeRule, "PermitValueRule")
-                            PermitValueRule.attrib['{http://www.w3.org/2001/XMLSchema-instance}type'] = "basic:ANY"
+                            PermitValueRule.attrib[
+                                '{http://www.w3.org/2001/XMLSchema-instance}type'
+                                ] = "basic:ANY"
     return(etree.tostring(AttributeFilterPolicyGroup, pretty_print=True, encoding='UTF-8'))
 
 
 class Command(BaseCommand):
 
     def add_arguments(self, parser):
-        parser.add_argument('-i', type=str, action='store', dest='input', help='Metadata input file name')
-        parser.add_argument('-o', type=str, action='store', dest='output', help='Attribute-filter output file name')
+        parser.add_argument('-i', type=str, action='store', dest='input',
+                            help='Metadata input file name')
+        parser.add_argument('-o', type=str, action='store', dest='output',
+                            help='Attribute-filter output file name')
 
     def handle(self, *args, **options):
         metadata_input = options['input']

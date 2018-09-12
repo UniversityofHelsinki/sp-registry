@@ -3,6 +3,8 @@ import re
 from django import template
 from django.conf import settings
 
+from rr.models.serviceprovider import ServiceProvider
+
 register = template.Library()
 numeric_test = re.compile("^\d+$")
 
@@ -27,3 +29,18 @@ def privacy_policy_url(name):
     if name in ["PRIVACY_POLICY_URL"]:
         return getattr(settings, name, "")
     return ""
+
+
+@register.filter
+def get_production_status(obj):
+    """
+    Return production status from history if object is not validated
+    Return false if there is no validated object
+    """
+    if obj.validated and not obj.modified:
+        return obj.production
+    history = ServiceProvider.objects.filter(history=obj.pk).exclude(validated=None).last()
+    if history:
+        return history.production
+    else:
+        return False

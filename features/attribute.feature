@@ -20,5 +20,5 @@ Scenario: Attribute list with superuser
 	Given test environment with logged in superuser exists
 	When clicking link with text "https://sp.example.org/sp"
 	And clicking visible link with text "Attributes"
-	Then the result page will include text "employeeNumberWagon"
+	Then the result page will include text "schacPersonalUniqueCode"
 	

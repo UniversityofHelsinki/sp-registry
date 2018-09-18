@@ -31,7 +31,7 @@ class AttributeForm(Form):
                 help_text = '<a target="_blank" href="' + schema_link + '">' + field.name + '</a>'
             else:
                 help_text = field.name
-            if self.is_admin and not field.public:
+            if self.is_admin and (not field.public_saml or not field.public_ldap):
                 not_public_text = _('Not a public attribute')
                 help_text = help_text + '<p class="text-danger">' + not_public_text + '</p>'
             self.fields[field.friendlyname] = CharField(label=field.friendlyname, max_length=256,

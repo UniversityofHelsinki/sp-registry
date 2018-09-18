@@ -10,7 +10,7 @@ def fill_testuser(context):
     context.browser.check("userdata")
     context.browser.check("otherdata")
     valid_for = context.browser.find_by_id('id_valid_for')
-    valid_for.select('3')
+    valid_for.select('5')
     context.browser.find_by_text('Save').first.click()
 
 

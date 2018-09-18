@@ -18,10 +18,12 @@ def create_test_environment(context):
     u.email = "user@example.org"
     u.save()
     sp = ServiceProvider.objects.create(entity_id="https://sp.example.org/sp",
+                                        service_type="saml",
                                         name_en="My program name",
                                         validated=timezone.now(), modified=False)
     sp.admins.add(u)
     ServiceProvider.objects.create(entity_id="https://sp.example.com/sp",
+                                   service_type="saml",
                                    name_en="SP without admins",
                                    validated=timezone.now(), modified=False)
     sp = ServiceProvider.objects.create(entity_id="ldap-3", service_type="ldap",
@@ -67,6 +69,7 @@ def create_ldap_test_environment(context):
 def create_additional_SP(context):
     u = User.objects.all().first()
     sp = ServiceProvider.objects.create(entity_id="https://sp.example.net/sp",
+                                        service_type="saml",
                                         name_en="Additional SP",
                                         production=True, test=True,
                                         validated=timezone.now(), modified=False)
@@ -83,10 +86,12 @@ def create_test_environment_with_superuser(context):
     u.last_name = "Testeri"
     u.save()
     sp = ServiceProvider.objects.create(entity_id="https://sp.example.org/sp",
+                                        service_type="saml",
                                         name_en="My program name", validated=timezone.now(),
                                         modified=False, test=True)
     sp.admins.add(u)
     ServiceProvider.objects.create(entity_id="https://sp.example.com/sp",
+                                   service_type="saml",
                                    name_en="SP without admins",
                                    validated=timezone.now(), modified=False)
     sp = ServiceProvider.objects.create(entity_id="ldap-3", service_type="ldap",

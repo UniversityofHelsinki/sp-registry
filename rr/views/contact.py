@@ -1,11 +1,13 @@
-from rr.models.serviceprovider import ServiceProvider
-from rr.models.contact import Contact
-from rr.forms.contact import ContactForm
-from django.shortcuts import render
-from django.http.response import Http404
-from django.contrib.auth.decorators import login_required
-from django.utils import timezone
 import logging
+
+from django.contrib.auth.decorators import login_required
+from django.http.response import Http404
+from django.shortcuts import render
+from django.utils import timezone
+
+from rr.forms.contact import ContactForm
+from rr.models.contact import Contact
+from rr.models.serviceprovider import ServiceProvider
 
 logger = logging.getLogger(__name__)
 
@@ -57,7 +59,8 @@ def contact_list(request, pk):
                                        lastname=lastname,
                                        email=email)
                 sp.save_modified()
-                logger.info("Contact added for {sp} by {user}".format(sp=sp, user=request.user))
+                logger.info("Contact added for {sp} by {user}"
+                            .format(sp=sp, user=request.user))
                 form = ContactForm(sp=sp)
         elif "remove_contact" in request.POST:
             for key, value in request.POST.dict().items():
@@ -67,7 +70,8 @@ def contact_list(request, pk):
                         contact.end_at = timezone.now()
                         contact.save()
                         sp.save_modified()
-                        logger.info("Contact removed from {sp} by {user}".format(sp=sp, user=request.user))
+                        logger.info("Contact removed from {sp} by {user}"
+                                    .format(sp=sp, user=request.user))
     contacts = Contact.objects.filter(sp=sp, end_at=None)
     return render(request, "rr/contact.html", {'object_list': contacts,
                                                'form': form,

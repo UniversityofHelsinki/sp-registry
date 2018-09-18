@@ -4,12 +4,13 @@ Import metadata first as this imports attributes only if entityID is found from 
 
 Usage help: ./manage.py cleandb -h
 """
+from lxml import etree
 
-from rr.models.serviceprovider import ServiceProvider, SPAttribute
-from rr.models.attribute import Attribute
-from lxml import etree, objectify
-from django.utils import timezone
 from django.core.management.base import BaseCommand
+from django.utils import timezone
+
+from rr.models.attribute import Attribute
+from rr.models.serviceprovider import ServiceProvider, SPAttribute
 
 
 def attributefilter_parser(filename, validate):
@@ -34,26 +35,32 @@ def attributefilter_parser(filename, validate):
                         if attribute_name:
                             try:
                                 attribute = Attribute.objects.get(friendlyname=attribute_name)
-                                if not SPAttribute.objects.filter(sp=sp, attribute=attribute).exists():
+                                if not SPAttribute.objects.filter(sp=sp,
+                                                                  attribute=attribute).exists():
                                     if validate:
                                         validated = timezone.now()
                                     else:
                                         validated = None
-                                    SPAttribute.objects.create(sp=sp,
-                                                               attribute=attribute,
-                                                               reason="initial dump, please give the real reason",
-                                                               validated=validated)
+                                    SPAttribute.objects.create(
+                                        sp=sp,
+                                        attribute=attribute,
+                                        reason="initial dump, please give the real reason",
+                                        validated=validated)
                                 else:
-                                    print("Attribute " + attribute_name + " already exists for " + entityID)
+                                    print("Attribute " + attribute_name + " already exists for "
+                                          + entityID)
                             except Attribute.DoesNotExist:
-                                print("Could not add attribute " + attribute_name + " for " + entityID)
+                                print("Could not add attribute " + attribute_name + " for "
+                                      + entityID)
 
 
 class Command(BaseCommand):
 
     def add_arguments(self, parser):
-        parser.add_argument('-i', type=str,  nargs='+', action='store', dest='files', help='List of files')
-        parser.add_argument('-a', action='store_true', dest='validate', help='Validate imported metadata automatically')
+        parser.add_argument('-i', type=str,  nargs='+', action='store', dest='files',
+                            help='List of files')
+        parser.add_argument('-a', action='store_true', dest='validate',
+                            help='Validate imported metadata automatically')
 
     def handle(self, *args, **options):
         validate = options['validate']

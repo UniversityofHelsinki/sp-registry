@@ -1,4 +1,5 @@
 from behave import when, then, given
+
 from django.core import mail
 
 
@@ -44,6 +45,11 @@ def check_for_missing_text(context, text):
 @then(u'the page will include form value "{text}"')
 def check_for_form_value(context, text):
     assert context.browser.find_by_value(text)
+
+
+@then(u'the page will not include form value "{text}"')
+def check_for_form_value_negation(context, text):
+    assert not context.browser.find_by_value(text)
 
 
 @then(u'count of tag "{text}" is "{number}"')

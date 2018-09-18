@@ -1,25 +1,28 @@
-from rr.models.serviceprovider import ServiceProvider, SPAttribute
+import logging
+
+from django.conf import settings
+from django.core.exceptions import PermissionDenied
+from django.db.models import Q
+from django.http.response import HttpResponseRedirect
+from django.shortcuts import render
+from django.urls.base import reverse, reverse_lazy
+from django.utils import timezone
+from django.utils.translation import ugettext as _
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views.generic.detail import DetailView
 from django.views.generic.list import ListView
-from rr.forms.serviceprovider import BasicInformationForm, TechnicalInformationForm, SamlServiceProviderCreateForm,\
-    LdapServiceProviderCreateForm, ServiceProviderValidationForm,\
-    LdapTechnicalInformationForm
-from django.utils import timezone
+
+from rr.forms.serviceprovider import BasicInformationForm, TechnicalInformationForm
+from rr.forms.serviceprovider import SamlServiceProviderCreateForm, LdapServiceProviderCreateForm
+from rr.forms.serviceprovider import ServiceProviderValidationForm, LdapTechnicalInformationForm
+
 from rr.models.certificate import Certificate
 from rr.models.contact import Contact
 from rr.models.endpoint import Endpoint
+from rr.models.serviceprovider import ServiceProvider, SPAttribute
 from rr.models.testuser import update_entity_ids
-from django.db.models import Q
-from django.http.response import HttpResponseRedirect
-from django.urls.base import reverse, reverse_lazy
-from django.shortcuts import render
-from django.utils.translation import ugettext as _
-import logging
-from rr.utils.notifications import validation_notification
-from django.core.exceptions import PermissionDenied
 from rr.models.usergroup import UserGroup
-from django.conf import settings
+from rr.utils.notifications import validation_notification
 
 logger = logging.getLogger(__name__)
 
@@ -45,18 +48,22 @@ class ServiceProviderList(ListView):
         if not settings.ACTIVATE_SAML:
             return ServiceProvider.objects.none()
         if self.request.user.is_superuser:
-            return ServiceProvider.objects.filter(end_at=None, service_type="saml").order_by('entity_id')
+            return ServiceProvider.objects.filter(end_at=None,
+                                                  service_type="saml").order_by('entity_id')
         else:
-            return ServiceProvider.objects.filter(admins=self.request.user, end_at=None, service_type="saml").order_by('entity_id')
+            return ServiceProvider.objects.filter(admins=self.request.user, end_at=None,
+                                                  service_type="saml").order_by('entity_id')
 
     def get_context_data(self, **kwargs):
         context = super(ServiceProviderList, self).get_context_data(**kwargs)
         if not settings.ACTIVATE_LDAP:
             context['ldap_providers'] = ServiceProvider.objects.none()
         elif self.request.user.is_superuser:
-            context['ldap_providers'] = ServiceProvider.objects.filter(end_at=None, service_type="ldap").order_by('server_names')
+            context['ldap_providers'] = ServiceProvider.objects.filter(end_at=None,
+                                                                       service_type="ldap").order_by('server_names')
         else:
-            context['ldap_providers'] = ServiceProvider.objects.filter(admins=self.request.user, end_at=None, service_type="ldap").order_by('server_names')
+            context['ldap_providers'] = ServiceProvider.objects.filter(admins=self.request.user,
+                                                                       end_at=None, service_type="ldap").order_by('server_names')
         context['activate_saml'] = settings.ACTIVATE_SAML
         context['activate_ldap'] = settings.ACTIVATE_LDAP
         return context
@@ -114,7 +121,8 @@ class BasicInformationView(DetailView):
         if self.request.user.is_superuser:
             return ServiceProvider.objects.all().order_by('entity_id')
         else:
-            return ServiceProvider.objects.filter(admins=self.request.user, end_at=None).order_by('entity_id')
+            return ServiceProvider.objects.filter(admins=self.request.user,
+                                                  end_at=None).order_by('entity_id')
 
     def get_missing_data(self, sp):
         missing = []
@@ -156,31 +164,47 @@ class BasicInformationView(DetailView):
         sp = context['object']
         history = ServiceProvider.objects.filter(history=sp.pk).exclude(validated=None).last()
         if not context['object'].validated and history:
-            context['attributes'] = SPAttribute.objects.filter(Q(sp=sp, end_at__gte=history.created_at) | Q(sp=sp, end_at=None))
-            context['certificates'] = Certificate.objects.filter(Q(sp=sp, end_at__gte=history.created_at) | Q(sp=sp, end_at=None))
-            context['contacts'] = Contact.objects.filter(Q(sp=sp, end_at__gte=history.created_at) | Q(sp=sp, end_at=None))
-            context['endpoints'] = Endpoint.objects.filter(Q(sp=sp, end_at__gte=history.created_at) | Q(sp=sp, end_at=None))
-            context['usergroups'] = UserGroup.objects.filter(Q(sp=sp, end_at__gte=history.created_at) | Q(sp=sp, end_at=None))
+            context['attributes'] = SPAttribute.objects.filter(
+                Q(sp=sp, end_at__gte=history.created_at) | Q(sp=sp, end_at=None))
+            context['certificates'] = Certificate.objects.filter(
+                Q(sp=sp, end_at__gte=history.created_at) | Q(sp=sp, end_at=None))
+            context['contacts'] = Contact.objects.filter(
+                Q(sp=sp, end_at__gte=history.created_at) | Q(sp=sp, end_at=None))
+            context['endpoints'] = Endpoint.objects.filter(
+                Q(sp=sp, end_at__gte=history.created_at) | Q(sp=sp, end_at=None))
+            context['usergroups'] = UserGroup.objects.filter(
+                Q(sp=sp, end_at__gte=history.created_at) | Q(sp=sp, end_at=None))
         elif context['object'].validated:
             history = None
-            context['attributes'] = SPAttribute.objects.filter(Q(sp=sp, end_at__gte=sp.validated) | Q(sp=sp, end_at=None))
-            context['certificates'] = Certificate.objects.filter(Q(sp=sp, end_at__gte=sp.validated) | Q(sp=sp, end_at=None))
-            context['contacts'] = Contact.objects.filter(Q(sp=sp, end_at__gte=sp.validated) | Q(sp=sp, end_at=None))
-            context['endpoints'] = Endpoint.objects.filter(Q(sp=sp, end_at__gte=sp.validated) | Q(sp=sp, end_at=None))
-            context['usergroups'] = UserGroup.objects.filter(Q(sp=sp, end_at__gte=sp.validated) | Q(sp=sp, end_at=None))
+            context['attributes'] = SPAttribute.objects.filter(
+                Q(sp=sp, end_at__gte=sp.validated) | Q(sp=sp, end_at=None))
+            context['certificates'] = Certificate.objects.filter(
+                Q(sp=sp, end_at__gte=sp.validated) | Q(sp=sp, end_at=None))
+            context['contacts'] = Contact.objects.filter(
+                Q(sp=sp, end_at__gte=sp.validated) | Q(sp=sp, end_at=None))
+            context['endpoints'] = Endpoint.objects.filter(
+                Q(sp=sp, end_at__gte=sp.validated) | Q(sp=sp, end_at=None))
+            context['usergroups'] = UserGroup.objects.filter(
+                Q(sp=sp, end_at__gte=sp.validated) | Q(sp=sp, end_at=None))
         else:
             history = None
-            context['attributes'] = SPAttribute.objects.filter(Q(sp=sp, end_at__gte=sp.created_at) | Q(sp=sp, end_at=None))
-            context['certificates'] = Certificate.objects.filter(Q(sp=sp, end_at__gte=sp.created_at) | Q(sp=sp, end_at=None))
-            context['contacts'] = Contact.objects.filter(Q(sp=sp, end_at__gte=sp.created_at) | Q(sp=sp, end_at=None))
-            context['endpoints'] = Endpoint.objects.filter(Q(sp=sp, end_at__gte=sp.created_at) | Q(sp=sp, end_at=None))
-            context['usergroups'] = UserGroup.objects.filter(Q(sp=sp, end_at__gte=sp.created_at) | Q(sp=sp, end_at=None))
+            context['attributes'] = SPAttribute.objects.filter(
+                Q(sp=sp, end_at__gte=sp.created_at) | Q(sp=sp, end_at=None))
+            context['certificates'] = Certificate.objects.filter(
+                Q(sp=sp, end_at__gte=sp.created_at) | Q(sp=sp, end_at=None))
+            context['contacts'] = Contact.objects.filter(
+                Q(sp=sp, end_at__gte=sp.created_at) | Q(sp=sp, end_at=None))
+            context['endpoints'] = Endpoint.objects.filter(
+                Q(sp=sp, end_at__gte=sp.created_at) | Q(sp=sp, end_at=None))
+            context['usergroups'] = UserGroup.objects.filter(
+                Q(sp=sp, end_at__gte=sp.created_at) | Q(sp=sp, end_at=None))
         if history:
             context['history_object'] = history
         if sp.production or sp.test:
             context['missing'] = self.get_missing_data(sp)
         if self.request.user.is_superuser and sp.modified:
-            context['form'] = ServiceProviderValidationForm(modified_date=sp.updated_at.strftime("%Y%m%d%H%M%S%f"))
+            context['form'] = ServiceProviderValidationForm(
+                modified_date=sp.updated_at.strftime("%Y%m%d%H%M%S%f"))
         else:
             context['form'] = None
         return context
@@ -279,7 +303,8 @@ class BasicInformationUpdate(UpdateView):
         if self.request.user.is_superuser:
             return ServiceProvider.objects.filter(end_at=None).order_by('entity_id')
         else:
-            return ServiceProvider.objects.filter(admins=self.request.user, end_at=None).order_by('entity_id')
+            return ServiceProvider.objects.filter(admins=self.request.user,
+                                                  end_at=None).order_by('entity_id')
 
     def get_form_kwargs(self):
         kwargs = super(BasicInformationUpdate, self).get_form_kwargs()
@@ -331,7 +356,8 @@ class TechnicalInformationUpdate(UpdateView):
         if self.request.user.is_superuser:
             return ServiceProvider.objects.filter(end_at=None, service_type="saml").order_by('entity_id')
         else:
-            return ServiceProvider.objects.filter(admins=self.request.user, service_type="saml", end_at=None).order_by('entity_id')
+            return ServiceProvider.objects.filter(admins=self.request.user, service_type="saml",
+                                                  end_at=None).order_by('entity_id')
 
     def get_form_kwargs(self):
         kwargs = super(TechnicalInformationUpdate, self).get_form_kwargs()
@@ -384,9 +410,11 @@ class LdapTechnicalInformationUpdate(UpdateView):
 
     def get_queryset(self):
         if self.request.user.is_superuser:
-            return ServiceProvider.objects.filter(end_at=None, service_type="ldap").order_by('entity_id')
+            return ServiceProvider.objects.filter(end_at=None,
+                                                  service_type="ldap").order_by('entity_id')
         else:
-            return ServiceProvider.objects.filter(admins=self.request.user, service_type="ldap", end_at=None).order_by('entity_id')
+            return ServiceProvider.objects.filter(admins=self.request.user, service_type="ldap",
+                                                  end_at=None).order_by('entity_id')
 
     def get_form_kwargs(self):
         kwargs = super(LdapTechnicalInformationUpdate, self).get_form_kwargs()
@@ -424,7 +452,8 @@ class ServiceProviderDelete(DeleteView):
         if self.request.user.is_superuser:
             return ServiceProvider.objects.filter(end_at=None).order_by('entity_id')
         else:
-            return ServiceProvider.objects.filter(admins=self.request.user, end_at=None).order_by('entity_id')
+            return ServiceProvider.objects.filter(admins=self.request.user,
+                                                  end_at=None).order_by('entity_id')
 
     def delete(self, request, *args, **kwargs):
         """

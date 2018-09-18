@@ -1,5 +1,4 @@
 from .common import *
-from .local_settings import *
 
 DEBUG = True
 
@@ -46,3 +45,5 @@ LOGGING = {
 SESSION_COOKIE_SECURE = False
 CSRF_COOKIE_SECURE = False
 SESSION_EXPIRE_AT_BROWSER_CLOSE = False
+
+from .local_settings import *

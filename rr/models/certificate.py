@@ -1,12 +1,14 @@
-from django.db import models
-from django.utils.translation import ugettext_lazy as _
-from rr.models.serviceprovider import ServiceProvider
-from django.utils import timezone
 from cryptography import x509
 from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives.serialization import Encoding
 from cryptography.x509.oid import NameOID
 import pytz
+
+from django.db import models
+from django.utils import timezone
+from django.utils.translation import ugettext_lazy as _
+
+from rr.models.serviceprovider import ServiceProvider
 
 
 def load_certificate(certificate):
@@ -55,7 +57,8 @@ class CertificateManager(models.Manager):
                         valid_until=pytz.utc.localize(valid_until),
                         key_size=key_size,
                         certificate=cert.public_bytes(Encoding.PEM).decode("utf-8").replace(
-                            "-----BEGIN CERTIFICATE-----\n", "").replace("-----END CERTIFICATE-----\n", ""),
+                            "-----BEGIN CERTIFICATE-----\n", "").replace(
+                                "-----END CERTIFICATE-----\n", ""),
                         signing=signing,
                         encryption=encryption,
                         validated=validated)

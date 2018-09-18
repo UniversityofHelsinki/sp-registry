@@ -24,12 +24,12 @@
     </tr>
   </thead>
   <tbody>
-{% for user in object_list %}
+{% for testuser in object_list %}
     <tr>
-      <th scope="row"><a href="{% url 'testuser-attribute-data' user.pk %}">{{ user.username }}</a></th>
-      <td>{{ user.firstname }}</td>
-      <td>{{ user.lastname }}</td>
-      <td><div class="checkbox"><input type="checkbox" name="{{ user.pk }}" class="" id="id_user" /></div></td>
+      <th scope="row"><a href="{% url 'testuser-attribute-data' testuser.pk %}">{{ testuser.username }}</a></th>
+      <td>{{ testuser.firstname }}</td>
+      <td>{{ testuser.lastname }}</td>
+      <td><div class="checkbox"><input type="checkbox" name="{{ testuser.pk }}" class="" id="id_user" /></div></td>
     </tr>
 {% endfor %}
   </tbody>
@@ -38,6 +38,36 @@
 </form>
 {% else %}
 <p>{% trans "No users" %}</p>
+{% endif %}
+{% if object_list_external %}
+<h3>{% trans "External test users available for this SP" %}</h3>
+<div class="alert alert-success" role="alert">
+<p>{% trans "These users are keyed to some other SP but have also been activated for this SP by a user who has admin rights for both SPs." %}</p>
+</div>
+<form action="" method='POST'>
+{% csrf_token %}
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">{% trans "Username" %}</th>
+      <th scope="col">{% trans "First name" %}</th>
+      <th scope="col">{% trans "Last name" %}</th>
+      <th scope="col">{% trans "Remove" %}</th>
+    </tr>
+  </thead>
+  <tbody>
+{% for testuser in object_list_external %}
+    <tr>
+      <th scope="row"><a href="{% url 'testuser-attribute-data' testuser.pk %}">{{ testuser.username }}</a></th>
+      <td>{{ testuser.firstname }}</td>
+      <td>{{ testuser.lastname }}</td>
+      <td><div class="checkbox"><input type="checkbox" name="{{ testuser.pk }}" class="" id="id_user" /></div></td>
+    </tr>
+{% endfor %}
+  </tbody>
+</table>
+<p><input class="btn btn-danger" type="submit" data-toggle="confirmation" name="remove_testuser_external" value="{% trans "Remove selected" %}" /></p>
+</form>
 {% endif %}
 {% if form %}
 <h2>{% trans "Add a test user" %}</h2>

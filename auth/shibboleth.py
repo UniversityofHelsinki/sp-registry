@@ -1,7 +1,8 @@
-from django.contrib.auth.models import User
-import re
-from django.conf import settings
 import logging
+import re
+
+from django.conf import settings
+from django.contrib.auth.models import User
 
 logger = logging.getLogger(__name__)
 
@@ -9,12 +10,15 @@ logger = logging.getLogger(__name__)
 class ShibbolethBackend:
     """
     Backend for Shibboleth authentication.
-    If Shibboleth EPPN is found, signs user in, creating a new user if nesessary.
+    If Shibboleth EPPN is found, signs user in,
+    creating a new user if necessary.
     """
     def authenticate(self, request):
         username = request.META.get(settings.SAML_ATTR_EPPN, '')
-        first_name = request.META.get(settings.SAML_ATTR_FIRST_NAME, '').encode('latin1').decode('utf-8', 'ignore')
-        last_name = request.META.get(settings.SAML_ATTR_LAST_NAME, '').encode('latin1').decode('utf-8', 'ignore')
+        first_name = request.META.get(
+            settings.SAML_ATTR_FIRST_NAME, '').encode('latin1').decode('utf-8', 'ignore')
+        last_name = request.META.get(
+            settings.SAML_ATTR_LAST_NAME, '').encode('latin1').decode('utf-8', 'ignore')
         email = request.META.get(settings.SAML_ATTR_EMAIL, '')
         affiliations = request.META.get(settings.SAML_ATTR_AFFILIATION, '')
 

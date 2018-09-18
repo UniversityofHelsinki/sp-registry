@@ -1,12 +1,14 @@
-from rr.models.serviceprovider import ServiceProvider
-from rr.models.certificate import Certificate
-from rr.forms.certificate import CertificateForm
-from django.shortcuts import render
-from django.http.response import Http404
-from django.contrib.auth.decorators import login_required
-from django.utils import timezone
 import logging
+
+from django.contrib.auth.decorators import login_required
 from django.core.exceptions import PermissionDenied
+from django.http.response import Http404
+from django.shortcuts import render
+from django.utils import timezone
+
+from rr.forms.certificate import CertificateForm
+from rr.models.certificate import Certificate
+from rr.models.serviceprovider import ServiceProvider
 
 logger = logging.getLogger(__name__)
 
@@ -30,10 +32,14 @@ def certificate_admin_list(request):
     """
     if not request.user.is_superuser:
         raise PermissionDenied
-    weak_certificates = Certificate.objects.filter(end_at=None, key_size__lt=2048).order_by('key_size')
-    expired_certificates = Certificate.objects.filter(end_at=None, valid_until__lte=timezone.now()).order_by('valid_until')
-    return render(request, "rr/certificate_admin_list.html", {'weak_certificates': weak_certificates,
-                                                              'expired_certificates': expired_certificates, })
+    weak_certificates = Certificate.objects.filter(end_at=None,
+                                                   key_size__lt=2048).order_by('key_size')
+    expired_certificates = Certificate.objects.filter(end_at=None,
+                                                      valid_until__lte=timezone.now()
+                                                      ).order_by('valid_until')
+    return render(request, "rr/certificate_admin_list.html",
+                  {'weak_certificates': weak_certificates,
+                   'expired_certificates': expired_certificates})
 
 
 @login_required
@@ -79,10 +85,12 @@ def certificate_list(request, pk):
                 if not signing and not encryption:
                     signing = True
                     encryption = True
-                if Certificate.objects.add_certificate(certificate, sp, signing=signing, encryption=encryption):
+                if Certificate.objects.add_certificate(certificate, sp, signing=signing,
+                                                       encryption=encryption):
                     form = CertificateForm(sp=sp)
                     sp.save_modified()
-                    logger.info("Certificate added for {sp} by {user}".format(sp=sp, user=request.user))
+                    logger.info("Certificate added for {sp} by {user}"
+                                .format(sp=sp, user=request.user))
         elif "remove_certificate" in request.POST:
             for key, value in request.POST.dict().items():
                 if value == "on":
@@ -91,7 +99,8 @@ def certificate_list(request, pk):
                         cert.end_at = timezone.now()
                         cert.save()
                         sp.save_modified()
-                        logger.info("Certificate removed from {sp} by {user}".format(sp=sp, user=request.user))
+                        logger.info("Certificate removed from {sp} by {user}"
+                                    .format(sp=sp, user=request.user))
     certificates = Certificate.objects.filter(sp=sp, end_at=None)
     return render(request, "rr/certificate.html", {'object_list': certificates,
                                                    'form': form,

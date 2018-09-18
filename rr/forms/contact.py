@@ -1,7 +1,8 @@
-from django.forms import ModelForm
-from rr.models.contact import Contact
 from django.core.validators import ValidationError
+from django.forms import ModelForm
 from django.utils.translation import ugettext as _
+
+from rr.models.contact import Contact
 
 
 class ContactForm(ModelForm):
@@ -19,5 +20,6 @@ class ContactForm(ModelForm):
         firstname = cleaned_data.get("firstname")
         lastname = cleaned_data.get("lastname")
         email = cleaned_data.get("email")
-        if Contact.objects.filter(sp=self.sp, type=contacttype, firstname=firstname, lastname=lastname, email=email, end_at=None).exists():
+        if Contact.objects.filter(sp=self.sp, type=contacttype, firstname=firstname,
+                                  lastname=lastname, email=email, end_at=None).exists():
             raise ValidationError(_("Contact already exists"))

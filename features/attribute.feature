@@ -15,3 +15,10 @@ Scenario: Attribute modifications
 	And clicking visible link with text "Summary"
 	Then the result page code include text "table-danger"
 	And the result page will include text "Basic contact address"
+
+Scenario: Attribute list with superuser
+	Given test environment with logged in superuser exists
+	When clicking link with text "https://sp.example.org/sp"
+	And clicking visible link with text "Attributes"
+	Then the result page will include text "employeeNumberWagon"
+	

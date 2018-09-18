@@ -7,13 +7,16 @@
 <div class="alert alert-success" role="alert">
 <p>{% trans "This form is used to add a new service to the University of Helsinki's single sign on system." %}</p>
 <p>{% trans "More information about configuring service providers can be found from <a href='https://wiki.helsinki.fi/display/IAMasioita/Ohjeet+Shibbolointiin'>https://wiki.helsinki.fi/display/IAMasioita/Ohjeet+Shibbolointiin</a> (in Finnish)" %}</p>
-<p><strong>{% trans "Required attributes for the production SPs. Some of the attributes are defined later in different forms." %}</strong></p>
+<p><strong>{% trans "Required attributes for the production SPs." %}</strong></p>
 <ul>
   <li>{% trans "Entity Id" %}</li>
   <li>{% trans "Service name in English or in Finnish" %}</li>
   <li>{% trans "Service description in English or in Finnish" %}</li>
   <li>{% trans "Privacy policy URL in English or in Finnish" %}</li>
-  <li>{% trans "Certificate" %}</li>
+</ul>
+<p><strong>{% trans "Some of the attributes are defined later in different forms." %}</strong></p>
+<ul>
+  <li>{% trans "Certificates" %}</li>
   <li>{% trans "AssertionConsumerService endpoint" %}</li>
   <li>{% trans "Technical and support contacts" %}</li>
 </ul>

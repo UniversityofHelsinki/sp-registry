@@ -21,11 +21,16 @@ TIME_ZONE = 'EET'
 ACTIVATE_SAML = True
 ACTIVATE_LDAP = True
 
+# Attribute test service
+ATTRIBUTE_TEST_SERVICE = True
+ATTRIBUTE_TEST_SERVICE_LOGOUT_URL = 'https://localhost:8080/testservice/Shibboleth.sso/Logout'
+
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 # Email address used as send address
 SERVER_EMAIL = 'noreply@example.org'
 # Will receive notifications of changes in metadata and also if error 500 occurs
-# Format should be a list of tuples of (Full name, email address). Example: [('John', 'john@example.com'), ('Mary', 'mary@example.com')]
+# Format should be a list of tuples of (Full name, email address).
+# Example: [('John', 'john@example.com'), ('Mary', 'mary@example.com')]
 ADMINS = [('IDP Admins', 'idp-admins@example.org')]
 # Contact email shown in login page if user account is not activated automatically
 DEFAULT_CONTACT_EMAIL = 'contact@example.org'
@@ -40,6 +45,12 @@ SAML_ATTR_FIRST_NAME = 'shib_first_name'
 SAML_ATTR_LAST_NAME = 'shib_last_name'
 SAML_ATTR_EMAIL = 'shib_mail'
 SAML_ATTR_AFFILIATION = 'shib_affiliation'
+
+# Uncomment to redirect logout to local Shibboleth logout
+# SHIBBOLETH_LOGOUT_URL = "/Shibboleth.sso/Logout"
+
+ATTRIBUTE_TEST_SERVICE = True
+ATTRIBUTE_TEST_SERVICE_LOGOUT_URL = 'https://localhost/testservice/Shibboleth.sso/Logout'
 
 # Path to git repositorio
 METADATA_GIT_REPOSITORIO = '/path/to/metadata/git/repo/'

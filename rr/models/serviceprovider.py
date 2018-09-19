@@ -203,14 +203,36 @@ class ServiceProvider(models.Model):
 
     def save_modified(self, *args, **kwargs):
         """ Saves model and send notification if it was unmodified """
-        if self.modified:
+        if self.modified and not self.production:
             self.save()
         else:
             self.modified = True
             self.save()
-            modified_sp = ServiceProvider.objects.filter(end_at=None,
-                                                         modified=True).order_by('entity_id')
-            admin_notification_modified_sp(modified_sp)
+            services = ServiceProvider.objects.filter(end_at=None,
+                                                      modified=True).order_by('entity_id')
+            in_production = []
+            add_production = []
+            remove_production = []
+            in_test = []
+            for service in services:
+                history = ServiceProvider.objects.filter(
+                    history=service.pk).exclude(validated=None).last()
+                if history:
+                    print(history)
+                    print(history.production)
+                    print(service.production)
+                if history and history.production and service.production:
+                    in_production.append(service.entity_id)
+                elif history and history.production and not service.production:
+                    remove_production.append(service.entity_id)
+                elif service.production and service.validated:
+                    in_production.append(service.entity_id)
+                elif service.production:
+                    add_production.append(service.entity_id)
+                if service.test:
+                    in_test.append(service.entity_id)
+            admin_notification_modified_sp(self.entity_id, in_production, add_production,
+                                           remove_production, in_test)
 
 
 class SPAttribute(models.Model):

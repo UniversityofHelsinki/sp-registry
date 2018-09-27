@@ -15,6 +15,46 @@ import csv
 
 logger = logging.getLogger(__name__)
 
+ad={"peopletimestampreaders": ["createTimestamp","modifyTimestamp"],
+"unitreaders": ["hyAccountingCode","hyDepartmentCode","hyDivisionCode","hyFacultyCode","hyUnitCode","hyProfitUnit","hyPersonEmployerCode","hyPersonSchoolCode","eduPersonPrimaryOrgUnitDN"],
+"memberofreaders": ["memberOf"],
+"employeenumberreaders": ["employeeNumber"],
+"studentidreaders": ["funetEduPersonStudentID","schacPersonalUniqueCode"],
+"languagereaders": ["preferredLanguage"],
+"rolereaders": ["eduPersonAffiliation","eduPersonEntitlement","eduPersonPrimaryAffiliation","eduPersonPrincipalName","employeeNumber","schacHomeOrganization","schacHomeOrganizationType","hyPersonOodiSurrogateNumber"],
+"hetureaders": ["funetEduPersonIdentityCode","schacPersonalUniqueID","schacDateOfBirth"],
+"mailreaders": ["mail","hyPersonMailNode","mailLocalAddress","mailRoutingAddress"]}
+
+csvtoaclgroup={'Yksikkötiedot':'unitreaders',
+    'Ryhmäjäsenyydet':'memberofreaders',
+    'Sähköpostiosoite':'mailreaders',
+    'Haka-roolitieto':'rolereaders',
+    'Henkilötunnus':'hetureaders',
+    'Opiskelijanumero':'studentidreaders',
+    'Henkilökuntanumero':'employeenumberreaders'}
+
+
+def try_to_make_sure_attribute_exists(friendlyname):
+    attribute = Attribute.objects.filter(friendlyname=friendlyname).first()
+    if not attribute:
+        name = ''
+        attributeid = ''
+        if friendlyname[0:2]=='hy':
+            name = 'urn:mace:funet.fi:helsinki.fi:' + friendlyname
+            attributeid = name
+        if friendlyname=='funetEduPersonStudentID':
+            attributeid = 'id-urn:mace:funet.fi:attribute-def:funetEduPersonStudentID'
+            name = 'urn:oid:1.3.6.1.4.1.16161.1.1.10'
+        Attribute.objects.create(name=name,
+                                 public_saml=0,
+                                 attributeid=attributeid,
+                                 friendlyname=friendlyname,
+                                 public_ldap=1)
+    else:
+        attribute.public_ldap=1
+        attribute.save()
+
+
 def parse_ldap_attributes(sp, d, validate, errors):
     """
     Parses LDAP client definition required attributes
@@ -24,43 +64,33 @@ def parse_ldap_attributes(sp, d, validate, errors):
     validate: automatically validate added metadata
     errors: list of errors
     """
-#    for child in element:
-#        if etree.QName(child.tag).localname == "RequestedAttribute":
-#            friendlyname = child.get("FriendlyName")
-#            name = child.get("Name")
-#            if friendlyname:
-#                attribute = Attribute.objects.filter(name=name).first()
-#                if not attribute:
-#                    attribute = Attribute.objects.filter(friendlyname=friendlyname).first()
-#                if attribute:
-#                    if not SPAttribute.objects.filter(sp=sp, attribute=attribute).exists():
-#                        if validate:
-#                            SPAttribute.objects.create(sp=sp,
-#                                                       attribute=attribute,
-#                                                       reason="initial dump, please give the real reason",
-#                                                       validated=timezone.now())
-#                        else:
-#                            SPAttribute.objects.create(sp=sp,
-#                                                       attribute=attribute,
-#                                                       reason="initial dump, please give the real reason",
-#                                                       validated=None)
-#                else:
-#                    errors.append(sp.entity_id + " : " + _("Could not add attribute") + " : " + friendlyname + ", " + name)
-#        if etree.QName(child.tag).localname == "ServiceName":
-#            if child.values()[0] == "fi":
-#                sp.name_fi = child.text
-#            elif child.values()[0] == "en":
-#                sp.name_en = child.text
-#            elif child.values()[0] == "sv":
-#                sp.name_sv = child.text
-#        if etree.QName(child.tag).localname == "ServiceDescription":
-#            if child.values()[0] == "fi":
-#                sp.description_fi = child.text
-#            elif child.values()[0] == "en":
-#                sp.description_en = child.text
-#            elif child.values()[0] == "sv":
-#                sp.description_sv = child.text
 
+    specialanames=list(filter(lambda x: len(x)>0,map(lambda x: x.strip(),(d['Tarvittavat erikoisattribuutit']).split(' '))))
+    groupedanames=[]
+
+    for k in d.keys():
+        if k in csvtoaclgroup.keys():
+            groupedanames+=ad[csvtoaclgroup[k]]
+
+    anames=specialanames + groupedanames
+
+    for friendlyname in anames:
+        try_to_make_sure_attribute_exists(friendlyname)
+        attribute = Attribute.objects.filter(friendlyname=friendlyname).first()
+        if attribute:
+            if not SPAttribute.objects.filter(sp=sp, attribute=attribute).exists():
+                if validate:
+                    SPAttribute.objects.create(sp=sp,
+                                               attribute=attribute,
+                                               reason="initial dump, please give the real reason",
+                                               validated=timezone.now())
+                else:
+                    SPAttribute.objects.create(sp=sp,
+                                               attribute=attribute,
+                                               reason="initial dump, please give the real reason",
+                                               validated=None)
+        else:
+            errors.append(sp.name_fi + " : " + _("Could not add attribute") + " : " + friendlyname)
 
 def add_ldap_spadmin(sp, maileppn, validate, errors):
     (adminemail,eppn) = maileppn.split('=')
@@ -186,6 +216,8 @@ def parse_ldapdict(sp, d, validate, errors):
     parse_ldap_contacts(sp, d, validate, errors)
 
     parse_ldap_spadmins(sp, d, validate, errors)
+
+    parse_ldap_attributes(sp, d, validate, errors)
 
 
 def ldap_oldcsv_parser(entity, overwrite, verbosity, validate=False):

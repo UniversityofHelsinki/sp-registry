@@ -34,6 +34,20 @@
   </tbody>
 </table>
 <p>In case the attribute values are incorrect or a required attribute was not released, please contact <a href="https://helpdesk.it.helsinki.fi/">Helpdesk.</a></p>
+<h2>{% trans "Authentication context" %}</h2>
+<table class="table table-sm">
+  <tbody>
+    <tr>
+      <td>Authentication Context Class</td>
+      <td>{{ shib_auth_context }}</td>
+    </tr>
+    <tr>
+      <td>Authentication Method</td>
+      <td>{{ shib_auth_method }}</td>
+    </tr>
+  </tbody>
+</table>
+<a href="https://{{ request.META.SERVER_NAME }}/Shibboleth.sso/Login?authnContextClassRef=https://refeds.org/profile/mfa"><button type="button" class="btn btn-primary">{% trans "Login using MFA" %}</button></a>
 <h2>{% trans "Attributes" %}</h2>
 <table class="table table-sm">
   <thead>

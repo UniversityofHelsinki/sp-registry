@@ -130,10 +130,10 @@ def parse_ldap_groups(sp, d, validate, errors):
     d: LDAP client description dict which is parsed
     validate: automatically validate added metadata
     """
-    ug_s=d['Tarvittavat ryhmät']
-    if ug_s=='Kaikki':
-        errors.append("LDAP Group parser: %s: support to add access for all groups not implemented yet in the registry" % sp.name_fi)
-        return
+#    ug_s=d['Tarvittavat ryhmät']
+#    if ug_s=='Kaikki':
+#        errors.append("LDAP Group parser: %s: support to add access for all groups not implemented yet in the registry" % sp.name_fi)
+#        return
 
     usergroups=list(filter(lambda x: len(x) > 0, map(lambda x: x.strip(), ug_s.split(' '))))
     for u in usergroups:

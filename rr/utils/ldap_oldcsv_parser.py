@@ -79,16 +79,13 @@ def parse_ldap_attributes(sp, d, validate, errors):
         attribute = Attribute.objects.filter(friendlyname=friendlyname).first()
         if attribute:
             if not SPAttribute.objects.filter(sp=sp, attribute=attribute).exists():
+                validated = None
                 if validate:
-                    SPAttribute.objects.create(sp=sp,
-                                               attribute=attribute,
-                                               reason="initial dump, please give the real reason",
-                                               validated=timezone.now())
-                else:
-                    SPAttribute.objects.create(sp=sp,
-                                               attribute=attribute,
-                                               reason="initial dump, please give the real reason",
-                                               validated=None)
+                    validated=timezone.now()
+                SPAttribute.objects.create(sp=sp,
+                                           attribute=attribute,
+                                           reason="initial import, please give the real reason or remove attribute if not needed",
+                                           validated=validated)
         else:
             errors.append(sp.name_fi + " : " + _("Could not add attribute") + " : " + friendlyname)
 

@@ -23,15 +23,15 @@ class ServiceProvider(models.Model):
     # Basic information
     organization = models.ForeignKey(Organization, blank=True, null=True,
                                      on_delete=models.SET_NULL, verbose_name=_('Organization'))
-    name_fi = models.CharField(max_length=70, blank=True,
+    name_fi = models.CharField(max_length=140, blank=True,
                                verbose_name=_('Service Name (Finnish)'),
-                               validators=[MaxLengthValidator(70)])
-    name_en = models.CharField(max_length=70, blank=True,
+                               validators=[MaxLengthValidator(140)])
+    name_en = models.CharField(max_length=140, blank=True,
                                verbose_name=_('Service Name (English)'),
-                               validators=[MaxLengthValidator(70)])
-    name_sv = models.CharField(max_length=70, blank=True,
+                               validators=[MaxLengthValidator(140)])
+    name_sv = models.CharField(max_length=140, blank=True,
                                verbose_name=_('Service Name (Swedish)'),
-                               validators=[MaxLengthValidator(70)])
+                               validators=[MaxLengthValidator(140)])
     description_fi = models.CharField(max_length=140, blank=True,
                                       verbose_name=_('Service Description (Finnish)'),
                                       validators=[MaxLengthValidator(140)])

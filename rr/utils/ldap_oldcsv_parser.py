@@ -111,6 +111,38 @@ def parse_ldap_spadmins(sp, d, validate, errors):
     for maileppn in filter(lambda x: len(x)>0, d['SP-adminit'].split(',')):
         add_ldap_spadmin(sp, maileppn, validate, errors)
     
+def make_usergroup(sp, name, validate):
+    if not name:
+        name = " "
+    if not UserGroup.objects.filter(sp=sp, name=name).exists():
+        if validate:
+            UserGroup.objects.create(sp=sp,
+                                   name=name,
+                                   validated=timezone.now())
+        else:
+            UserGroup.objects.create(sp=sp,
+                                   name=name,
+                                   validated=None)
+
+
+def parse_ldap_groups(sp, d, validate, errors):
+    """
+    Parses LDAP user groups for the client
+
+    sp: ServiceProvider object where information is linked
+    d: LDAP client description dict which is parsed
+    validate: automatically validate added metadata
+    """
+    ug_s=d['Tarvittavat ryhmät']
+    if ug_s=='Kaikki':
+        errors.append("LDAP Group parser: %s: support to add access for all groups not implemented yet in the registry" % sp.name_fi)
+        return
+
+    usergroups=list(filter(lambda x: len(x) > 0, map(lambda x: x.strip(), ug_s.split(' '))))
+    for u in usergroups:
+        make_usergroup(sp, u, validate)
+
+
 def make_contact(sp, contacttype, namel, email, validate):
     firstname = ' '.join(namel[0:-1]).strip()
     lastname = namel[-1].strip()
@@ -218,6 +250,8 @@ def parse_ldapdict(sp, d, validate, errors):
     parse_ldap_spadmins(sp, d, validate, errors)
 
     parse_ldap_attributes(sp, d, validate, errors)
+
+    parse_ldap_groups(sp, d, validate, errors)
 
 
 def ldap_oldcsv_parser(entity, overwrite, verbosity, validate=False):

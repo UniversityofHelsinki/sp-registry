@@ -1,4 +1,20 @@
 SAML SP-Registry has following service providers with changes waiting for
 validation:
-{% for sp in modified_sp %}
-- {{ sp.entity_id }}{% endfor %}
+
+Latest modified SP: {{ modified_sp }}{% if in_production %}
+
+Modified production SPs:
+{% for entity_id in in_production %}
+ - {{ entity_id }}{% endfor %}{% endif %}{% if add_production %}
+
+SPs added to production:
+{% for entity_id in add_production %}
+ - {{ entity_id }}{% endfor %}{% endif %}{% if remove_production %}
+
+SPs removed from production:
+{% for entity_id in remove_production %}
+ - {{ entity_id }}{% endfor %}{% endif %}{% if in_test %}
+
+Modified test SPs:
+{% for entity_id in in_test %}
+ - {{ entity_id }}{% endfor %}{% endif %}

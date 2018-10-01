@@ -1,25 +1,32 @@
 """
 Email notifications
 """
+from smtplib import SMTPException
 
 from django.template.loader import render_to_string
 from django.core.mail import send_mail
 from django.conf import settings
-import logging
-from smtplib import SMTPException
 from django.core.mail.message import BadHeaderError
+
+import logging
 
 logger = logging.getLogger(__name__)
 
 
-def admin_notification_modified_sp(modified_sp):
+def admin_notification_modified_sp(modified_sp, in_production, add_production, remove_production,
+                                   in_test):
     """
     Sends list of modified SPs to ADMIN_NOTIFICATION_EMAIL
     """
     if modified_sp and settings.ADMINS:
+
         subject = render_to_string('email/admin_notification_modified_sp_subject.txt')
         message = render_to_string('email/admin_notification_modified_sp.txt',
-                                   {'modified_sp': modified_sp})
+                                   {'modified_sp': modified_sp,
+                                    'in_production': in_production,
+                                    'add_production': add_production,
+                                    'remove_production': remove_production,
+                                    'in_test': in_test})
         try:
             send_mail(subject, message, settings.SERVER_EMAIL, settings.ADMINS, fail_silently=False)
         except SMTPException:

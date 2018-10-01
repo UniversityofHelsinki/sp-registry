@@ -55,4 +55,6 @@ def attribute_test_service(request):
     else:
         logout_url = None
     return render(request, "attribute_test_service.html", {'object_list': object_list,
-                                                           'logout_url': logout_url})
+                                                           'logout_url': logout_url,
+                                                           'shib_auth_context': request.META.get('Shib-AuthnContext-Class', ''),
+                                                           'shib_auth_method': request.META.get('Shib-Authentication-Method', '')})

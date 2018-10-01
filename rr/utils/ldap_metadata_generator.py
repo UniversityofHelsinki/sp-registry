@@ -103,6 +103,10 @@ def ldap_metadata_generator(sp, validated=True, tree=None):
             etree.SubElement(entity, "LocalStorageGroups", value="true")
         else:
             etree.SubElement(entity, "LocalStorageGroups", value="false")
+        if history.can_access_all_ldap_groups:
+            etree.SubElement(entity, "CanAccessAllLdapGroups", value="true")
+        else:
+            etree.SubElement(entity, "CanAccessAllLdapGroups", value="false")
     else:
         etree.SubElement(entity, "TargetGroup", value=sp.target_group)
         if sp.service_account:
@@ -117,6 +121,10 @@ def ldap_metadata_generator(sp, validated=True, tree=None):
             etree.SubElement(entity, "LocalStorageGroups", value="true")
         else:
             etree.SubElement(entity, "LocalStorageGroups", value="false")
+        if sp.can_access_all_ldap_groups:
+            etree.SubElement(entity, "CanAccessAllLdapGroups", value="true")
+        else:
+            etree.SubElement(entity, "CanAccessAllLdapGroups", value="false")
     ldap_metadata_attributes(entity, sp, validation_date)
     ldap_metadata_usergroups(entity, sp, validation_date)
     return tree

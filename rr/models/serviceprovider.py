@@ -89,6 +89,8 @@ class ServiceProvider(models.Model):
                                           verbose_name=_('Does the service use a service account?'))
     service_account_contact = models.TextField(blank=True,
                                                verbose_name=_('Email address and phone number for delivering the service account credentials'))
+    can_access_all_ldap_groups = models.BooleanField(default=False,
+                                                     verbose_name=_('Service requires access to all LDAP groups'))
     local_storage_users = models.BooleanField(default=False,
                                               verbose_name=_('Service stores a local copy of users and their information'))
     # Checking if user stores passwords so we can reject the application
@@ -256,7 +258,8 @@ class ServiceProvider(models.Model):
                     value = None
             # Skip fields in list
             if f.editable and f.name in ('server_names', 'target_group', 'service_account', 'service_account_contact', 'local_storage_users',
-                                         'local_storage_passwords', 'local_storage_passwords_info', 'local_storage_groups', 'production'):
+                                         'local_storage_passwords', 'local_storage_passwords_info', 'local_storage_groups', 'production',
+                                         'can_access_all_ldap_groups'):
                 fields.append(
                   {
                    'label': f.verbose_name,

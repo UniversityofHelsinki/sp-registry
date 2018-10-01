@@ -141,8 +141,8 @@ class LdapTechnicalInformationForm(ModelForm):
 
     class Meta:
         model = ServiceProvider
-        fields = ['server_names', 'target_group', 'service_account', 'service_account_contact', 'local_storage_users',
-                  'local_storage_passwords', 'local_storage_passwords_info', 'local_storage_groups', 'production']
+        fields = ['server_names', 'target_group', 'service_account', 'service_account_contact', 'can_access_all_ldap_groups',
+                  'local_storage_users', 'local_storage_passwords', 'local_storage_passwords_info', 'local_storage_groups', 'production']
         widgets = {
           'service_account_contact': Textarea(attrs={'rows': 2}),
           'local_storage_passwords_info': Textarea(attrs={'rows': 5}),
@@ -154,6 +154,7 @@ class LdapTechnicalInformationForm(ModelForm):
             'target_group': _('What is the target group (users) of this service?'),
             'service_account': _('Separate service account is used for LDAP queries (recommended way).'),
             'service_account_contact': _('Email and phone number for delivering service account credentials.'),
+            'can_access_all_ldap_groups': _('Service requires access to all LDAP groups.'),
             'local_storage_users': _('Service stores user name and released attributes locally.'),
             'local_storage_passwords': _('Service stores user passwords locally.'),
             'local_storage_passwords_info': _('Why is this service storing user passwords locally and how? This is not generally a good idea.'),

@@ -16,7 +16,9 @@ class AttributeForm(Form):
         self.sp = kwargs.pop('sp')
         self.is_admin = kwargs.pop('is_admin')
         super(AttributeForm, self).__init__(*args, **kwargs)
-        if self.sp.service_type == "saml":
+        if self.is_admin:
+            attributes = Attribute.objects.all().order_by('friendlyname')
+        elif self.sp.service_type == "saml":
             attributes = Attribute.objects.filter(Q(public_saml=True) | Q(
                     spattribute__sp=self.sp, spattribute__end_at=None)).order_by('friendlyname')
         elif self.sp.service_type == "ldap":
@@ -31,8 +33,11 @@ class AttributeForm(Form):
                 help_text = '<a target="_blank" href="' + schema_link + '">' + field.name + '</a>'
             else:
                 help_text = field.name
-            if self.is_admin and (not field.public_saml or not field.public_ldap):
-                not_public_text = _('Not a public attribute')
+            if self.is_admin and self.sp.service_type == "saml" and not field.public_saml:
+                not_public_text = _('Not a public SAML attribute, might not be available from IdP.')
+                help_text = help_text + '<p class="text-danger">' + not_public_text + '</p>'
+            if self.is_admin and self.sp.service_type == "ldap" and not field.public_ldap:
+                not_public_text = _('Not a public LDAP attribute, might not be available from LDAP.')
                 help_text = help_text + '<p class="text-danger">' + not_public_text + '</p>'
             self.fields[field.friendlyname] = CharField(label=field.friendlyname, max_length=256,
                                                         required=False, help_text=help_text)

@@ -54,7 +54,7 @@ def try_to_make_sure_attribute_exists(friendlyname):
                                  friendlyname=friendlyname,
                                  public_ldap=1)
     else:
-        attribute.public_ldap = 1
+        attribute.public_ldap = True
         attribute.save()
 
 
@@ -74,7 +74,7 @@ def parse_ldap_attributes(sp, d, validate, errors):
     groupedanames = []
 
     for k in d.keys():
-        if k in csvtoaclgroup.keys():
+        if k in csvtoaclgroup.keys() and d[k] == "x":
             groupedanames += ad[csvtoaclgroup[k]]
 
     anames = specialanames + groupedanames
@@ -262,6 +262,8 @@ def parse_ldapdict(sp, d, validate, errors):
     parse_ldap_attributes(sp, d, validate, errors)
 
     parse_ldap_groups(sp, d, validate)
+
+    sp.production = True
 
 
 def ldap_oldcsv_parser(entity, overwrite, verbosity, validate=False):

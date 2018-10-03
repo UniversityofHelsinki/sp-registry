@@ -10,6 +10,8 @@ from django.contrib.auth.models import User
 from django.utils import timezone
 from django.utils.translation import ugettext as _
 import logging
+import unicodedata
+import re
 
 logger = logging.getLogger(__name__)
 
@@ -266,6 +268,25 @@ def parse_ldapdict(sp, d, validate, errors):
     sp.production = True
 
 
+def ldap_entity_id_from_name(horribleunicodestring):
+    """
+    Creates an LDAP Entity ID from it's human language name that's probably a
+    horribleunicode string.
+
+    horribleunicodestring: Human language name
+
+    return cleaned-up string containing only lowercase ascii characters
+    """
+    s = unicodedata.normalize('NFKD', horribleunicodestring).encode('ascii', 'ignore')
+    s = s.decode()
+    s = re.sub(r"\.helsinki\.fi$", "", s)
+    s = re.sub(r"[-,! ()]", "", s)
+    s = re.sub(r"[./|]", "_", s)
+    s = s.lower()
+
+    return s
+
+
 def ldap_oldcsv_parser(entity, overwrite, verbosity, validate=False):
     """
     Parses LDAP CSV dict and saves information to SP-object
@@ -291,12 +312,7 @@ def ldap_oldcsv_parser(entity, overwrite, verbosity, validate=False):
                 if verbosity > 1:
                     errors.append(name + " : " + _("Name already exists, overwriting"))
         except ServiceProvider.DoesNotExist:
-            n = 1
-            while True:
-                entityID = "ldap-" + str(n)
-                if not ServiceProvider.objects.filter(entity_id=entityID).exists():
-                    break
-                n = n + 1
+            entityID = ldap_entity_id_from_name(name)
             if validate:
                 sp = ServiceProvider.objects.create(entity_id=entityID, name_fi=name,
                                                     service_type="ldap", validated=timezone.now(),

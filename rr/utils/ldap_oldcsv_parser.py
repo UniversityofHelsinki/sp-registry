@@ -1,3 +1,4 @@
+# vim: tabstop=8 expandtab shiftwidth=4 softtabstop=4 textwidth=80
 """
 Functions for importing LDAP SP definitions from old style CSV file
 """
@@ -287,6 +288,29 @@ def ldap_entity_id_from_name(horribleunicodestring):
     return s
 
 
+def new_ldap_entity_id_from_name(horribleunicodestring):
+    """
+    Creates an LDAP Entity ID from it's human language name that's probably a
+    horribleunicode string. If an object with the same Entity ID already
+    exists, returns the ID with a number appended, so that this will be a new
+    Entity ID. Not thread safe or anything.
+
+    horribleunicodestring: Human language name
+
+    return cleaned-up string plus possibly a running number
+    """
+    entity_id = ldap_entity_id_from_name(horribleunicodestring)
+    sp = ServiceProvider.objects.filter(entity_id=entity_id).first()
+    n = 0
+    origin = entity_id
+    while sp:
+        n = n + 1
+        entity_id = "%s%i" % (entity_id, n)
+        sp = ServiceProvider.objects.filter(entity_id=entity_id).first()
+
+    return entity_id
+
+
 def ldap_oldcsv_parser(entity, overwrite, verbosity, validate=False):
     """
     Parses LDAP CSV dict and saves information to SP-object
@@ -312,7 +336,7 @@ def ldap_oldcsv_parser(entity, overwrite, verbosity, validate=False):
                 if verbosity > 1:
                     errors.append(name + " : " + _("Name already exists, overwriting"))
         except ServiceProvider.DoesNotExist:
-            entityID = ldap_entity_id_from_name(name)
+            entityID = new_ldap_entity_id_from_name(name)
             if validate:
                 sp = ServiceProvider.objects.create(entity_id=entityID, name_fi=name,
                                                     service_type="ldap", validated=timezone.now(),
@@ -321,7 +345,7 @@ def ldap_oldcsv_parser(entity, overwrite, verbosity, validate=False):
                 sp = ServiceProvider.objects.create(entity_id=entityID, name_fi=name,
                                                     service_type="ldap", validated=None,
                                                     modified=True)
-            if verbosity > 2:
+            if verbosity > 3:
                 errors.append(name + " : " + _("Name does not exist, creating"))
         if not skip:
             parse_ldapdict(sp, entity, validate, errors)

@@ -1,4 +1,4 @@
-# vim: tabstop=8 expandtab shiftwidth=4 softtabstop=4 textwidth=80
+# vim: tabstop=8 expandtab shiftwidth=4 softtabstop=4 textwidth=80 ai
 """
 Functions for importing LDAP SP definitions from old style CSV file
 """

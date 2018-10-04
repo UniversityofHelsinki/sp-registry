@@ -120,10 +120,7 @@ class ServiceProvider(models.Model):
         if self.service_type == "saml":
             return self.entity_id
         elif self.service_type == "ldap":
-            if self.server_names:
-                return self.server_names.splitlines()[0]
-            else:
-                return self.entity_id
+            return self.entity_id
         else:
             return None
 

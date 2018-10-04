@@ -4,7 +4,7 @@ Email notifications
 from smtplib import SMTPException
 
 from django.template.loader import render_to_string
-from django.core.mail import send_mail
+from django.core.mail import send_mail, mail_admins
 from django.conf import settings
 from django.core.mail.message import BadHeaderError
 
@@ -18,8 +18,8 @@ def admin_notification_modified_sp(modified_sp, in_production, add_production, r
     """
     Sends list of modified SPs to ADMIN_NOTIFICATION_EMAIL
     """
-    if modified_sp and settings.ADMINS:
-
+    if (modified_sp and hasattr(settings, 'ADMINS') and settings.ADMINS and
+            hasattr(settings, 'ADMIN_NOTIFICATION') and settings.ADMIN_NOTIFICATION):
         subject = render_to_string('email/admin_notification_modified_sp_subject.txt')
         message = render_to_string('email/admin_notification_modified_sp.txt',
                                    {'modified_sp': modified_sp,
@@ -28,7 +28,7 @@ def admin_notification_modified_sp(modified_sp, in_production, add_production, r
                                     'remove_production': remove_production,
                                     'in_test': in_test})
         try:
-            send_mail(subject, message, settings.SERVER_EMAIL, settings.ADMINS, fail_silently=False)
+            mail_admins(subject, message)
         except SMTPException:
             logger.error("SMTP error when sending admin notification.")
         except BadHeaderError:
@@ -39,17 +39,18 @@ def validation_notification(sp):
     """
     Sends validation message to SP admins.
     """
-    admins = sp.admins.all()
-    admin_emails = []
-    for admin in admins:
-        admin_emails.append(admin.email)
-    if sp and admin_emails:
-        subject = render_to_string('email/validation_notification_subject.txt')
-        message = render_to_string('email/validation_notification.txt',
-                                   {'entity_id': sp.entity_id})
-        try:
-            send_mail(subject, message, settings.SERVER_EMAIL, admin_emails, fail_silently=False)
-        except SMTPException:
-            logger.warning("SMTP error when sending validation notification.")
-        except BadHeaderError:
-            logger.error("Validation notification email contained invalid headers.")
+    if (hasattr(settings, 'VALIDATION_NOTIFICATION') and settings.VALIDATION_NOTIFICATION):
+        admins = sp.admins.all()
+        admin_emails = []
+        for admin in admins:
+            admin_emails.append(admin.email)
+        if sp and admin_emails:
+            subject = render_to_string('email/validation_notification_subject.txt')
+            message = render_to_string('email/validation_notification.txt',
+                                       {'entity_id': sp.entity_id})
+            try:
+                send_mail(subject, message, settings.SERVER_EMAIL, admin_emails, fail_silently=False)
+            except SMTPException:
+                logger.warning("SMTP error when sending validation notification.")
+            except BadHeaderError:
+                logger.error("Validation notification email contained invalid headers.")

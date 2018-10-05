@@ -28,13 +28,13 @@ class ServiceProvider(models.Model):
                                      on_delete=models.SET_NULL, verbose_name=_('Organization'))
     name_fi = models.CharField(max_length=140, blank=True,
                                verbose_name=_('Service Name (Finnish)'),
-                               validators=[MaxLengthValidator(140)])
+                               validators=[MaxLengthValidator(70)])
     name_en = models.CharField(max_length=140, blank=True,
                                verbose_name=_('Service Name (English)'),
-                               validators=[MaxLengthValidator(140)])
+                               validators=[MaxLengthValidator(70)])
     name_sv = models.CharField(max_length=140, blank=True,
                                verbose_name=_('Service Name (Swedish)'),
-                               validators=[MaxLengthValidator(140)])
+                               validators=[MaxLengthValidator(70)])
     description_fi = models.CharField(max_length=140, blank=True,
                                       verbose_name=_('Service Description (Finnish)'),
                                       validators=[MaxLengthValidator(140)])

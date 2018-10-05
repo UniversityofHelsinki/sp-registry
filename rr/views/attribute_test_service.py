@@ -45,7 +45,7 @@ def attribute_test_service(request):
                 icon = "invalid"
             else:
                 icon = "optional"
-        if attribute.public or value:
+        if attribute.public_saml or value:
             object_list.append({'friendlyname': attribute.friendlyname,
                                 'name': attribute.name,
                                 'value': value.replace(";", "<br>"),

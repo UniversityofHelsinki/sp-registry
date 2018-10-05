@@ -3,7 +3,7 @@
 Functions for importing LDAP SP definitions from old style CSV file
 """
 
-from rr.models.serviceprovider import ServiceProvider, SPAttribute
+from rr.models.serviceprovider import ServiceProvider, SPAttribute, new_ldap_entity_id_from_name
 from rr.models.contact import Contact
 from rr.models.attribute import Attribute
 from rr.models.usergroup import UserGroup
@@ -11,8 +11,6 @@ from django.contrib.auth.models import User
 from django.utils import timezone
 from django.utils.translation import ugettext as _
 import logging
-import unicodedata
-import re
 
 logger = logging.getLogger(__name__)
 
@@ -267,48 +265,6 @@ def parse_ldapdict(sp, d, validate, errors):
     parse_ldap_groups(sp, d, validate)
 
     sp.production = True
-
-
-def ldap_entity_id_from_name(horribleunicodestring):
-    """
-    Creates an LDAP Entity ID from it's human language name that's probably a
-    horribleunicode string.
-
-    horribleunicodestring: Human language name
-
-    return cleaned-up string containing only lowercase ascii characters
-    """
-    s = unicodedata.normalize('NFKD', horribleunicodestring).encode('ascii', 'ignore')
-    s = s.decode()
-    s = re.sub(r"\.helsinki\.fi$", "", s)
-    s = re.sub(r"[-,! ()]", "", s)
-    s = re.sub(r"[./|]", "_", s)
-    s = s.lower()
-
-    return s
-
-
-def new_ldap_entity_id_from_name(horribleunicodestring):
-    """
-    Creates an LDAP Entity ID from it's human language name that's probably a
-    horribleunicode string. If an object with the same Entity ID already
-    exists, returns the ID with a number appended, so that this will be a new
-    Entity ID. Not thread safe or anything.
-
-    horribleunicodestring: Human language name
-
-    return cleaned-up string plus possibly a running number
-    """
-    entity_id = ldap_entity_id_from_name(horribleunicodestring)
-    sp = ServiceProvider.objects.filter(entity_id=entity_id).first()
-    n = 0
-    origin = entity_id
-    while sp:
-        n = n + 1
-        entity_id = "%s%i" % (entity_id, n)
-        sp = ServiceProvider.objects.filter(entity_id=entity_id).first()
-
-    return entity_id
 
 
 def ldap_oldcsv_parser(entity, overwrite, verbosity, validate=False):

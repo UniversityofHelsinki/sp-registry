@@ -8,6 +8,8 @@ from rr.models.nameidformat import NameIDFormat
 from rr.models.organization import Organization
 from rr.utils.notifications import admin_notification_modified_sp
 
+import unicodedata
+import re
 
 class ServiceProvider(models.Model):
     """
@@ -316,3 +318,45 @@ class SPAttribute(models.Model):
 
     class Meta:
         ordering = ["attribute__friendlyname"]
+
+
+def ldap_entity_id_from_name(horribleunicodestring):
+    """
+    Creates an LDAP Entity ID from it's human language name that's probably a
+    horribleunicode string.
+
+    horribleunicodestring: Human language name
+
+    return cleaned-up string containing only lowercase ascii characters
+    """
+    s = unicodedata.normalize('NFKD', horribleunicodestring).encode('ascii', 'ignore')
+    s = s.decode()
+    s = re.sub(r"\.helsinki\.fi$", "", s)
+    s = re.sub(r"[-,! ()\]\[{}]", "", s)
+    s = re.sub(r"[./|]", "_", s)
+    s = s.lower()
+
+    return s
+
+
+def new_ldap_entity_id_from_name(horribleunicodestring):
+    """
+    Creates an LDAP Entity ID from it's human language name that's probably a
+    horribleunicode string. If an object with the same Entity ID already
+    exists, returns the ID with a number appended, so that this will be a new
+    Entity ID. Not thread safe or anything.
+
+    horribleunicodestring: Human language name
+
+    return cleaned-up string plus possibly a running number
+    """
+    entity_id = ldap_entity_id_from_name(horribleunicodestring)
+    sp = ServiceProvider.objects.filter(entity_id=entity_id).first()
+    n = 0
+    origin = entity_id
+    while sp:
+        n = n + 1
+        entity_id = "%s%i" % (entity_id, n)
+        sp = ServiceProvider.objects.filter(entity_id=entity_id).first()
+
+    return entity_id

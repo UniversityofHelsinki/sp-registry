@@ -8,7 +8,7 @@ from django.forms.widgets import HiddenInput, Textarea, CheckboxInput
 from django.utils.translation import ugettext as _
 
 from rr.models.nameidformat import NameIDFormat
-from rr.models.serviceprovider import ServiceProvider
+from rr.models.serviceprovider import ServiceProvider, ldap_entity_id_from_name
 
 
 class BasicInformationForm(ModelForm):
@@ -286,6 +286,7 @@ class LdapServiceProviderCreateForm(ModelForm):
     def __init__(self, *args, **kwargs):
         self.request = kwargs.pop('request', None)
         super(LdapServiceProviderCreateForm, self).__init__(*args, **kwargs)
+        self.fields['name_fi'].required = True
 
     def clean_server_names(self):
         """
@@ -298,6 +299,15 @@ class LdapServiceProviderCreateForm(ModelForm):
             if not pattern.match(server_name):
                 raise ValidationError(_("Invalid list of server names."))
         return server_names
+
+    def clean_name_fi(self):
+        """
+        Check name_fi format
+        """
+        name_fi = self.cleaned_data['name_fi']
+        if len(ldap_entity_id_from_name(name_fi)) == 0:
+            raise ValidationError(_("Invalid Finnish name."))
+        return name_fi
 
 
 class ServiceProviderCloseForm(Form):

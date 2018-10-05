@@ -19,7 +19,7 @@ from rr.forms.serviceprovider import ServiceProviderValidationForm, LdapTechnica
 from rr.models.certificate import Certificate
 from rr.models.contact import Contact
 from rr.models.endpoint import Endpoint
-from rr.models.serviceprovider import ServiceProvider, SPAttribute
+from rr.models.serviceprovider import ServiceProvider, SPAttribute, new_ldap_entity_id_from_name
 from rr.models.testuser import update_entity_ids
 from rr.models.usergroup import UserGroup
 from rr.utils.notifications import validation_notification
@@ -268,13 +268,7 @@ class LdapServiceProviderCreate(CreateView):
     def form_valid(self, form):
         form.instance.updated_by = self.request.user
         form.instance.service_type = "ldap"
-        n = 1
-        while True:
-            entity_id = "ldap-" + str(n)
-            if not ServiceProvider.objects.filter(entity_id=entity_id).exists():
-                break
-            n = n + 1
-        form.instance.entity_id = entity_id
+        form.instance.entity_id = new_ldap_entity_id_from_name(form.instance.name_fi)
         super().form_valid(form)
         self.object.admins.add(self.request.user)
         logger.info("SP %s created by %s", self.object, self.request.user)

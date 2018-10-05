@@ -11,8 +11,10 @@
     <dd class="col-sm-9">{{ attribute.name }}</dd>
     <dt class="col-sm-3">{% trans "Name Format" %}</dt>
     <dd class="col-sm-9">{{ attribute.nameformat }}</dd>
-    <dt class="col-sm-3">{% trans "Public" %}</dt>
-    {% if attribute.public %}<dd class="col-sm-9 text-success">&#10004;{% else %}<dd class="col-sm-9 text-danger">&#10005;{% endif %}</dd>
+    <dt class="col-sm-3">{% trans "Public SAML" %}</dt>
+    {% if attribute.public_saml %}<dd class="col-sm-9 text-success">&#10004;{% else %}<dd class="col-sm-9 text-danger">&#10005;{% endif %}</dd>
+    <dt class="col-sm-3">{% trans "Public LDAP" %}</dt>
+    {% if attribute.public_ldap %}<dd class="col-sm-9 text-success">&#10004;{% else %}<dd class="col-sm-9 text-danger">&#10005;{% endif %}</dd>
     <dt class="col-sm-3">{% trans "Information" %}</dt>
     <dd class="col-sm-9">{{ attribute.info }}</dd>
 </dl>

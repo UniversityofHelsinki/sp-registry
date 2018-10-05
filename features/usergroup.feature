@@ -3,7 +3,7 @@ Feature: User groups
 
 Scenario: User group modifications
 	Given test environment with logged in user exists
-	When clicking link with text "ldap.example.com ldap3.example.com"
+	When clicking link with text "ldap-3"
 	And clicking visible link with text "User Groups"
 	And filling user group form with name "Teppo Testeri"
 	And filling user group form with name "Maija Mehiläinen"

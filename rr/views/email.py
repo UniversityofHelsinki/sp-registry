@@ -62,6 +62,7 @@ def email_list(request):
         if form.is_valid():
             production_sp = form.cleaned_data['production_sp']
             test_sp = form.cleaned_data['test_sp']
+            service_type = form.cleaned_data['service_type']
             individual_sp = form.cleaned_data['individual_sp']
             admin_emails = form.cleaned_data['admin_emails']
             technical_contacts = form.cleaned_data['technical_contacts']
@@ -73,7 +74,9 @@ def email_list(request):
                     template = Template.objects.get(pk=template)
                 except Template.DoesNotExist:
                     template = None
-            service_providers = ServiceProvider.objects.filter(end_at=None)
+            print(service_type)
+            service_providers = ServiceProvider.objects.filter(end_at=None,
+                                                               service_type__in=service_type)
             for sp in service_providers:
                 if (production_sp and sp.production) or (test_sp and sp.test) \
                             or (sp in individual_sp):

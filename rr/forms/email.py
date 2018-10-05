@@ -1,3 +1,4 @@
+from django.forms import CheckboxSelectMultiple, MultipleChoiceField
 from django.forms.fields import BooleanField
 from django.forms.forms import Form
 from django.forms.models import ModelChoiceField, ModelMultipleChoiceField
@@ -11,6 +12,10 @@ class EmailSelectForm(Form):
     """
     Form for selecting email addresses
     """
+    SERVICETYPECHOICES = (('saml', _('SAML / Shibboleth')),
+                          ('ldap', _('LDAP')))
+    service_type = MultipleChoiceField(required=True, widget=CheckboxSelectMultiple,
+                                       choices=SERVICETYPECHOICES)
     production_sp = BooleanField(required=False, help_text=_("Select production SPs."))
     test_sp = BooleanField(required=False, help_text=_("Select test SPs"))
     individual_sp = ModelMultipleChoiceField(

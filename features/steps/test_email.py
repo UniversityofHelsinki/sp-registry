@@ -3,6 +3,7 @@ from behave import when, then, given
 
 @when(u'filling email form')
 def filling_email_form(context):
+    context.browser.check("service_type")
     context.browser.check("test_sp")
     context.browser.check("admin_emails")
     context.browser.select("template", "1")

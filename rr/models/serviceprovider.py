@@ -11,6 +11,7 @@ from rr.utils.notifications import admin_notification_modified_sp
 import unicodedata
 import re
 
+
 class ServiceProvider(models.Model):
     """
     Stores a service provider, related to :model:`auth.User` and
@@ -284,10 +285,6 @@ class ServiceProvider(models.Model):
             for service in services:
                 history = ServiceProvider.objects.filter(
                     history=service.pk).exclude(validated=None).last()
-                if history:
-                    print(history)
-                    print(history.production)
-                    print(service.production)
                 if history and history.production and service.production:
                     in_production.append(service.entity_id)
                 elif history and history.production and not service.production:
@@ -353,7 +350,6 @@ def new_ldap_entity_id_from_name(horribleunicodestring):
     entity_id = ldap_entity_id_from_name(horribleunicodestring)
     sp = ServiceProvider.objects.filter(entity_id=entity_id).first()
     n = 0
-    origin = entity_id
     while sp:
         n = n + 1
         entity_id = "%s%i" % (entity_id, n)

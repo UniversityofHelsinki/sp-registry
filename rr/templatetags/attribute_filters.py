@@ -37,7 +37,7 @@ def get_production_status(obj):
     Return production status from history if object is not validated
     Return false if there is no validated object
     """
-    if obj.validated and not obj.modified:
+    if obj.validated:
         return obj.production
     history = ServiceProvider.objects.filter(history=obj.pk).exclude(validated=None).last()
     if history:

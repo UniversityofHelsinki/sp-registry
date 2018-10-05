@@ -34,6 +34,11 @@ SERVER_EMAIL = 'noreply@example.org'
 ADMINS = [('IDP Admins', 'idp-admins@example.org')]
 # Contact email shown in login page if user account is not activated automatically
 DEFAULT_CONTACT_EMAIL = 'contact@example.org'
+# Send email to emails defined in ADMINS when changes have been made
+ADMIN_NOTIFICATION = True
+# Send email to service admins when changes have been validated
+VALIDATION_NOTIFICATION = True
+
 # Privacy policy url shown in login page
 PRIVACY_POLICY_URL = 'https://example.org/DataPrivacyPolicy.pdf'
 # Path to save test screenshots

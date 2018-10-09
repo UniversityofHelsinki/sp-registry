@@ -46,8 +46,15 @@ def validation_notification(sp):
             admin_emails.append(admin.email)
         if sp and admin_emails:
             subject = render_to_string('email/validation_notification_subject.txt')
-            message = render_to_string('email/validation_notification.txt',
-                                       {'entity_id': sp.entity_id})
+            if sp.service_type == "saml":
+                message = render_to_string('email/validation_notification_saml.txt',
+                                           {'entity_id': sp.entity_id})
+            elif sp.service_type == "ldap":
+                message = render_to_string('email/validation_notification_ldap.txt',
+                                           {'entity_id': sp.entity_id})
+            else:
+                message = render_to_string('email/validation_notification.txt',
+                                           {'entity_id': sp.entity_id})
             try:
                 send_mail(subject, message, settings.SERVER_EMAIL, admin_emails, fail_silently=False)
             except SMTPException:

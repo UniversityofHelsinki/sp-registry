@@ -1,0 +1,9 @@
+Changes have been validated for LDAP client {{ entity_id }}. The necessary
+firewall rules and a service account (if required) will be
+created/updated in the next update run within a couple of days. If a new
+service account will be created, the account information will be sent
+via securemail to the contact you provided.
+
+If you run into limits or if you need to access any attributes or LDAP groups
+but are 100% certain that your LDAP client cannot be configured to use a
+service account, please contact atk-ldap@helsinki.fi.

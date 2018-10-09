@@ -1,0 +1,5 @@
+Changes have been validated for service provider:
+{{ entity_id }}
+
+Modified metadata will be included to the next IdP update and will come into
+effect within couple of days.

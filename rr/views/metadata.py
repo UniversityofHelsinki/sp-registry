@@ -8,7 +8,7 @@ from datetime import datetime
 from os.path import join
 
 from git import Repo
-from git.exc import InvalidGitRepositoryError, NoSuchPathError
+from git.exc import InvalidGitRepositoryError, NoSuchPathError, GitCommandError
 from lxml import etree
 
 from django.conf import settings
@@ -159,7 +159,15 @@ def metadata_management(request):
     except NoSuchPathError:
         error_message = _("Repository path could not be accessed.")
         return render(request, "error.html", {'error_message': error_message})
-    origin = repo.remotes.origin
+    except GitCommandError:
+        error_message = _("Execution of git command failed. Might want to try git command locally "
+                          "from the command line and check that it works.")
+        return render(request, "error.html", {'error_message': error_message})
+    try:
+        origin = repo.remotes.origin
+    except AttributeError:
+        error_message = _("Git repository has no origin.")
+        return render(request, "error.html", {'error_message': error_message})
     diff = repo.git.diff('HEAD')
     log = last_commits(repo, 5)
     if repo.commit().hexsha != origin.fetch()[0].commit.hexsha:

@@ -126,8 +126,8 @@ class BasicInformationView(DetailView):
 
     def get_missing_data(self, sp):
         missing = []
-        if sp.service_type == "saml":
-            if sp.test or sp.production:
+        if sp.production:
+            if sp.service_type == "saml" or sp.service_type == "ldap":
                 if not sp.name_en and not sp.name_fi:
                     url = reverse("basicinformation-update", args=[sp.pk])
                     msg = _("Service name in English or in Finnish")
@@ -136,26 +136,27 @@ class BasicInformationView(DetailView):
                     url = reverse("basicinformation-update", args=[sp.pk])
                     msg = _("Service description in English or in Finnish")
                     missing.append("<a href='" + url + "'>" + msg + "</a>")
-                if sp.production:
-                    if not sp.privacypolicy_en and not sp.privacypolicy_fi and sp.attributes:
-                        url = reverse("basicinformation-update", args=[sp.pk])
-                        msg = _("Privacy policy URL in English or in Finnish")
-                        missing.append("<a href='" + url + "'>" + msg + "</a>")
-                if not Certificate.objects.filter(sp=sp, end_at=None):
-                    url = reverse("certificate-list", args=[sp.pk])
-                    msg = _("Certificate")
+                if not sp.privacypolicy_en and not sp.privacypolicy_fi and sp.attributes:
+                    url = reverse("basicinformation-update", args=[sp.pk])
+                    msg = _("Privacy policy URL in English or in Finnish")
                     missing.append("<a href='" + url + "'>" + msg + "</a>")
-                if not Endpoint.objects.filter(sp=sp, end_at=None, type='AssertionConsumerService'):
-                    url = reverse("endpoint-list", args=[sp.pk])
-                    msg = _("AssertionConsumerService endpoint")
+                if not sp.application_portfolio:
+                    url = reverse("basicinformation-update", args=[sp.pk])
+                    msg = _("Application portfolio URL")
                     missing.append("<a href='" + url + "'>" + msg + "</a>")
                 if not Contact.objects.filter(sp=sp, end_at=None, type="technical"):
                     url = reverse("contact-list", args=[sp.pk])
                     msg = _("Technical contact")
                     missing.append("<a href='" + url + "'>" + msg + "</a>")
-                if not Contact.objects.filter(sp=sp, end_at=None, type="support"):
-                    url = reverse("contact-list", args=[sp.pk])
-                    msg = _("Support contact")
+            if sp.service_type == "saml":
+                if not Certificate.objects.filter(sp=sp, end_at=None):
+                    url = reverse("certificate-list", args=[sp.pk])
+                    msg = _("Certificate")
+                    missing.append("<a href='" + url + "'>" + msg + "</a>")
+                if not Endpoint.objects.filter(sp=sp, end_at=None,
+                                               type='AssertionConsumerService'):
+                    url = reverse("endpoint-list", args=[sp.pk])
+                    msg = _("AssertionConsumerService endpoint")
                     missing.append("<a href='" + url + "'>" + msg + "</a>")
         return missing
 

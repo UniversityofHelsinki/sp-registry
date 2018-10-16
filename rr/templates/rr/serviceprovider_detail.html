@@ -27,9 +27,7 @@
 <div class="alert alert-info" role="alert">
 <h2>{% trans "Missing data" %}</h2>
 {% if object.production %}
-<p>{% trans "This service provider is marked for production IdPs but is missing following data:" %}</p>
-{% else %}
-<p>{% trans "This service provider is marked for test IdPs but it is missing following data:" %}</p>
+<p>{% trans "This service is marked for the production use but is missing following data:" %}</p>
 {% endif %}
 <ul>
 {% for field in missing %}<li>{{ field |safe }}</li>{% endfor %}

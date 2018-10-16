@@ -4,7 +4,7 @@ from django.core.exceptions import ValidationError
 from django.core.validators import URLValidator
 from django.forms import Form, Textarea, HiddenInput
 from django.forms.fields import CharField, BooleanField
-from django.utils.translation import ugettext as _
+from django.utils.translation import ugettext_lazy as _
 
 from rr.models.serviceprovider import ServiceProvider
 

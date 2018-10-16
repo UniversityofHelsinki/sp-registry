@@ -1,4 +1,4 @@
-from django.conf.urls import url
+from django.conf.urls import url, include
 from rr.views.attribute_test_service import attribute_test_service
 
 # Overwrite default status handlers
@@ -9,4 +9,5 @@ handler500 = 'rr.views.handlers.server_error_blank'
 
 urlpatterns = [
     url(r'^$', attribute_test_service, name='attribute-test-service'),
+    url(r'^i18n/', include('django.conf.urls.i18n')),
 ]

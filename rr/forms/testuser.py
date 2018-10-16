@@ -2,7 +2,7 @@ from django.db.models import Q
 from django.core.validators import ValidationError
 from django.forms import ModelForm, Form, CharField, BooleanField, PasswordInput
 from django.forms.widgets import TextInput
-from django.utils.translation import ugettext as _
+from django.utils.translation import ugettext_lazy as _
 
 from rr.models.serviceprovider import SPAttribute, ServiceProvider
 from rr.models.testuser import TestUser, TestUserData

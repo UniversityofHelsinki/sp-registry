@@ -70,4 +70,5 @@ urlpatterns = [
     url(r'^invite/$', activate_key, name='invite-activate'),
     url(r'^invite/(?P<invite_key>[\w+\s-]+)/$', activate_key, name='invite-activate-key'),
     url('^', include('django.contrib.auth.urls')),
+    url(r'^i18n/', include('django.conf.urls.i18n')),
 ]

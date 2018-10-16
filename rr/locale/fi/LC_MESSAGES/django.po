@@ -1,0 +1,2331 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2018-10-16 09:47+0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: forms/attribute.py:37
+msgid "Not a public SAML attribute, might not be available from IdP."
+msgstr "Ei julkinen SAML attribuutti, eikä ole välttämättä saatavilla IdP:ltä."
+
+#: forms/attribute.py:40
+msgid "Not a public LDAP attribute, might not be available from LDAP."
+msgstr "Ei julkinen LDAP attribuutti, eikä välttämättä saatavilla LDAPista"
+
+#: forms/certificate.py:17
+msgid ""
+"Certificate in PEM format, WITHOUT -----BEGIN CERTIFICATE----- and -----END "
+"CERTIFICATE-----"
+msgstr ""
+"Varmenne PEM-muodossa ilman -----BEGIN CERTIFICATE----- ja -----END "
+"CERTIFICATE----- kohtia."
+
+#: forms/certificate.py:21
+msgid ""
+"Use this certificate for signing. If both signing and encryption are left "
+"empty, certificate is used for both."
+msgstr ""
+"Allekirjoitukseen käytettävä varmenne. Jos sekä allekirjoitus että salaus-kohdat "
+"jätetään tyhjäksi, varmennetta käytetään molempiin."
+
+#: forms/certificate.py:24
+msgid "Use this certificate for encryption"
+msgstr "Salaukseen käytettävä varmenne"
+
+#: forms/certificate.py:35
+msgid "Unable to load certificate"
+msgstr "Ei voitu ladata varmennetta"
+
+#: forms/certificate.py:45
+msgid "Certificate already exists"
+msgstr "Varmenne on jo lisätty"
+
+#: forms/contact.py:25
+msgid "Contact already exists"
+msgstr "Yhteystieto on jo lisätty"
+
+#: forms/email.py:15 models/serviceprovider.py:21
+msgid "SAML / Shibboleth"
+msgstr ""
+
+#: forms/email.py:16 models/serviceprovider.py:22
+msgid "LDAP"
+msgstr ""
+
+#: forms/email.py:19
+msgid "Select production SPs."
+msgstr "Valitse tuotantopalvelut"
+
+#: forms/email.py:20
+msgid "Select test SPs"
+msgstr "Valitse testipalvelut"
+
+#: forms/email.py:24
+msgid "Select individual SPs"
+msgstr "Valitse yksittäisiä palveluita"
+
+#: forms/email.py:25
+msgid "Select admin emails"
+msgstr "Valitse ylläpitäjien sähköpostit"
+
+#: forms/email.py:26
+msgid "Select technical contacts"
+msgstr "Valitse tekniset kontaktit"
+
+#: forms/email.py:27
+msgid "Select support contacts"
+msgstr "Valitse tukikontaktit"
+
+#: forms/email.py:29
+msgid "Select administrative contacts"
+msgstr "Valitse hallinnolliset kontaktit"
+
+#: forms/email.py:31
+msgid "Select template if you want to send email"
+msgstr "Valitse viestipohja, jos haluat lähettää sähköpostia"
+
+#: forms/endpoint.py:25
+msgid "Endpoint already exists"
+msgstr "Yhteysosoite on jo lisätty"
+
+#: forms/metadata.py:17
+msgid "Service Provider metadata"
+msgstr "Palvelun metatiedot"
+
+#: forms/metadata.py:19
+msgid "Disable checks for Endpoint bindings"
+msgstr "Poista tarkastukset yhteysosoitteille"
+
+#: forms/metadata.py:20
+msgid "Validate imported metadata"
+msgstr "Hyväksy tuodut metatiedot"
+
+#: forms/metadata.py:36
+msgid "Not valid XML: "
+msgstr "Virheellinen XML: "
+
+#: forms/metadata.py:38
+msgid "First element should be EntityDescriptor"
+msgstr "Ensimmäisen elementin tulee olla EntityDescriptor"
+
+#: forms/metadata.py:41 utils/metadata_parser.py:317
+msgid "Could not find entityID"
+msgstr "entityID puuttuu"
+
+#: forms/metadata.py:47 forms/serviceprovider.py:129
+#: forms/serviceprovider.py:252
+msgid ""
+"Entity Id should be URI, please contact IdP admins if this is not possible."
+msgstr ""
+"Entity ID:n tulee olla URI, ota yhteyttä IdP-ylläpitäjiin, jos tämä ei ole mahdollista"
+
+#: forms/metadata.py:50 forms/serviceprovider.py:133
+#: forms/serviceprovider.py:256
+msgid "Entity Id already exists"
+msgstr "Entity ID on jo olemassa"
+
+#: forms/metadata.py:57
+msgid "Commit message"
+msgstr "Muutoksen viesti"
+
+#: forms/serviceprovider.py:26
+msgid "Organization name, only changeable by the registry admins."
+msgstr "Organisaation nimi, muutettavissa vain reksiterin ylläpitäjien toimesta."
+
+#: forms/serviceprovider.py:27 forms/serviceprovider.py:209
+msgid ""
+"Short (max 70 characters) and descriptive name for the service in Finnish."
+"<div class=\"text-danger\">Required for both production and test use.</div>"
+msgstr ""
+"Lyhyt (korkeintaan 70 merkkiä) ja kuvaava nimi palvelulle suomeksi."
+"<div class=\"text-danger\">Vaadittu tuotanto- ja testikäyttöön.</div>"
+
+#: forms/serviceprovider.py:30 forms/serviceprovider.py:212
+msgid ""
+"Short (max 70 characters) and descriptive name for the service in English."
+"<div class=\"text-danger\">Required for both production and test use.</div>"
+msgstr ""
+"Lyhyt (korkeintaan 70 merkkiä) ja kuvaava nimi palvelulle englanniksi."
+"<div class=\"text-danger\">Vaadittu tuotanto- ja testikäyttöön.</div>"
+
+#: forms/serviceprovider.py:33 forms/serviceprovider.py:215
+#: forms/serviceprovider.py:274
+msgid ""
+"Short (max 70 characters) and descriptive name for the service in Swedish."
+msgstr ""
+"Lyhyt (korkeintaan 70 merkkiä) ja kuvaava nimi palvelulle ruotsiksi."
+
+#: forms/serviceprovider.py:35 forms/serviceprovider.py:217
+msgid ""
+"Short (max 140 characters) description of the service in Finnish. <div class="
+"\"text-danger\">Required for both production and test use.</div>"
+msgstr ""
+"Lyhyt (korkeintaan 140 merkkiä) kuvaus palvelulle suomeksi."
+"<div class=\"text-danger\">Vaadittu tuotanto- ja testikäyttöön.</div>"
+
+#: forms/serviceprovider.py:38 forms/serviceprovider.py:220
+msgid ""
+"Short (max 140 characters) description of the service in English. <div class="
+"\"text-danger\">Required for both production and test use.</div>"
+msgstr ""
+"Lyhyt (korkeintaan 140 merkkiä) kuvaus palvelulle englanniksi."
+"<div class=\"text-danger\">Vaadittu tuotanto- ja testikäyttöön.</div>"
+
+#: forms/serviceprovider.py:41 forms/serviceprovider.py:223
+#: forms/serviceprovider.py:277
+msgid "Short (max 140 characters) description of the service in Swedish."
+msgstr "Lyhyt (korkeintaan 140 merkkiä) kuvaus palvelulle ruotsiksi."
+
+#: forms/serviceprovider.py:43 forms/serviceprovider.py:225
+msgid ""
+"Link to privacy policy in Finnish. Link must be publicly accessible. <div "
+"class=\"text-danger\">Required for production use if the service requests "
+"any personal information.</div>"
+msgstr ""
+"Linkki suomenkieliseen tietosuojaselosteeseen. Linkin täytyy olla julkinen. <div "
+"class=\"text-danger\">Vaadittu tuotantokäytötön, jos palvelu vaatii "
+"henkilötietoja.</div>"
+
+#: forms/serviceprovider.py:46 forms/serviceprovider.py:228
+msgid ""
+"Link to privacy policy in English. Link must be publicly accessible. <div "
+"class=\"text-danger\">Required for production use if the service requests "
+"any personal information.</div>"
+msgstr ""
+"Linkki englanninkieliseen tietosuojaselosteeseen. Linkin täytyy olla julkinen. <div "
+"class=\"text-danger\">Vaadittu tuotantokäytötön, jos palvelu vaatii "
+"henkilötietoja.</div>"
+
+#: forms/serviceprovider.py:49 forms/serviceprovider.py:231
+#: forms/serviceprovider.py:280
+msgid "Link to privacy policy in Swedish. Link must be publicly accessible."
+msgstr "Linkki ruotsinkieliseen tietosuojaselosteeseen. Linkin täytyy olla julkinen."
+
+#: forms/serviceprovider.py:51 forms/serviceprovider.py:233
+#: forms/serviceprovider.py:281
+msgid "Used for debugging and testing services."
+msgstr "Käytetään palveluiden testaamsieen."
+
+#: forms/serviceprovider.py:52 forms/serviceprovider.py:234
+#: forms/serviceprovider.py:282
+msgid "Link to external application portfolio."
+msgstr "Linkki palvelun tietoihin sovellussalkussa."
+
+#: forms/serviceprovider.py:53 forms/serviceprovider.py:235
+#: forms/serviceprovider.py:283
+msgid "Additional notes about this service."
+msgstr "Lisätietoja palvelusta."
+
+#: forms/serviceprovider.py:54
+msgid ""
+"Additional administrative notes. Writable only by registry admins but showed "
+"in summary to SP admins."
+msgstr ""
+"Ylläpitoon liittyviä huomioita. Muokattavissa vain rekisterin ylläpitäjien "
+"toimesta, mutta näytetään myös palvelun ylläpitäjille."
+
+#: forms/serviceprovider.py:80 forms/serviceprovider.py:206
+msgid ""
+"Should be URI including scheme, hostname of your application and path e.g. "
+"https://test.helsinki.fi/sp. <div class=\"text-danger\">Required for both "
+"production and test use.</div>"
+msgstr ""
+"Muotona URI, sisältäen protokollan, osoitteen ja polun, esim. "
+"https://test.helsinki.fi/sp. <div class=\"text-danger\">Vaaditaan sekä "
+"tuotanto että testikäyttöön.</div>"
+
+#: forms/serviceprovider.py:83
+msgid ""
+"For service providers supporting discovery service. Usually only valid if "
+"you are accepting logins for multiple IdPs."
+msgstr ""
+"Jos palvelu tukee erillistä valintapalvelua eri kirjautumispalveluihin. "
+"Yleensä näin on vain, jos palvelusi sallii kirjautumisia useilta eri identiteetintarjoajilta."
+
+#: forms/serviceprovider.py:87
+msgid ""
+"Support for name identifier formats. Check <a href=\"https://wiki.shibboleth."
+"net/confluence/display/CONCEPT/NameIdentifiers\" target=\"_blank"
+"\">Shibboleth wiki</a> for more information."
+msgstr ""
+"Tuetut name identifier muodot. Katso lisätietoja <a href=\"https://wiki.shibboleth."
+"net/confluence/display/CONCEPT/NameIdentifiers\" target=\"_blank"
+"\">Shibboleth wikistä</a>."
+
+#: forms/serviceprovider.py:90
+msgid ""
+"IdP sings attribute assertions sent to SP. Defaults to False because "
+"assertions are encrypted by default."
+msgstr ""
+"IdP allekirjoittaa palvelulle lähetetyt attribuuttitiedot. Oletuksena Ei, koska "
+"assertiot salataan oletuksena."
+
+#: forms/serviceprovider.py:92
+msgid "IdP requires signed authentication requests from this SP."
+msgstr "IdP vaatii allekirjoitettuja autentikointipyyntöjä palvelulta."
+
+#: forms/serviceprovider.py:93
+msgid ""
+"IdP signs responses sent to SP. Defaults to True and should not be changed."
+msgstr ""
+"IdP allekirjoittaa palvelulle lähetetyt vastaukset. Oletuksena Kyllä, eikä tätä pitäisi muuttaa."
+
+#: forms/serviceprovider.py:95
+msgid ""
+"IdP encrypts attribute assertions sent to SP. Defaults to True. Do not "
+"change unless you are using a SP that does not support encryption."
+msgstr ""
+"IdP salaa palvelulle lähetettävät attribuuttitiedot. Oletuksena kyllä. "
+"Muuta vain tilanteessa, jossa käyttämäsi SAML-toteutus ei tue salausta. "
+"Tällöin attribuuttitietojen allekirjoitus on asetettava päälle."
+
+#: forms/serviceprovider.py:98
+msgid ""
+"Publish this SP to the production IdP. Only validated data is used. Any "
+"changes to production SPs must be validated by the IdP administrators before "
+"coming into effect.<div class=\"text-danger\">Required for production use.</"
+"div>"
+msgstr ""
+"Julkaise tämä palvelu tuotanto-IdP:lle. Vain hyväksyttyjä tietoja käytetään. "
+"Kaikki muutokset tuotantopalveluihin täytyy hyväksyä IdP-ylläpitäjien toimesta "
+"ennen niiden voimaantuloa. "
+"<div class=\"text-danger\">Required for production use.</div>"
+
+#: forms/serviceprovider.py:102
+msgid ""
+"Publish this SP to the test IdP using unvalidated data. Any changes might "
+"take up to 15 minutes until they are published to the test IdP."
+msgstr ""
+"Julkaise tämä palvelu testi-IdP:lle käyttäen hyväksymättömiä tietoja. "
+"Muutokset päivitetään testi-IdP:lle noin 15 minuutin välein."
+
+#: forms/serviceprovider.py:105
+msgid ""
+"For administrative use e.g. for testing different SPs during IdP updates."
+msgstr ""
+"Käytetään testaamaan eri ohjelmistoja ajavia palveluita IdP-päivitysten yhteydessä."
+
+#: forms/serviceprovider.py:107
+msgid "Päivittääkö tämä SP automaattisesti IdP-metatiedot vähintään kerran päivässä?"
+msgstr ""
+
+#: forms/serviceprovider.py:153
+msgid ""
+"Full server names (not IPs), separated by space. User for access control."
+msgstr ""
+"Täydet palvelinten nimet (DNS-nimi, ei IP), erotettuna välilyönnillä. Käytetään pääsynvalvontaan."
+
+#: forms/serviceprovider.py:154
+msgid "What is the target group (users) of this service?"
+msgstr "Mikä on tämän palvelun kohderyhmä (käyttäjät)?"
+
+#: forms/serviceprovider.py:155
+msgid "Separate service account is used for LDAP queries (recommended way)."
+msgstr "LDAP-kyselyihin käytetään erillistä palvelutunnusta (suositeltu tapa)."
+
+#: forms/serviceprovider.py:156
+msgid "Email and phone number for delivering service account credentials."
+msgstr "Sähköposti ja puhelinnumero, joihin palvelutunnuksen tiedot toimitetaan."
+
+#: forms/serviceprovider.py:157
+msgid "Service requires access to all LDAP groups."
+msgstr "Palvelu tarvitsee pääsyn kaikkiin LDAP-ryhmiin."
+
+#: forms/serviceprovider.py:158
+msgid "Service stores user name and released attributes locally."
+msgstr "Palvleu tallentaa käyttäjänimen ja julkaistavat attribuutit paikallisesti."
+
+#: forms/serviceprovider.py:159
+msgid "Service stores user passwords locally."
+msgstr "Palvelu tallentaa käyttäjien salasanat paikallisesti."
+
+#: forms/serviceprovider.py:160
+msgid ""
+"Why is this service storing user passwords locally and how? This is not "
+"generally a good idea."
+msgstr ""
+"Miksi tämä palvelu tallentaa käyttäjien salasanoja ja kuinka? "
+"Tämä ei yleisesti ottaen ole hyvä tapa."
+
+#: forms/serviceprovider.py:161
+msgid "Service stores requested groups and their member lists locally."
+msgstr "Palvelu tallentaa pyydetyt ryhmät ja niiden jäsenteidot paikallisesti."
+
+#: forms/serviceprovider.py:162
+msgid "Publish this service to LDAP production servers."
+msgstr "Julkaise tämä palvelu LDAP-tuotantopalvelimille."
+
+#: forms/serviceprovider.py:178 forms/serviceprovider.py:300
+msgid "Invalid list of server names."
+msgstr "Virheellinen palvelimen nimi."
+
+#: forms/serviceprovider.py:271
+msgid ""
+"Full server names (not IPs), one per line. Used for access control. <div "
+"class=\"text-danger\">Required.</div>"
+msgstr ""
+"Täydet palvelinten nimet (DNS-nimi, ei IP), erotettuna välilyönnillä. Käytetään pääsynvalvontaan. "
+"<div class=\"text-danger\">Required.</div>"
+
+#: forms/serviceprovider.py:272
+msgid ""
+"Short (max 70 characters) and descriptive name for the service in Finnish. "
+"<div class=\"text-danger\">Required. </div>"
+msgstr ""
+"Lyhyt (korkeintaan 70 merkkiä) ja kuvaava nimi palvelulle suomeksi."
+"<div class=\"text-danger\">Vaadittu tieto.</div>"
+
+#: forms/serviceprovider.py:273
+msgid ""
+"Short (max 70 characters) and descriptive name for the service in English."
+msgstr ""
+"Lyhyt (korkeintaan 70 merkkiä) ja kuvaava nimi palvelulle englanniksi."
+
+#: forms/serviceprovider.py:275
+msgid ""
+"Short (max 140 characters) description of the service in Finnish. <div class="
+"\"text-danger\">Required.</div>"
+msgstr ""
+"Lyhyt (korkeintaan 140 merkkiä) kuvaus palvelulle suomeksi."
+"<div class=\"text-danger\">Vaadittu tieto.</div>"
+
+#: forms/serviceprovider.py:276
+msgid "Short (max 140 characters) description of the service in English."
+msgstr ""
+"Lyhyt (korkeintaan 140 merkkiä) kuvaus palvelulle englanniksi."
+
+#: forms/serviceprovider.py:278
+msgid ""
+"Link to privacy policy in Finnish. Link must be publicly accessible. <div "
+"class=\"text-danger\">Required if the service requests any personal "
+"information.</div>"
+msgstr ""
+"Linkki suomenkieliseen tietosuojaselosteeseen. Linkin täytyy olla julkinen. <div "
+"class=\"text-danger\">Vaadittu, jos palvelu vaatii mitään "
+"henkilötietoja.</div>"
+
+#: forms/serviceprovider.py:279
+msgid "Link to privacy policy in English. Link must be publicly accessible."
+msgstr ""
+"Linkki englanninkieliseen tietosuojaselosteeseen. Linkin täytyy olla julkinen."
+
+#: forms/serviceprovider.py:309
+msgid "Invalid Finnish name."
+msgstr "Virheellinen suomenkielinen nimi."
+
+#: forms/serviceprovider.py:317
+msgid "Confirm closing"
+msgstr "Vahvista sulkeminen"
+
+#: forms/serviceprovider.py:324
+msgid "Do not send validation email to SP admins."
+msgstr "Älä lähetä ilmoitusta tietojen hyväksymisestä palvelun ylläpitäjille."
+
+#: forms/spadmin.py:11
+msgid "Email where invitation is sent"
+msgstr "Sähköpostiosoite, johon kutsu lähetetään"
+
+#: forms/spadmin.py:13
+msgid "Using default template if none given."
+msgstr "Käytetään kutsun oletuspohjaa, jos muuta ei valita."
+
+#: forms/testuser.py:14
+msgid "Generate attribute data for name and username based fields."
+msgstr "Täytä nimi- ja käyttäjänimipohjaiset attribuutit auttomaattisesti."
+
+#: forms/testuser.py:16
+msgid "Generate random attribute data for other fields."
+msgstr "Luo satunnaiset arvot muille kentille."
+
+#: forms/testuser.py:34
+msgid "Username already exists"
+msgstr "Käyttäjänimi on jo olemassa"
+
+#: forms/usergroup.py:20
+msgid "Group already added"
+msgstr "Ryhmä on jo lisätty"
+
+#: models/attribute.py:10 models/testuser.py:38
+msgid "Attribute FriendlyName"
+msgstr "Attribuutti FriendlyName"
+
+#: models/attribute.py:11
+msgid "Attribute information"
+msgstr "Tietoja"
+
+#: models/attribute.py:12
+msgid "Attribute OID"
+msgstr "Attribuutin OID"
+
+#: models/attribute.py:13 templates/rr/attribute_admin_list.html:13
+#: templates/rr/attribute_admin_view.html:8
+msgid "Attribute ID"
+msgstr "Attribuutin ID"
+
+#: models/attribute.py:14
+msgid "Attribute NameFormat"
+msgstr "Attribuutin NameFormat"
+
+#: models/attribute.py:15
+msgid "Show in SAML attribute list"
+msgstr "Näytä SAML-palveluille"
+
+#: models/attribute.py:17
+msgid "Show link to funetEduPerson-schema"
+msgstr "Näytä linkki funetEduPerson-skeemaan"
+
+#: models/attribute.py:19
+msgid "Show in LDAP attribute list"
+msgstr "Näytä LDAP-palveluille"
+
+#: models/attribute.py:20
+msgid "Attribute Group for LDAP"
+msgstr "LDAPin attribuuttiryhmä"
+
+#: models/attribute.py:23
+msgid "Show in Attribute test service"
+msgstr "Näytä attribuuttien testipalvelussa"
+
+#: models/attribute.py:25
+msgid "Required attribute in test service"
+msgstr "Vaadittu arvo testipalvelussa"
+
+#: models/attribute.py:27
+msgid "Regex text for attribute validation"
+msgstr "Regex attribuutin arvon tarkistamiseen"
+
+#: models/attribute.py:29
+msgid "Shibboelth environmental variable for the attribute"
+msgstr "Shibboleth ympäristömuuttuja attribuutille"
+
+#: models/attribute.py:30 models/certificate.py:83 models/contact.py:21
+#: models/endpoint.py:31 models/serviceprovider.py:114
+#: models/serviceprovider.py:311 models/testuser.py:20 models/usergroup.py:13
+msgid "Created at"
+msgstr "Luotu"
+
+#: models/attribute.py:31 models/certificate.py:84 models/contact.py:22
+#: models/endpoint.py:32 models/serviceprovider.py:115
+#: models/serviceprovider.py:312 models/testuser.py:21 models/usergroup.py:14
+msgid "Updated at"
+msgstr "Päivitetty"
+
+#: models/certificate.py:75
+msgid "cn"
+msgstr "cn"
+
+#: models/certificate.py:76
+msgid "Issuer cn"
+msgstr "Myöntäjän cn"
+
+#: models/certificate.py:77 templates/rr/certificate.html:23
+#: templates/rr/serviceprovider_detail.html:186
+msgid "Valid from"
+msgstr "Voimassaolo alkaa"
+
+#: models/certificate.py:78 templates/rr/certificate.html:22
+#: templates/rr/certificate_admin_list.html:14
+#: templates/rr/certificate_admin_list.html:40
+#: templates/rr/serviceprovider_detail.html:185 templates/rr/spadmin.html:48
+msgid "Valid until"
+msgstr "Voimassaolo päättyy"
+
+#: models/certificate.py:79 templates/rr/certificate.html:24
+#: templates/rr/certificate_admin_list.html:15
+#: templates/rr/certificate_admin_list.html:41
+#: templates/rr/serviceprovider_detail.html:187
+msgid "Key size"
+msgstr "Avaimen koko"
+
+#: models/certificate.py:80 views/serviceprovider.py:154
+msgid "Certificate"
+msgstr "Varmenne"
+
+#: models/certificate.py:81
+msgid "Use for signing"
+msgstr "Käytetään allekirjoitukseen"
+
+#: models/certificate.py:82
+msgid "Use for encryption"
+msgstr "Käytetään salaukseen"
+
+#: models/certificate.py:85 models/contact.py:23 models/endpoint.py:33
+#: models/serviceprovider.py:116 models/serviceprovider.py:313
+#: models/testuser.py:22 models/usergroup.py:15
+msgid "Entry end time"
+msgstr "Päättymispäivä"
+
+#: models/certificate.py:86 models/contact.py:24 models/endpoint.py:34
+#: models/serviceprovider.py:119 models/serviceprovider.py:314
+#: models/usergroup.py:16
+msgid "Validated on"
+msgstr "Hyväksytty"
+
+#: models/contact.py:13
+msgid "Administrative"
+msgstr "Hallinnollinen"
+
+#: models/contact.py:14
+msgid "Technical"
+msgstr "Tekninen"
+
+#: models/contact.py:15
+msgid "Support"
+msgstr "Tuki"
+
+#: models/contact.py:17
+msgid "Contact Type"
+msgstr "Yhteystietotyyppi"
+
+#: models/contact.py:18
+msgid "First Name"
+msgstr "Etunimi"
+
+#: models/contact.py:19
+msgid "Last Name"
+msgstr "Sukunimi"
+
+#: models/contact.py:20 templates/rr/contact.html:22
+#: templates/rr/spadmin.html:21 templates/rr/spadmin.html:47
+msgid "E-Mail"
+msgstr "Sähköpostiosoite"
+
+#: models/email.py:6
+msgid "Message title"
+msgstr "Viestin otsikko"
+
+#: models/email.py:7
+msgid "Message body"
+msgstr "Viestin sisältö"
+
+#: models/endpoint.py:13
+msgid "AssertionConsumerService"
+msgstr ""
+
+#: models/endpoint.py:14
+msgid "SingleLogoutService"
+msgstr ""
+
+#: models/endpoint.py:15
+msgid "ArtifactResolutionService"
+msgstr ""
+
+#: models/endpoint.py:18
+msgid "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST"
+msgstr ""
+
+#: models/endpoint.py:20
+msgid "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect"
+msgstr ""
+
+#: models/endpoint.py:22
+msgid "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Artifact"
+msgstr ""
+
+#: models/endpoint.py:24
+msgid "urn:oasis:names:tc:SAML:2.0:bindings:SOAP"
+msgstr ""
+
+#: models/endpoint.py:26
+msgid "Endpoint Type"
+msgstr "Yhteysosoitteen tyyppi"
+
+#: models/endpoint.py:28
+msgid "Endpoint Binding"
+msgstr "Yhteysosoitteen muoto"
+
+#: models/endpoint.py:29
+msgid "Endpoint URL"
+msgstr "Yhteysosoite"
+
+#: models/endpoint.py:30
+msgid "Endpoint Index"
+msgstr "Järjestysnumero"
+
+#: models/nameidformat.py:10
+msgid "Name Identifier Format"
+msgstr ""
+
+#: models/nameidformat.py:11
+msgid "Show in list"
+msgstr "Näytetään listassa"
+
+#: models/organization.py:10
+msgid "Organization Name (Finnish)"
+msgstr "Organisaation nimi (suomi)"
+
+#: models/organization.py:12
+msgid "Organization Name (English)"
+msgstr "Organisaation nimi (englanti)"
+
+#: models/organization.py:14
+msgid "Organization Name (Swedish)"
+msgstr "Organisaation nimi (ruotsi)"
+
+#: models/organization.py:16
+msgid "Organization Description (Finnish)"
+msgstr "Organisaation kuvaus (suomi)"
+
+#: models/organization.py:18
+msgid "Organization Description (English)"
+msgstr "Organisaation kuvaus (englanti)"
+
+#: models/organization.py:20
+msgid "Organization Description (Swedish)"
+msgstr "Organisaation kuvaus (ruotsi)"
+
+#: models/organization.py:22
+msgid "Organization URL (Finnish)"
+msgstr "Organisaation URL (suomi)"
+
+#: models/organization.py:24
+msgid "Organization URL (English)"
+msgstr "Organisaation URL (englanti)"
+
+#: models/organization.py:26
+msgid "Organization URL (Swedish)"
+msgstr "Organisaation URL (ruotsi)"
+
+#: models/serviceprovider.py:20 models/testuser.py:39
+#: templates/rr/serviceprovider_saml_create_form.html:12
+msgid "Entity Id"
+msgstr "Entity Id"
+
+#: models/serviceprovider.py:24
+msgid "Service type (SAML/LDAP)"
+msgstr "Palvelun tyyppi (SAML/LDAP)"
+
+#: models/serviceprovider.py:28
+msgid "Organization"
+msgstr "Organisaatio"
+
+#: models/serviceprovider.py:30
+msgid "Service Name (Finnish)"
+msgstr "Palvelun nimi (suomi)"
+
+#: models/serviceprovider.py:33
+msgid "Service Name (English)"
+msgstr "Palvelun nimi (englanti)"
+
+#: models/serviceprovider.py:36
+msgid "Service Name (Swedish)"
+msgstr "Palvelun nimi (ruotsi)"
+
+#: models/serviceprovider.py:39
+msgid "Service Description (Finnish)"
+msgstr "Palvelun kuvaus (suomi)"
+
+#: models/serviceprovider.py:42
+msgid "Service Description (English)"
+msgstr "Palvelun kuvaus (englanti)"
+
+#: models/serviceprovider.py:45
+msgid "Service Description (Swedish)"
+msgstr "Palvelun kuvaus (ruotsi)"
+
+#: models/serviceprovider.py:48
+msgid "Privacy Policy URL (Finnish)"
+msgstr "Tietosuojaseloste URL (suomi)"
+
+#: models/serviceprovider.py:50
+msgid "Privacy Policy URL (English)"
+msgstr "Tietosuojaseloste URL (englanti)"
+
+#: models/serviceprovider.py:52
+msgid "Privacy Policy URL (Swedish)"
+msgstr "Tietosuojaseloste URL (ruotsi)"
+
+#: models/serviceprovider.py:54
+msgid "Service Login Page URL"
+msgstr "Palvelun kirjautumisosoite"
+
+#: models/serviceprovider.py:57 views/serviceprovider.py:145
+msgid "Application portfolio URL"
+msgstr "Palvelun tiedot Sovellussalkussa (URL)"
+
+#: models/serviceprovider.py:58
+msgid "Additional notes"
+msgstr "Lisätietoja"
+
+#: models/serviceprovider.py:59
+msgid "Admin notes"
+msgstr "Ylläpitäjän huomioita"
+
+#: models/serviceprovider.py:63
+msgid "Discovery Service URL"
+msgstr "Discovery-palvelun osoite"
+
+#: models/serviceprovider.py:67
+msgid "Sign SSO assertions"
+msgstr "Allekirjoita SSO assertiot"
+
+#: models/serviceprovider.py:68
+msgid "Sign SSO requests"
+msgstr "Allerkijoita SSO pyynnöt"
+
+#: models/serviceprovider.py:69
+msgid "Sign SSO responses"
+msgstr "Allekirjoita SSO vastaukset"
+
+#: models/serviceprovider.py:71
+msgid "Encrypt SSO assertions"
+msgstr "Salaa SSO assertiot"
+
+#: models/serviceprovider.py:74
+msgid "Publish to production servers"
+msgstr "Julkaise tuotantopalvelimille"
+
+#: models/serviceprovider.py:75
+msgid "Publish to test servers"
+msgstr "Julkaise testipalvelimille"
+
+#: models/serviceprovider.py:78
+msgid "SAML product this service is using"
+msgstr "Palvelun käyttämä SAML-tuote"
+
+#: models/serviceprovider.py:81
+msgid "SP updates IdP metadata automatically"
+msgstr "SP päivittää IdP-metatiedot automaattisesti"
+
+#: models/serviceprovider.py:85
+msgid "Server names (not IPs), one per line"
+msgstr "Palvelimien nimet (DNS-nimet, ei IPt), yksi per rivi"
+
+#: models/serviceprovider.py:86
+msgid "Internet"
+msgstr ""
+
+#: models/serviceprovider.py:87
+msgid "University of Helsinki users"
+msgstr "Helsingin yliopiston käyttäjät"
+
+#: models/serviceprovider.py:88
+msgid "Restricted user group"
+msgstr "Rajattu käyttäjäryhmä"
+
+#: models/serviceprovider.py:90
+msgid "Target group for the service"
+msgstr "Palvelun kohderyhmä"
+
+#: models/serviceprovider.py:92
+msgid "Does the service use a service account?"
+msgstr "Käyttääkö palvelu palvelutunnusta?"
+
+#: models/serviceprovider.py:94
+msgid ""
+"Email address and phone number for delivering the service account credentials"
+msgstr ""
+"Sähköpostiosoite ja puhelinnumero palvelutunnuksen toimittamista varten"
+
+#: models/serviceprovider.py:96
+msgid "Service requires access to all LDAP groups"
+msgstr "Palvelu tarvitsee pääsyn kaikkin LDAP-ryhmiin"
+
+#: models/serviceprovider.py:98
+msgid "Service stores a local copy of users and their information"
+msgstr "Palvelu tallentaa paikallisesti käyttäjät ja heidän tietojaan"
+
+#: models/serviceprovider.py:101
+msgid "Service stores a local copy of user passwords"
+msgstr "Palvelu tallentaa paikallisesti käyttäjien salasanat"
+
+#: models/serviceprovider.py:103
+msgid "How is this service storing the saved passwords and why?"
+msgstr "Kuinka palvelu tallentaa käyttäjien salasanat ja miksi?"
+
+#: models/serviceprovider.py:105
+msgid "Service stores a local copy of groups and group members"
+msgstr "Palvleu tallentaa paikallisesti kopion ryhmistä ja ryhmien jäsenistä"
+
+#: models/serviceprovider.py:112
+msgid "Modified"
+msgstr "Muokattu"
+
+#: models/serviceprovider.py:113
+msgid "History key"
+msgstr "Historia-avain"
+
+#: models/serviceprovider.py:118
+msgid "Updated by"
+msgstr "Päivittäjä"
+
+#: models/serviceprovider.py:310
+msgid "Reason for the attribute requisition"
+msgstr "Syy tietojen pyytämiseen"
+
+#: models/spadmin.py:60 templates/rr/spadmin.html:49
+msgid "Creator"
+msgstr "Luoja"
+
+#: models/spadmin.py:61
+msgid "Activation key"
+msgstr "Aktivaatiotunnus"
+
+#: models/spadmin.py:62
+msgid "Valid until date"
+msgstr "Voimassaolo"
+
+#: models/spadmin.py:63
+msgid "Email address"
+msgstr "Sähköpostiosoite"
+
+#: models/testuser.py:13 models/testuser.py:37
+msgid "Login name"
+msgstr "Käyttäjätunnus"
+
+#: models/testuser.py:14
+msgid "Password"
+msgstr "Salasana"
+
+#: models/testuser.py:16 templates/rr/contact.html:20
+#: templates/rr/serviceprovider_detail.html:207 templates/rr/spadmin.html:19
+#: templates/rr/testuser.html:21 templates/rr/testuser.html:53
+msgid "First name"
+msgstr "Etunimi"
+
+#: models/testuser.py:17 templates/rr/contact.html:21
+#: templates/rr/serviceprovider_detail.html:208 templates/rr/spadmin.html:20
+#: templates/rr/testuser.html:22 templates/rr/testuser.html:54
+msgid "Last name"
+msgstr "Sukunimi"
+
+#: models/testuser.py:19
+msgid "Valid for selected SPs"
+msgstr "Hyväksytty valittuihin palveluihin"
+
+#: models/testuser.py:36
+msgid "Attribute value"
+msgstr "Attribuutin arvo"
+
+#: models/usergroup.py:12
+msgid "Group name"
+msgstr "Ryhmän nimi"
+
+#: templates/attribute_test_service.html:10
+msgid "Attribute Test Service"
+msgstr "Attribuuttien testipalvelu"
+
+#: templates/attribute_test_service.html:16
+msgid "Attribute test service"
+msgstr "Attribuuttien testipalvelu"
+
+#: templates/attribute_test_service.html:24
+msgid "Attribute was released and it has a seemingly correct value."
+msgstr "Attribuutti julkaistiin ja sen arvo vaikuttaa oikeanlaiselta."
+
+#: templates/attribute_test_service.html:28
+msgid ""
+"Attribute marked as a mandatory was not released or the attribute's value is "
+"not within the accepted value range."
+msgstr ""
+"Attribuutti oli merkattu pakolliseksi, mutta sitä ei julkaistu tai sen arvo "
+"ei ollut hyväksyttävä."
+
+#: templates/attribute_test_service.html:32
+msgid ""
+"This attribute is an optional and doesn't have any value for you. Not all "
+"attributes are available for all users."
+msgstr ""
+"Tämä attribuutti on vapaaehtoinen eikä sillä ollut arvoa teille. Kaikkia "
+"attribuutteja ei ole saatavilla kaikille käyttäjille."
+
+#: templates/attribute_test_service.html:37
+msgid "Authentication context"
+msgstr "Autentikointitapa"
+
+#: templates/attribute_test_service.html:50
+msgid "Login using MFA"
+msgstr "Kirjaudu kaksivaiheisella tunnistautumisella"
+
+#: templates/attribute_test_service.html:51 templates/base.html:48
+#: templates/base.html:87 templates/base.html:162 templates/base.html:200
+#: templates/rr/attribute_list.html:6
+msgid "Attributes"
+msgstr "Attribuutit"
+
+#: templates/attribute_test_service.html:56
+#: templates/rr/serviceprovider_detail.html:63
+#: templates/rr/serviceprovider_detail.html:91
+#: templates/rr/serviceprovider_detail.html:119
+#: templates/rr/serviceprovider_detail.html:166
+msgid "Attribute"
+msgstr "Attribuutti"
+
+#: templates/attribute_test_service.html:57
+#: templates/rr/serviceprovider_detail.html:64
+#: templates/rr/serviceprovider_detail.html:92
+#: templates/rr/serviceprovider_detail.html:120
+msgid "Value"
+msgstr "Arvo"
+
+#: templates/attribute_test_service.html:58
+msgid "Value format (regex)"
+msgstr "Arvon muoto (regex)"
+
+#: templates/attribute_test_service.html:72
+msgid "Logout using Single Logout"
+msgstr "Kirjaudu ulos käyttäen kertauloskirjautumista"
+
+#: templates/base.html:10
+msgid "Shibboleth Resource Registry"
+msgstr "Shibboleth palvelureksiteri"
+
+#: templates/base.html:14
+msgid "SP Registry"
+msgstr "SP-rekisteri"
+
+#: templates/base.html:24 templates/base.html:139
+#: templates/rr/serviceprovider_list.html:6
+msgid "Service Providers"
+msgstr "Palvelut"
+
+#: templates/base.html:29 templates/base.html:144
+msgid "SP Configuration"
+msgstr "Palvelun asetukset"
+
+#: templates/base.html:33 templates/base.html:147
+msgid "Summary"
+msgstr "Yhteenveto"
+
+#: templates/base.html:36 templates/base.html:150
+msgid "Basic Information"
+msgstr "Perustiedot"
+
+#: templates/base.html:40 templates/base.html:44 templates/base.html:154
+#: templates/base.html:158
+msgid "Technical Attributes"
+msgstr "Tekniset tiedot"
+
+#: templates/base.html:52 templates/base.html:90 templates/base.html:166
+#: templates/base.html:203 templates/rr/certificate.html:6
+#: templates/rr/serviceprovider_detail.html:181
+#: templates/rr/serviceprovider_saml_create_form.html:19
+msgid "Certificates"
+msgstr "Varmenteet"
+
+#: templates/base.html:55 templates/base.html:169
+msgid "SAML Endpoints"
+msgstr "SAML yhteysosoitteet"
+
+#: templates/base.html:60 templates/base.html:174 templates/rr/usergroup.html:6
+msgid "User Groups"
+msgstr "Käyttäjäryhmät"
+
+#: templates/base.html:64 templates/base.html:178 templates/rr/contact.html:6
+#: templates/rr/serviceprovider_detail.html:202
+msgid "Contacts"
+msgstr "Yhteystiedot"
+
+#: templates/base.html:67 templates/base.html:181 templates/rr/spadmin.html:6
+msgid "Admins"
+msgstr "Ylläpitäjät"
+
+#: templates/base.html:71 templates/rr/testuser.html:6
+msgid "Test users"
+msgstr "Testikäyttäjät"
+
+#: templates/base.html:76 templates/base.html:190
+msgid "View Metadata"
+msgstr "Näytä metatiedot"
+
+#: templates/base.html:83 templates/base.html:197
+msgid "Administration"
+msgstr "Hallinta"
+
+#: templates/base.html:93 templates/base.html:206
+msgid "Sign and Encrypt"
+msgstr "Allekirjoitus ja salaus"
+
+#: templates/base.html:96 templates/base.html:209 templates/rr/email.html:6
+msgid "Emails"
+msgstr "Sähköpostit"
+
+#: templates/base.html:99 templates/base.html:212
+msgid "Manage metadata"
+msgstr "Hallitse metatietoja"
+
+#: templates/base.html:103 templates/base.html:217
+msgid "Database Admin"
+msgstr "Django hallinta"
+
+#: templates/base.html:122 templates/registration/login.html:11
+msgid "Logout"
+msgstr "Kirjaudu ulos"
+
+#: templates/base.html:126 templates/registration/logout.html:7
+msgid "Login"
+msgstr "Kirjautuminen sisään"
+
+#: templates/base.html:185
+msgid "Test Users"
+msgstr "Testikäyttäjät"
+
+#: templates/error.html:5
+msgid "An error occurred"
+msgstr "Virhe"
+
+#: templates/handlers/400.html:5 templates/handlers/400_blank.html:13
+msgid "Bad request"
+msgstr "Virheellinen pyyntö"
+
+#: templates/handlers/400.html:6 templates/handlers/400_blank.html:14
+msgid "We do not understand you. Are you trying to hack us?"
+msgstr "Emme ymmärrä teitä, yritättekö hakkeroita meitä?"
+
+#: templates/handlers/400.html:7 templates/handlers/400_blank.html:15
+#: templates/handlers/403.html:7 templates/handlers/403_blank.html:15
+#: templates/handlers/404.html:7 templates/handlers/404_blank.html:15
+#: templates/handlers/500.html:7 templates/handlers/500_blank.html:15
+msgid "Return to previous page"
+msgstr "Palaa edelliselle sivulle"
+
+#: templates/handlers/400_blank.html:10 templates/handlers/403_blank.html:10
+#: templates/handlers/404_blank.html:10 templates/handlers/500_blank.html:10
+msgid "Error"
+msgstr "Virhe"
+
+#: templates/handlers/403.html:5 templates/handlers/403_blank.html:13
+msgid "Permission denied"
+msgstr "Pääsy evätty"
+
+#: templates/handlers/403.html:6 templates/handlers/403_blank.html:14
+msgid "You have insufficient user rights to access this page."
+msgstr "Käyttoikeutesti eivät riitä pyydettyyn toimintoon."
+
+#: templates/handlers/404.html:5 templates/handlers/404_blank.html:13
+msgid "Page not found"
+msgstr "Sivua ei löydy"
+
+#: templates/handlers/404.html:6 templates/handlers/404_blank.html:14
+msgid ""
+"The page you are looking for does not exist or you have insufficient "
+"permissions for it."
+msgstr ""
+"Sivua ei löydy tai teillä on käyttöoikeutenne eivät riitä sen näyttämiseen."
+
+#: templates/handlers/500.html:5 templates/handlers/500_blank.html:13
+msgid "Internal error"
+msgstr "Sisäinen virhe"
+
+#: templates/handlers/500.html:6 templates/handlers/500_blank.html:14
+msgid "Something went wrong. Error has been logged and we will investigate it."
+msgstr "Jotain meni pieleen. Virhe on kirjattu ja selvitämme mistä se johtui."
+
+#: templates/info.html:5
+msgid "For your information"
+msgstr "Tiedoksenne"
+
+#: templates/registration/login.html:7
+msgid "Service Provider Registry"
+msgstr "SP-rekisteri"
+
+#: templates/registration/login.html:8
+msgid "University of Helsinki"
+msgstr "Helsingin yliopisto"
+
+#: templates/registration/login.html:10
+msgid "You have already logged in"
+msgstr "Olet jo kirjautunut sisään"
+
+#: templates/registration/login.html:16
+msgid "Login using Single Sign-On"
+msgstr "Kirjadu käyttäen kertakirjautumista"
+
+#: templates/registration/login.html:26
+msgid "Login using a local account"
+msgstr "Kirjadu käyttäen paikallista tunnusta"
+
+#: templates/registration/login.html:33
+msgid "Use this only if you do not have University of Helsinki user account."
+msgstr "Käytä tätä vain, jos teillä ei ole Helsingin yliopiston käyttäjätunnusta."
+
+#: templates/registration/login.html:37
+msgid "Submit"
+msgstr "Lähetä"
+
+#: templates/registration/login.html:41
+msgid ""
+"Lost password? Reset it here. You may use same form to get forgotten "
+"username."
+msgstr ""
+"Salasana hukassa? Palauta se täällä. Voit käyttää samaa lomaketta palauttaaksesi "
+"unohdetun käyttäjätunnuksen."
+
+#: templates/registration/login.html:48
+msgid "Data privacy information of the service"
+msgstr "Palvelun tietosuojatiedote"
+
+#: templates/registration/login.html:49
+msgid ""
+"This site uses cookies to save session information between page changes. By "
+"logging in to the site, you are agreeing to our use of cookies."
+msgstr ""
+"Tämä sivusto käyttää evästeitä tallentaakseen istuntotietoja sallien mm. sivulta toiseen siirtymisen. "
+"Kirjautumalla hyväksyt evästeiden käytön tähän tarkoitukseen."
+
+#: templates/registration/logout.html:5 templates/rr/front_page.html:5
+msgid "University of Helsinki - Service Provider Registry"
+msgstr "Helsingin yliopisto - Palveluntarjoajarekisteri"
+
+#: templates/registration/logout.html:6
+msgid "You have logged out"
+msgstr "Olet kirjautunut ulos"
+
+#: templates/registration/password_reset_complete.html:5
+#: templates/registration/password_reset_confirm.html:7
+#: templates/registration/password_reset_done.html:5
+#: templates/registration/password_reset_form.html:7
+msgid "Reset password"
+msgstr "Palauta salasana"
+
+#: templates/registration/password_reset_complete.html:7
+msgid "Password has been reset successfully."
+msgstr "Salasana on palautettu onnistuneesti."
+
+#: templates/registration/password_reset_complete.html:9
+msgid "Log in."
+msgstr "Kirjaudu sisään."
+
+#: templates/registration/password_reset_confirm.html:18
+msgid "Password reset failed."
+msgstr "Salasanan palautus epäonnistui."
+
+#: templates/registration/password_reset_done.html:6
+msgid "Please follow the instructions in the email to reset your password."
+msgstr "Ole hyvä ja seuraa sähköpostitse saamiasi ohjeita salasanan palautukseen."
+
+#: templates/registration/password_reset_email.html:2
+msgid ""
+"You're receiving this email because you requested a password reset for your "
+"user account at"
+msgstr ""
+"Saat tämän viestin, koska pyysit salasanan palautusta käyttäjätilillesi "
+
+#: templates/registration/password_reset_email.html:4
+msgid "Your username, in case you've forgotten:"
+msgstr "Käyttäjätunnuksesi,jos olet unohtanut sen:"
+
+#: templates/registration/password_reset_email.html:6
+msgid "If you did not request a password reset, please ignore this email."
+msgstr "Jos et pyytänyt salasanan palautusta, voit jättää tämän viestin huomioitta."
+
+#: templates/registration/password_reset_email.html:8
+msgid "Please go to the following page and choose a new password:"
+msgstr "Ole hyvä ja mene seuraavalle sivulle valitsemaan uusi salasana:"
+
+#: templates/registration/password_reset_form.html:8
+msgid "Instructions for resetting password will be send to your email."
+msgstr "Ohjeet salasanan palautukseen lähetetään sähköpostiisi."
+
+#: templates/rr/attribute_admin_list.html:6
+msgid "Listing all attributes included in this system."
+msgstr "Listataan kaikki tunnetut attribuutit."
+
+#: templates/rr/attribute_admin_list.html:7
+msgid "Click attribute ID for more information."
+msgstr "Klikkaa attribuutti-ID:tä saadaksesti lisätietoja."
+
+#: templates/rr/attribute_admin_list.html:12
+msgid "Friendly name"
+msgstr "Selväkielinen nimi"
+
+#: templates/rr/attribute_admin_list.html:14
+msgid "OID / Name"
+msgstr "OID / Nimi"
+
+#: templates/rr/attribute_admin_list.html:15
+msgid "Public"
+msgstr "Julkinen"
+
+#: templates/rr/attribute_admin_list.html:28
+#: templates/rr/attribute_admin_view.html:44
+msgid "No attributes"
+msgstr "Ei attribuuttia"
+
+#: templates/rr/attribute_admin_view.html:6
+msgid "Friendly Name"
+msgstr "Selväkielinen nimi"
+
+#: templates/rr/attribute_admin_view.html:10
+msgid "Name / OID"
+msgstr "Nimi / OID"
+
+#: templates/rr/attribute_admin_view.html:12
+msgid "Name Format"
+msgstr "Nimen muoto"
+
+#: templates/rr/attribute_admin_view.html:14
+msgid "Public SAML"
+msgstr "Julkinen, SAML"
+
+#: templates/rr/attribute_admin_view.html:16
+msgid "Public LDAP"
+msgstr "Julkinen, LDAP"
+
+#: templates/rr/attribute_admin_view.html:18
+msgid "Information"
+msgstr "Lisätietoja"
+
+#: templates/rr/attribute_admin_view.html:21
+msgid "Edit in Django admin view"
+msgstr "Muokkaa tietoja Django-hallinassa"
+
+#: templates/rr/attribute_admin_view.html:22
+msgid "Service Providers using the attribute"
+msgstr "Palvelut, jotka käyttävät tätä attribuuttia"
+
+#: templates/rr/attribute_admin_view.html:26
+#: templates/rr/certificate_admin_list.html:13
+#: templates/rr/certificate_admin_list.html:39
+msgid "SP"
+msgstr "Palvelu"
+
+#: templates/rr/attribute_admin_view.html:27
+#: templates/rr/serviceprovider_list.html:19
+#: templates/rr/serviceprovider_list.html:58
+msgid "Prod"
+msgstr "Tuotanto"
+
+#: templates/rr/attribute_admin_view.html:28
+#: templates/rr/serviceprovider_list.html:20
+msgid "Test"
+msgstr "Testi"
+
+#: templates/rr/attribute_admin_view.html:29
+#: templates/rr/serviceprovider_detail.html:167
+msgid "Reason"
+msgstr "Syy"
+
+#: templates/rr/attribute_admin_view.html:30
+msgid "Validated"
+msgstr "Hyväksytty"
+
+#: templates/rr/attribute_list.html:8
+msgid ""
+"Give reasons for the attribute requisitions. Remove reason to remove "
+"requisition."
+msgstr ""
+"Anna syy attribuutin luovutukseen. Poista syy poistaaksesi luovutuspyynnön."
+
+#: templates/rr/attribute_list.html:9
+msgid ""
+"Attributes with green border are validated and attributes with red border "
+"still need to be validated."
+msgstr ""
+"Attribuutit vihreällä reunalla on hyväksytty ja attribuutit punaisella reunalla "
+"odottavat hyväksymistä."
+
+#: templates/rr/attribute_list.html:10
+msgid ""
+"Check the <a target=\"_blank\" href=\"https://wiki.helsinki.fi/pages/"
+"viewpage.action?pageId=226580829\">Wiki of the University of Helsinki</a> "
+"for attribute classifications."
+msgstr ""
+"Katso <a target=\"_blank\" href=\"https://wiki.helsinki.fi/pages/"
+"viewpage.action?pageId=226580829\">Helsingin yliopiston wikistä</a> "
+"listätietoja attribuuteista."
+
+#: templates/rr/attribute_list.html:13
+msgid "Attribute list"
+msgstr "Attribuuttilista"
+
+#: templates/rr/attribute_list.html:18 templates/rr/certificate.html:56
+#: templates/rr/contact.html:49 templates/rr/endpoint.html:51
+#: templates/rr/serviceprovider_basic_form.html:15
+#: templates/rr/serviceprovider_ldap_create_form.html:24
+#: templates/rr/serviceprovider_ldap_technical_form.html:25
+#: templates/rr/serviceprovider_saml_create_form.html:30
+#: templates/rr/serviceprovider_technical_form.html:15
+#: templates/rr/testuser.html:78 templates/rr/testuser_attribute_data.html:29
+#: templates/rr/usergroup.html:42
+msgid "Save"
+msgstr "Tallenna"
+
+#: templates/rr/attribute_list.html:26
+#: templates/rr/serviceprovider_basic_form.html:23
+#: templates/rr/serviceprovider_ldap_create_form.html:32
+#: templates/rr/serviceprovider_ldap_technical_form.html:33
+#: templates/rr/serviceprovider_saml_create_form.html:38
+#: templates/rr/serviceprovider_technical_form.html:23
+msgid "You have modified the form without saving it."
+msgstr "Olet muokannut lomaketta tallentamatta sitä."
+
+#: templates/rr/certificate.html:8
+msgid ""
+"You need at least one certificate for signing SAML messages between SP and "
+"IdP. It's possible to use the same certificate for both signing and "
+"encryption."
+msgstr ""
+"Tarvitset ainakin yhden varmenteen SAML-viestien allekirjoitukseen palvelun "
+"ja IdP:n välillä. Allekirjoitukseen ja salaukseen voi tarvittaessa käyttää "
+"samaa varmennetta."
+
+#: templates/rr/certificate.html:9
+msgid ""
+"It's highly recommended to use different certificate for signing and "
+"encrypting SAML messages than the certificate that is used for encrypting "
+"HTTPS traffic."
+msgstr ""
+"On erittäin suositeltavaa käyttää eri varmennetta SAML-viestien allekirjoitukseen "
+"ja salaukseen kuin mitä käytetään HTTPS-liikenteen salaamiseen."
+
+#: templates/rr/certificate.html:10
+msgid ""
+"You may well use self-signed certificate for SAML messages. You may create a "
+"self-signed certificate using the following openssl command, using hostname "
+"sp1.test.helsinki.fi as an example."
+msgstr ""
+"Voit hyvin käyttää itse-allekirjoitettua varmennetta SAML-viestien allekirjoitukseen "
+"ja salaukseen. Voit luoda itse-allekirjoitetun varmenteen esimerkiksi openssl-komennolla, "
+"käyttäen seuraavaa esimerkkiä."
+
+#: templates/rr/certificate.html:14
+msgid "List of certificates"
+msgstr "Lista varmenteista."
+
+#: templates/rr/certificate.html:21 templates/rr/email.html:32
+#: templates/rr/spadmin.html:79
+msgid "Subject"
+msgstr "Otsikko"
+
+#: templates/rr/certificate.html:25 templates/rr/certificate_admin_list.html:16
+#: templates/rr/certificate_admin_list.html:42
+msgid "Signing"
+msgstr "Allekirjoitus"
+
+#: templates/rr/certificate.html:26 templates/rr/certificate_admin_list.html:17
+#: templates/rr/certificate_admin_list.html:43
+msgid "Encryption"
+msgstr "Salaus"
+
+#: templates/rr/certificate.html:27 templates/rr/contact.html:23
+#: templates/rr/endpoint.html:24 templates/rr/spadmin.html:22
+#: templates/rr/spadmin.html:50 templates/rr/testuser.html:23
+#: templates/rr/testuser.html:55 templates/rr/usergroup.html:19
+msgid "Remove"
+msgstr "Poista"
+
+#: templates/rr/certificate.html:44 templates/rr/contact.html:38
+#: templates/rr/endpoint.html:39 templates/rr/spadmin.html:37
+#: templates/rr/spadmin.html:66 templates/rr/testuser.html:37
+#: templates/rr/testuser.html:69 templates/rr/usergroup.html:31
+msgid "Remove selected"
+msgstr "Poista valitut"
+
+#: templates/rr/certificate.html:47
+msgid "No certificates"
+msgstr "Ei varmenteita"
+
+#: templates/rr/certificate.html:51
+msgid "Add certificate"
+msgstr "Lisää varmenne"
+
+#: templates/rr/certificate.html:60
+msgid "You cannot have more than two certificates"
+msgstr "Palvelulla ei voi olla yli kahta varmennetta"
+
+#: templates/rr/certificate.html:67 templates/rr/contact.html:58
+#: templates/rr/endpoint.html:60 templates/rr/spadmin.html:101
+#: templates/rr/testuser.html:88 templates/rr/usergroup.html:51
+msgid "Confirm removal"
+msgstr "Vahvista poisto"
+
+#: templates/rr/certificate.html:68
+msgid "Do you want to remove selected certificates?"
+msgstr "Haluatko poistaa valitut varmenteet?"
+
+#: templates/rr/certificate.html:71 templates/rr/contact.html:62
+#: templates/rr/endpoint.html:64 templates/rr/spadmin.html:105
+#: templates/rr/testuser.html:92 templates/rr/usergroup.html:55
+msgid "Confirm"
+msgstr "Vahvista"
+
+#: templates/rr/certificate.html:72 templates/rr/contact.html:63
+#: templates/rr/endpoint.html:65 templates/rr/spadmin.html:106
+#: templates/rr/testuser.html:93 templates/rr/usergroup.html:56
+msgid "Cancel"
+msgstr "Peru"
+
+#: templates/rr/certificate_admin_list.html:6
+msgid "Certificate administration"
+msgstr "Varmenteiden hallinta"
+
+#: templates/rr/certificate_admin_list.html:8
+msgid "Expired certificates"
+msgstr "Vanhentuneet varmenteet"
+
+#: templates/rr/certificate_admin_list.html:34
+msgid "Weak certificates"
+msgstr "Heikot varmenteet"
+
+#: templates/rr/contact.html:8
+msgid ""
+"You need to specify at least the technical contact for a production use."
+msgstr ""
+"Tarvitset ainakin teknisen yhteystiedon tuotantokäyttöön."
+
+#: templates/rr/contact.html:9
+msgid ""
+"It's recommend that you use service addresses, not personal addresses. These "
+"contacts are used if the IdP administrators have to contact you about the SP "
+"or some client request has to be forwarded to you."
+msgstr ""
+"On suositeltavaa käyttää palvelu-/ryhmäosoitteita, ei henkilökohtaisia sähköpostiosoitteita. "
+"Näitä yhteystietoja käytetään kirjautumispalveluiden ylläpitäjien toimesta, jos teihin "
+"täytyy ottaa yhteyttä palveluun liittyen."
+
+#: templates/rr/contact.html:12
+msgid "List of contacts"
+msgstr "Lista yhteystiedoista"
+
+#: templates/rr/contact.html:19 templates/rr/endpoint.html:20
+#: templates/rr/serviceprovider_detail.html:206
+#: templates/rr/serviceprovider_detail.html:229
+msgid "Type"
+msgstr "Tyyppi"
+
+#: templates/rr/contact.html:41
+msgid "No contacts"
+msgstr "Ei yhteystietoja"
+
+#: templates/rr/contact.html:44
+msgid "Add contact"
+msgstr "Lisää yhteystieto"
+
+#: templates/rr/contact.html:59
+msgid "Do you want to remove selected contacts?"
+msgstr "Haluatko poistaa valitut yhteystiedot?"
+
+#: templates/rr/email.html:8
+msgid "Emails have been sent."
+msgstr "Sähköpostit on lähetetty."
+
+#: templates/rr/email.html:10
+msgid "Sending failed to following addresses:"
+msgstr "Lähetys epäonnistui seuraaviin osoitteisiin:"
+
+#: templates/rr/email.html:27
+msgid "List emails / Show message"
+msgstr "Listaa sähköpostiosoitteet / Näytä viesti"
+
+#: templates/rr/email.html:27
+msgid "Send email"
+msgstr "Lähetä sähköpostit"
+
+#: templates/rr/email.html:36 templates/rr/metadata_management.html:21
+msgid "Message"
+msgstr "Viesti"
+
+#: templates/rr/email.html:40
+msgid "Email addresses"
+msgstr "Sähköpostiosoitteet"
+
+#: templates/rr/endpoint.html:6
+msgid "Endpoints"
+msgstr "Yhteysosoitteet"
+
+#: templates/rr/endpoint.html:8
+msgid ""
+"Endpoints are communication addresses to the SP. Any request sent to the IdP "
+"by the SP includes a return address. That address must be in this list or "
+"the request results in error."
+msgstr ""
+"Yhteysosoitteet ovat osoitteita, johon SP vastaanottaa viestejä IdP:ltä. "
+"Kaikki IdP:lle lähetetyt pyynnöt sisältävät paluuosoitteen ja sen osoitteen "
+"täytyy löytyä yhteysosoitteiden listasta tai pyyntö palauttaa virheen. "
+"Yhteysosoitteen muoto on koko URL, sisältäen protokollan ja polun."
+
+#: templates/rr/endpoint.html:9
+msgid ""
+"In most cases you only have to specify AssertionConsumerService with HTTP-"
+"POST binding."
+msgstr ""
+"Useimmissa tapauksissa tarvitsee määrittää vain HTTP-POST muodon "
+"AssertionConsumerService -osoite."
+
+#: templates/rr/endpoint.html:10
+msgid ""
+"If the service supports Single Logout Service, you should also specify "
+"endpoint for that."
+msgstr ""
+"Jos palvelu tukee kertauloskirjautumista (SLO), on suositeltavaa lisätä "
+"yhteysosoite myös sille."
+
+#: templates/rr/endpoint.html:13
+msgid "List of endpoints"
+msgstr "Yhteysosoitteiden lista"
+
+#: templates/rr/endpoint.html:21 templates/rr/serviceprovider_detail.html:230
+msgid "Binding"
+msgstr "Muoto"
+
+#: templates/rr/endpoint.html:22 templates/rr/serviceprovider_detail.html:231
+msgid "URL"
+msgstr ""
+
+#: templates/rr/endpoint.html:23 templates/rr/serviceprovider_detail.html:232
+msgid "Index"
+msgstr "Järjestys"
+
+#: templates/rr/endpoint.html:42
+msgid "No endpoints"
+msgstr "Ei yhteysosoitteita"
+
+#: templates/rr/endpoint.html:46
+msgid "Add endpoint"
+msgstr "Lisää yhteysosoite"
+
+#: templates/rr/endpoint.html:61
+msgid "Do you want to remove selected endpoints?"
+msgstr "Haluatko poistaa valitut yhteysosoitteet?"
+
+#: templates/rr/metadata.html:5
+msgid "Metadata"
+msgstr "Metatiedot"
+
+#: templates/rr/metadata.html:8
+msgid "Displaying validated metadata. This is used for production IdP."
+msgstr "Näytetään hyväksytyt metatiedot. Näitä käytetään tuotanto-IdP:lla."
+
+#: templates/rr/metadata.html:10
+msgid "Show unvalidated"
+msgstr "Näytä hyväksymätön"
+
+#: templates/rr/metadata.html:13
+msgid "Displaying unvalidated metadata. This is used for test IdP."
+msgstr "Näytetää hyväksymättömät metatiedot. Näitä käytetään testi-IdP:lla."
+
+#: templates/rr/metadata.html:15
+msgid "Show validated"
+msgstr "Näytä hyväksytty"
+
+#: templates/rr/metadata.html:18
+msgid "Could not find metadata"
+msgstr "Metadataa ei löytynyt"
+
+#: templates/rr/metadata_import.html:6
+msgid "Metadata import"
+msgstr "Metadatan tuonti"
+
+#: templates/rr/metadata_import.html:10
+msgid "Service provider imported with following notifications"
+msgstr "Palvelu tuotu seuraavin huomioin"
+
+#: templates/rr/metadata_import.html:18
+msgid "Service provider imported succesfully"
+msgstr "Palvelu tuotu onnistuneesti"
+
+#: templates/rr/metadata_import.html:20
+msgid "Continue to summary view"
+msgstr "Jatka yhteenvetoon"
+
+#: templates/rr/metadata_import.html:35
+msgid "Import"
+msgstr "Tuo"
+
+#: templates/rr/metadata_management.html:5
+msgid "Metadata management"
+msgstr "Metatietojen hallinta"
+
+#: templates/rr/metadata_management.html:7
+msgid "You may commit changes to metadata here."
+msgstr "Voit viedä tehdyt muutokset metatietoihin täällä."
+
+#: templates/rr/metadata_management.html:8
+msgid "Using production SPs with validated data."
+msgstr "Käytetään tuotanto-SP:tä hyväksytyillä metatiedoilla."
+
+#: templates/rr/metadata_management.html:16
+msgid "Previous commits"
+msgstr "Edelliset muutokset"
+
+#: templates/rr/metadata_management.html:20
+msgid "Time"
+msgstr "Aika"
+
+#: templates/rr/metadata_management.html:36
+msgid "Commit changes"
+msgstr "Muutokset"
+
+#: templates/rr/metadata_management.html:41
+msgid "Export"
+msgstr "Vie"
+
+#: templates/rr/metadata_management.html:46
+msgid "Changes to previous commit"
+msgstr "Muutokset edelliseen versioon"
+
+#: templates/rr/metadata_management.html:52
+msgid "There are no uncommitted changes."
+msgstr "Muutoksia ei ole tehty."
+
+#: templates/rr/serviceprovider_basic_form.html:6
+#: templates/rr/serviceprovider_detail.html:59
+msgid "Basic information"
+msgstr "Perustiedot"
+
+#: templates/rr/serviceprovider_basic_form.html:8
+msgid ""
+"Basic information for your service provider. Necessary information for "
+"production use are marked."
+msgstr ""
+"Perustiedot palvelusta. Tuotantoon vaaditut tiedot on erikseen merkitty."
+
+#: templates/rr/serviceprovider_confirm_delete.html:6
+msgid "Service provider removal"
+msgstr "Poista palvelu"
+
+#: templates/rr/serviceprovider_confirm_delete.html:8
+msgid "Please confirm the removal of this service provider:"
+msgstr "Vahvista tämän palvelun poisto:"
+
+#: templates/rr/serviceprovider_detail.html:7
+msgid "Details"
+msgstr "Kooste"
+
+#: templates/rr/serviceprovider_detail.html:11
+msgid "Colors legend:"
+msgstr "Värien merkitykset:"
+
+#: templates/rr/serviceprovider_detail.html:12
+msgid "Modified since last validation"
+msgstr "Muutettu edellisen hyväksynnän jälkeen"
+
+#: templates/rr/serviceprovider_detail.html:13
+msgid "Removed since last validation"
+msgstr "Poistettu edellisen hyväksynnän jälkeen"
+
+#: templates/rr/serviceprovider_detail.html:21
+msgid ""
+"This service provider is currently not published to the production or the "
+"test IdPs. You may publish this SP in the Technical Attributes page."
+msgstr ""
+"Tätä palvelua ei ole tällä hetkellä julkaistu tuotanto- tai testi-IdP:lle. "
+"Voit julkaista palvelun Tekniset tiedot-sivulla."
+
+#: templates/rr/serviceprovider_detail.html:22
+msgid ""
+"You may also remove this SP from the registry by using the link at the "
+"bottom of this page."
+msgstr ""
+"Voit poistaa tämän palvelun rekisteristä sivun alareunassa olevalla linkillä."
+
+#: templates/rr/serviceprovider_detail.html:28
+msgid "Missing data"
+msgstr "Puuttuvat tiedot"
+
+#: templates/rr/serviceprovider_detail.html:30
+msgid ""
+"This service is marked for the production use but is missing following data:"
+msgstr "Tämä palvelu on merkitty tuotantoon, mutta siitä puuttuu seuraavat tiedot:"
+
+#: templates/rr/serviceprovider_detail.html:39
+msgid "Waiting for validation"
+msgstr "Odottaa hyväksymistä"
+
+#: templates/rr/serviceprovider_detail.html:40
+msgid "There are changes waiting for validation by the IdP administrators."
+msgstr "Palveluun on tehty muutoksia, jotka odottavat rekisterin ylläpitäjien hyväksymistä."
+
+#: templates/rr/serviceprovider_detail.html:41
+msgid "You will receive an email when the changes are validated."
+msgstr "Saat sähköpostin, kun muutokset on hyväksytty."
+
+#: templates/rr/serviceprovider_detail.html:42
+msgid ""
+"NB. only production systems are validated. Test servers are updated "
+"automatically every 15 minutes, using unvalidated data."
+msgstr ""
+"Huom. vain tuotantojärjestelmien muutokset hyväksytään. Testipalveluiden "
+"tiedot päivitetään testi-IdP:lle automaattisesti 15 minuutin välein, käyttäen "
+"hyväksymätömiä tietoja."
+
+#: templates/rr/serviceprovider_detail.html:47
+#: templates/rr/serviceprovider_detail.html:53
+msgid "Validate changes"
+msgstr "Hyväksy muutokset"
+
+#: templates/rr/serviceprovider_detail.html:48
+msgid ""
+"This object has changed. Click the button to validate all changes listed in "
+"this page."
+msgstr ""
+"Tämän palvelun tietoja on muutettu. Tarkasta ne uudelleen ennen hyväksymistä."
+
+#: templates/rr/serviceprovider_detail.html:65
+#: templates/rr/serviceprovider_detail.html:93
+#: templates/rr/serviceprovider_detail.html:121
+msgid "Validated value"
+msgstr "Hyväksytty arvo"
+
+#: templates/rr/serviceprovider_detail.html:87
+#: templates/rr/serviceprovider_detail.html:115
+msgid "Technical attributes"
+msgstr "Tekniset tiedot"
+
+#: templates/rr/serviceprovider_detail.html:143
+msgid "Registry administrators"
+msgstr "Palvelun ylläpitäjät"
+
+#: templates/rr/serviceprovider_detail.html:147
+#: templates/rr/serviceprovider_list.html:18
+#: templates/rr/serviceprovider_list.html:57 templates/rr/usergroup.html:18
+msgid "Name"
+msgstr "Nimi"
+
+#: templates/rr/serviceprovider_detail.html:148
+#: templates/rr/serviceprovider_detail.html:209
+msgid "Email"
+msgstr "Sähköposti"
+
+#: templates/rr/serviceprovider_detail.html:162
+msgid "Attribute requisitions"
+msgstr "Attribuuttien luovutspyynnöt"
+
+#: templates/rr/serviceprovider_detail.html:225
+msgid "SAML endpoints"
+msgstr "SAML yhteysosoitteet"
+
+#: templates/rr/serviceprovider_detail.html:248
+msgid "LDAP user groups"
+msgstr "LDAP käyttäjäryhmät"
+
+#: templates/rr/serviceprovider_detail.html:252
+msgid "name"
+msgstr "nimi"
+
+#: templates/rr/serviceprovider_detail.html:265
+msgid "Removing this service provider"
+msgstr "Poista tämä palvelu"
+
+#: templates/rr/serviceprovider_detail.html:266
+msgid "Click this link to remove this service provider"
+msgstr "Klikkaa linkkiä poistaaksesti tämän palvelun"
+
+#: templates/rr/serviceprovider_ldap_create_form.html:6
+#: templates/rr/serviceprovider_saml_create_form.html:6
+msgid "Adding a new service provider"
+msgstr "Lisää uusi palvelu"
+
+#: templates/rr/serviceprovider_ldap_create_form.html:8
+msgid "This form is used to add new LDAP connection request."
+msgstr "Tätä lomaketta käytetään uuden LDAP-palvelun lisäämiseen."
+
+#: templates/rr/serviceprovider_ldap_create_form.html:9
+msgid "More information about registering services (external page in Finnish)."
+msgstr "Lisää tietoja palvelun rekisteröinnistä (ulkoinen sivusto)."
+
+#: templates/rr/serviceprovider_ldap_create_form.html:10
+msgid ""
+"Required attributes for the production use. Some of the attributes are "
+"defined later in different forms."
+msgstr ""
+"Vaaditut tiedot tuotantokäyttöön. Osa tiedoista määritetään myöhemmin "
+"muilla lomakkeilla."
+
+#: templates/rr/serviceprovider_ldap_create_form.html:12
+#: templates/rr/serviceprovider_saml_create_form.html:13
+#: views/serviceprovider.py:133
+msgid "Service name in English or in Finnish"
+msgstr "Palvelun nimi suomeksi tai englanniksi."
+
+#: templates/rr/serviceprovider_ldap_create_form.html:13
+#: templates/rr/serviceprovider_saml_create_form.html:14
+#: views/serviceprovider.py:137
+msgid "Service description in English or in Finnish"
+msgstr "Palvelun kuvaus suomeksi tai englanniksi."
+
+#: templates/rr/serviceprovider_ldap_create_form.html:14
+#: templates/rr/serviceprovider_saml_create_form.html:15
+#: views/serviceprovider.py:141
+msgid "Privacy policy URL in English or in Finnish"
+msgstr "Tietosuojaselosteen osoite suomeksi tai englanniksi."
+
+#: templates/rr/serviceprovider_ldap_create_form.html:15
+msgid "Server Names"
+msgstr "Palvelinten nimet"
+
+#: templates/rr/serviceprovider_ldap_create_form.html:16
+#: templates/rr/serviceprovider_saml_create_form.html:21
+msgid "Technical and support contacts"
+msgstr "Tekniset yhteystieto"
+
+#: templates/rr/serviceprovider_ldap_technical_form.html:6
+#: templates/rr/serviceprovider_technical_form.html:6
+msgid "Technical information"
+msgstr "Tekniset tiedot"
+
+#: templates/rr/serviceprovider_ldap_technical_form.html:8
+msgid "Techical attributes for your service provider."
+msgstr "Palvelun tekniset tiedot."
+
+#: templates/rr/serviceprovider_list.html:8
+msgid ""
+"This list includes all service providers you currently have administration "
+"access."
+msgstr ""
+"Tämä sivu listaa kaikki palvelut, joihin teillä on hallintaoikeus."
+
+#: templates/rr/serviceprovider_list.html:11
+msgid "SAML Providers"
+msgstr "SAML-palvelut"
+
+#: templates/rr/serviceprovider_list.html:12
+msgid "Add a new service provider"
+msgstr "Lisää uusi palvelu"
+
+#: templates/rr/serviceprovider_list.html:17
+#: templates/rr/serviceprovider_list.html:56
+#: templates/rr/serviceprovider_sign_encrypt_list.html:12
+msgid "entityID"
+msgstr ""
+
+#: templates/rr/serviceprovider_list.html:19
+msgid "Publish to production IdP (validated status)"
+msgstr "Tuotantoon julkaistu (hyväksytty tieto)"
+
+#: templates/rr/serviceprovider_list.html:20
+msgid "Publish to test IdP"
+msgstr "Testiin julkaistu"
+
+#: templates/rr/serviceprovider_list.html:21
+#: templates/rr/serviceprovider_list.html:59
+msgid "OK / Modified, modified are waiting for validation"
+msgstr "OK / Muutettu, muutetut odottavat hyväksyntää"
+
+#: templates/rr/serviceprovider_list.html:21
+#: templates/rr/serviceprovider_list.html:59
+msgid "Status"
+msgstr "Status"
+
+#: templates/rr/serviceprovider_list.html:22
+#: templates/rr/serviceprovider_list.html:60
+msgid "Number of admins (invites)"
+msgstr "Ylläpitäjien määrä (kutsuja)"
+
+#: templates/rr/serviceprovider_list.html:22
+#: templates/rr/serviceprovider_list.html:60
+msgid "A/I"
+msgstr "A/I"
+
+#: templates/rr/serviceprovider_list.html:34
+#: templates/rr/serviceprovider_list.html:71
+msgid "OK "
+msgstr "OK"
+
+#: templates/rr/serviceprovider_list.html:34
+#: templates/rr/serviceprovider_list.html:71
+msgid "Modified "
+msgstr "Muutettu"
+
+#: templates/rr/serviceprovider_list.html:39
+#: templates/rr/serviceprovider_list.html:76
+#: templates/rr/serviceprovider_sign_encrypt_list.html:34
+msgid "You do not have access to any service providers."
+msgstr "Teillä ei ole oikeuksia yhteenkään palveluun."
+
+#: templates/rr/serviceprovider_list.html:50
+msgid "LDAP Providers"
+msgstr "LDAP-palvelut"
+
+#: templates/rr/serviceprovider_list.html:51
+msgid "Add a new LDAP connection"
+msgstr "Lisää uusi LDAP-palvelu"
+
+#: templates/rr/serviceprovider_list.html:58
+msgid "Publish to production"
+msgstr "Julkaise tuotantoon"
+
+#: templates/rr/serviceprovider_saml_create_form.html:8
+msgid ""
+"This form is used to add a new service to the University of Helsinki's "
+"single sign on system."
+msgstr ""
+"Tätä lomaketta käytetään uusien palveluiden lisäämiseen Helsingin "
+"yliopiston kertakirjautumisjärjestelmään."
+
+#: templates/rr/serviceprovider_saml_create_form.html:9
+msgid ""
+"More information about configuring service providers can be found from <a "
+"href='https://wiki.helsinki.fi/display/IAMasioita/Ohjeet"
+"+Shibbolointiin'>https://wiki.helsinki.fi/display/IAMasioita/Ohjeet"
+"+Shibbolointiin</a> (in Finnish)"
+msgstr ""
+"Lisätietoja palveluiden määrityksistä löytyy osoitteesta <a "
+"href='https://wiki.helsinki.fi/display/IAMasioita/Ohjeet"
+"+Shibbolointiin'>https://wiki.helsinki.fi/display/IAMasioita/Ohjeet"
+"+Shibbolointiin</a>"
+
+#: templates/rr/serviceprovider_saml_create_form.html:10
+msgid "Required attributes for the production SPs."
+msgstr "Vaaditut tiedot tuotantokäyttöön."
+
+#: templates/rr/serviceprovider_saml_create_form.html:17
+msgid "Some of the attributes are defined later in different forms."
+msgstr "Osa tiedoista määritetään myöhemmin muilla lomakkeilla."
+
+#: templates/rr/serviceprovider_saml_create_form.html:20
+#: views/serviceprovider.py:159
+msgid "AssertionConsumerService endpoint"
+msgstr "AssertionConsumerService yhteysosoite"
+
+#: templates/rr/serviceprovider_saml_create_form.html:23
+msgid "Add by importing service provider metadata"
+msgstr "Lisää uusi palvelu tuomalla metatieto-XML"
+
+#: templates/rr/serviceprovider_sign_encrypt_list.html:5
+msgid "Service Provider Signing and Encryption"
+msgstr "Palveluiden allekirjoitus ja salaus"
+
+#: templates/rr/serviceprovider_sign_encrypt_list.html:7
+msgid ""
+"This list includes all service providers which do not have default signing "
+"and encryption attributes."
+msgstr ""
+"Tämä lista sisältää palvelut, joilla ei ole oletusasetukset "
+"salaus ja allekirjoituskäytännöissä."
+
+#: templates/rr/serviceprovider_sign_encrypt_list.html:13
+msgid "Sign assertions"
+msgstr "Allekirjoita assertaatiot"
+
+#: templates/rr/serviceprovider_sign_encrypt_list.html:14
+msgid "Sign requests"
+msgstr "Allekirjoita pyynnöt"
+
+#: templates/rr/serviceprovider_sign_encrypt_list.html:15
+msgid "Sign responses"
+msgstr "Allekirjoita vastaukset"
+
+#: templates/rr/serviceprovider_sign_encrypt_list.html:16
+msgid "Encrypt assertions"
+msgstr "Salaa assertaatiot"
+
+#: templates/rr/serviceprovider_technical_form.html:8
+msgid ""
+"Techical attributes for your service provider. Necessary information for the "
+"production use are marked."
+msgstr ""
+"Palvelun tekniset tiedot. Tuotantoon pakolliset tiedot on merkitty erikseen."
+
+#: templates/rr/spadmin.html:8
+msgid ""
+"Users who can manage this service provider. You can send invites through "
+"email."
+msgstr ""
+"Ylläpitäjät, joilla on oikeus hallinnoida tätä palvelua. Voit lähettää kutsuja "
+"sähköpostitse."
+
+#: templates/rr/spadmin.html:9
+msgid ""
+"Users without a University of Helsinki login account have to requisition a "
+"local account from IdP administrators."
+msgstr ""
+"Käyttäjien, joilla ei ole Helsingin yliopiston käyttäjätunnusta, täytyy pyytää "
+"paikallinen käyttäjätunnus rekisterin ylläpitäjiltä."
+
+#: templates/rr/spadmin.html:12
+msgid "List of admins"
+msgstr "Lista ylläpitäjistä"
+
+#: templates/rr/spadmin.html:39
+msgid "No admins"
+msgstr "Ei ylläpitäjiä"
+
+#: templates/rr/spadmin.html:41
+msgid "List of invites"
+msgstr "Lista kutsuista"
+
+#: templates/rr/spadmin.html:68
+msgid "No invites"
+msgstr "Ei kutsuja"
+
+#: templates/rr/spadmin.html:71
+msgid "Add admin"
+msgstr "Lisää ylläpitäjä"
+
+#: templates/rr/spadmin.html:78
+msgid "Example message"
+msgstr "Esimerkkiviesti"
+
+#: templates/rr/spadmin.html:83
+msgid "Body"
+msgstr "Viesti"
+
+#: templates/rr/spadmin.html:92
+msgid "Send invitation"
+msgstr "Lähetä kutsu"
+
+#: templates/rr/spadmin.html:92
+msgid "Show message"
+msgstr "Näytä viesti"
+
+#: templates/rr/spadmin.html:102
+msgid "Do you want to remove selected admins/invites?"
+msgstr "Haluatko poistaa valitut ylläpitäjät/kutsut?"
+
+#: templates/rr/testuser.html:8
+msgid ""
+"These users are added to the test IdP database and can be used to test this "
+"SP against the test IdP."
+msgstr ""
+"Nämä käyttäjät lisätään testi-IdP:n tietokantaan ja niitä voidaan käyttää "
+"testaamaan palveluun kirjautumista."
+
+#: templates/rr/testuser.html:10
+msgid "List of users"
+msgstr "Lista käyttäjistä"
+
+#: templates/rr/testuser.html:12
+msgid "Click the username to configure user attribute values."
+msgstr "Klikkaa käyttäjänimeä määrittääksesi attribuuttitiedot."
+
+#: templates/rr/testuser.html:20 templates/rr/testuser.html:52
+#: templates/rr/testuser_attribute_data.html:9
+msgid "Username"
+msgstr "Käyttäjänimi"
+
+#: templates/rr/testuser.html:40
+msgid "No users"
+msgstr "Ei käyttäjiä"
+
+#: templates/rr/testuser.html:43
+msgid "External test users available for this SP"
+msgstr "Ulkopuoliset testikäyttäjät, joita voidaan kirjautua tähän palveluun"
+
+#: templates/rr/testuser.html:45
+msgid ""
+"These users are keyed to some other SP but have also been activated for this "
+"SP by a user who has admin rights for both SPs."
+msgstr ""
+"Nämä käyttäjät on lisätty johonkin toiseen palveluun, mutta ne on hyväksytty "
+"myös tähän palveluun sellaisen ylläpitäjän toimesta, jolla on oikeudet molempiin "
+"palveluihin."
+
+#: templates/rr/testuser.html:73
+msgid "Add a test user"
+msgstr "Lisää testikäyttäjä"
+
+#: templates/rr/testuser.html:89
+msgid "Do you want to remove selected test users?"
+msgstr "Haluatko poistaa valitut testikäyttäjät?"
+
+#: templates/rr/testuser_attribute_data.html:5
+msgid "Test user"
+msgstr "Testikäyttäjä"
+
+#: templates/rr/testuser_attribute_data.html:7
+msgid "Listing all attributes requested by this service provider."
+msgstr "Näytetään kaikki attribuutit, joita tämä palvelu pyytää."
+
+#: templates/rr/testuser_attribute_data.html:14
+msgid "Update"
+msgstr "Päivitä"
+
+#: templates/rr/testuser_attribute_data.html:17
+msgid "Attribute values"
+msgstr "Attribuuttien arvot"
+
+#: templates/rr/testuser_attribute_data.html:19
+msgid ""
+"Multiple values can be separated by semicolon. If you don't find the "
+"attribute here, please check that the attribute is enabled for this SP in "
+"the Attributes page."
+msgstr ""
+"Useampia arvoja voidaan antaa erottamalla ne puolipisteellä. Jos et löydä "
+"attribuuttia täältä, varmista että attribuutti on lisätty palveluun "
+"Attribuutit-sivulla."
+
+#: templates/rr/testuser_attribute_data.html:23
+msgid "Reset name based data"
+msgstr "Palauta nimipohjaiset arvot"
+
+#: templates/rr/testuser_attribute_data.html:23
+msgid "Reset other data with random values"
+msgstr "Arvo muut arvot uudelleen"
+
+#: templates/rr/usergroup.html:8
+msgid "User Groups published via LDAP."
+msgstr "Käyttäjäryhmät, jotka julkaistaa LDAPn kautta."
+
+#: templates/rr/usergroup.html:11
+msgid "List of user groups"
+msgstr "Lista käyttäjäryhmistä"
+
+#: templates/rr/usergroup.html:34
+msgid "No user groups"
+msgstr "Ei käyttäjäryhmiä"
+
+#: templates/rr/usergroup.html:37
+msgid "Add user group"
+msgstr "Lisää käyttäjäryhmä"
+
+#: templates/rr/usergroup.html:52
+msgid "Do you want to remove selected user groups?"
+msgstr "Haluatko poistaa valitut käyttäjäryhmät?"
+
+#: utils/ldap_oldcsv_parser.py:96 utils/metadata_parser.py:189
+msgid "Could not add attribute"
+msgstr "Ei voitu lisätä attribuuttia"
+
+#: utils/ldap_oldcsv_parser.py:290
+msgid "Name already exists, skipping"
+msgstr "Nimi on jo olemassa, jätetään väliin"
+
+#: utils/ldap_oldcsv_parser.py:293
+msgid "Name already exists, overwriting"
+msgstr "Nimi on jo olemassa, ylikirjoitetaan"
+
+#: utils/ldap_oldcsv_parser.py:305
+msgid "Name does not exist, creating"
+msgstr "Nimeä ei löydy, luodaan"
+
+#: utils/ldap_oldcsv_parser.py:311
+msgid "Could not find name"
+msgstr "Ei voitu löytää nimeä"
+
+#: utils/metadata_parser.py:104
+msgid "Could not add certificate"
+msgstr "Ei voitu lisätä varmennetta"
+
+#: utils/metadata_parser.py:119
+msgid "Unsupported nameid-format"
+msgstr "Ei tuettu nameid-muoto"
+
+#: utils/metadata_parser.py:137
+msgid "Unsupported binding, please contact IdP admins if you really need this"
+msgstr "Ei tuettu yhteysosoite-muoto, ota yhteyttä IdP-ylläpitäjiin, jos oikeasti tarvitset tätä"
+
+#: utils/metadata_parser.py:156
+msgid "Could not add"
+msgstr "Ei voitu lisätä"
+
+#: utils/metadata_parser.py:297
+msgid "EntityID already exists, skipping"
+msgstr "EntityID jo olemassa, jätetään väliin"
+
+#: utils/metadata_parser.py:300
+msgid "EntityID already exists, overwriting"
+msgstr "EntityID jo olemassa, ylikirjoitetaan"
+
+#: utils/metadata_parser.py:307
+msgid "EntityID does not exist, creating"
+msgstr "EntityIDtä ei löytynyt, luodaan"
+
+#: views/attribute.py:48
+msgid "Service provider does not exist"
+msgstr "Palvelua ei löytynyt"
+
+#: views/attribute.py:133
+msgid "Attribute proviced does not exist"
+msgstr "Attribuuttia ei löytynyt"
+
+#: views/attribute_test_service.py:28
+msgid "Attribute test service has been disabled"
+msgstr "Attribuuttien testipalvelu on suljettu"
+
+#: views/email.py:113
+msgid "Email have been sent"
+msgstr "Sähköpostit lähetetty"
+
+#: views/login.py:32
+msgid ""
+"Redirection loop for authenticated user detected. Check that your "
+"LOGIN_REDIRECT_URL doesn't point to a login page."
+msgstr ""
+"Uudelleenohjaus-loop havaittu autentikoinnissa. Tarkista, ettei "
+"LOGIn_REDIRECT_URL osoita kirjautumissivulle."
+
+#: views/login.py:39
+msgid "Your user account has been deactivated."
+msgstr "Käyttäjätilisi on suljettu"
+
+#: views/metadata.py:157
+msgid "Git repository appears to have an invalid format."
+msgstr "Git repositorio vaikuttaisi olevan väärässä muodossa."
+
+#: views/metadata.py:160
+msgid "Repository path could not be accessed."
+msgstr "Repositorion sijaintia ei voidu lukea."
+
+#: views/metadata.py:163 views/metadata.py:179
+msgid ""
+"Execution of git command failed. Might want to try git command locally from "
+"the command line and check that it works."
+msgstr ""
+"git-komennon suorittaminen epäonnistui. Kannattaa tarkastaa komentorivillä "
+"että se toimii oikein."
+
+#: views/metadata.py:169
+msgid "Git repository has no origin."
+msgstr "Git repositoriolla ei ole lähdettä"
+
+#: views/metadata.py:175
+msgid "Remote repository not matching local, please fix manually."
+msgstr "Ulkoinen repositorio ei vastaa paikallista, korjaa tämä käsin."
+
+#: views/metadata.py:195
+msgid "Pushing to remote did not work, please fix manually."
+msgstr "Tietojen vienti ulkoiseen repositorioon ei toiminut, korjaa tämä käsin."
+
+#: views/metadata.py:197
+msgid ""
+"Execution of git command failed. Might want to try git command locally  from "
+"the command line and check that it works."
+msgstr ""
+"git-komennon suorittaminen epäonnistui. Kannattaa tarkastaa komentorivillä "
+"että se toimii oikein."
+
+#: views/metadata.py:203
+msgid "Metadata file has changed, please try again."
+msgstr "Metatiedot ovat muuttuneet, tarkasta muutokset ja yritä uudelleen."
+
+#: views/serviceprovider.py:116
+msgid "You should not be here."
+msgstr "Sinun ei kuuluisi olla täällä."
+
+#: views/serviceprovider.py:149
+msgid "Technical contact"
+msgstr "Tekninen yhteystieto"
+
+#: views/spadmin.py:79
+msgid ""
+"Template is missing activation link. Please include {{ activation_link }} to "
+"message."
+msgstr ""
+"Viestipohjasta puuttuu aktivointilinkki. Lisää {{ activation_link }} "
+"viestiin."
+
+#: views/spadmin.py:143
+msgid "Could not send email."
+msgstr "Ei voitu lähettää sähköpostia."
+
+#: views/spadmin.py:148
+msgid "Invalid header found, could not send email."
+msgstr "Virheellinen otsikko löydetty, ei voitu lähettää sähköpostia."
+
+#: views/spadmin.py:200
+msgid "Activation key does not match"
+msgstr "Aktivointiavain ei vastaa"
+
+#: views/testuser.py:53
+msgid "Service provided does not exist"
+msgstr "Palvelua ei ole olemassa"
+
+#: views/testuser.py:135 views/testuser.py:139
+msgid "User provided does not exist"
+msgstr "Käyttäjää ei ole olemassa"

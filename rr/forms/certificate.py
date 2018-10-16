@@ -2,7 +2,7 @@ from cryptography.hazmat.primitives.serialization import Encoding
 
 from django.forms import Form, Textarea, ValidationError
 from django.forms.fields import CharField, BooleanField
-from django.utils.translation import ugettext as _
+from django.utils.translation import ugettext_lazy as _
 
 from rr.models.certificate import Certificate, load_certificate
 

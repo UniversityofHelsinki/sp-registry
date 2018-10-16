@@ -106,6 +106,17 @@
       </ul>
       <ul class="navbar-nav ml-auto">
       <div class="dropdown-divider"></div>
+{% get_current_language as LANGUAGE_CODE %}
+{% get_available_languages as LANGUAGES %}
+{% get_language_info_list for LANGUAGES as languages %}
+{% for language in languages %}
+<form action="{% url 'set_language' %}" method="post">{% csrf_token %}
+    <input name="next" type="hidden" value="{{ request.get_full_path }}">
+    <input name="language" type="hidden" value="{{ language.code }}" />
+    <input class="btn btn-sm {% if language.code == LANGUAGE_CODE %}btn-outline-secondary{% else %}btn-outline-primary{% endif %}" type="submit" value="{{ language.name }}" /> 
+</form>&nbsp;
+{% endfor %}
+      <div class="dropdown-divider"></div>
 {% if user.is_authenticated %}
         <li class="nav-item">
           <a class="nav-link" href="{% url 'logout' %}">{% trans "Logout" %}</a>

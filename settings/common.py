@@ -2,6 +2,7 @@
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/1.11/ref/settings/
 """
+from django.utils.translation import ugettext_lazy as _
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -18,6 +19,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -38,6 +40,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'django.template.context_processors.i18n',
                 'rr.context_processors.saml_login_url',
             ],
         },
@@ -72,9 +75,13 @@ LANGUAGE_CODE = 'en-us'
 
 USE_I18N = True
 
+LANGUAGES = [
+  ('en', _('English')),
+  ('fi', _('Finnish')),
+]
+
 USE_L10N = True
 
 USE_TZ = True
 
 STATIC_URL = '/static/'
-

@@ -5,7 +5,7 @@ from django.db.models import Q
 from django.forms import ModelForm, Form, BooleanField
 from django.forms.fields import CharField
 from django.forms.widgets import HiddenInput, Textarea, CheckboxInput
-from django.utils.translation import ugettext as _
+from django.utils.translation import ugettext_lazy as _
 
 from rr.models.nameidformat import NameIDFormat
 from rr.models.serviceprovider import ServiceProvider, ldap_entity_id_from_name
@@ -222,7 +222,7 @@ class SamlServiceProviderCreateForm(ModelForm):
                                 'Required for both production and test use.</div>'),
             'description_sv': _('Short (max 140 characters) description of the service '
                                 'in Swedish.'),
-            'privacypolicy_fi': _('Link to privacy policy in Finnish. Link must be publicly'
+            'privacypolicy_fi': _('Link to privacy policy in Finnish. Link must be publicly '
                                   'accessible. <div class="text-danger">Required for production '
                                   'use if the service requests any personal information.</div>'),
             'privacypolicy_en': _('Link to privacy policy in English. Link must be publicly '

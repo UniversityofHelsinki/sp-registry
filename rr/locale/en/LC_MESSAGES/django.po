@@ -1,0 +1,2195 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2018-10-16 09:47+0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: forms/attribute.py:37
+msgid "Not a public SAML attribute, might not be available from IdP."
+msgstr ""
+
+#: forms/attribute.py:40
+msgid "Not a public LDAP attribute, might not be available from LDAP."
+msgstr ""
+
+#: forms/certificate.py:17
+msgid ""
+"Certificate in PEM format, WITHOUT -----BEGIN CERTIFICATE----- and -----END "
+"CERTIFICATE-----"
+msgstr ""
+
+#: forms/certificate.py:21
+msgid ""
+"Use this certificate for signing. If both signing and encryption are left "
+"empty, certificate is used for both."
+msgstr ""
+
+#: forms/certificate.py:24
+msgid "Use this certificate for encryption"
+msgstr ""
+
+#: forms/certificate.py:35
+msgid "Unable to load certificate"
+msgstr ""
+
+#: forms/certificate.py:45
+msgid "Certificate already exists"
+msgstr ""
+
+#: forms/contact.py:25
+msgid "Contact already exists"
+msgstr ""
+
+#: forms/email.py:15 models/serviceprovider.py:21
+msgid "SAML / Shibboleth"
+msgstr ""
+
+#: forms/email.py:16 models/serviceprovider.py:22
+msgid "LDAP"
+msgstr ""
+
+#: forms/email.py:19
+msgid "Select production SPs."
+msgstr ""
+
+#: forms/email.py:20
+msgid "Select test SPs"
+msgstr ""
+
+#: forms/email.py:24
+msgid "Select individual SPs"
+msgstr ""
+
+#: forms/email.py:25
+msgid "Select admin emails"
+msgstr ""
+
+#: forms/email.py:26
+msgid "Select technical contacts"
+msgstr ""
+
+#: forms/email.py:27
+msgid "Select support contacts"
+msgstr ""
+
+#: forms/email.py:29
+msgid "Select administrative contacts"
+msgstr ""
+
+#: forms/email.py:31
+msgid "Select template if you want to send email"
+msgstr ""
+
+#: forms/endpoint.py:25
+msgid "Endpoint already exists"
+msgstr ""
+
+#: forms/metadata.py:17
+msgid "Service Provider metadata"
+msgstr ""
+
+#: forms/metadata.py:19
+msgid "Disable checks for Endpoint bindings"
+msgstr ""
+
+#: forms/metadata.py:20
+msgid "Validate imported metadata"
+msgstr ""
+
+#: forms/metadata.py:36
+msgid "Not valid XML: "
+msgstr ""
+
+#: forms/metadata.py:38
+msgid "First element should be EntityDescriptor"
+msgstr ""
+
+#: forms/metadata.py:41 utils/metadata_parser.py:317
+msgid "Could not find entityID"
+msgstr ""
+
+#: forms/metadata.py:47 forms/serviceprovider.py:129
+#: forms/serviceprovider.py:252
+msgid ""
+"Entity Id should be URI, please contact IdP admins if this is not possible."
+msgstr ""
+
+#: forms/metadata.py:50 forms/serviceprovider.py:133
+#: forms/serviceprovider.py:256
+msgid "Entity Id already exists"
+msgstr ""
+
+#: forms/metadata.py:57
+msgid "Commit message"
+msgstr ""
+
+#: forms/serviceprovider.py:26
+msgid "Organization name, only changeable by the registry admins."
+msgstr ""
+
+#: forms/serviceprovider.py:27 forms/serviceprovider.py:209
+msgid ""
+"Short (max 70 characters) and descriptive name for the service in Finnish."
+"<div class=\"text-danger\">Required for both production and test use.</div>"
+msgstr ""
+
+#: forms/serviceprovider.py:30 forms/serviceprovider.py:212
+msgid ""
+"Short (max 70 characters) and descriptive name for the service in English."
+"<div class=\"text-danger\">Required for both production and test use.</div>"
+msgstr ""
+
+#: forms/serviceprovider.py:33 forms/serviceprovider.py:215
+#: forms/serviceprovider.py:274
+msgid ""
+"Short (max 70 characters) and descriptive name for the service in Swedish."
+msgstr ""
+
+#: forms/serviceprovider.py:35 forms/serviceprovider.py:217
+msgid ""
+"Short (max 140 characters) description of the service in Finnish. <div class="
+"\"text-danger\">Required for both production and test use.</div>"
+msgstr ""
+
+#: forms/serviceprovider.py:38 forms/serviceprovider.py:220
+msgid ""
+"Short (max 140 characters) description of the service in English. <div class="
+"\"text-danger\">Required for both production and test use.</div>"
+msgstr ""
+
+#: forms/serviceprovider.py:41 forms/serviceprovider.py:223
+#: forms/serviceprovider.py:277
+msgid "Short (max 140 characters) description of the service in Swedish."
+msgstr ""
+
+#: forms/serviceprovider.py:43 forms/serviceprovider.py:225
+msgid ""
+"Link to privacy policy in Finnish. Link must be publiclyaccessible. <div "
+"class=\"text-danger\">Required for production use if the service requests "
+"any personal information.</div>"
+msgstr ""
+
+#: forms/serviceprovider.py:46 forms/serviceprovider.py:228
+msgid ""
+"Link to privacy policy in English. Link must be publicly accessible. <div "
+"class=\"text-danger\">Required for production use if the service requests "
+"any personal information.</div>"
+msgstr ""
+
+#: forms/serviceprovider.py:49 forms/serviceprovider.py:231
+#: forms/serviceprovider.py:280
+msgid "Link to privacy policy in Swedish. Link must be publicly accessible."
+msgstr ""
+
+#: forms/serviceprovider.py:51 forms/serviceprovider.py:233
+#: forms/serviceprovider.py:281
+msgid "Used for debugging and testing services."
+msgstr ""
+
+#: forms/serviceprovider.py:52 forms/serviceprovider.py:234
+#: forms/serviceprovider.py:282
+msgid "Link to external application portfolio."
+msgstr ""
+
+#: forms/serviceprovider.py:53 forms/serviceprovider.py:235
+#: forms/serviceprovider.py:283
+msgid "Additional notes about this service."
+msgstr ""
+
+#: forms/serviceprovider.py:54
+msgid ""
+"Additional administrative notes. Writable only by registry admins but showed "
+"in summary to SP admins."
+msgstr ""
+
+#: forms/serviceprovider.py:80 forms/serviceprovider.py:206
+msgid ""
+"Should be URI including scheme, hostname of your application and path e.g. "
+"https://test.helsinki.fi/sp. <div class=\"text-danger\">Required for both "
+"production and test use.</div>"
+msgstr ""
+
+#: forms/serviceprovider.py:83
+msgid ""
+"For service providers supporting discovery service. Usually only valid if "
+"you are accepting logins for multiple IdPs."
+msgstr ""
+
+#: forms/serviceprovider.py:87
+msgid ""
+"Support for name identifier formats. Check <a href=\"https://wiki.shibboleth."
+"net/confluence/display/CONCEPT/NameIdentifiers\" target=\"_blank"
+"\">Shibboleth wiki</a> for more information."
+msgstr ""
+
+#: forms/serviceprovider.py:90
+msgid ""
+"IdP sings attribute assertions sent to SP. Defaults to False because "
+"assertions are encrypted by default."
+msgstr ""
+
+#: forms/serviceprovider.py:92
+msgid "IdP requires signed authentication requests from this SP."
+msgstr ""
+
+#: forms/serviceprovider.py:93
+msgid ""
+"IdP signs responses sent to SP. Defaults to True and should not be changed."
+msgstr ""
+
+#: forms/serviceprovider.py:95
+msgid ""
+"IdP encrypts attribute assertions sent to SP. Defaults to True. Do not "
+"change unless you are using a SP that does not support encryption."
+msgstr ""
+
+#: forms/serviceprovider.py:98
+msgid ""
+"Publish this SP to the production IdP. Only validated data is used. Any "
+"changes to production SPs must be validated by the IdP administrators before "
+"coming into effect.<div class=\"text-danger\">Required for production use.</"
+"div>"
+msgstr ""
+
+#: forms/serviceprovider.py:102
+msgid ""
+"Publish this SP to the test IdP using unvalidated data. Any changes might "
+"take up to 15 minutes until they are published to the test IdP."
+msgstr ""
+
+#: forms/serviceprovider.py:105
+msgid ""
+"For administrative use e.g. for testing different SPs during IdP updates."
+msgstr ""
+
+#: forms/serviceprovider.py:107
+msgid "Does this SP automatically update IdP metadata at least once a day?"
+msgstr ""
+
+#: forms/serviceprovider.py:153
+msgid ""
+"Full server names (not IPs), separated by space. User for access control."
+msgstr ""
+
+#: forms/serviceprovider.py:154
+msgid "What is the target group (users) of this service?"
+msgstr ""
+
+#: forms/serviceprovider.py:155
+msgid "Separate service account is used for LDAP queries (recommended way)."
+msgstr ""
+
+#: forms/serviceprovider.py:156
+msgid "Email and phone number for delivering service account credentials."
+msgstr ""
+
+#: forms/serviceprovider.py:157
+msgid "Service requires access to all LDAP groups."
+msgstr ""
+
+#: forms/serviceprovider.py:158
+msgid "Service stores user name and released attributes locally."
+msgstr ""
+
+#: forms/serviceprovider.py:159
+msgid "Service stores user passwords locally."
+msgstr ""
+
+#: forms/serviceprovider.py:160
+msgid ""
+"Why is this service storing user passwords locally and how? This is not "
+"generally a good idea."
+msgstr ""
+
+#: forms/serviceprovider.py:161
+msgid "Service stores requested groups and their member lists locally."
+msgstr ""
+
+#: forms/serviceprovider.py:162
+msgid "Publish this service to LDAP production servers."
+msgstr ""
+
+#: forms/serviceprovider.py:178 forms/serviceprovider.py:300
+msgid "Invalid list of server names."
+msgstr ""
+
+#: forms/serviceprovider.py:271
+msgid ""
+"Full server names (not IPs), one per line. Used for access control. <div "
+"class=\"text-danger\">Required.</div>"
+msgstr ""
+
+#: forms/serviceprovider.py:272
+msgid ""
+"Short (max 70 characters) and descriptive name for the service in Finnish. "
+"<div class=\"text-danger\">Required. </div>"
+msgstr ""
+
+#: forms/serviceprovider.py:273
+msgid ""
+"Short (max 70 characters) and descriptive name for the service in English."
+msgstr ""
+
+#: forms/serviceprovider.py:275
+msgid ""
+"Short (max 140 characters) description of the service in Finnish. <div class="
+"\"text-danger\">Required.</div>"
+msgstr ""
+
+#: forms/serviceprovider.py:276
+msgid "Short (max 140 characters) description of the service in English."
+msgstr ""
+
+#: forms/serviceprovider.py:278
+msgid ""
+"Link to privacy policy in Finnish. Link must be publicly accessible. <div "
+"class=\"text-danger\">Required if the service requests any personal "
+"information.</div>"
+msgstr ""
+
+#: forms/serviceprovider.py:279
+msgid "Link to privacy policy in English. Link must be publicly accessible."
+msgstr ""
+
+#: forms/serviceprovider.py:309
+msgid "Invalid Finnish name."
+msgstr ""
+
+#: forms/serviceprovider.py:317
+msgid "Confirm closing"
+msgstr ""
+
+#: forms/serviceprovider.py:324
+msgid "Do not send validation email to SP admins."
+msgstr ""
+
+#: forms/spadmin.py:11
+msgid "Email where invitation is sent"
+msgstr ""
+
+#: forms/spadmin.py:13
+msgid "Using default template if none given."
+msgstr ""
+
+#: forms/testuser.py:14
+msgid "Generate attribute data for name and username based fields."
+msgstr ""
+
+#: forms/testuser.py:16
+msgid "Generate random attribute data for other fields."
+msgstr ""
+
+#: forms/testuser.py:34
+msgid "Username already exists"
+msgstr ""
+
+#: forms/usergroup.py:20
+msgid "Group already added"
+msgstr ""
+
+#: models/attribute.py:10 models/testuser.py:38
+msgid "Attribute FriendlyName"
+msgstr ""
+
+#: models/attribute.py:11
+msgid "Attribute information"
+msgstr ""
+
+#: models/attribute.py:12
+msgid "Attribute OID"
+msgstr ""
+
+#: models/attribute.py:13 templates/rr/attribute_admin_list.html:13
+#: templates/rr/attribute_admin_view.html:8
+msgid "Attribute ID"
+msgstr ""
+
+#: models/attribute.py:14
+msgid "Attribute NameFormat"
+msgstr ""
+
+#: models/attribute.py:15
+msgid "Show in SAML attribute list"
+msgstr ""
+
+#: models/attribute.py:17
+msgid "Show link to funetEduPerson-schema"
+msgstr ""
+
+#: models/attribute.py:19
+msgid "Show in LDAP attribute list"
+msgstr ""
+
+#: models/attribute.py:20
+msgid "Attribute Group for LDAP"
+msgstr ""
+
+#: models/attribute.py:23
+msgid "Show in Attribute test service"
+msgstr ""
+
+#: models/attribute.py:25
+msgid "Required attribute in test service"
+msgstr ""
+
+#: models/attribute.py:27
+msgid "Regex text for attribute validation"
+msgstr ""
+
+#: models/attribute.py:29
+msgid "Shibboelth environmental variable for the attribute"
+msgstr ""
+
+#: models/attribute.py:30 models/certificate.py:83 models/contact.py:21
+#: models/endpoint.py:31 models/serviceprovider.py:114
+#: models/serviceprovider.py:311 models/testuser.py:20 models/usergroup.py:13
+msgid "Created at"
+msgstr ""
+
+#: models/attribute.py:31 models/certificate.py:84 models/contact.py:22
+#: models/endpoint.py:32 models/serviceprovider.py:115
+#: models/serviceprovider.py:312 models/testuser.py:21 models/usergroup.py:14
+msgid "Updated at"
+msgstr ""
+
+#: models/certificate.py:75
+msgid "cn"
+msgstr ""
+
+#: models/certificate.py:76
+msgid "Issuer cn"
+msgstr ""
+
+#: models/certificate.py:77 templates/rr/certificate.html:23
+#: templates/rr/serviceprovider_detail.html:186
+msgid "Valid from"
+msgstr ""
+
+#: models/certificate.py:78 templates/rr/certificate.html:22
+#: templates/rr/certificate_admin_list.html:14
+#: templates/rr/certificate_admin_list.html:40
+#: templates/rr/serviceprovider_detail.html:185 templates/rr/spadmin.html:48
+msgid "Valid until"
+msgstr ""
+
+#: models/certificate.py:79 templates/rr/certificate.html:24
+#: templates/rr/certificate_admin_list.html:15
+#: templates/rr/certificate_admin_list.html:41
+#: templates/rr/serviceprovider_detail.html:187
+msgid "Key size"
+msgstr ""
+
+#: models/certificate.py:80 views/serviceprovider.py:154
+msgid "Certificate"
+msgstr ""
+
+#: models/certificate.py:81
+msgid "Use for signing"
+msgstr ""
+
+#: models/certificate.py:82
+msgid "Use for encryption"
+msgstr ""
+
+#: models/certificate.py:85 models/contact.py:23 models/endpoint.py:33
+#: models/serviceprovider.py:116 models/serviceprovider.py:313
+#: models/testuser.py:22 models/usergroup.py:15
+msgid "Entry end time"
+msgstr ""
+
+#: models/certificate.py:86 models/contact.py:24 models/endpoint.py:34
+#: models/serviceprovider.py:119 models/serviceprovider.py:314
+#: models/usergroup.py:16
+msgid "Validated on"
+msgstr ""
+
+#: models/contact.py:13
+msgid "Administrative"
+msgstr ""
+
+#: models/contact.py:14
+msgid "Technical"
+msgstr ""
+
+#: models/contact.py:15
+msgid "Support"
+msgstr ""
+
+#: models/contact.py:17
+msgid "Contact Type"
+msgstr ""
+
+#: models/contact.py:18
+msgid "First Name"
+msgstr ""
+
+#: models/contact.py:19
+msgid "Last Name"
+msgstr ""
+
+#: models/contact.py:20 templates/rr/contact.html:22
+#: templates/rr/spadmin.html:21 templates/rr/spadmin.html:47
+msgid "E-Mail"
+msgstr ""
+
+#: models/email.py:6
+msgid "Message title"
+msgstr ""
+
+#: models/email.py:7
+msgid "Message body"
+msgstr ""
+
+#: models/endpoint.py:13
+msgid "AssertionConsumerService"
+msgstr ""
+
+#: models/endpoint.py:14
+msgid "SingleLogoutService"
+msgstr ""
+
+#: models/endpoint.py:15
+msgid "ArtifactResolutionService"
+msgstr ""
+
+#: models/endpoint.py:18
+msgid "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST"
+msgstr ""
+
+#: models/endpoint.py:20
+msgid "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect"
+msgstr ""
+
+#: models/endpoint.py:22
+msgid "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Artifact"
+msgstr ""
+
+#: models/endpoint.py:24
+msgid "urn:oasis:names:tc:SAML:2.0:bindings:SOAP"
+msgstr ""
+
+#: models/endpoint.py:26
+msgid "Endpoint Type"
+msgstr ""
+
+#: models/endpoint.py:28
+msgid "Endpoint Binding"
+msgstr ""
+
+#: models/endpoint.py:29
+msgid "Endpoint URL"
+msgstr ""
+
+#: models/endpoint.py:30
+msgid "Endpoint Index"
+msgstr ""
+
+#: models/nameidformat.py:10
+msgid "Name Identifier Format"
+msgstr ""
+
+#: models/nameidformat.py:11
+msgid "Show in list"
+msgstr ""
+
+#: models/organization.py:10
+msgid "Organization Name (Finnish)"
+msgstr ""
+
+#: models/organization.py:12
+msgid "Organization Name (English)"
+msgstr ""
+
+#: models/organization.py:14
+msgid "Organization Name (Swedish)"
+msgstr ""
+
+#: models/organization.py:16
+msgid "Organization Description (Finnish)"
+msgstr ""
+
+#: models/organization.py:18
+msgid "Organization Description (English)"
+msgstr ""
+
+#: models/organization.py:20
+msgid "Organization Description (Swedish)"
+msgstr ""
+
+#: models/organization.py:22
+msgid "Organization URL (Finnish)"
+msgstr ""
+
+#: models/organization.py:24
+msgid "Organization URL (English)"
+msgstr ""
+
+#: models/organization.py:26
+msgid "Organization URL (Swedish)"
+msgstr ""
+
+#: models/serviceprovider.py:20 models/testuser.py:39
+#: templates/rr/serviceprovider_saml_create_form.html:12
+msgid "Entity Id"
+msgstr ""
+
+#: models/serviceprovider.py:24
+msgid "Service type (SAML/LDAP)"
+msgstr ""
+
+#: models/serviceprovider.py:28
+msgid "Organization"
+msgstr ""
+
+#: models/serviceprovider.py:30
+msgid "Service Name (Finnish)"
+msgstr ""
+
+#: models/serviceprovider.py:33
+msgid "Service Name (English)"
+msgstr ""
+
+#: models/serviceprovider.py:36
+msgid "Service Name (Swedish)"
+msgstr ""
+
+#: models/serviceprovider.py:39
+msgid "Service Description (Finnish)"
+msgstr ""
+
+#: models/serviceprovider.py:42
+msgid "Service Description (English)"
+msgstr ""
+
+#: models/serviceprovider.py:45
+msgid "Service Description (Swedish)"
+msgstr ""
+
+#: models/serviceprovider.py:48
+msgid "Privacy Policy URL (Finnish)"
+msgstr ""
+
+#: models/serviceprovider.py:50
+msgid "Privacy Policy URL (English)"
+msgstr ""
+
+#: models/serviceprovider.py:52
+msgid "Privacy Policy URL (Swedish)"
+msgstr ""
+
+#: models/serviceprovider.py:54
+msgid "Service Login Page URL"
+msgstr ""
+
+#: models/serviceprovider.py:57 views/serviceprovider.py:145
+msgid "Application portfolio URL"
+msgstr ""
+
+#: models/serviceprovider.py:58
+msgid "Additional notes"
+msgstr ""
+
+#: models/serviceprovider.py:59
+msgid "Admin notes"
+msgstr ""
+
+#: models/serviceprovider.py:63
+msgid "Discovery Service URL"
+msgstr ""
+
+#: models/serviceprovider.py:67
+msgid "Sign SSO assertions"
+msgstr ""
+
+#: models/serviceprovider.py:68
+msgid "Sign SSO requests"
+msgstr ""
+
+#: models/serviceprovider.py:69
+msgid "Sign SSO responses"
+msgstr ""
+
+#: models/serviceprovider.py:71
+msgid "Encrypt SSO assertions"
+msgstr ""
+
+#: models/serviceprovider.py:74
+msgid "Publish to production servers"
+msgstr ""
+
+#: models/serviceprovider.py:75
+msgid "Publish to test servers"
+msgstr ""
+
+#: models/serviceprovider.py:78
+msgid "SAML product this service is using"
+msgstr ""
+
+#: models/serviceprovider.py:81
+msgid "SP updates IdP metadata automatically"
+msgstr ""
+
+#: models/serviceprovider.py:85
+msgid "Server names (not IPs), one per line"
+msgstr ""
+
+#: models/serviceprovider.py:86
+msgid "Internet"
+msgstr ""
+
+#: models/serviceprovider.py:87
+msgid "University of Helsinki users"
+msgstr ""
+
+#: models/serviceprovider.py:88
+msgid "Restricted user group"
+msgstr ""
+
+#: models/serviceprovider.py:90
+msgid "Target group for the service"
+msgstr ""
+
+#: models/serviceprovider.py:92
+msgid "Does the service use a service account?"
+msgstr ""
+
+#: models/serviceprovider.py:94
+msgid ""
+"Email address and phone number for delivering the service account credentials"
+msgstr ""
+
+#: models/serviceprovider.py:96
+msgid "Service requires access to all LDAP groups"
+msgstr ""
+
+#: models/serviceprovider.py:98
+msgid "Service stores a local copy of users and their information"
+msgstr ""
+
+#: models/serviceprovider.py:101
+msgid "Service stores a local copy of user passwords"
+msgstr ""
+
+#: models/serviceprovider.py:103
+msgid "How is this service storing the saved passwords and why?"
+msgstr ""
+
+#: models/serviceprovider.py:105
+msgid "Service stores a local copy of groups and group members"
+msgstr ""
+
+#: models/serviceprovider.py:112
+msgid "Modified"
+msgstr ""
+
+#: models/serviceprovider.py:113
+msgid "History key"
+msgstr ""
+
+#: models/serviceprovider.py:118
+msgid "Updated by"
+msgstr ""
+
+#: models/serviceprovider.py:310
+msgid "Reason for the attribute requisition"
+msgstr ""
+
+#: models/spadmin.py:60 templates/rr/spadmin.html:49
+msgid "Creator"
+msgstr ""
+
+#: models/spadmin.py:61
+msgid "Activation key"
+msgstr ""
+
+#: models/spadmin.py:62
+msgid "Valid until date"
+msgstr ""
+
+#: models/spadmin.py:63
+msgid "Email address"
+msgstr ""
+
+#: models/testuser.py:13 models/testuser.py:37
+msgid "Login name"
+msgstr ""
+
+#: models/testuser.py:14
+msgid "Password"
+msgstr ""
+
+#: models/testuser.py:16 templates/rr/contact.html:20
+#: templates/rr/serviceprovider_detail.html:207 templates/rr/spadmin.html:19
+#: templates/rr/testuser.html:21 templates/rr/testuser.html:53
+msgid "First name"
+msgstr ""
+
+#: models/testuser.py:17 templates/rr/contact.html:21
+#: templates/rr/serviceprovider_detail.html:208 templates/rr/spadmin.html:20
+#: templates/rr/testuser.html:22 templates/rr/testuser.html:54
+msgid "Last name"
+msgstr ""
+
+#: models/testuser.py:19
+msgid "Valid for selected SPs"
+msgstr ""
+
+#: models/testuser.py:36
+msgid "Attribute value"
+msgstr ""
+
+#: models/usergroup.py:12
+msgid "Group name"
+msgstr ""
+
+#: templates/attribute_test_service.html:10
+msgid "Attribute Test Service"
+msgstr ""
+
+#: templates/attribute_test_service.html:16
+msgid "Attribute test service"
+msgstr ""
+
+#: templates/attribute_test_service.html:24
+msgid "Attribute was released and it has a seemingly correct value."
+msgstr ""
+
+#: templates/attribute_test_service.html:28
+msgid ""
+"Attribute marked as a mandatory was not released or the attribute's value is "
+"not within the accepted value range."
+msgstr ""
+
+#: templates/attribute_test_service.html:32
+msgid ""
+"This attribute is an optional and doesn't have any value for you. Not all "
+"attributes are available for all users."
+msgstr ""
+
+#: templates/attribute_test_service.html:37
+msgid "Authentication context"
+msgstr ""
+
+#: templates/attribute_test_service.html:50
+msgid "Login using MFA"
+msgstr ""
+
+#: templates/attribute_test_service.html:51 templates/base.html:48
+#: templates/base.html:87 templates/base.html:162 templates/base.html:200
+#: templates/rr/attribute_list.html:6
+msgid "Attributes"
+msgstr ""
+
+#: templates/attribute_test_service.html:56
+#: templates/rr/serviceprovider_detail.html:63
+#: templates/rr/serviceprovider_detail.html:91
+#: templates/rr/serviceprovider_detail.html:119
+#: templates/rr/serviceprovider_detail.html:166
+msgid "Attribute"
+msgstr ""
+
+#: templates/attribute_test_service.html:57
+#: templates/rr/serviceprovider_detail.html:64
+#: templates/rr/serviceprovider_detail.html:92
+#: templates/rr/serviceprovider_detail.html:120
+msgid "Value"
+msgstr ""
+
+#: templates/attribute_test_service.html:58
+msgid "Value format (regex)"
+msgstr ""
+
+#: templates/attribute_test_service.html:72
+msgid "Logout using Single Logout"
+msgstr ""
+
+#: templates/base.html:10
+msgid "Shibboleth Resource Registry"
+msgstr ""
+
+#: templates/base.html:14
+msgid "SP Registry"
+msgstr ""
+
+#: templates/base.html:24 templates/base.html:139
+#: templates/rr/serviceprovider_list.html:6
+msgid "Service Providers"
+msgstr ""
+
+#: templates/base.html:29 templates/base.html:144
+msgid "SP Configuration"
+msgstr ""
+
+#: templates/base.html:33 templates/base.html:147
+msgid "Summary"
+msgstr ""
+
+#: templates/base.html:36 templates/base.html:150
+msgid "Basic Information"
+msgstr ""
+
+#: templates/base.html:40 templates/base.html:44 templates/base.html:154
+#: templates/base.html:158
+msgid "Technical Attributes"
+msgstr ""
+
+#: templates/base.html:52 templates/base.html:90 templates/base.html:166
+#: templates/base.html:203 templates/rr/certificate.html:6
+#: templates/rr/serviceprovider_detail.html:181
+#: templates/rr/serviceprovider_saml_create_form.html:19
+msgid "Certificates"
+msgstr ""
+
+#: templates/base.html:55 templates/base.html:169
+msgid "SAML Endpoints"
+msgstr ""
+
+#: templates/base.html:60 templates/base.html:174 templates/rr/usergroup.html:6
+msgid "User Groups"
+msgstr ""
+
+#: templates/base.html:64 templates/base.html:178 templates/rr/contact.html:6
+#: templates/rr/serviceprovider_detail.html:202
+msgid "Contacts"
+msgstr ""
+
+#: templates/base.html:67 templates/base.html:181 templates/rr/spadmin.html:6
+msgid "Admins"
+msgstr ""
+
+#: templates/base.html:71 templates/rr/testuser.html:6
+msgid "Test users"
+msgstr ""
+
+#: templates/base.html:76 templates/base.html:190
+msgid "View Metadata"
+msgstr ""
+
+#: templates/base.html:83 templates/base.html:197
+msgid "Administration"
+msgstr ""
+
+#: templates/base.html:93 templates/base.html:206
+msgid "Sign and Encrypt"
+msgstr ""
+
+#: templates/base.html:96 templates/base.html:209 templates/rr/email.html:6
+msgid "Emails"
+msgstr ""
+
+#: templates/base.html:99 templates/base.html:212
+msgid "Manage metadata"
+msgstr ""
+
+#: templates/base.html:103 templates/base.html:217
+msgid "Database Admin"
+msgstr ""
+
+#: templates/base.html:122 templates/registration/login.html:11
+msgid "Logout"
+msgstr ""
+
+#: templates/base.html:126 templates/registration/logout.html:7
+msgid "Login"
+msgstr ""
+
+#: templates/base.html:185
+msgid "Test Users"
+msgstr ""
+
+#: templates/error.html:5
+msgid "An error occurred"
+msgstr ""
+
+#: templates/handlers/400.html:5 templates/handlers/400_blank.html:13
+msgid "Bad request"
+msgstr ""
+
+#: templates/handlers/400.html:6 templates/handlers/400_blank.html:14
+msgid "We do not understand you. Are you trying to hack us?"
+msgstr ""
+
+#: templates/handlers/400.html:7 templates/handlers/400_blank.html:15
+#: templates/handlers/403.html:7 templates/handlers/403_blank.html:15
+#: templates/handlers/404.html:7 templates/handlers/404_blank.html:15
+#: templates/handlers/500.html:7 templates/handlers/500_blank.html:15
+msgid "Return to previous page"
+msgstr ""
+
+#: templates/handlers/400_blank.html:10 templates/handlers/403_blank.html:10
+#: templates/handlers/404_blank.html:10 templates/handlers/500_blank.html:10
+msgid "Error"
+msgstr ""
+
+#: templates/handlers/403.html:5 templates/handlers/403_blank.html:13
+msgid "Permission denied"
+msgstr ""
+
+#: templates/handlers/403.html:6 templates/handlers/403_blank.html:14
+msgid "You have insufficient user rights to access this page."
+msgstr ""
+
+#: templates/handlers/404.html:5 templates/handlers/404_blank.html:13
+msgid "Page not found"
+msgstr ""
+
+#: templates/handlers/404.html:6 templates/handlers/404_blank.html:14
+msgid ""
+"The page you are looking for does not exist or you have insufficient "
+"permissions for it."
+msgstr ""
+
+#: templates/handlers/500.html:5 templates/handlers/500_blank.html:13
+msgid "Internal error"
+msgstr ""
+
+#: templates/handlers/500.html:6 templates/handlers/500_blank.html:14
+msgid "Something went wrong. Error has been logged and we will investigate it."
+msgstr ""
+
+#: templates/info.html:5
+msgid "For your information"
+msgstr ""
+
+#: templates/registration/login.html:7
+msgid "Service Provider Registry"
+msgstr ""
+
+#: templates/registration/login.html:8
+msgid "University of Helsinki"
+msgstr ""
+
+#: templates/registration/login.html:10
+msgid "You have already logged in"
+msgstr ""
+
+#: templates/registration/login.html:16
+msgid "Login using Single Sign-On"
+msgstr ""
+
+#: templates/registration/login.html:26
+msgid "Login using a local account"
+msgstr ""
+
+#: templates/registration/login.html:33
+msgid "Use this only if you do not have University of Helsinki user account."
+msgstr ""
+
+#: templates/registration/login.html:37
+msgid "Submit"
+msgstr ""
+
+#: templates/registration/login.html:41
+msgid ""
+"Lost password? Reset it here. You may use same form to get forgotten "
+"username."
+msgstr ""
+
+#: templates/registration/login.html:48
+msgid "Data privacy information of the service"
+msgstr ""
+
+#: templates/registration/login.html:49
+msgid ""
+"This site uses cookies to save session information between page changes. By "
+"logging in to the site, you are agreeing to our use of cookies."
+msgstr ""
+
+#: templates/registration/logout.html:5 templates/rr/front_page.html:5
+msgid "University of Helsinki - Service Provider Registry"
+msgstr ""
+
+#: templates/registration/logout.html:6
+msgid "You have logged out"
+msgstr ""
+
+#: templates/registration/password_reset_complete.html:5
+#: templates/registration/password_reset_confirm.html:7
+#: templates/registration/password_reset_done.html:5
+#: templates/registration/password_reset_form.html:7
+msgid "Reset password"
+msgstr ""
+
+#: templates/registration/password_reset_complete.html:7
+msgid "Password has been reset successfully."
+msgstr ""
+
+#: templates/registration/password_reset_complete.html:9
+msgid "Log in."
+msgstr ""
+
+#: templates/registration/password_reset_confirm.html:18
+msgid "Password reset failed."
+msgstr ""
+
+#: templates/registration/password_reset_done.html:6
+msgid "Please follow the instructions in the email to reset your password."
+msgstr ""
+
+#: templates/registration/password_reset_email.html:2
+msgid ""
+"You're receiving this email because you requested a password reset for your "
+"user account at"
+msgstr ""
+
+#: templates/registration/password_reset_email.html:4
+msgid "Your username, in case you've forgotten:"
+msgstr ""
+
+#: templates/registration/password_reset_email.html:6
+msgid "If you did not request a password reset, please ignore this email."
+msgstr ""
+
+#: templates/registration/password_reset_email.html:8
+msgid "Please go to the following page and choose a new password:"
+msgstr ""
+
+#: templates/registration/password_reset_form.html:8
+msgid "Instructions for resetting password will be send to your email."
+msgstr ""
+
+#: templates/rr/attribute_admin_list.html:6
+msgid "Listing all attributes included in this system."
+msgstr ""
+
+#: templates/rr/attribute_admin_list.html:7
+msgid "Click attribute ID for more information."
+msgstr ""
+
+#: templates/rr/attribute_admin_list.html:12
+msgid "Friendly name"
+msgstr ""
+
+#: templates/rr/attribute_admin_list.html:14
+msgid "OID / Name"
+msgstr ""
+
+#: templates/rr/attribute_admin_list.html:15
+msgid "Public"
+msgstr ""
+
+#: templates/rr/attribute_admin_list.html:28
+#: templates/rr/attribute_admin_view.html:44
+msgid "No attributes"
+msgstr ""
+
+#: templates/rr/attribute_admin_view.html:6
+msgid "Friendly Name"
+msgstr ""
+
+#: templates/rr/attribute_admin_view.html:10
+msgid "Name / OID"
+msgstr ""
+
+#: templates/rr/attribute_admin_view.html:12
+msgid "Name Format"
+msgstr ""
+
+#: templates/rr/attribute_admin_view.html:14
+msgid "Public SAML"
+msgstr ""
+
+#: templates/rr/attribute_admin_view.html:16
+msgid "Public LDAP"
+msgstr ""
+
+#: templates/rr/attribute_admin_view.html:18
+msgid "Information"
+msgstr ""
+
+#: templates/rr/attribute_admin_view.html:21
+msgid "Edit in Django admin view"
+msgstr ""
+
+#: templates/rr/attribute_admin_view.html:22
+msgid "Service Providers using the attribute"
+msgstr ""
+
+#: templates/rr/attribute_admin_view.html:26
+#: templates/rr/certificate_admin_list.html:13
+#: templates/rr/certificate_admin_list.html:39
+msgid "SP"
+msgstr ""
+
+#: templates/rr/attribute_admin_view.html:27
+#: templates/rr/serviceprovider_list.html:19
+#: templates/rr/serviceprovider_list.html:58
+msgid "Prod"
+msgstr ""
+
+#: templates/rr/attribute_admin_view.html:28
+#: templates/rr/serviceprovider_list.html:20
+msgid "Test"
+msgstr ""
+
+#: templates/rr/attribute_admin_view.html:29
+#: templates/rr/serviceprovider_detail.html:167
+msgid "Reason"
+msgstr ""
+
+#: templates/rr/attribute_admin_view.html:30
+msgid "Validated"
+msgstr ""
+
+#: templates/rr/attribute_list.html:8
+msgid ""
+"Give reasons for the attribute requisitions. Remove reason to remove "
+"requisition."
+msgstr ""
+
+#: templates/rr/attribute_list.html:9
+msgid ""
+"Attributes with green border are validated and attributes with red border "
+"still need to be validated."
+msgstr ""
+
+#: templates/rr/attribute_list.html:10
+msgid ""
+"Check the <a target=\"_blank\" href=\"https://wiki.helsinki.fi/pages/"
+"viewpage.action?pageId=226580829\">Wiki of the University of Helsinki</a> "
+"for attribute classifications."
+msgstr ""
+
+#: templates/rr/attribute_list.html:13
+msgid "Attribute list"
+msgstr ""
+
+#: templates/rr/attribute_list.html:18 templates/rr/certificate.html:56
+#: templates/rr/contact.html:49 templates/rr/endpoint.html:51
+#: templates/rr/serviceprovider_basic_form.html:15
+#: templates/rr/serviceprovider_ldap_create_form.html:24
+#: templates/rr/serviceprovider_ldap_technical_form.html:25
+#: templates/rr/serviceprovider_saml_create_form.html:30
+#: templates/rr/serviceprovider_technical_form.html:15
+#: templates/rr/testuser.html:78 templates/rr/testuser_attribute_data.html:29
+#: templates/rr/usergroup.html:42
+msgid "Save"
+msgstr ""
+
+#: templates/rr/attribute_list.html:26
+#: templates/rr/serviceprovider_basic_form.html:23
+#: templates/rr/serviceprovider_ldap_create_form.html:32
+#: templates/rr/serviceprovider_ldap_technical_form.html:33
+#: templates/rr/serviceprovider_saml_create_form.html:38
+#: templates/rr/serviceprovider_technical_form.html:23
+msgid "You have modified the form without saving it."
+msgstr ""
+
+#: templates/rr/certificate.html:8
+msgid ""
+"You need at least one certificate for signing SAML messages between SP and "
+"IdP. It's possible to use the same certificate for both signing and "
+"encryption."
+msgstr ""
+
+#: templates/rr/certificate.html:9
+msgid ""
+"It's highly recommended to use different certificate for signing and "
+"encrypting SAML messages than the certificate that is used for encrypting "
+"HTTPS traffic."
+msgstr ""
+
+#: templates/rr/certificate.html:10
+msgid ""
+"You may well use self-signed certificate for SAML messages. You may create a "
+"self-signed certificate using the following openssl command, using hostname "
+"sp1.test.helsinki.fi as an example."
+msgstr ""
+
+#: templates/rr/certificate.html:14
+msgid "List of certificates"
+msgstr ""
+
+#: templates/rr/certificate.html:21 templates/rr/email.html:32
+#: templates/rr/spadmin.html:79
+msgid "Subject"
+msgstr ""
+
+#: templates/rr/certificate.html:25 templates/rr/certificate_admin_list.html:16
+#: templates/rr/certificate_admin_list.html:42
+msgid "Signing"
+msgstr ""
+
+#: templates/rr/certificate.html:26 templates/rr/certificate_admin_list.html:17
+#: templates/rr/certificate_admin_list.html:43
+msgid "Encryption"
+msgstr ""
+
+#: templates/rr/certificate.html:27 templates/rr/contact.html:23
+#: templates/rr/endpoint.html:24 templates/rr/spadmin.html:22
+#: templates/rr/spadmin.html:50 templates/rr/testuser.html:23
+#: templates/rr/testuser.html:55 templates/rr/usergroup.html:19
+msgid "Remove"
+msgstr ""
+
+#: templates/rr/certificate.html:44 templates/rr/contact.html:38
+#: templates/rr/endpoint.html:39 templates/rr/spadmin.html:37
+#: templates/rr/spadmin.html:66 templates/rr/testuser.html:37
+#: templates/rr/testuser.html:69 templates/rr/usergroup.html:31
+msgid "Remove selected"
+msgstr ""
+
+#: templates/rr/certificate.html:47
+msgid "No certificates"
+msgstr ""
+
+#: templates/rr/certificate.html:51
+msgid "Add certificate"
+msgstr ""
+
+#: templates/rr/certificate.html:60
+msgid "You cannot have more than two certificates"
+msgstr ""
+
+#: templates/rr/certificate.html:67 templates/rr/contact.html:58
+#: templates/rr/endpoint.html:60 templates/rr/spadmin.html:101
+#: templates/rr/testuser.html:88 templates/rr/usergroup.html:51
+msgid "Confirm removal"
+msgstr ""
+
+#: templates/rr/certificate.html:68
+msgid "Do you want to remove selected certificates?"
+msgstr ""
+
+#: templates/rr/certificate.html:71 templates/rr/contact.html:62
+#: templates/rr/endpoint.html:64 templates/rr/spadmin.html:105
+#: templates/rr/testuser.html:92 templates/rr/usergroup.html:55
+msgid "Confirm"
+msgstr ""
+
+#: templates/rr/certificate.html:72 templates/rr/contact.html:63
+#: templates/rr/endpoint.html:65 templates/rr/spadmin.html:106
+#: templates/rr/testuser.html:93 templates/rr/usergroup.html:56
+msgid "Cancel"
+msgstr ""
+
+#: templates/rr/certificate_admin_list.html:6
+msgid "Certificate administration"
+msgstr ""
+
+#: templates/rr/certificate_admin_list.html:8
+msgid "Expired certificates"
+msgstr ""
+
+#: templates/rr/certificate_admin_list.html:34
+msgid "Weak certificates"
+msgstr ""
+
+#: templates/rr/contact.html:8
+msgid ""
+"You need to specify at least the technical contact for a production use."
+msgstr ""
+
+#: templates/rr/contact.html:9
+msgid ""
+"It's recommend that you use service addresses, not personal addresses. These "
+"contacts are used if the IdP administrators have to contact you about the SP "
+"or some client request has to be forwarded to you."
+msgstr ""
+
+#: templates/rr/contact.html:12
+msgid "List of contacts"
+msgstr ""
+
+#: templates/rr/contact.html:19 templates/rr/endpoint.html:20
+#: templates/rr/serviceprovider_detail.html:206
+#: templates/rr/serviceprovider_detail.html:229
+msgid "Type"
+msgstr ""
+
+#: templates/rr/contact.html:41
+msgid "No contacts"
+msgstr ""
+
+#: templates/rr/contact.html:44
+msgid "Add contact"
+msgstr ""
+
+#: templates/rr/contact.html:59
+msgid "Do you want to remove selected contacts?"
+msgstr ""
+
+#: templates/rr/email.html:8
+msgid "Emails have been sent."
+msgstr ""
+
+#: templates/rr/email.html:10
+msgid "Sending failed to following addresses:"
+msgstr ""
+
+#: templates/rr/email.html:27
+msgid "List emails / Show message"
+msgstr ""
+
+#: templates/rr/email.html:27
+msgid "Send email"
+msgstr ""
+
+#: templates/rr/email.html:36 templates/rr/metadata_management.html:21
+msgid "Message"
+msgstr ""
+
+#: templates/rr/email.html:40
+msgid "Email addresses"
+msgstr ""
+
+#: templates/rr/endpoint.html:6
+msgid "Endpoints"
+msgstr ""
+
+#: templates/rr/endpoint.html:8
+msgid ""
+"Endpoints are communication addresses to the SP. Any request sent to the IdP "
+"by the SP includes a return address. That address must be in this list or "
+"the request results in error."
+msgstr ""
+
+#: templates/rr/endpoint.html:9
+msgid ""
+"In most cases you only have to specify AssertionConsumerService with HTTP-"
+"POST binding."
+msgstr ""
+
+#: templates/rr/endpoint.html:10
+msgid ""
+"If the service supports Single Logout Service, you should also specify "
+"endpoint for that."
+msgstr ""
+
+#: templates/rr/endpoint.html:13
+msgid "List of endpoints"
+msgstr ""
+
+#: templates/rr/endpoint.html:21 templates/rr/serviceprovider_detail.html:230
+msgid "Binding"
+msgstr ""
+
+#: templates/rr/endpoint.html:22 templates/rr/serviceprovider_detail.html:231
+msgid "URL"
+msgstr ""
+
+#: templates/rr/endpoint.html:23 templates/rr/serviceprovider_detail.html:232
+msgid "Index"
+msgstr ""
+
+#: templates/rr/endpoint.html:42
+msgid "No endpoints"
+msgstr ""
+
+#: templates/rr/endpoint.html:46
+msgid "Add endpoint"
+msgstr ""
+
+#: templates/rr/endpoint.html:61
+msgid "Do you want to remove selected endpoints?"
+msgstr ""
+
+#: templates/rr/metadata.html:5
+msgid "Metadata"
+msgstr ""
+
+#: templates/rr/metadata.html:8
+msgid "Displaying validated metadata. This is used for production IdP."
+msgstr ""
+
+#: templates/rr/metadata.html:10
+msgid "Show unvalidated"
+msgstr ""
+
+#: templates/rr/metadata.html:13
+msgid "Displaying unvalidated metadata. This is used for test IdP."
+msgstr ""
+
+#: templates/rr/metadata.html:15
+msgid "Show validated"
+msgstr ""
+
+#: templates/rr/metadata.html:18
+msgid "Could not find metadata"
+msgstr ""
+
+#: templates/rr/metadata_import.html:6
+msgid "Metadata import"
+msgstr ""
+
+#: templates/rr/metadata_import.html:10
+msgid "Service provider imported with following notifications"
+msgstr ""
+
+#: templates/rr/metadata_import.html:18
+msgid "Service provider imported succesfully"
+msgstr ""
+
+#: templates/rr/metadata_import.html:20
+msgid "Continue to summary view"
+msgstr ""
+
+#: templates/rr/metadata_import.html:35
+msgid "Import"
+msgstr ""
+
+#: templates/rr/metadata_management.html:5
+msgid "Metadata management"
+msgstr ""
+
+#: templates/rr/metadata_management.html:7
+msgid "You may commit changes to metadata here."
+msgstr ""
+
+#: templates/rr/metadata_management.html:8
+msgid "Using production SPs with validated data."
+msgstr ""
+
+#: templates/rr/metadata_management.html:16
+msgid "Previous commits"
+msgstr ""
+
+#: templates/rr/metadata_management.html:20
+msgid "Time"
+msgstr ""
+
+#: templates/rr/metadata_management.html:36
+msgid "Commit changes"
+msgstr ""
+
+#: templates/rr/metadata_management.html:41
+msgid "Export"
+msgstr ""
+
+#: templates/rr/metadata_management.html:46
+msgid "Changes to previous commit"
+msgstr ""
+
+#: templates/rr/metadata_management.html:52
+msgid "There are no uncommitted changes."
+msgstr ""
+
+#: templates/rr/serviceprovider_basic_form.html:6
+#: templates/rr/serviceprovider_detail.html:59
+msgid "Basic information"
+msgstr ""
+
+#: templates/rr/serviceprovider_basic_form.html:8
+msgid ""
+"Basic information for your service provider. Necessary information for "
+"production use are marked."
+msgstr ""
+
+#: templates/rr/serviceprovider_confirm_delete.html:6
+msgid "Service provider removal"
+msgstr ""
+
+#: templates/rr/serviceprovider_confirm_delete.html:8
+msgid "Please confirm the removal of this service provider:"
+msgstr ""
+
+#: templates/rr/serviceprovider_detail.html:7
+msgid "Details"
+msgstr ""
+
+#: templates/rr/serviceprovider_detail.html:11
+msgid "Colors legend:"
+msgstr ""
+
+#: templates/rr/serviceprovider_detail.html:12
+msgid "Modified since last validation"
+msgstr ""
+
+#: templates/rr/serviceprovider_detail.html:13
+msgid "Removed since last validation"
+msgstr ""
+
+#: templates/rr/serviceprovider_detail.html:21
+msgid ""
+"This service provider is currently not published to the production or the "
+"test IdPs. You may publish this SP in the Technical Attributes page."
+msgstr ""
+
+#: templates/rr/serviceprovider_detail.html:22
+msgid ""
+"You may also remove this SP from the registry by using the link at the "
+"bottom of this page."
+msgstr ""
+
+#: templates/rr/serviceprovider_detail.html:28
+msgid "Missing data"
+msgstr ""
+
+#: templates/rr/serviceprovider_detail.html:30
+msgid ""
+"This service is marked for the production use but is missing following data:"
+msgstr ""
+
+#: templates/rr/serviceprovider_detail.html:39
+msgid "Waiting for validation"
+msgstr ""
+
+#: templates/rr/serviceprovider_detail.html:40
+msgid "There are changes waiting for validation by the IdP administrators."
+msgstr ""
+
+#: templates/rr/serviceprovider_detail.html:41
+msgid "You will receive an email when the changes are validated."
+msgstr ""
+
+#: templates/rr/serviceprovider_detail.html:42
+msgid ""
+"NB. only production systems are validated. Test servers are updated "
+"automatically every 15 minutes, using unvalidated data."
+msgstr ""
+
+#: templates/rr/serviceprovider_detail.html:47
+#: templates/rr/serviceprovider_detail.html:53
+msgid "Validate changes"
+msgstr ""
+
+#: templates/rr/serviceprovider_detail.html:48
+msgid ""
+"This object has changed. Click the button to validate all changes listed in "
+"this page."
+msgstr ""
+
+#: templates/rr/serviceprovider_detail.html:65
+#: templates/rr/serviceprovider_detail.html:93
+#: templates/rr/serviceprovider_detail.html:121
+msgid "Validated value"
+msgstr ""
+
+#: templates/rr/serviceprovider_detail.html:87
+#: templates/rr/serviceprovider_detail.html:115
+msgid "Technical attributes"
+msgstr ""
+
+#: templates/rr/serviceprovider_detail.html:143
+msgid "Registry administrators"
+msgstr ""
+
+#: templates/rr/serviceprovider_detail.html:147
+#: templates/rr/serviceprovider_list.html:18
+#: templates/rr/serviceprovider_list.html:57 templates/rr/usergroup.html:18
+msgid "Name"
+msgstr ""
+
+#: templates/rr/serviceprovider_detail.html:148
+#: templates/rr/serviceprovider_detail.html:209
+msgid "Email"
+msgstr ""
+
+#: templates/rr/serviceprovider_detail.html:162
+msgid "Attribute requisitions"
+msgstr ""
+
+#: templates/rr/serviceprovider_detail.html:225
+msgid "SAML endpoints"
+msgstr ""
+
+#: templates/rr/serviceprovider_detail.html:248
+msgid "LDAP user groups"
+msgstr ""
+
+#: templates/rr/serviceprovider_detail.html:252
+msgid "name"
+msgstr ""
+
+#: templates/rr/serviceprovider_detail.html:265
+msgid "Removing this service provider"
+msgstr ""
+
+#: templates/rr/serviceprovider_detail.html:266
+msgid "Click this link to remove this service provider"
+msgstr ""
+
+#: templates/rr/serviceprovider_ldap_create_form.html:6
+#: templates/rr/serviceprovider_saml_create_form.html:6
+msgid "Adding a new service provider"
+msgstr ""
+
+#: templates/rr/serviceprovider_ldap_create_form.html:8
+msgid "This form is used to add new LDAP connection request."
+msgstr ""
+
+#: templates/rr/serviceprovider_ldap_create_form.html:9
+msgid "More information about registering services (external page in Finnish)."
+msgstr ""
+
+#: templates/rr/serviceprovider_ldap_create_form.html:10
+msgid ""
+"Required attributes for the production use. Some of the attributes are "
+"defined later in different forms."
+msgstr ""
+
+#: templates/rr/serviceprovider_ldap_create_form.html:12
+#: templates/rr/serviceprovider_saml_create_form.html:13
+#: views/serviceprovider.py:133
+msgid "Service name in English or in Finnish"
+msgstr ""
+
+#: templates/rr/serviceprovider_ldap_create_form.html:13
+#: templates/rr/serviceprovider_saml_create_form.html:14
+#: views/serviceprovider.py:137
+msgid "Service description in English or in Finnish"
+msgstr ""
+
+#: templates/rr/serviceprovider_ldap_create_form.html:14
+#: templates/rr/serviceprovider_saml_create_form.html:15
+#: views/serviceprovider.py:141
+msgid "Privacy policy URL in English or in Finnish"
+msgstr ""
+
+#: templates/rr/serviceprovider_ldap_create_form.html:15
+msgid "Server Names"
+msgstr ""
+
+#: templates/rr/serviceprovider_ldap_create_form.html:16
+#: templates/rr/serviceprovider_saml_create_form.html:21
+msgid "Technical and support contacts"
+msgstr ""
+
+#: templates/rr/serviceprovider_ldap_technical_form.html:6
+#: templates/rr/serviceprovider_technical_form.html:6
+msgid "Technical information"
+msgstr ""
+
+#: templates/rr/serviceprovider_ldap_technical_form.html:8
+msgid "Techical attributes for your service provider."
+msgstr ""
+
+#: templates/rr/serviceprovider_list.html:8
+msgid ""
+"This list includes all service providers you currently have administration "
+"access."
+msgstr ""
+
+#: templates/rr/serviceprovider_list.html:11
+msgid "SAML Providers"
+msgstr ""
+
+#: templates/rr/serviceprovider_list.html:12
+msgid "Add a new service provider"
+msgstr ""
+
+#: templates/rr/serviceprovider_list.html:17
+#: templates/rr/serviceprovider_list.html:56
+#: templates/rr/serviceprovider_sign_encrypt_list.html:12
+msgid "entityID"
+msgstr ""
+
+#: templates/rr/serviceprovider_list.html:19
+msgid "Publish to production IdP (validated status)"
+msgstr ""
+
+#: templates/rr/serviceprovider_list.html:20
+msgid "Publish to test IdP"
+msgstr ""
+
+#: templates/rr/serviceprovider_list.html:21
+#: templates/rr/serviceprovider_list.html:59
+msgid "OK / Modified, modified are waiting for validation"
+msgstr ""
+
+#: templates/rr/serviceprovider_list.html:21
+#: templates/rr/serviceprovider_list.html:59
+msgid "Status"
+msgstr ""
+
+#: templates/rr/serviceprovider_list.html:22
+#: templates/rr/serviceprovider_list.html:60
+msgid "Number of admins (invites)"
+msgstr ""
+
+#: templates/rr/serviceprovider_list.html:22
+#: templates/rr/serviceprovider_list.html:60
+msgid "A/I"
+msgstr ""
+
+#: templates/rr/serviceprovider_list.html:34
+#: templates/rr/serviceprovider_list.html:71
+msgid "OK "
+msgstr ""
+
+#: templates/rr/serviceprovider_list.html:34
+#: templates/rr/serviceprovider_list.html:71
+msgid "Modified "
+msgstr ""
+
+#: templates/rr/serviceprovider_list.html:39
+#: templates/rr/serviceprovider_list.html:76
+#: templates/rr/serviceprovider_sign_encrypt_list.html:34
+msgid "You do not have access to any service providers."
+msgstr ""
+
+#: templates/rr/serviceprovider_list.html:50
+msgid "LDAP Providers"
+msgstr ""
+
+#: templates/rr/serviceprovider_list.html:51
+msgid "Add a new LDAP connection"
+msgstr ""
+
+#: templates/rr/serviceprovider_list.html:58
+msgid "Publish to production"
+msgstr ""
+
+#: templates/rr/serviceprovider_saml_create_form.html:8
+msgid ""
+"This form is used to add a new service to the University of Helsinki's "
+"single sign on system."
+msgstr ""
+
+#: templates/rr/serviceprovider_saml_create_form.html:9
+msgid ""
+"More information about configuring service providers can be found from <a "
+"href='https://wiki.helsinki.fi/display/IAMasioita/Ohjeet"
+"+Shibbolointiin'>https://wiki.helsinki.fi/display/IAMasioita/Ohjeet"
+"+Shibbolointiin</a> (in Finnish)"
+msgstr ""
+
+#: templates/rr/serviceprovider_saml_create_form.html:10
+msgid "Required attributes for the production SPs."
+msgstr ""
+
+#: templates/rr/serviceprovider_saml_create_form.html:17
+msgid "Some of the attributes are defined later in different forms."
+msgstr ""
+
+#: templates/rr/serviceprovider_saml_create_form.html:20
+#: views/serviceprovider.py:159
+msgid "AssertionConsumerService endpoint"
+msgstr ""
+
+#: templates/rr/serviceprovider_saml_create_form.html:23
+msgid "Add by importing service provider metadata"
+msgstr ""
+
+#: templates/rr/serviceprovider_sign_encrypt_list.html:5
+msgid "Service Provider Signing and Encryption"
+msgstr ""
+
+#: templates/rr/serviceprovider_sign_encrypt_list.html:7
+msgid ""
+"This list includes all service providers which do not have default signing "
+"and encryption attributes."
+msgstr ""
+
+#: templates/rr/serviceprovider_sign_encrypt_list.html:13
+msgid "Sign assertions"
+msgstr ""
+
+#: templates/rr/serviceprovider_sign_encrypt_list.html:14
+msgid "Sign requests"
+msgstr ""
+
+#: templates/rr/serviceprovider_sign_encrypt_list.html:15
+msgid "Sign responses"
+msgstr ""
+
+#: templates/rr/serviceprovider_sign_encrypt_list.html:16
+msgid "Encrypt assertions"
+msgstr ""
+
+#: templates/rr/serviceprovider_technical_form.html:8
+msgid ""
+"Techical attributes for your service provider. Necessary information for the "
+"production use are marked."
+msgstr ""
+
+#: templates/rr/spadmin.html:8
+msgid ""
+"Users who can manage this service provider. You can send invites through "
+"email."
+msgstr ""
+
+#: templates/rr/spadmin.html:9
+msgid ""
+"Users without a University of Helsinki login account have to requisition a "
+"local account from IdP administrators."
+msgstr ""
+
+#: templates/rr/spadmin.html:12
+msgid "List of admins"
+msgstr ""
+
+#: templates/rr/spadmin.html:39
+msgid "No admins"
+msgstr ""
+
+#: templates/rr/spadmin.html:41
+msgid "List of invites"
+msgstr ""
+
+#: templates/rr/spadmin.html:68
+msgid "No invites"
+msgstr ""
+
+#: templates/rr/spadmin.html:71
+msgid "Add admin"
+msgstr ""
+
+#: templates/rr/spadmin.html:78
+msgid "Example message"
+msgstr ""
+
+#: templates/rr/spadmin.html:83
+msgid "Body"
+msgstr ""
+
+#: templates/rr/spadmin.html:92
+msgid "Send invitation"
+msgstr ""
+
+#: templates/rr/spadmin.html:92
+msgid "Show message"
+msgstr ""
+
+#: templates/rr/spadmin.html:102
+msgid "Do you want to remove selected admins/invites?"
+msgstr ""
+
+#: templates/rr/testuser.html:8
+msgid ""
+"These users are added to the test IdP database and can be used to test this "
+"SP against the test IdP."
+msgstr ""
+
+#: templates/rr/testuser.html:10
+msgid "List of users"
+msgstr ""
+
+#: templates/rr/testuser.html:12
+msgid "Click the username to configure user attribute values."
+msgstr ""
+
+#: templates/rr/testuser.html:20 templates/rr/testuser.html:52
+#: templates/rr/testuser_attribute_data.html:9
+msgid "Username"
+msgstr ""
+
+#: templates/rr/testuser.html:40
+msgid "No users"
+msgstr ""
+
+#: templates/rr/testuser.html:43
+msgid "External test users available for this SP"
+msgstr ""
+
+#: templates/rr/testuser.html:45
+msgid ""
+"These users are keyed to some other SP but have also been activated for this "
+"SP by a user who has admin rights for both SPs."
+msgstr ""
+
+#: templates/rr/testuser.html:73
+msgid "Add a test user"
+msgstr ""
+
+#: templates/rr/testuser.html:89
+msgid "Do you want to remove selected test users?"
+msgstr ""
+
+#: templates/rr/testuser_attribute_data.html:5
+msgid "Test user"
+msgstr ""
+
+#: templates/rr/testuser_attribute_data.html:7
+msgid "Listing all attributes requested by this service provider."
+msgstr ""
+
+#: templates/rr/testuser_attribute_data.html:14
+msgid "Update"
+msgstr ""
+
+#: templates/rr/testuser_attribute_data.html:17
+msgid "Attribute values"
+msgstr ""
+
+#: templates/rr/testuser_attribute_data.html:19
+msgid ""
+"Multiple values can be separated by semicolon. If you don't find the "
+"attribute here, please check that the attribute is enabled for this SP in "
+"the Attributes page."
+msgstr ""
+
+#: templates/rr/testuser_attribute_data.html:23
+msgid "Reset name based data"
+msgstr ""
+
+#: templates/rr/testuser_attribute_data.html:23
+msgid "Reset other data with random values"
+msgstr ""
+
+#: templates/rr/usergroup.html:8
+msgid "User Groups published via LDAP."
+msgstr ""
+
+#: templates/rr/usergroup.html:11
+msgid "List of user groups"
+msgstr ""
+
+#: templates/rr/usergroup.html:34
+msgid "No user groups"
+msgstr ""
+
+#: templates/rr/usergroup.html:37
+msgid "Add user group"
+msgstr ""
+
+#: templates/rr/usergroup.html:52
+msgid "Do you want to remove selected user groups?"
+msgstr ""
+
+#: utils/ldap_oldcsv_parser.py:96 utils/metadata_parser.py:189
+msgid "Could not add attribute"
+msgstr ""
+
+#: utils/ldap_oldcsv_parser.py:290
+msgid "Name already exists, skipping"
+msgstr ""
+
+#: utils/ldap_oldcsv_parser.py:293
+msgid "Name already exists, overwriting"
+msgstr ""
+
+#: utils/ldap_oldcsv_parser.py:305
+msgid "Name does not exist, creating"
+msgstr ""
+
+#: utils/ldap_oldcsv_parser.py:311
+msgid "Could not find name"
+msgstr ""
+
+#: utils/metadata_parser.py:104
+msgid "Could not add certificate"
+msgstr ""
+
+#: utils/metadata_parser.py:119
+msgid "Unsupported nameid-format"
+msgstr ""
+
+#: utils/metadata_parser.py:137
+msgid "Unsupported binding, please contact IdP admins if you really need this"
+msgstr ""
+
+#: utils/metadata_parser.py:156
+msgid "Could not add"
+msgstr ""
+
+#: utils/metadata_parser.py:297
+msgid "EntityID already exists, skipping"
+msgstr ""
+
+#: utils/metadata_parser.py:300
+msgid "EntityID already exists, overwriting"
+msgstr ""
+
+#: utils/metadata_parser.py:307
+msgid "EntityID does not exist, creating"
+msgstr ""
+
+#: views/attribute.py:48
+msgid "Service provider does not exist"
+msgstr ""
+
+#: views/attribute.py:133
+msgid "Attribute proviced does not exist"
+msgstr ""
+
+#: views/attribute_test_service.py:28
+msgid "Attribute test service has been disabled"
+msgstr ""
+
+#: views/email.py:113
+msgid "Email have been sent"
+msgstr ""
+
+#: views/login.py:32
+msgid ""
+"Redirection loop for authenticated user detected. Check that your "
+"LOGIN_REDIRECT_URL doesn't point to a login page."
+msgstr ""
+
+#: views/login.py:39
+msgid "Your user account has been deactivated."
+msgstr ""
+
+#: views/metadata.py:157
+msgid "Git repository appears to have an invalid format."
+msgstr ""
+
+#: views/metadata.py:160
+msgid "Repository path could not be accessed."
+msgstr ""
+
+#: views/metadata.py:163 views/metadata.py:179
+msgid ""
+"Execution of git command failed. Might want to try git command locally from "
+"the command line and check that it works."
+msgstr ""
+
+#: views/metadata.py:169
+msgid "Git repository has no origin."
+msgstr ""
+
+#: views/metadata.py:175
+msgid "Remote repository not matching local, please fix manually."
+msgstr ""
+
+#: views/metadata.py:195
+msgid "Pushing to remote did not work, please fix manually."
+msgstr ""
+
+#: views/metadata.py:197
+msgid ""
+"Execution of git command failed. Might want to try git command locally  from "
+"the command line and check that it works."
+msgstr ""
+
+#: views/metadata.py:203
+msgid "Metadata file has changed, please try again."
+msgstr ""
+
+#: views/serviceprovider.py:116
+msgid "You should not be here."
+msgstr ""
+
+#: views/serviceprovider.py:149
+msgid "Technical contact"
+msgstr ""
+
+#: views/spadmin.py:79
+msgid ""
+"Template is missing activation link. Please include {{ activation_link }} to "
+"message."
+msgstr ""
+
+#: views/spadmin.py:143
+msgid "Could not send email."
+msgstr ""
+
+#: views/spadmin.py:148
+msgid "Invalid header found, could not send email."
+msgstr ""
+
+#: views/spadmin.py:200
+msgid "Activation key does not match"
+msgstr ""
+
+#: views/testuser.py:53
+msgid "Service provided does not exist"
+msgstr ""
+
+#: views/testuser.py:135 views/testuser.py:139
+msgid "User provided does not exist"
+msgstr ""

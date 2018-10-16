@@ -1,5 +1,5 @@
 from django.forms import Form, EmailField, ModelChoiceField
-from django.utils.translation import ugettext as _
+from django.utils.translation import ugettext_lazy as _
 
 from rr.models.email import Template
 

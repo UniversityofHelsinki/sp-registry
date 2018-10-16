@@ -1,7 +1,7 @@
 from django.forms import ModelForm
 from rr.models.usergroup import UserGroup
 from django.core.validators import ValidationError
-from django.utils.translation import ugettext as _
+from django.utils.translation import ugettext_lazy as _
 
 
 class UserGroupForm(ModelForm):

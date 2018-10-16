@@ -2,7 +2,7 @@ from django.forms import CheckboxSelectMultiple, MultipleChoiceField
 from django.forms.fields import BooleanField
 from django.forms.forms import Form
 from django.forms.models import ModelChoiceField, ModelMultipleChoiceField
-from django.utils.translation import ugettext as _
+from django.utils.translation import ugettext_lazy as _
 
 from rr.models.email import Template
 from rr.models.serviceprovider import ServiceProvider

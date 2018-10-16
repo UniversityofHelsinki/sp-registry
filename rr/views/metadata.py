@@ -170,10 +170,15 @@ def metadata_management(request):
         return render(request, "error.html", {'error_message': error_message})
     diff = repo.git.diff('HEAD')
     log = last_commits(repo, 5)
-    if repo.commit().hexsha != origin.fetch()[0].commit.hexsha:
-        error = _("Remote repository not matching local, please fix manually.")
-        return render(request, "rr/metadata_management.html", {'log': log,
-                                                               'error': error})
+    try:
+        if repo.commit().hexsha != origin.fetch()[0].commit.hexsha:
+            error = _("Remote repository not matching local, please fix manually.")
+            return render(request, "rr/metadata_management.html", {'log': log,
+                                                                   'error': error})
+    except GitCommandError:
+        error_message = _("Execution of git command failed. Might want to try git command locally "
+                          "from the command line and check that it works.")
+        return render(request, "error.html", {'error_message': error_message})
     if request.method == "POST":
         form = MetadataCommitForm(request.POST)
         if form.is_valid() and diff:
@@ -183,10 +188,15 @@ def metadata_management(request):
             if form_hash == hashlib.md5(diff.encode('utf-8')).hexdigest():
                 repo.index.add([settings.METADATA_FILENAME])
                 repo.index.commit(commit_message)
-                origin.push()
-                log = last_commits(repo, 5)
-                if repo.commit().hexsha != origin.fetch()[0].commit.hexsha:
-                    error = _("Pushing to remote did not work, please fix manually.")
+                try:
+                    origin.push()
+                    log = last_commits(repo, 5)
+                    if repo.commit().hexsha != origin.fetch()[0].commit.hexsha:
+                        error = _("Pushing to remote did not work, please fix manually.")
+                except GitCommandError:
+                    error_message = _("Execution of git command failed. Might want to try git "
+                                      "command locally  from the command line and check that it "
+                                      "works.")
                 return render(request, "rr/metadata_management.html", {'log': log,
                                                                        'error': error})
             else:

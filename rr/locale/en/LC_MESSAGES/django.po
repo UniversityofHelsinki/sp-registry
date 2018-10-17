@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-10-16 09:47+0300\n"
+"POT-Creation-Date: 2018-10-17 12:20+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -122,13 +122,13 @@ msgid "Could not find entityID"
 msgstr ""
 
 #: forms/metadata.py:47 forms/serviceprovider.py:129
-#: forms/serviceprovider.py:252
+#: forms/serviceprovider.py:263
 msgid ""
 "Entity Id should be URI, please contact IdP admins if this is not possible."
 msgstr ""
 
 #: forms/metadata.py:50 forms/serviceprovider.py:133
-#: forms/serviceprovider.py:256
+#: forms/serviceprovider.py:267
 msgid "Entity Id already exists"
 msgstr ""
 
@@ -140,72 +140,72 @@ msgstr ""
 msgid "Organization name, only changeable by the registry admins."
 msgstr ""
 
-#: forms/serviceprovider.py:27 forms/serviceprovider.py:209
+#: forms/serviceprovider.py:27 forms/serviceprovider.py:220
 msgid ""
 "Short (max 70 characters) and descriptive name for the service in Finnish."
 "<div class=\"text-danger\">Required for both production and test use.</div>"
 msgstr ""
 
-#: forms/serviceprovider.py:30 forms/serviceprovider.py:212
+#: forms/serviceprovider.py:30 forms/serviceprovider.py:223
 msgid ""
 "Short (max 70 characters) and descriptive name for the service in English."
 "<div class=\"text-danger\">Required for both production and test use.</div>"
 msgstr ""
 
-#: forms/serviceprovider.py:33 forms/serviceprovider.py:215
-#: forms/serviceprovider.py:274
+#: forms/serviceprovider.py:33 forms/serviceprovider.py:226
+#: forms/serviceprovider.py:288
 msgid ""
 "Short (max 70 characters) and descriptive name for the service in Swedish."
 msgstr ""
 
-#: forms/serviceprovider.py:35 forms/serviceprovider.py:217
+#: forms/serviceprovider.py:35 forms/serviceprovider.py:228
 msgid ""
 "Short (max 140 characters) description of the service in Finnish. <div class="
 "\"text-danger\">Required for both production and test use.</div>"
 msgstr ""
 
-#: forms/serviceprovider.py:38 forms/serviceprovider.py:220
+#: forms/serviceprovider.py:38 forms/serviceprovider.py:231
 msgid ""
 "Short (max 140 characters) description of the service in English. <div class="
 "\"text-danger\">Required for both production and test use.</div>"
 msgstr ""
 
-#: forms/serviceprovider.py:41 forms/serviceprovider.py:223
-#: forms/serviceprovider.py:277
+#: forms/serviceprovider.py:41 forms/serviceprovider.py:234
+#: forms/serviceprovider.py:294
 msgid "Short (max 140 characters) description of the service in Swedish."
 msgstr ""
 
-#: forms/serviceprovider.py:43 forms/serviceprovider.py:225
+#: forms/serviceprovider.py:43
 msgid ""
 "Link to privacy policy in Finnish. Link must be publiclyaccessible. <div "
 "class=\"text-danger\">Required for production use if the service requests "
 "any personal information.</div>"
 msgstr ""
 
-#: forms/serviceprovider.py:46 forms/serviceprovider.py:228
+#: forms/serviceprovider.py:46 forms/serviceprovider.py:239
 msgid ""
 "Link to privacy policy in English. Link must be publicly accessible. <div "
 "class=\"text-danger\">Required for production use if the service requests "
 "any personal information.</div>"
 msgstr ""
 
-#: forms/serviceprovider.py:49 forms/serviceprovider.py:231
-#: forms/serviceprovider.py:280
+#: forms/serviceprovider.py:49 forms/serviceprovider.py:242
+#: forms/serviceprovider.py:301
 msgid "Link to privacy policy in Swedish. Link must be publicly accessible."
 msgstr ""
 
-#: forms/serviceprovider.py:51 forms/serviceprovider.py:233
-#: forms/serviceprovider.py:281
+#: forms/serviceprovider.py:51 forms/serviceprovider.py:244
+#: forms/serviceprovider.py:303
 msgid "Used for debugging and testing services."
 msgstr ""
 
-#: forms/serviceprovider.py:52 forms/serviceprovider.py:234
-#: forms/serviceprovider.py:282
+#: forms/serviceprovider.py:52 forms/serviceprovider.py:245
+#: forms/serviceprovider.py:304
 msgid "Link to external application portfolio."
 msgstr ""
 
-#: forms/serviceprovider.py:53 forms/serviceprovider.py:235
-#: forms/serviceprovider.py:283
+#: forms/serviceprovider.py:53 forms/serviceprovider.py:246
+#: forms/serviceprovider.py:305
 msgid "Additional notes about this service."
 msgstr ""
 
@@ -215,7 +215,7 @@ msgid ""
 "in summary to SP admins."
 msgstr ""
 
-#: forms/serviceprovider.py:80 forms/serviceprovider.py:206
+#: forms/serviceprovider.py:80 forms/serviceprovider.py:217
 msgid ""
 "Should be URI including scheme, hostname of your application and path e.g. "
 "https://test.helsinki.fi/sp. <div class=\"text-danger\">Required for both "
@@ -279,100 +279,109 @@ msgstr ""
 msgid "Does this SP automatically update IdP metadata at least once a day?"
 msgstr ""
 
-#: forms/serviceprovider.py:153
+#: forms/serviceprovider.py:154
 msgid ""
 "Full server names (not IPs), separated by space. User for access control."
 msgstr ""
 
-#: forms/serviceprovider.py:154
+#: forms/serviceprovider.py:156
 msgid "What is the target group (users) of this service?"
 msgstr ""
 
-#: forms/serviceprovider.py:155
+#: forms/serviceprovider.py:157
 msgid "Separate service account is used for LDAP queries (recommended way)."
 msgstr ""
 
-#: forms/serviceprovider.py:156
+#: forms/serviceprovider.py:159
 msgid "Email and phone number for delivering service account credentials."
 msgstr ""
 
-#: forms/serviceprovider.py:157
+#: forms/serviceprovider.py:161
 msgid "Service requires access to all LDAP groups."
 msgstr ""
 
-#: forms/serviceprovider.py:158
-msgid "Service stores user name and released attributes locally."
+#: forms/serviceprovider.py:162
+msgid ""
+"Service stores all users and released attributes locally. If you only save "
+"user data when user logs in, do not check this."
 msgstr ""
 
-#: forms/serviceprovider.py:159
+#: forms/serviceprovider.py:165
 msgid "Service stores user passwords locally."
 msgstr ""
 
-#: forms/serviceprovider.py:160
+#: forms/serviceprovider.py:166
 msgid ""
 "Why is this service storing user passwords locally and how? This is not "
 "generally a good idea."
 msgstr ""
 
-#: forms/serviceprovider.py:161
+#: forms/serviceprovider.py:169
 msgid "Service stores requested groups and their member lists locally."
 msgstr ""
 
-#: forms/serviceprovider.py:162
+#: forms/serviceprovider.py:171
 msgid "Publish this service to LDAP production servers."
 msgstr ""
 
-#: forms/serviceprovider.py:178 forms/serviceprovider.py:300
+#: forms/serviceprovider.py:188 forms/serviceprovider.py:323
 msgid "Invalid list of server names."
 msgstr ""
 
-#: forms/serviceprovider.py:271
+#: forms/serviceprovider.py:236
+msgid ""
+"Link to privacy policy in Finnish. Link must be publicly accessible. <div "
+"class=\"text-danger\">Required for production use if the service requests "
+"any personal information.</div>"
+msgstr ""
+
+#: forms/serviceprovider.py:282
 msgid ""
 "Full server names (not IPs), one per line. Used for access control. <div "
 "class=\"text-danger\">Required.</div>"
 msgstr ""
 
-#: forms/serviceprovider.py:272
+#: forms/serviceprovider.py:284
 msgid ""
 "Short (max 70 characters) and descriptive name for the service in Finnish. "
 "<div class=\"text-danger\">Required. </div>"
 msgstr ""
 
-#: forms/serviceprovider.py:273
+#: forms/serviceprovider.py:286
 msgid ""
 "Short (max 70 characters) and descriptive name for the service in English."
 msgstr ""
 
-#: forms/serviceprovider.py:275
+#: forms/serviceprovider.py:290
 msgid ""
 "Short (max 140 characters) description of the service in Finnish. <div class="
 "\"text-danger\">Required.</div>"
 msgstr ""
 
-#: forms/serviceprovider.py:276
+#: forms/serviceprovider.py:292
 msgid "Short (max 140 characters) description of the service in English."
 msgstr ""
 
-#: forms/serviceprovider.py:278
+#: forms/serviceprovider.py:296
 msgid ""
 "Link to privacy policy in Finnish. Link must be publicly accessible. <div "
 "class=\"text-danger\">Required if the service requests any personal "
 "information.</div>"
 msgstr ""
 
-#: forms/serviceprovider.py:279
+#: forms/serviceprovider.py:299
 msgid "Link to privacy policy in English. Link must be publicly accessible."
 msgstr ""
 
-#: forms/serviceprovider.py:309
+#: forms/serviceprovider.py:332
 msgid "Invalid Finnish name."
 msgstr ""
 
-#: forms/serviceprovider.py:317
+#: forms/serviceprovider.py:340
 msgid "Confirm closing"
 msgstr ""
 
-#: forms/serviceprovider.py:324
+#: forms/serviceprovider.py:347
 msgid "Do not send validation email to SP admins."
 msgstr ""
 
@@ -492,7 +501,7 @@ msgstr ""
 msgid "Key size"
 msgstr ""
 
-#: models/certificate.py:80 views/serviceprovider.py:154
+#: models/certificate.py:80 views/serviceprovider.py:157
 msgid "Certificate"
 msgstr ""
 
@@ -694,7 +703,7 @@ msgstr ""
 msgid "Service Login Page URL"
 msgstr ""
 
-#: models/serviceprovider.py:57 views/serviceprovider.py:145
+#: models/serviceprovider.py:57 views/serviceprovider.py:144
 msgid "Application portfolio URL"
 msgstr ""
 
@@ -1733,19 +1742,19 @@ msgstr ""
 
 #: templates/rr/serviceprovider_ldap_create_form.html:12
 #: templates/rr/serviceprovider_saml_create_form.html:13
-#: views/serviceprovider.py:133
+#: views/serviceprovider.py:136
 msgid "Service name in English or in Finnish"
 msgstr ""
 
 #: templates/rr/serviceprovider_ldap_create_form.html:13
 #: templates/rr/serviceprovider_saml_create_form.html:14
-#: views/serviceprovider.py:137
+#: views/serviceprovider.py:140
 msgid "Service description in English or in Finnish"
 msgstr ""
 
 #: templates/rr/serviceprovider_ldap_create_form.html:14
 #: templates/rr/serviceprovider_saml_create_form.html:15
-#: views/serviceprovider.py:141
+#: views/serviceprovider.py:153
 msgid "Privacy policy URL in English or in Finnish"
 msgstr ""
 
@@ -1866,7 +1875,7 @@ msgid "Some of the attributes are defined later in different forms."
 msgstr ""
 
 #: templates/rr/serviceprovider_saml_create_form.html:20
-#: views/serviceprovider.py:159
+#: views/serviceprovider.py:162
 msgid "AssertionConsumerService endpoint"
 msgstr ""
 
@@ -2098,11 +2107,23 @@ msgstr ""
 msgid "EntityID does not exist, creating"
 msgstr ""
 
-#: views/attribute.py:48
+#: views/attribute.py:49
 msgid "Service provider does not exist"
 msgstr ""
 
-#: views/attribute.py:133
+#: views/attribute.py:87
+msgid "Attributes added: "
+msgstr ""
+
+#: views/attribute.py:90
+msgid "Attributes modified: "
+msgstr ""
+
+#: views/attribute.py:93
+msgid "Attributes removed: "
+msgstr ""
+
+#: views/attribute.py:149
 msgid "Attribute proviced does not exist"
 msgstr ""
 
@@ -2110,8 +2131,36 @@ msgstr ""
 msgid "Attribute test service has been disabled"
 msgstr ""
 
+#: views/certificate.py:97
+msgid "Certificate added."
+msgstr ""
+
+#: views/certificate.py:100
+msgid "Could not add certificate."
+msgstr ""
+
+#: views/certificate.py:112
+msgid "Certificate removed: "
+msgstr ""
+
+#: views/contact.py:66
+msgid "Contact added."
+msgstr ""
+
+#: views/contact.py:78
+msgid "Contact removed."
+msgstr ""
+
 #: views/email.py:113
 msgid "Email have been sent"
+msgstr ""
+
+#: views/endpoint.py:68
+msgid "Endpoint added."
+msgstr ""
+
+#: views/endpoint.py:80
+msgid "Endpoint removed."
 msgstr ""
 
 #: views/login.py:32
@@ -2161,35 +2210,96 @@ msgid "Metadata file has changed, please try again."
 msgstr ""
 
 #: views/serviceprovider.py:116
+msgid "Changes validated."
+msgstr ""
+
+#: views/serviceprovider.py:119
 msgid "You should not be here."
 msgstr ""
 
-#: views/serviceprovider.py:149
+#: views/serviceprovider.py:148
 msgid "Technical contact"
 msgstr ""
 
-#: views/spadmin.py:79
+#: views/serviceprovider.py:298 views/serviceprovider.py:352
+#: views/serviceprovider.py:409
+msgid "Form successfully saved"
+msgstr ""
+
+#: views/serviceprovider.py:451
+msgid "Service deleted."
+msgstr ""
+
+#: views/spadmin.py:80
 msgid ""
 "Template is missing activation link. Please include {{ activation_link }} to "
 "message."
 msgstr ""
 
-#: views/spadmin.py:143
+#: views/spadmin.py:142
+msgid "Invite sent to "
+msgstr ""
+
+#: views/spadmin.py:146
 msgid "Could not send email."
 msgstr ""
 
-#: views/spadmin.py:148
+#: views/spadmin.py:151
 msgid "Invalid header found, could not send email."
 msgstr ""
 
-#: views/spadmin.py:200
+#: views/spadmin.py:163
+msgid "Invite removed for email "
+msgstr ""
+
+#: views/spadmin.py:172
+msgid "Admin removed: "
+msgstr ""
+
+#: views/spadmin.py:207
 msgid "Activation key does not match"
 msgstr ""
 
-#: views/testuser.py:53
+#: views/testuser.py:55
 msgid "Service provided does not exist"
 msgstr ""
 
-#: views/testuser.py:135 views/testuser.py:139
+#: views/testuser.py:78
+msgid "Test user added: "
+msgstr ""
+
+#: views/testuser.py:89
+msgid "Test user removed: "
+msgstr ""
+
+#: views/testuser.py:101
+msgid "External test user removed: "
+msgstr ""
+
+#: views/testuser.py:142 views/testuser.py:146
 msgid "User provided does not exist"
+msgstr ""
+
+#: views/testuser.py:166
+msgid "Test user attributes updated: "
+msgstr ""
+
+#: views/testuser.py:171
+msgid "Name based data reset for test user: "
+msgstr ""
+
+#: views/testuser.py:176
+msgid "User data reset for test user: "
+msgstr ""
+
+#: views/testuser.py:194
+msgid "User info updated: "
+msgstr ""
+
+#: views/usergroup.py:60
+msgid "User group added."
+msgstr ""
+
+#: views/usergroup.py:71
+msgid "User group removed."
 msgstr ""

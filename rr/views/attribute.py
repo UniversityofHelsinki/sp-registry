@@ -1,5 +1,6 @@
 import logging
 
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import PermissionDenied
 from django.http.response import Http404
@@ -49,6 +50,9 @@ def attribute_list(request, pk):
     if request.method == "POST":
         form = AttributeForm(request.POST, sp=sp, is_admin=request.user.is_superuser)
         if form.is_valid():
+            removed_attributes = []
+            added_attributes = []
+            modified_attributes = []
             for field in form:
                 data = form.cleaned_data.get(field.name)
                 sp_attribute = SPAttribute.objects.filter(sp=sp, attribute__friendlyname=field.name,
@@ -60,6 +64,7 @@ def attribute_list(request, pk):
                     logger.info("Attribute requisition for {attribute} removed from {sp} by {user}"
                                 .format(attribute=sp_attribute.attribute, sp=sp,
                                         user=request.user))
+                    removed_attributes.append(field.name)
                 elif data:
                     if not sp_attribute:
                         attribute = Attribute.objects.filter(friendlyname=field.name).first()
@@ -67,6 +72,7 @@ def attribute_list(request, pk):
                         sp.save_modified()
                         logger.info("Attribute {attribute} requested for {sp} by {user}"
                                     .format(attribute=attribute, sp=sp, user=request.user))
+                        added_attributes.append(field.name)
                     else:
                         if sp_attribute.reason != data:
                             sp_attribute.reason = data
@@ -75,6 +81,16 @@ def attribute_list(request, pk):
                             logger.info("Attribute {attribute} reason updated for {sp} by {user}"
                                         .format(attribute=sp_attribute.attribute, sp=sp,
                                                 user=request.user))
+                            modified_attributes.append(field.name)
+            if added_attributes:
+                messages.add_message(request, messages.INFO,
+                                     _('Attributes added: ') + ', '.join(added_attributes))
+            if modified_attributes:
+                messages.add_message(request, messages.INFO,
+                                     _('Attributes modified: ') + ', '.join(modified_attributes))
+            if removed_attributes:
+                messages.add_message(request, messages.INFO,
+                                     _('Attributes removed: ') + ', '.join(removed_attributes))
         form = AttributeForm(request.POST, sp=sp, is_admin=request.user.is_superuser)
     else:
         form = AttributeForm(sp=sp, is_admin=request.user.is_superuser)

@@ -1,11 +1,12 @@
 import hashlib
 import logging
 
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.http.response import Http404
 from django.shortcuts import render
 from django.utils import timezone
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import ugettext as _
 
 from rr.forms.testuser import TestUserForm, TestUserDataForm, TestUserUpdateForm
 from rr.utils.testuser_generator import generate_user_data
@@ -47,7 +48,8 @@ def testuser_list(request, pk):
         if request.user.is_superuser:
             sp = ServiceProvider.objects.get(pk=pk, end_at=None, service_type="saml")
         else:
-            sp = ServiceProvider.objects.get(pk=pk, admins=request.user, end_at=None, service_type="saml")
+            sp = ServiceProvider.objects.get(pk=pk, admins=request.user, end_at=None,
+                                             service_type="saml")
     except ServiceProvider.DoesNotExist:
         logger.debug("Tried to access unauthorized service provider")
         raise Http404(_("Service provided does not exist"))
@@ -73,6 +75,7 @@ def testuser_list(request, pk):
                             .format(username=username, sp=sp))
                 form = TestUserForm(sp=sp, admin=request.user)
                 generate_user_data(testuser, userdata, otherdata)
+                messages.add_message(request, messages.INFO, _('Test user added: ') + username)
         elif "remove_testuser" in request.POST:
             for key, value in request.POST.dict().items():
                 if value == "on":
@@ -82,6 +85,8 @@ def testuser_list(request, pk):
                         testuser.save()
                         logger.info("Test user {username} removed from {sp}"
                                     .format(username=testuser.username, sp=sp))
+                        messages.add_message(request, messages.INFO,
+                                             _('Test user removed: ') + testuser.username)
         elif "remove_testuser_external" in request.POST:
             for key, value in request.POST.dict().items():
                 if value == "on":
@@ -92,6 +97,8 @@ def testuser_list(request, pk):
                         testuser.valid_for.remove(sp)
                         logger.info("External test user {username} removed from {sp}"
                                     .format(username=testuser.username, sp=sp))
+                        messages.add_message(request, messages.INFO,
+                                             _('External test user removed: ') + testuser.username)
     testusers = TestUser.objects.filter(sp=sp, end_at=None)
     testusers_external = TestUser.objects.filter(valid_for=sp).exclude(sp=sp)
     return render(request, "rr/testuser.html", {'object_list': testusers,
@@ -155,12 +162,18 @@ def testuser_attribute_data(request, pk):
                             TestUserData.objects.create(user=testuser,
                                                         attribute=attribute,
                                                         value=value)
+                messages.add_message(request, messages.INFO,
+                                     _('Test user attributes updated: ') + testuser.username)
         if "reset_userdata" in request.POST:
             generate_user_data(testuser, userdata=True, otherdata=False)
             form = TestUserDataForm(user=testuser)
+            messages.add_message(request, messages.INFO,
+                                 _('Name based data reset for test user: ') + testuser.username)
         if "reset_otherdata" in request.POST:
             generate_user_data(testuser, userdata=False, otherdata=True)
             form = TestUserDataForm(user=testuser)
+            messages.add_message(request, messages.INFO,
+                                 _('User data reset for test user: ') + testuser.username)
         if "update_user" in request.POST:
             user_update_form = TestUserUpdateForm(request.POST, instance=testuser, sp=testuser.sp,
                                                   admin=request.user)
@@ -177,6 +190,8 @@ def testuser_attribute_data(request, pk):
                 testuser.valid_for.add(testuser.sp)
                 user_update_form = TestUserUpdateForm(instance=testuser, sp=testuser.sp,
                                                       admin=request.user)
+                messages.add_message(request, messages.INFO,
+                                     _('User info updated: ') + testuser.username)
     return render(request, "rr/testuser_attribute_data.html",
                   {'form': form,
                    'user_update_form': user_update_form,

@@ -141,8 +141,9 @@ class LdapTechnicalInformationForm(ModelForm):
 
     class Meta:
         model = ServiceProvider
-        fields = ['server_names', 'target_group', 'service_account', 'service_account_contact', 'can_access_all_ldap_groups',
-                  'local_storage_users', 'local_storage_passwords', 'local_storage_passwords_info', 'local_storage_groups', 'production']
+        fields = ['server_names', 'target_group', 'service_account', 'service_account_contact',
+                  'can_access_all_ldap_groups', 'local_storage_users', 'local_storage_passwords',
+                  'local_storage_passwords_info', 'local_storage_groups', 'production']
         widgets = {
           'service_account_contact': Textarea(attrs={'rows': 2}),
           'local_storage_passwords_info': Textarea(attrs={'rows': 5}),
@@ -150,15 +151,23 @@ class LdapTechnicalInformationForm(ModelForm):
           'local_storage_passwords': CheckboxInput(attrs={'class': 'hideCheck2'}),
         }
         help_texts = {
-            'server_names': _('Full server names (not IPs), separated by space. User for access control.'),
+            'server_names': _('Full server names (not IPs), separated by space. User for access '
+                              'control.'),
             'target_group': _('What is the target group (users) of this service?'),
-            'service_account': _('Separate service account is used for LDAP queries (recommended way).'),
-            'service_account_contact': _('Email and phone number for delivering service account credentials.'),
+            'service_account': _('Separate service account is used for LDAP queries (recommended '
+                                 'way).'),
+            'service_account_contact': _('Email and phone number for delivering service account '
+                                         'credentials.'),
             'can_access_all_ldap_groups': _('Service requires access to all LDAP groups.'),
-            'local_storage_users': _('Service stores user name and released attributes locally.'),
+            'local_storage_users': _('Service stores all users and released attributes locally. '
+                                     'If you only save user data when user logs in, do not check '
+                                     'this.'),
             'local_storage_passwords': _('Service stores user passwords locally.'),
-            'local_storage_passwords_info': _('Why is this service storing user passwords locally and how? This is not generally a good idea.'),
-            'local_storage_groups': _('Service stores requested groups and their member lists locally.'),
+            'local_storage_passwords_info': _('Why is this service storing user passwords '
+                                              'locally and how? This is not generally a good '
+                                              'idea.'),
+            'local_storage_groups': _('Service stores requested groups and their member lists '
+                                      'locally.'),
             'production': _('Publish this service to LDAP production servers.'),
         }
 
@@ -172,7 +181,8 @@ class LdapTechnicalInformationForm(ModelForm):
         """
         server_names = self.cleaned_data['server_names']
         server_names_list = server_names.splitlines()
-        pattern = re.compile("^(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\-]*[a-zA-Z0-9])\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9\-]*[A-Za-z0-9])$")
+        pattern = re.compile("^(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\-]*[a-zA-Z0-9])\.)*"
+                             "([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9\-]*[A-Za-z0-9])$")
         for server_name in server_names_list:
             if not pattern.match(server_name):
                 raise ValidationError(_("Invalid list of server names."))
@@ -189,7 +199,8 @@ class LdapTechnicalInformationForm(ModelForm):
                 self.add_error('service_account_contact', "Please give contact information.")
         if local_storage_passwords:
             if not local_storage_passwords_info:
-                self.add_error('local_storage_passwords_info', "Please give a reason for saving passwords.")
+                self.add_error('local_storage_passwords_info',
+                               "Please give a reason for saving passwords.")
 
 
 class SamlServiceProviderCreateForm(ModelForm):
@@ -264,20 +275,31 @@ class LdapServiceProviderCreateForm(ModelForm):
 
     class Meta:
         model = ServiceProvider
-        fields = ['server_names', 'name_fi', 'name_en', 'name_sv', 'description_fi', 'description_en', 'description_sv',
-                  'privacypolicy_fi', 'privacypolicy_en', 'privacypolicy_sv',
-                  'login_page_url', 'application_portfolio', 'notes']
+        fields = ['server_names', 'name_fi', 'name_en', 'name_sv', 'description_fi',
+                  'description_en', 'description_sv', 'privacypolicy_fi', 'privacypolicy_en',
+                  'privacypolicy_sv', 'login_page_url', 'application_portfolio', 'notes']
         help_texts = {
-            'server_names': _('Full server names (not IPs), one per line. Used for access control. <div class="text-danger">Required.</div>'),
-            'name_fi': _('Short (max 70 characters) and descriptive name for the service in Finnish. <div class="text-danger">Required. </div>'),
-            'name_en': _('Short (max 70 characters) and descriptive name for the service in English.'),
-            'name_sv': _('Short (max 70 characters) and descriptive name for the service in Swedish.'),
-            'description_fi': _('Short (max 140 characters) description of the service in Finnish. <div class="text-danger">Required.</div>'),
-            'description_en': _('Short (max 140 characters) description of the service in English.'),
-            'description_sv': _('Short (max 140 characters) description of the service in Swedish.'),
-            'privacypolicy_fi': _('Link to privacy policy in Finnish. Link must be publicly accessible. <div class="text-danger">Required if the service requests any personal information.</div>'),
-            'privacypolicy_en': _('Link to privacy policy in English. Link must be publicly accessible.'),
-            'privacypolicy_sv': _('Link to privacy policy in Swedish. Link must be publicly accessible.'),
+            'server_names': _('Full server names (not IPs), one per line. Used for access '
+                              'control. <div class="text-danger">Required.</div>'),
+            'name_fi': _('Short (max 70 characters) and descriptive name for the service in '
+                         'Finnish. <div class="text-danger">Required. </div>'),
+            'name_en': _('Short (max 70 characters) and descriptive name for the service in '
+                         'English.'),
+            'name_sv': _('Short (max 70 characters) and descriptive name for the service in '
+                         'Swedish.'),
+            'description_fi': _('Short (max 140 characters) description of the service in '
+                                'Finnish. <div class="text-danger">Required.</div>'),
+            'description_en': _('Short (max 140 characters) description of the service in '
+                                'English.'),
+            'description_sv': _('Short (max 140 characters) description of the service in '
+                                'Swedish.'),
+            'privacypolicy_fi': _('Link to privacy policy in Finnish. Link must be publicly '
+                                  'accessible. <div class="text-danger">Required if the '
+                                  'service requests any personal information.</div>'),
+            'privacypolicy_en': _('Link to privacy policy in English. Link must be publicly '
+                                  'accessible.'),
+            'privacypolicy_sv': _('Link to privacy policy in Swedish. Link must be publicly '
+                                  'accessible.'),
             'login_page_url': _('Used for debugging and testing services.'),
             'application_portfolio': _('Link to external application portfolio.'),
             'notes': _('Additional notes about this service.'),
@@ -294,7 +316,8 @@ class LdapServiceProviderCreateForm(ModelForm):
         """
         server_names = self.cleaned_data['server_names']
         server_names_list = server_names.splitlines()
-        pattern = re.compile("^(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\-]*[a-zA-Z0-9])\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9\-]*[A-Za-z0-9])$")
+        pattern = re.compile("^(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\-]*[a-zA-Z0-9])\.)*"
+                             "([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9\-]*[A-Za-z0-9])$")
         for server_name in server_names_list:
             if not pattern.match(server_name):
                 raise ValidationError(_("Invalid list of server names."))

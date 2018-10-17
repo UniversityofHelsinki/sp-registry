@@ -221,6 +221,13 @@
       </nav>
 {% endif %}
       <main class="col-lg-10 offset-lg-2 col-xl-8 offset-xl-2 pt-3">
+{% if messages %}
+<div class="alert alert-info" role="alert">
+    {% for message in messages %}
+    {{ message }}<br>
+    {% endfor %}
+</div>
+{% endif %}
 	{% block content %}
 	{% endblock %}
       </main>

@@ -3,6 +3,7 @@ import logging
 from smtplib import SMTPException
 
 from django.conf import settings
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.core.mail import send_mail
@@ -137,6 +138,8 @@ def admin_list(request, pk):
                         form = SPAdminForm(superuser=request.user.is_superuser)
                         subject = None
                         message = None
+                        messages.add_message(request, messages.INFO,
+                                             _('Invite sent to ') + email)
                     except SMTPException:
                         logger.warning("Could not send invite to {email}"
                                        .format(email=email))
@@ -156,6 +159,8 @@ def admin_list(request, pk):
                     if invite.sp == sp:
                         logger.info("Invite for {email} to {sp} deleted by {user}"
                                     .format(email=invite.email, sp=sp, user=request.user))
+                        messages.add_message(request, messages.INFO,
+                                             _('Invite removed for email ') + invite.email)
                         invite.delete()
         elif "remove_admin" in request.POST:
             for key, value in request.POST.dict().items():
@@ -163,6 +168,8 @@ def admin_list(request, pk):
                     admin = User.objects.get(pk=key)
                     logger.info("Admin {admin} removed from {sp} by {user}"
                                 .format(admin=admin, sp=sp, user=request.user))
+                    messages.add_message(request, messages.INFO,
+                                         _('Admin removed: ') + admin.username)
                     sp.admins.remove(admin)
                     try:
                         if request.user.is_superuser:

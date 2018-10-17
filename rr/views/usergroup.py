@@ -1,11 +1,15 @@
+import logging
+
+from django.contrib import messages
+from django.contrib.auth.decorators import login_required
+from django.http.response import Http404
+from django.shortcuts import render
+from django.utils import timezone
+from django.utils.translation import ugettext as _
+
+from rr.forms.usergroup import UserGroupForm
 from rr.models.serviceprovider import ServiceProvider
 from rr.models.usergroup import UserGroup
-from rr.forms.usergroup import UserGroupForm
-from django.shortcuts import render
-from django.http.response import Http404
-from django.contrib.auth.decorators import login_required
-from django.utils import timezone
-import logging
 
 logger = logging.getLogger(__name__)
 
@@ -38,7 +42,8 @@ def usergroup_list(request, pk):
         if request.user.is_superuser:
             sp = ServiceProvider.objects.get(pk=pk, end_at=None, service_type="ldap")
         else:
-            sp = ServiceProvider.objects.get(pk=pk, admins=request.user, end_at=None, service_type="ldap")
+            sp = ServiceProvider.objects.get(pk=pk, admins=request.user, end_at=None,
+                                             service_type="ldap")
     except ServiceProvider.DoesNotExist:
         logger.debug("Tried to access unauthorized service provider")
         raise Http404("Service provider does not exist")
@@ -52,6 +57,7 @@ def usergroup_list(request, pk):
                 sp.save_modified()
                 logger.info("User group added for {sp} by {user}".format(sp=sp, user=request.user))
                 form = UserGroupForm(sp=sp)
+                messages.add_message(request, messages.INFO, _('User group added.'))
         elif "remove_usergroup" in request.POST:
             for key, value in request.POST.dict().items():
                 if value == "on":
@@ -60,7 +66,9 @@ def usergroup_list(request, pk):
                         user_group.end_at = timezone.now()
                         user_group.save()
                         sp.save_modified()
-                        logger.info("User group removed from {sp} by {user}".format(sp=sp, user=request.user))
+                        logger.info("User group removed from {sp} by {user}".format(
+                            sp=sp, user=request.user))
+                        messages.add_message(request, messages.INFO, _('User group removed.'))
     contacts = UserGroup.objects.filter(sp=sp, end_at=None).order_by('name')
     return render(request, "rr/usergroup.html", {'object_list': contacts,
                                                  'form': form,

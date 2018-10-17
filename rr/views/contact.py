@@ -1,9 +1,11 @@
 import logging
 
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.http.response import Http404
 from django.shortcuts import render
 from django.utils import timezone
+from django.utils.translation import ugettext as _
 
 from rr.forms.contact import ContactForm
 from rr.models.contact import Contact
@@ -61,6 +63,7 @@ def contact_list(request, pk):
                 sp.save_modified()
                 logger.info("Contact added for {sp} by {user}"
                             .format(sp=sp, user=request.user))
+                messages.add_message(request, messages.INFO, _('Contact added.'))
                 form = ContactForm(sp=sp)
         elif "remove_contact" in request.POST:
             for key, value in request.POST.dict().items():
@@ -72,6 +75,7 @@ def contact_list(request, pk):
                         sp.save_modified()
                         logger.info("Contact removed from {sp} by {user}"
                                     .format(sp=sp, user=request.user))
+                        messages.add_message(request, messages.INFO, _('Contact removed.'))
     contacts = Contact.objects.filter(sp=sp, end_at=None)
     return render(request, "rr/contact.html", {'object_list': contacts,
                                                'form': form,

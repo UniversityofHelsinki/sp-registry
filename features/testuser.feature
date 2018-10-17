@@ -24,7 +24,7 @@ Scenario: Creating test users
 	Then the result page will include text "External test users"
 	And the result page will include text "shholmes"
 	When removing external test user
-	Then the result page will not include text "shholmes"
+	Then the result page will include text "External test user removed: shholmes"
 	When filling test user form
     Then the result page will include text "Username already exists"
     And the result page will not include text "shholmes"

@@ -1,6 +1,8 @@
 import logging
 
 from django.conf import settings
+from django.contrib import messages
+from django.contrib.messages.views import SuccessMessageMixin
 from django.core.exceptions import PermissionDenied
 from django.db.models import Q
 from django.http.response import HttpResponseRedirect
@@ -71,7 +73,7 @@ class ServiceProviderList(ListView):
 
 class BasicInformationView(DetailView):
     """
-    Displays details for an invidual :model:`rr.ServiceProvider`.
+    Displays details for an individual :model:`rr.ServiceProvider`.
 
     **Context**
 
@@ -111,6 +113,7 @@ class BasicInformationView(DetailView):
                 if not no_email:
                     validation_notification(sp)
                 logger.info("SP {sp} validated by {user}".format(sp=sp, user=self.request.user))
+                messages.add_message(request, messages.INFO, _('Changes validated.'))
             return HttpResponseRedirect(reverse('summary-view', args=(sp.pk,)))
         else:
             error_message = _("You should not be here.")
@@ -239,7 +242,7 @@ class SamlServiceProviderCreate(CreateView):
         form.instance.service_type = "saml"
         super().form_valid(form)
         self.object.admins.add(self.request.user)
-        logger.info("SP %s created by %s", self.object, self.request.user)
+        logger.info("SAML service %s created by %s", self.object, self.request.user)
         return HttpResponseRedirect(reverse('summary-view', args=(self.object.pk,)))
 
 
@@ -272,11 +275,11 @@ class LdapServiceProviderCreate(CreateView):
         form.instance.entity_id = new_ldap_entity_id_from_name(form.instance.name_fi)
         super().form_valid(form)
         self.object.admins.add(self.request.user)
-        logger.info("SP %s created by %s", self.object, self.request.user)
+        logger.info("LDAP service %s created by %s", self.object, self.request.user)
         return HttpResponseRedirect(reverse('summary-view', args=(self.object.pk,)))
 
 
-class BasicInformationUpdate(UpdateView):
+class BasicInformationUpdate(SuccessMessageMixin, UpdateView):
     """
     Displays a form for updating a :model:`rr.ServiceProvider`.
 
@@ -292,6 +295,7 @@ class BasicInformationUpdate(UpdateView):
     model = ServiceProvider
     form_class = BasicInformationForm
     success_url = '#'
+    success_message = _("Form successfully saved")
     template_name_suffix = '_basic_form'
 
     def get_queryset(self):
@@ -329,7 +333,7 @@ class BasicInformationUpdate(UpdateView):
             return super().form_invalid(form)
 
 
-class TechnicalInformationUpdate(UpdateView):
+class TechnicalInformationUpdate(SuccessMessageMixin, UpdateView):
     """
     Displays a form for updating a :model:`rr.ServiceProvider`.
 
@@ -345,6 +349,7 @@ class TechnicalInformationUpdate(UpdateView):
     model = ServiceProvider
     form_class = TechnicalInformationForm
     success_url = '#'
+    success_message = _("Form successfully saved")
     template_name_suffix = '_technical_form'
 
     def get_queryset(self):
@@ -385,7 +390,7 @@ class TechnicalInformationUpdate(UpdateView):
             return super().form_invalid(form)
 
 
-class LdapTechnicalInformationUpdate(UpdateView):
+class LdapTechnicalInformationUpdate(SuccessMessageMixin, UpdateView):
     """
     Displays a form for updating a :model:`rr.ServiceProvider`.
 
@@ -401,6 +406,7 @@ class LdapTechnicalInformationUpdate(UpdateView):
     model = ServiceProvider
     form_class = LdapTechnicalInformationForm
     success_url = '#'
+    success_message = _("Form successfully saved")
     template_name_suffix = '_ldap_technical_form'
 
     def get_queryset(self):
@@ -439,9 +445,10 @@ class LdapTechnicalInformationUpdate(UpdateView):
             return super().form_invalid(form)
 
 
-class ServiceProviderDelete(DeleteView):
+class ServiceProviderDelete(SuccessMessageMixin, DeleteView):
     model = ServiceProvider
     success_url = reverse_lazy('serviceprovider-list')
+    success_message = _("Service deleted.")
 
     def get_queryset(self):
         if self.request.user.is_superuser:

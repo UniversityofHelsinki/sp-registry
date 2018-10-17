@@ -1,9 +1,11 @@
 import logging
 
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.http.response import Http404
 from django.shortcuts import render
 from django.utils import timezone
+from django.utils.translation import ugettext as _
 
 from rr.forms.endpoint import EndpointForm
 from rr.models.endpoint import Endpoint
@@ -41,7 +43,8 @@ def endpoint_list(request, pk):
         if request.user.is_superuser:
             sp = ServiceProvider.objects.get(pk=pk, end_at=None, service_type="saml")
         else:
-            sp = ServiceProvider.objects.get(pk=pk, admins=request.user, end_at=None, service_type="saml")
+            sp = ServiceProvider.objects.get(pk=pk, admins=request.user, end_at=None,
+                                             service_type="saml")
     except ServiceProvider.DoesNotExist:
         logger.debug("Tried to access unauthorized service provider")
         raise Http404("Service provider does not exist")
@@ -62,6 +65,7 @@ def endpoint_list(request, pk):
                 sp.save_modified()
                 logger.info("Endpoint added for {sp} by {user}"
                             .format(sp=sp, user=request.user))
+                messages.add_message(request, messages.INFO, _('Endpoint added.'))
                 form = EndpointForm(sp=sp)
         elif "remove_endpoint" in request.POST:
             for key, value in request.POST.dict().items():
@@ -73,6 +77,7 @@ def endpoint_list(request, pk):
                         sp.save_modified()
                         logger.info("Endpoint removed from {sp} by {user}"
                                     .format(sp=sp, user=request.user))
+                        messages.add_message(request, messages.INFO, _('Endpoint removed.'))
     endpoints = Endpoint.objects.filter(sp=sp, end_at=None)
     return render(request, "rr/endpoint.html", {'object_list': endpoints,
                                                 'form': form,

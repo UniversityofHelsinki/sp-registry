@@ -1,10 +1,12 @@
 import logging
 
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import PermissionDenied
 from django.http.response import Http404
 from django.shortcuts import render
 from django.utils import timezone
+from django.utils.translation import ugettext as _
 
 from rr.forms.certificate import CertificateForm
 from rr.models.certificate import Certificate
@@ -70,7 +72,8 @@ def certificate_list(request, pk):
         if request.user.is_superuser:
             sp = ServiceProvider.objects.get(pk=pk, end_at=None, service_type="saml")
         else:
-            sp = ServiceProvider.objects.get(pk=pk, admins=request.user, end_at=None, service_type="saml")
+            sp = ServiceProvider.objects.get(pk=pk, admins=request.user, end_at=None,
+                                             service_type="saml")
     except ServiceProvider.DoesNotExist:
         logger.debug("Tried to access unauthorized service provider")
         raise Http404("Service provider does not exist")
@@ -91,6 +94,10 @@ def certificate_list(request, pk):
                     sp.save_modified()
                     logger.info("Certificate added for {sp} by {user}"
                                 .format(sp=sp, user=request.user))
+                    messages.add_message(request, messages.INFO, _('Certificate added.'))
+                else:
+                    messages.add_message(request, messages.WARNING,
+                                         _('Could not add certificate.'))
         elif "remove_certificate" in request.POST:
             for key, value in request.POST.dict().items():
                 if value == "on":
@@ -101,6 +108,8 @@ def certificate_list(request, pk):
                         sp.save_modified()
                         logger.info("Certificate removed from {sp} by {user}"
                                     .format(sp=sp, user=request.user))
+                        messages.add_message(request, messages.INFO,
+                                             _('Certificate removed: ') + cert.cn)
     certificates = Certificate.objects.filter(sp=sp, end_at=None)
     return render(request, "rr/certificate.html", {'object_list': certificates,
                                                    'form': form,

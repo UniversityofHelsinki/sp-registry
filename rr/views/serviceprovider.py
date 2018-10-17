@@ -136,10 +136,6 @@ class BasicInformationView(DetailView):
                     url = reverse("basicinformation-update", args=[sp.pk])
                     msg = _("Service description in English or in Finnish")
                     missing.append("<a href='" + url + "'>" + msg + "</a>")
-                if not sp.privacypolicy_en and not sp.privacypolicy_fi and sp.attributes:
-                    url = reverse("basicinformation-update", args=[sp.pk])
-                    msg = _("Privacy policy URL in English or in Finnish")
-                    missing.append("<a href='" + url + "'>" + msg + "</a>")
                 if not sp.application_portfolio:
                     url = reverse("basicinformation-update", args=[sp.pk])
                     msg = _("Application portfolio URL")
@@ -149,6 +145,10 @@ class BasicInformationView(DetailView):
                     msg = _("Technical contact")
                     missing.append("<a href='" + url + "'>" + msg + "</a>")
             if sp.service_type == "saml":
+                if not sp.privacypolicy_en and not sp.privacypolicy_fi and sp.attributes:
+                    url = reverse("basicinformation-update", args=[sp.pk])
+                    msg = _("Privacy policy URL in English or in Finnish")
+                    missing.append("<a href='" + url + "'>" + msg + "</a>")
                 if not Certificate.objects.filter(sp=sp, end_at=None):
                     url = reverse("certificate-list", args=[sp.pk])
                     msg = _("Certificate")

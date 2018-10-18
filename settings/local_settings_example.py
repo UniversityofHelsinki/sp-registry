@@ -20,6 +20,7 @@ TIME_ZONE = 'EET'
 # Activate SAML/LDAP SP listing
 ACTIVATE_SAML = True
 ACTIVATE_LDAP = True
+ACTIVATE_OIDC = True
 
 # Attribute test service
 ATTRIBUTE_TEST_SERVICE = True
@@ -57,8 +58,10 @@ SAML_ATTR_AFFILIATION = 'shib_affiliation'
 ATTRIBUTE_TEST_SERVICE = True
 ATTRIBUTE_TEST_SERVICE_LOGOUT_URL = 'https://localhost/testservice/Shibboleth.sso/Logout'
 
-# Path to git repositorio
+# Path to saml git repositorio
 METADATA_GIT_REPOSITORIO = '/path/to/metadata/git/repo/'
+# Path to ldap git repositorio
+LDAP_GIT_REPOSITORIO = '/path/to/ldap/git/repo/'
 # Metadata file used for upload
 METADATA_FILENAME = 'metadata.xml'
 

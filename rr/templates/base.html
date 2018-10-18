@@ -96,7 +96,10 @@
           <a class="nav-link" href="{% url 'email-list' %}">{% trans "Emails" %}</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="{% url 'metadata-manage' %}">{% trans "Manage metadata" %}</a>
+          <a class="nav-link" href="{% url 'metadata-manage-saml' %}">{% trans "Manage SAML metadata" %}</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'metadata-manage-ldap' %}">{% trans "Manage LDAP metadata" %}</a>
         </li>
         <div class="dropdown-divider"></div>
         <li class="nav-item">
@@ -209,7 +212,10 @@
           <a class="nav-link {% if request.path|slice:":7" == "/email/" %}active{% endif %}" href="{% url 'email-list' %}">{% trans "Emails" %}</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link {% if request.path|slice:":17" == "/metadata/manage/" %}active{% endif %}" href="{% url 'metadata-manage' %}">{% trans "Manage metadata" %}</a>
+          <a class="nav-link {% if request.path|slice:":22" == "/metadata/manage/saml/" %}active{% endif %}" href="{% url 'metadata-manage-saml' %}">{% trans "Manage SAML metadata" %}</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link {% if request.path|slice:":22" == "/metadata/manage/ldap/" %}active{% endif %}" href="{% url 'metadata-manage-ldap' %}">{% trans "Manage LDAP metadata" %}</a>
         </li>
        
         <div class="dropdown-divider"></div>

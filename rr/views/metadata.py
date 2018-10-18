@@ -4,8 +4,10 @@ Functions for genereating metadata of service providers
 
 import hashlib
 import logging
+import os
 from datetime import datetime
 from os.path import join
+from glob import glob
 
 from git import Repo
 from git.exc import InvalidGitRepositoryError, NoSuchPathError, GitCommandError
@@ -23,6 +25,7 @@ from rr.models.serviceprovider import ServiceProvider
 from rr.utils.metadata_generator import metadata_generator
 from rr.utils.metadata_generator import metadata_generator_list
 from rr.utils.metadata_parser import metadata_parser
+from rr.utils.ldap_metadata_generator import ldap_metadata_generator_list
 
 logger = logging.getLogger(__name__)
 
@@ -48,7 +51,8 @@ def metadata(request, pk):
         if request.user.is_superuser:
             sp = ServiceProvider.objects.get(pk=pk, end_at=None, service_type="saml")
         else:
-            sp = ServiceProvider.objects.get(pk=pk, admins=request.user, end_at=None, service_type="saml")
+            sp = ServiceProvider.objects.get(pk=pk, admins=request.user, end_at=None,
+                                             service_type="saml")
     except ServiceProvider.DoesNotExist:
         logger.debug("Tried to access unauthorized service provider")
         raise Http404("Service provider does not exist")
@@ -124,8 +128,37 @@ def last_commits(repo, n):
     return log
 
 
+def write_saml_metadata():
+        # Generate metadata and write it to file
+        metadata = metadata_generator_list(validated=True, privacypolicy=True, production=True)
+        metadata_file = join(settings.METADATA_GIT_REPOSITORIO, settings.METADATA_FILENAME)
+        with open(metadata_file, 'wb') as f:
+            f.write('<?xml version="1.0" encoding="UTF-8"?>\n'.encode('utf-8'))
+            # Hack for correcting namespace definition by removing prefix.
+            f.write(etree.tostring(metadata, pretty_print=True,
+                                   encoding='UTF-8').replace(b'xmlns:xmlns', b'xmlns'))
+
+
+def write_ldap_metadata():
+        # Generate metadata and write it to file
+        tree = ldap_metadata_generator_list(validated=True, production=True)
+        files = []
+        for entity in tree:
+            entity_id = entity.get("ID")
+            if entity_id:
+                metadata_file = join(settings.LDAP_GIT_REPOSITORIO, entity_id + '.xml')
+                files.append(entity_id + '.xml')
+                with open(metadata_file, 'wb') as f:
+                    f.write('<?xml version="1.0" encoding="UTF-8"?>\n'.encode('utf-8'))
+                    f.write(etree.tostring(entity, pretty_print=True, encoding='UTF-8'))
+        for f in glob(settings.LDAP_GIT_REPOSITORIO + '*.xml'):
+            if f.replace(settings.LDAP_GIT_REPOSITORIO, '') not in files:
+                os.remove(f)
+        return
+
+
 @login_required
-def metadata_management(request):
+def metadata_management(request, service_type="saml"):
     """
     View for managing metadata export repositorio
 
@@ -151,8 +184,14 @@ def metadata_management(request):
     form = None
     if not request.user.is_superuser:
         raise PermissionDenied
+    if service_type == "saml" and hasattr(settings, 'METADATA_GIT_REPOSITORIO'):
+        repo_location = settings.METADATA_GIT_REPOSITORIO
+    elif service_type == "ldap" and hasattr(settings, 'LDAP_GIT_REPOSITORIO'):
+        repo_location = settings.LDAP_GIT_REPOSITORIO
+    else:
+        raise PermissionDenied
     try:
-        repo = Repo(settings.METADATA_GIT_REPOSITORIO)
+        repo = Repo(repo_location)
     except InvalidGitRepositoryError:
         error_message = _("Git repository appears to have an invalid format.")
         return render(request, "error.html", {'error_message': error_message})
@@ -186,7 +225,6 @@ def metadata_management(request):
             form_hash = form.cleaned_data['diff_hash']
             # Check that file has not changed
             if form_hash == hashlib.md5(diff.encode('utf-8')).hexdigest():
-                repo.index.add([settings.METADATA_FILENAME])
                 repo.index.commit(commit_message)
                 try:
                     origin.push()
@@ -202,15 +240,13 @@ def metadata_management(request):
             else:
                 error = _("Metadata file has changed, please try again.")
     if not error:
-        # Generate metadata and write it to file
-        metadata = metadata_generator_list(validated=True, privacypolicy=True, production=True)
-        metadata_file = join(settings.METADATA_GIT_REPOSITORIO, settings.METADATA_FILENAME)
-        with open(metadata_file, 'wb') as f:
-            f.write('<?xml version="1.0" encoding="UTF-8"?>\n'.encode('utf-8'))
-            # Hack for correcting namespace definition by removing prefix.
-            f.write(etree.tostring(metadata, pretty_print=True,
-                                   encoding='UTF-8').replace(b'xmlns:xmlns', b'xmlns'))
-            diff = repo.git.diff('HEAD')
+        if service_type == "saml":
+            write_saml_metadata()
+            repo.index.add([settings.METADATA_FILENAME])
+        if service_type == "ldap":
+            write_ldap_metadata()
+            repo.git.add(A=True)
+        diff = repo.git.diff('HEAD')
     diff_hash = hashlib.md5(diff.encode('utf-8')).hexdigest()
     form = MetadataCommitForm(diff_hash=diff_hash)
     return render(request, "rr/metadata_management.html", {'form': form,

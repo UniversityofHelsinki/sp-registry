@@ -143,6 +143,12 @@ def write_ldap_metadata():
         # Generate metadata and write it to file
         tree = ldap_metadata_generator_list(validated=True, production=True)
         files = []
+        metadata_file = join(settings.LDAP_GIT_REPOSITORIO, settings.LDAP_METADATA_FILENAME)
+        files.append(settings.LDAP_METADATA_FILENAME)
+        with open(metadata_file, 'wb') as f:
+            f.write('<?xml version="1.0" encoding="UTF-8"?>\n'.encode('utf-8'))
+            f.write(etree.tostring(tree, pretty_print=True, encoding='UTF-8'))
+        # Generate separate files for all entities
         for entity in tree:
             entity_id = entity.get("ID")
             if entity_id:
@@ -151,6 +157,7 @@ def write_ldap_metadata():
                 with open(metadata_file, 'wb') as f:
                     f.write('<?xml version="1.0" encoding="UTF-8"?>\n'.encode('utf-8'))
                     f.write(etree.tostring(entity, pretty_print=True, encoding='UTF-8'))
+        # Remove all other xml-files from repository
         for f in glob(settings.LDAP_GIT_REPOSITORIO + '*.xml'):
             if f.replace(settings.LDAP_GIT_REPOSITORIO, '') not in files:
                 os.remove(f)
@@ -184,9 +191,11 @@ def metadata_management(request, service_type="saml"):
     form = None
     if not request.user.is_superuser:
         raise PermissionDenied
-    if service_type == "saml" and hasattr(settings, 'METADATA_GIT_REPOSITORIO'):
+    if service_type == "saml" and hasattr(settings, 'METADATA_GIT_REPOSITORIO') and \
+            hasattr(settings, 'METADATA_FILENAME'):
         repo_location = settings.METADATA_GIT_REPOSITORIO
-    elif service_type == "ldap" and hasattr(settings, 'LDAP_GIT_REPOSITORIO'):
+    elif service_type == "ldap" and hasattr(settings, 'LDAP_GIT_REPOSITORIO') and \
+            hasattr(settings, 'LDAP_METADATA_FILENAME'):
         repo_location = settings.LDAP_GIT_REPOSITORIO
     else:
         raise PermissionDenied

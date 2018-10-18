@@ -58,12 +58,12 @@ SAML_ATTR_AFFILIATION = 'shib_affiliation'
 ATTRIBUTE_TEST_SERVICE = True
 ATTRIBUTE_TEST_SERVICE_LOGOUT_URL = 'https://localhost/testservice/Shibboleth.sso/Logout'
 
-# Path to saml git repositorio
+# Path to git repositorio
 METADATA_GIT_REPOSITORIO = '/path/to/metadata/git/repo/'
-# Path to ldap git repositorio
 LDAP_GIT_REPOSITORIO = '/path/to/ldap/git/repo/'
 # Metadata file used for upload
 METADATA_FILENAME = 'metadata.xml'
+LDAP_METADATA_FILENAME = 'ldap-metadata.xml'
 
 # Path to static files for collection
 STATIC_ROOT = '/path/to/rr/static/'

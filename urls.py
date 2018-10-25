@@ -10,6 +10,7 @@ from rr.views.serviceprovider import SingEncryptList
 from rr.views.serviceprovider import LdapServiceProviderCreate, LdapTechnicalInformationUpdate
 from rr.views.attribute import attribute_list, attribute_admin_list, attribute_view
 from rr.views.certificate import certificate_list, certificate_admin_list
+from rr.views.certificate import certificate_info
 from rr.views.contact import contact_list
 from rr.views.endpoint import endpoint_list
 from rr.views.metadata import metadata, metadata_import, metadata_management
@@ -40,6 +41,7 @@ urlpatterns = [
     url(r'^attribute/list/$', attribute_admin_list, name='attribute-admin-list'),
     url(r'^attribute/view/(?P<pk>[0-9]+)/$', attribute_view, name='attribute-view'),
     url(r'^certificate/(?P<pk>[0-9]+)/$', certificate_list, name='certificate-list'),
+    url(r'^certificate/info/(?P<pk>[0-9]+)/$', certificate_info, name='certificate-info'),
     url(r'^certificate/list/$', certificate_admin_list, name='certificate-admin-list'),
     url(r'^contact/(?P<pk>[0-9]+)/$', contact_list, name='contact-list'),
     url(r'^endpoint/(?P<pk>[0-9]+)/$', endpoint_list, name='endpoint-list'),

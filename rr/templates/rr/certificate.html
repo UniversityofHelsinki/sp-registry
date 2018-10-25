@@ -30,7 +30,7 @@
   <tbody>
 {% for certificate in object_list %}
     <tr>
-      <th scope="row">{{ certificate.cn }}</th>
+      <th scope="row"><a href="{% url 'certificate-info' certificate.pk %}">{{ certificate.cn }}</a></th>
       <td>{{ certificate.valid_until }}</td>
       <td>{{ certificate.valid_from }}</td>
       <td>{{ certificate.key_size }}</td>

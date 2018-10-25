@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load bootstrap4 %}
+{% load static %}
+{% block content %}
+<h1>{% trans "Certificate information" %} - <small>{{ object.display_identifier }}</small></h1>
+<dl>
+<dt>{% trans "Certificate name" %}</dt>
+<dd>{{ certificate.cn }}</dd>
+<dt>{% trans "Issuer" %}</dt>
+<dd>{{ certificate.issuer }}</dd>
+<dt>{% trans "Valid until" %}</dt>
+<dd>{{ certificate.valid_until }}</dd>
+<dt>{% trans "Valid from" %}</dt>
+<dd>{{ certificate.valid_from }}</dd>
+<dt>{% trans "Key Size" %}</dt>
+<dd>{{ certificate.key_size }}</dd>
+<dt>{% trans "Use for signing" %}</dt>
+<dd>{{ certificate.signing }}</dd>
+<dt>{% trans "Use for encryption" %}</dt>
+<dd>{{ certificate.encryption }}</dd>
+<dt>{% trans "Serial number" %}</dt>
+<dd>{{ serial_number }}</dd>
+<dt>{% trans "Fingerprint" %}</dt>
+<dd>MD5: {{ fingerprint_md5 }}</dd>
+<dd>SHA1: {{ fingerprint_sha1 }}</dd>
+<dd>SHA256: {{ fingerprint_sha256 }}</dd>
+<dt>{% trans "Certificate" %}</dt>
+<dd><pre>-----BEGIN CERTIFICATE-----
+{{ certificate.certificate }}-----END CERTIFICATE-----</pre></dd>
+</dl>
+
+{% endblock %}

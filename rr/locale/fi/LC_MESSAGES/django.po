@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-10-25 16:35+0300\n"
+"POT-Creation-Date: 2018-10-31 11:19+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1004,9 +1004,9 @@ msgstr "Arvon muoto (regex)"
 msgid "Logout using Single Logout"
 msgstr "Kirjaudu ulos käyttäen kertauloskirjautumista"
 
-#: templates/base.html:10
-msgid "Shibboleth Resource Registry"
-msgstr "Shibboleth palvelureksiteri"
+#: templates/base.html:10 templates/registration/login.html:7
+msgid "Service Provider Registry"
+msgstr "SP-rekisteri"
 
 #: templates/base.html:14
 msgid "SP Registry"
@@ -1157,10 +1157,6 @@ msgstr "Jotain meni pieleen. Virhe on kirjattu ja selvitämme mistä se johtui."
 msgid "For your information"
 msgstr "Tiedoksenne"
 
-#: templates/registration/login.html:7
-msgid "Service Provider Registry"
-msgstr "SP-rekisteri"
-
 #: templates/registration/login.html:8
 msgid "University of Helsinki"
 msgstr "Helsingin yliopisto"
@@ -1171,11 +1167,11 @@ msgstr "Olet jo kirjautunut sisään"
 
 #: templates/registration/login.html:16
 msgid "Login using Single Sign-On"
-msgstr "Kirjadu käyttäen kertakirjautumista"
+msgstr "Kirjaudu käyttäen kertakirjautumista"
 
 #: templates/registration/login.html:26
 msgid "Login using a local account"
-msgstr "Kirjadu käyttäen paikallista tunnusta"
+msgstr "Kirjaudu käyttäen paikallista tunnusta"
 
 #: templates/registration/login.html:33
 msgid "Use this only if you do not have University of Helsinki user account."
@@ -2321,7 +2317,7 @@ msgstr "Ei voitu lisätä varmennetta."
 msgid "Certificate removed: "
 msgstr "Varmenne poistettu: "
 
-#: views/certificate.py:145 views/certificate.py:149
+#: views/certificate.py:154 views/certificate.py:158
 msgid "Certificate provided does not exist"
 msgstr "Varmennetta ei ole olemassa"
 
@@ -2494,3 +2490,6 @@ msgstr "Käyttäjäryhmä lisätty."
 #: views/usergroup.py:71
 msgid "User group removed."
 msgstr "Käyttäjäryhmä poistettu."
+
+#~ msgid "Shibboleth Resource Registry"
+#~ msgstr "Shibboleth palvelurekisteri"

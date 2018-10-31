@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-10-25 16:35+0300\n"
+"POT-Creation-Date: 2018-10-31 11:19+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -928,8 +928,8 @@ msgstr ""
 msgid "Logout using Single Logout"
 msgstr ""
 
-#: templates/base.html:10
-msgid "Shibboleth Resource Registry"
+#: templates/base.html:10 templates/registration/login.html:7
+msgid "Service Provider Registry"
 msgstr ""
 
 #: templates/base.html:14
@@ -1078,10 +1078,6 @@ msgstr ""
 
 #: templates/info.html:5
 msgid "For your information"
-msgstr ""
-
-#: templates/registration/login.html:7
-msgid "Service Provider Registry"
 msgstr ""
 
 #: templates/registration/login.html:8
@@ -2174,7 +2170,7 @@ msgstr ""
 msgid "Certificate removed: "
 msgstr ""
 
-#: views/certificate.py:145 views/certificate.py:149
+#: views/certificate.py:154 views/certificate.py:158
 msgid "Certificate provided does not exist"
 msgstr ""
 

@@ -195,7 +195,7 @@ class LdapTechnicalInformationForm(ModelForm):
         Check service account contact format
         """
         service_account_contact = self.cleaned_data['service_account_contact']
-        pattern = re.compile("^[-a-z.]+@helsinki.fi 0[0-9]+",re.I)
+        pattern = re.compile("^($|[-a-z.]+@helsinki.fi 0[0-9]+)",re.I)
         if not pattern.match(service_account_contact):
             raise ValidationError(_("Invalid service account contact."))
         return service_account_contact

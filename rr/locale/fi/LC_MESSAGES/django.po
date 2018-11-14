@@ -344,9 +344,16 @@ msgid "Separate service account is used for LDAP queries (recommended way)."
 msgstr "LDAP-kyselyihin käytetään erillistä palvelutunnusta (suositeltu tapa)."
 
 #: forms/serviceprovider.py:159
-msgid "Email and phone number for delivering service account credentials."
+msgid ""
+"Email and phone number for delivering service account credentials. "
+"Use a firstname.lastname@helsinki.fi address and the same person's mobile phone "
+"in non-international format, that is, start it with 0. Separete the email and "
+"phone number by space."
 msgstr ""
-"Sähköposti ja puhelinnumero, joihin palvelutunnuksen tiedot toimitetaan."
+"Sähköposti ja puhelinnumero, joihin palvelutunnuksen tiedot toimitetaan. "
+"Käytä etu.suku@helsinki.fi-osoitetta ja samanhenkilön matkapuhelinnumeroa "
+"ei-kansainvälisessä muodossa, eli 0-alkuisena. Erota sähköpostiosoite ja "
+"puhelinnumero toisistaan välilyönnillä."
 
 #: forms/serviceprovider.py:161
 msgid "Service requires access to all LDAP groups."

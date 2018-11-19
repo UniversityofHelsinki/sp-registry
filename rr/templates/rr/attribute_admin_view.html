@@ -33,7 +33,7 @@
   <tbody>
 {% for object in object_list %}
     <tr>
-      <th scope="row">{{ object.sp }}</th>
+      <th scope="row"><a href="/summary/{{ object.sp.pk }}/">{{ object.sp }}</a></th>
       {% if object.sp.production %}<td class="text-success">&#10004;{% else %}<td class="text-danger">&#10005;{% endif %}</td>
       {% if object.sp.test %}<td class="text-success">&#10004;{% else %}<td class="text-danger">&#10005;{% endif %}</td>
       <td>{{ object.reason }}</td>

@@ -154,10 +154,12 @@ class LdapTechnicalInformationForm(ModelForm):
             'server_names': _('Full server names (not IPs), separated by space. User for access '
                               'control.'),
             'target_group': _('What is the target group (users) of this service?'),
-            'service_account': _('Separate service account is used for LDAP queries (recommended '
-                                 'way).'),
+            'service_account': _('Separate service account is used for LDAP queries (recommended way).'),
             'service_account_contact': _('Email and phone number for delivering service account '
-                                         'credentials.'),
+                                         'credentials. Use a firstname.lastname@helsinki.fi '
+                                         'address and the same person\'s mobile phone in '
+                                         'non-international format, that is, start it with 0. '
+                                         'Separete the email and phone number by space.'),
             'can_access_all_ldap_groups': _('Service requires access to all LDAP groups.'),
             'local_storage_users': _('Service stores all users and released attributes locally. '
                                      'If you only save user data when user logs in, do not check '
@@ -187,6 +189,16 @@ class LdapTechnicalInformationForm(ModelForm):
             if not pattern.match(server_name):
                 raise ValidationError(_("Invalid list of server names."))
         return server_names
+
+    def clean_service_account_contact(self):
+        """
+        Check service account contact format
+        """
+        service_account_contact = self.cleaned_data['service_account_contact']
+        pattern = re.compile("^($|[-a-z.]+@helsinki.fi 0[0-9]+)",re.I)
+        if not pattern.match(service_account_contact):
+            raise ValidationError(_("Invalid service account contact."))
+        return service_account_contact
 
     def clean(self):
         cleaned_data = super().clean()

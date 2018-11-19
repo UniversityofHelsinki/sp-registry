@@ -294,7 +294,11 @@ msgid "Separate service account is used for LDAP queries (recommended way)."
 msgstr ""
 
 #: forms/serviceprovider.py:159
-msgid "Email and phone number for delivering service account credentials."
+msgid ""
+"Email and phone number for delivering service account credentials. "
+"Use a firstname.lastname@helsinki.fi address and the same person's mobile phone "
+"in non-international format, that is, start it with 0. Separete the email and "
+"phone number by space."
 msgstr ""
 
 #: forms/serviceprovider.py:161

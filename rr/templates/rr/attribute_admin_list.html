@@ -12,7 +12,8 @@
       <th scope="col">{% trans "Friendly name" %}</th>
       <th scope="col">{% trans "Attribute ID" %}</th>
       <th scope="col">{% trans "OID / Name" %}</th>
-      <th scope="col">{% trans "Public" %}</th>
+      <th scope="col" data-toggle="tooltip" data-placement="top" title="{% trans "Public attribute for SAML." %}">{% trans "SAML" %}</th>
+      <th scope="col" data-toggle="tooltip" data-placement="top" title="{% trans "Public attribute for LDAP." %}">{% trans "LDAP" %}</th>
     </tr>
   </thead>
   <tbody>
@@ -21,7 +22,8 @@
       <th scope="row">{{ object.friendlyname }}</th>
       <td><a href="{% url 'attribute-view' object.pk %}">{{ object.attributeid }}</a></td>
       <td>{{ object.name }}</td>
-      {% if object.public %}<td class="text-success">&#10004;{% else %}<td class="text-danger">&#10005;{% endif %}</td>
+      {% if object.public_saml %}<td class="text-success">&#10004;{% else %}<td class="text-danger">&#10005;{% endif %}</td>
+      {% if object.public_ldap %}<td class="text-success">&#10004;{% else %}<td class="text-danger">&#10005;{% endif %}</td>
     </tr>
 {% empty %}
     <tr>
@@ -34,4 +36,11 @@
 {% endfor %}
   </tbody>
 </table>
+{% endblock %}
+{% block javascript %}
+<script>
+$(function () {
+	  $('[data-toggle="tooltip"]').tooltip()
+	})
+</script>
 {% endblock %}

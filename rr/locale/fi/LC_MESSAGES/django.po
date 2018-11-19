@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-10-31 11:19+0200\n"
+"POT-Creation-Date: 2018-11-19 09:23+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -63,6 +63,7 @@ msgid "SAML / Shibboleth"
 msgstr ""
 
 #: forms/email.py:16 models/serviceprovider.py:22
+#: templates/rr/attribute_admin_list.html:16
 msgid "LDAP"
 msgstr ""
 
@@ -1276,10 +1277,19 @@ msgid "OID / Name"
 msgstr "OID / Nimi"
 
 #: templates/rr/attribute_admin_list.html:15
-msgid "Public"
-msgstr "Julkinen"
+msgid "Public attribute for SAML."
+msgstr "Julkinen attribuutti SAML-palveluille."
 
-#: templates/rr/attribute_admin_list.html:28
+#: templates/rr/attribute_admin_list.html:15
+msgid "SAML"
+msgstr ""
+
+#: templates/rr/attribute_admin_list.html:16
+#| msgid "Attribute Group for LDAP"
+msgid "Public attribute for LDAP."
+msgstr "Julkinen attribuutti LDAP-palveluille."
+
+#: templates/rr/attribute_admin_list.html:30
 #: templates/rr/attribute_admin_view.html:44
 msgid "No attributes"
 msgstr "Ei attribuuttia"
@@ -2490,6 +2500,3 @@ msgstr "Käyttäjäryhmä lisätty."
 #: views/usergroup.py:71
 msgid "User group removed."
 msgstr "Käyttäjäryhmä poistettu."
-
-#~ msgid "Shibboleth Resource Registry"
-#~ msgstr "Shibboleth palvelurekisteri"

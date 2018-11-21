@@ -34,7 +34,7 @@ class MetadataForm(Form):
             root = etree.fromstring(metadata, parser)
         except etree.XMLSyntaxError as e:
             raise ValidationError(_("Not valid XML: " + str(e)))
-        if root.tag != "EntityDescriptor":
+        if etree.QName(root.tag).localname != "EntityDescriptor":
             raise ValidationError(_("First element should be EntityDescriptor"))
         entity_id = root.get("entityID")
         if not entity_id:

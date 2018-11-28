@@ -35,6 +35,24 @@ def admin_notification_modified_sp(modified_sp, in_production, add_production, r
             logger.error("Admin notification email contained invalid headers.")
 
 
+def admin_notification_created_sp(sp):
+    """
+    Sends message to SP admins when new service provider is created.
+    """
+    if (sp and hasattr(settings, 'ADMINS') and settings.ADMINS and
+            hasattr(settings, 'ADMIN_NOTIFICATION') and settings.ADMIN_NOTIFICATION):
+        subject = render_to_string('email/admin_notification_created_sp_subject.txt',
+                                   {'sp': sp})
+        message = render_to_string('email/admin_notification_created_sp.txt',
+                                   {'sp': sp})
+        try:
+            mail_admins(subject, message)
+        except SMTPException:
+            logger.error("SMTP error when sending admin notification.")
+        except BadHeaderError:
+            logger.error("Admin notification email contained invalid headers.")
+
+
 def validation_notification(sp):
     """
     Sends validation message to SP admins.
@@ -61,3 +79,4 @@ def validation_notification(sp):
                 logger.warning("SMTP error when sending validation notification.")
             except BadHeaderError:
                 logger.error("Validation notification email contained invalid headers.")
+

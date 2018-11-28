@@ -24,7 +24,7 @@ from rr.models.endpoint import Endpoint
 from rr.models.serviceprovider import ServiceProvider, SPAttribute, new_ldap_entity_id_from_name
 from rr.models.testuser import update_entity_ids
 from rr.models.usergroup import UserGroup
-from rr.utils.notifications import validation_notification
+from rr.utils.notifications import validation_notification, admin_notification_created_sp
 
 logger = logging.getLogger(__name__)
 
@@ -243,6 +243,7 @@ class SamlServiceProviderCreate(CreateView):
         super().form_valid(form)
         self.object.admins.add(self.request.user)
         logger.info("SAML service %s created by %s", self.object, self.request.user)
+        admin_notification_created_sp(self.object)
         return HttpResponseRedirect(reverse('summary-view', args=(self.object.pk,)))
 
 
@@ -276,6 +277,7 @@ class LdapServiceProviderCreate(CreateView):
         super().form_valid(form)
         self.object.admins.add(self.request.user)
         logger.info("LDAP service %s created by %s", self.object, self.request.user)
+        admin_notification_created_sp(self.object)
         return HttpResponseRedirect(reverse('summary-view', args=(self.object.pk,)))
 
 

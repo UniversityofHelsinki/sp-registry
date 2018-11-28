@@ -1,0 +1,1 @@
+[SP-Registry] New {{ sp.service_type }} service added: {{ sp.entity_id }} 

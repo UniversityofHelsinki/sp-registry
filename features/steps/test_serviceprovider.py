@@ -15,6 +15,15 @@ def fill_basic_form(context):
     context.browser.find_by_text('Save').first.click()
 
 
+@when(u'filling service creation form')
+def fill_creation_form(context):
+    context.browser.fill("entity_id", "https://new.example.org/sp")
+    context.browser.fill("name_en", "My new test service")
+    context.browser.fill("description_en", "New test service for testing this service")
+    context.browser.fill("privacypolicy_en", "https://privacy.example.org/sp.pdf")
+    context.browser.find_by_text('Save').first.click()
+
+
 @when(u'filling technical information form with invalid information')
 def fill_techical_form_invalid(context):
     context.browser.fill("entity_id", "invalid_entity_id")

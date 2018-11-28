@@ -26,3 +26,13 @@ Scenario: Technical information modifications
 	When filling technical information form
 	And clicking visible link with text "Summary"
 	Then the result page will include text "https://sp.example.org/sp"
+
+	
+Scenario: Service provider creation
+    Given test environment with logged in user exists
+    When clicking object with text "Add a new service provider"
+    Then the result page will include text "Adding a new service provider"
+    When filling service creation form
+    Then the result page will include text "Details"
+    And the result page will include text "This service provider is currently not published to the production or the test IdPs. You may publish this SP in the Technical Attributes page."
+    And message "0" in mailbox should have "[SP-Registry] New saml service added: https://new.example.org/sp" in subject

@@ -1,0 +1,13 @@
+New entity has been added to SP-registry:
+
+Type:
+{{ sp.service_type }}
+
+Entity id:
+{{ sp.entity_id }}
+
+Name:
+{{ sp.name }}
+
+Description:
+{{ sp.description }}

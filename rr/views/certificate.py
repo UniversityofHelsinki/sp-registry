@@ -37,9 +37,9 @@ def certificate_admin_list(request):
     """
     if not request.user.is_superuser:
         raise PermissionDenied
-    weak_certificates = Certificate.objects.filter(end_at=None,
+    weak_certificates = Certificate.objects.filter(end_at=None, sp__end_at=None,
                                                    key_size__lt=2048).order_by('key_size')
-    expired_certificates = Certificate.objects.filter(end_at=None,
+    expired_certificates = Certificate.objects.filter(end_at=None, sp__end_at=None,
                                                       valid_until__lte=timezone.now()
                                                       ).order_by('valid_until')
     return render(request, "rr/certificate_admin_list.html",

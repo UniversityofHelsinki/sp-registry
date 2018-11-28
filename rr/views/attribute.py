@@ -148,6 +148,6 @@ def attribute_view(request, pk):
     except ServiceProvider.DoesNotExist:
         raise Http404(_("Attribute proviced does not exist"))
     attributes = SPAttribute.objects.filter(attribute=attribute,
-                                            end_at=None).order_by('sp__entity_id')
+                                            end_at=None, sp__end_at=None).order_by('sp__entity_id')
     return render(request, "rr/attribute_admin_view.html", {'object_list': attributes,
                                                             'attribute': attribute})

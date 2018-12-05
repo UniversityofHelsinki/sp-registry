@@ -8,7 +8,7 @@ from rr.models.contact import Contact
 from rr.models.endpoint import Endpoint
 from rr.models.attribute import Attribute
 from cryptography.hazmat.primitives.serialization import Encoding
-from lxml import etree, objectify
+from lxml import etree
 from django.utils import timezone
 from django.utils.translation import ugettext as _
 import logging
@@ -19,32 +19,32 @@ logger = logging.getLogger(__name__)
 
 def metadata_parser_uiinfo(sp, element):
     """
-    Parses SP metadata extesions UIinfo
+    Parses SP metadata extensions UIinfo
 
     sp: ServiceProvider object where information is saved
     element: lxml element which is parsed
     """
     for child in element:
         if etree.QName(child.tag).localname == "DisplayName":
-            if child.values()[0] == "fi":
+            if child.values()[0] == "fi" and child.text:
                 sp.name_fi = child.text
-            elif child.values()[0] == "en":
+            elif child.values()[0] == "en" and child.text:
                 sp.name_en = child.text
-            elif child.values()[0] == "sv":
+            elif child.values()[0] == "sv" and child.text:
                 sp.name_sv = child.text
         if etree.QName(child.tag).localname == "Description":
-            if child.values()[0] == "fi":
+            if child.values()[0] == "fi" and child.text:
                 sp.description_fi = child.text
-            elif child.values()[0] == "en":
+            elif child.values()[0] == "en" and child.text:
                 sp.description_en = child.text
-            elif child.values()[0] == "sv":
+            elif child.values()[0] == "sv" and child.text:
                 sp.description_sv = child.text
         if etree.QName(child.tag).localname == "PrivacyStatementURL":
-            if child.values()[0] == "fi":
+            if child.values()[0] == "fi" and child.text:
                 sp.privacypolicy_fi = child.text
-            elif child.values()[0] == "en":
+            elif child.values()[0] == "en" and child.text:
                 sp.privacypolicy_en = child.text
-            elif child.values()[0] == "sv":
+            elif child.values()[0] == "sv" and child.text:
                 sp.privacypolicy_sv = child.text
 
 
@@ -95,7 +95,8 @@ def metadata_parser_keydescriptor(sp, element, validate, errors):
         cert = load_certificate(child.text.strip())
         certificate = cert.public_bytes(Encoding.PEM).decode("utf-8").replace(
             "-----BEGIN CERTIFICATE-----\n", "").replace("-----END CERTIFICATE-----\n", "")
-        if not Certificate.objects.filter(certificate=certificate, sp=sp, signing=signing, encryption=encryption):
+        if not Certificate.objects.filter(certificate=certificate, sp=sp, signing=signing,
+                                          encryption=encryption):
             if not Certificate.objects.add_certificate(certificate=certificate,
                                                        sp=sp,
                                                        signing=signing,
@@ -116,7 +117,8 @@ def metadata_parser_nameidformat(sp, element, errors):
         nameid = NameIDFormat.objects.get(nameidformat=element.text)
         sp.nameidformat.add(nameid)
     except NameIDFormat.DoesNotExist:
-        errors.append(sp.entity_id + " : " + _("Unsupported nameid-format") + " : " + str(element.text))
+        errors.append(
+            sp.entity_id + " : " + _("Unsupported nameid-format") + " : " + str(element.text))
 
 
 def metadata_parser_servicetype(sp, element, validate, errors, servicetype, disable_checks):
@@ -134,9 +136,13 @@ def metadata_parser_servicetype(sp, element, validate, errors, servicetype, disa
     location = element.get("Location")
     index = element.get("Index")
     if not disable_checks and binding not in [i[0] for i in Endpoint.BINDINGCHOICES]:
-        errors.append(sp.entity_id + " : " + _("Unsupported binding, please contact IdP admins if you really need this") + " : " + binding)
+        errors.append(
+            sp.entity_id + " : " +
+            _("Unsupported binding, please contact IdP admins if you really need this") +
+            " : " + binding)
     else:
-        if not Endpoint.objects.filter(sp=sp, type=servicetype, binding=binding, url=location, index=index).exists():
+        if not Endpoint.objects.filter(
+                sp=sp, type=servicetype, binding=binding, url=location, index=index).exists():
             try:
                 if validate:
                     Endpoint.objects.create(sp=sp,
@@ -176,30 +182,34 @@ def metadata_parser_attributeconsumingservice(sp, element, validate, errors):
                 if attribute:
                     if not SPAttribute.objects.filter(sp=sp, attribute=attribute).exists():
                         if validate:
-                            SPAttribute.objects.create(sp=sp,
-                                                       attribute=attribute,
-                                                       reason="initial dump, please give the real reason",
-                                                       validated=timezone.now())
+                            SPAttribute.objects.create(
+                                sp=sp,
+                                attribute=attribute,
+                                reason="initial dump, please give the real reason",
+                                validated=timezone.now())
                         else:
-                            SPAttribute.objects.create(sp=sp,
-                                                       attribute=attribute,
-                                                       reason="initial dump, please give the real reason",
-                                                       validated=None)
+                            SPAttribute.objects.create(
+                                sp=sp,
+                                attribute=attribute,
+                                reason="initial dump, please give the real reason",
+                                validated=None)
                 else:
-                    errors.append(sp.entity_id + " : " + _("Could not add attribute") + " : " + friendlyname + ", " + name)
+                    errors.append(
+                        sp.entity_id + " : " +
+                        _("Could not add attribute") + " : " + friendlyname + ", " + name)
         if etree.QName(child.tag).localname == "ServiceName":
-            if child.values()[0] == "fi":
+            if child.values()[0] == "fi" and child.text:
                 sp.name_fi = child.text
-            elif child.values()[0] == "en":
+            elif child.values()[0] == "en" and child.text:
                 sp.name_en = child.text
-            elif child.values()[0] == "sv":
+            elif child.values()[0] == "sv" and child.text:
                 sp.name_sv = child.text
         if etree.QName(child.tag).localname == "ServiceDescription":
-            if child.values()[0] == "fi":
+            if child.values()[0] == "fi" and child.text:
                 sp.description_fi = child.text
-            elif child.values()[0] == "en":
+            elif child.values()[0] == "en" and child.text:
                 sp.description_en = child.text
-            elif child.values()[0] == "sv":
+            elif child.values()[0] == "sv" and child.text:
                 sp.description_sv = child.text
 
 
@@ -225,9 +235,11 @@ def metadata_parser_ssodescriptor(sp, element, validate, errors, disable_checks)
             metadata_parser_keydescriptor(sp, child, validate, errors)
         if etree.QName(child.tag).localname == "NameIDFormat":
             metadata_parser_nameidformat(sp, child, errors)
-        for servicetype in ["ArtifactResolutionService", "SingleLogoutService", "AssertionConsumerService"]:
+        for servicetype in ["ArtifactResolutionService", "SingleLogoutService",
+                            "AssertionConsumerService"]:
             if etree.QName(child.tag).localname == servicetype:
-                metadata_parser_servicetype(sp, child, validate, errors, servicetype, disable_checks)
+                metadata_parser_servicetype(sp, child, validate, errors, servicetype,
+                                            disable_checks)
         if etree.QName(child.tag).localname == "AttributeConsumingService":
             metadata_parser_attributeconsumingservice(sp, child, validate, errors)
 
@@ -256,7 +268,8 @@ def metadata_parser_contact(sp, element, validate):
             firstname = " "
         if not lastname:
             lastname = " "
-        if not Contact.objects.filter(sp=sp, type=contacttype, firstname=firstname, lastname=lastname, email=email).exists() and email:
+        if not Contact.objects.filter(sp=sp, type=contacttype, firstname=firstname,
+                                      lastname=lastname, email=email).exists() and email:
             if validate:
                 Contact.objects.create(sp=sp,
                                        type=contacttype,
@@ -300,9 +313,11 @@ def metadata_parser(entity, overwrite, verbosity, validate=False, disable_checks
                     errors.append(entityID + " : " + _("EntityID already exists, overwriting"))
         except ServiceProvider.DoesNotExist:
             if validate:
-                sp = ServiceProvider.objects.create(entity_id=entityID, service_type="saml", validated=timezone.now(), modified=False)
+                sp = ServiceProvider.objects.create(entity_id=entityID, service_type="saml",
+                                                    validated=timezone.now(), modified=False)
             else:
-                sp = ServiceProvider.objects.create(entity_id=entityID, service_type="saml", validated=None, modified=True)
+                sp = ServiceProvider.objects.create(entity_id=entityID, service_type="saml",
+                                                    validated=None, modified=True)
             if verbosity > 2:
                 errors.append(entityID + " : " + _("EntityID does not exist, creating"))
         if not skip:

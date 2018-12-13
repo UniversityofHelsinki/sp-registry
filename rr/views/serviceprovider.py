@@ -50,8 +50,8 @@ class ServiceProviderList(ListView):
         if not settings.ACTIVATE_SAML:
             return ServiceProvider.objects.none()
         if self.request.user.is_superuser:
-            return ServiceProvider.objects.filter(end_at=None,
-                                                  service_type="saml").order_by('entity_id')
+            return ServiceProvider.objects.filter(
+                end_at=None, service_type="saml").order_by('-modified', '-production', '-test', 'entity_id')
         else:
             return ServiceProvider.objects.filter(admins=self.request.user, end_at=None,
                                                   service_type="saml").order_by('entity_id')
@@ -61,11 +61,11 @@ class ServiceProviderList(ListView):
         if not settings.ACTIVATE_LDAP:
             context['ldap_providers'] = ServiceProvider.objects.none()
         elif self.request.user.is_superuser:
-            context['ldap_providers'] = ServiceProvider.objects.filter(end_at=None,
-                                                                       service_type="ldap").order_by('entity_id')
+            context['ldap_providers'] = ServiceProvider.objects.filter(
+                end_at=None, service_type="ldap").order_by('-modified', '-production', 'entity_id')
         else:
-            context['ldap_providers'] = ServiceProvider.objects.filter(admins=self.request.user,
-                                                                       end_at=None, service_type="ldap").order_by('entity_id')
+            context['ldap_providers'] = ServiceProvider.objects.filter(
+                admins=self.request.user, end_at=None, service_type="ldap").order_by('entity_id')
         context['activate_saml'] = settings.ACTIVATE_SAML
         context['activate_ldap'] = settings.ACTIVATE_LDAP
         return context

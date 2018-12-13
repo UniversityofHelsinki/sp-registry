@@ -18,7 +18,7 @@
       <th scope="col">{% trans "Name" %}</th>
       <th scope="col" data-toggle="tooltip" data-placement="top" title="{% trans "Publish to production IdP (validated status)" %}">{% trans "Prod" %}</th>
       <th scope="col" data-toggle="tooltip" data-placement="top" title="{% trans "Publish to test IdP" %}">{% trans "Test" %}</th>
-      <th scope="col" data-toggle="tooltip" data-placement="top" title="{% trans "OK / Modified, modified are waiting for validation" %}">{% trans "Status" %}</th>{% if user.is_superuser %}
+      <th scope="col" data-toggle="tooltip" data-placement="top" title="{% trans "OK / Modified, modified are waiting for validation. Yellow means change in production, blue change in test service." %}">{% trans "Status" %}</th>{% if user.is_superuser %}
       <th scope="col" data-toggle="tooltip" data-placement="top" title="{% trans "Number of admins (invites)" %}">{% trans "A/I" %}</th>{% endif %}
     </tr>
   </thead>

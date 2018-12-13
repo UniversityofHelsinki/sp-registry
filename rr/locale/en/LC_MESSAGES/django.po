@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-11-28 13:13+0200\n"
+"POT-Creation-Date: 2018-12-13 09:06+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -118,7 +118,7 @@ msgstr ""
 msgid "First element should be EntityDescriptor"
 msgstr ""
 
-#: forms/metadata.py:41 utils/metadata_parser.py:317
+#: forms/metadata.py:41 utils/metadata_parser.py:332
 msgid "Could not find entityID"
 msgstr ""
 
@@ -1848,8 +1848,9 @@ msgid "Publish to test IdP"
 msgstr ""
 
 #: templates/rr/serviceprovider_list.html:21
-#: templates/rr/serviceprovider_list.html:59
-msgid "OK / Modified, modified are waiting for validation"
+msgid ""
+"OK / Modified, modified are waiting for validation. Yellow means change in "
+"production, blue change in test service."
 msgstr ""
 
 #: templates/rr/serviceprovider_list.html:21
@@ -1893,6 +1894,10 @@ msgstr ""
 
 #: templates/rr/serviceprovider_list.html:58
 msgid "Publish to production"
+msgstr ""
+
+#: templates/rr/serviceprovider_list.html:59
+msgid "OK / Modified, modified are waiting for validation"
 msgstr ""
 
 #: templates/rr/serviceprovider_saml_create_form.html:6
@@ -2106,7 +2111,7 @@ msgstr ""
 msgid "Do you want to remove selected user groups?"
 msgstr ""
 
-#: utils/ldap_oldcsv_parser.py:96 utils/metadata_parser.py:189
+#: utils/ldap_oldcsv_parser.py:96 utils/metadata_parser.py:199
 msgid "Could not add attribute"
 msgstr ""
 
@@ -2126,31 +2131,31 @@ msgstr ""
 msgid "Could not find name"
 msgstr ""
 
-#: utils/metadata_parser.py:104
+#: utils/metadata_parser.py:105
 msgid "Could not add certificate"
 msgstr ""
 
-#: utils/metadata_parser.py:119
+#: utils/metadata_parser.py:121
 msgid "Unsupported nameid-format"
 msgstr ""
 
-#: utils/metadata_parser.py:137
+#: utils/metadata_parser.py:141
 msgid "Unsupported binding, please contact IdP admins if you really need this"
 msgstr ""
 
-#: utils/metadata_parser.py:156
+#: utils/metadata_parser.py:162
 msgid "Could not add"
 msgstr ""
 
-#: utils/metadata_parser.py:297
+#: utils/metadata_parser.py:310
 msgid "EntityID already exists, skipping"
 msgstr ""
 
-#: utils/metadata_parser.py:300
+#: utils/metadata_parser.py:313
 msgid "EntityID already exists, overwriting"
 msgstr ""
 
-#: utils/metadata_parser.py:307
+#: utils/metadata_parser.py:322
 msgid "EntityID does not exist, creating"
 msgstr ""
 

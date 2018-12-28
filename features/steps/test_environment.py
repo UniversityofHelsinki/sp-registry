@@ -6,6 +6,8 @@ from django.utils import timezone
 from rr.models.email import Template
 from rr.models.serviceprovider import ServiceProvider
 from rr.models.spadmin import Keystore
+from rr.models.organization import Organization
+from rr.models.nameidformat import NameIDFormat
 
 
 @given(u'test environment with logged in user exists')
@@ -19,8 +21,8 @@ def create_test_environment(context):
     u.save()
     sp = ServiceProvider.objects.create(entity_id="https://sp.example.org/sp",
                                         service_type="saml",
-                                        name_en="My program name",
-                                        validated=timezone.now(), modified=False)
+                                        name_en="My program name", validated=timezone.now(),
+                                        modified=False, test=True)
     sp.admins.add(u)
     ServiceProvider.objects.create(entity_id="https://sp.example.com/sp",
                                    service_type="saml",
@@ -85,10 +87,39 @@ def create_test_environment_with_superuser(context):
     u.first_name = "Teemu"
     u.last_name = "Testeri"
     u.save()
-    sp = ServiceProvider.objects.create(entity_id="https://sp.example.org/sp",
-                                        service_type="saml",
-                                        name_en="My program name", validated=timezone.now(),
-                                        modified=False, test=True)
+    organization = Organization.objects.create(
+        name_en="Corp Ltd",
+        name_fi="Corp Oy",
+        name_sv="Corp Ab",
+        description_en="Corporation Ltd",
+        description_fi="Corporation Oy",
+        description_sv="Corporation Ab",
+        url_en="https://corp.example.org/en/",
+        url_fi="https://corp.example.org/fi/",
+        url_sv="https://corp.example.org/sv/",
+        )
+    nameidformat = NameIDFormat.objects.create(nameidformat="urn:oasis:names:tc:SAML:2.0:nameid-format:persistent")
+    sp = ServiceProvider.objects.create(
+        entity_id="https://sp.example.org/sp",
+        service_type="saml",
+        organization=organization,
+        name_en="My program name",
+        name_fi="Mun ohjelma",
+        name_sv="Mitt program",
+        description_en="Testing this service",
+        description_fi="Tämän palvelun testaus",
+        description_sv="Testa denna tjänst",
+        privacypolicy_en="https://corp.example.org/privacypolicy/en/",
+        privacypolicy_fi="https://corp.example.org/privacypolicy/fi/",
+        privacypolicy_sv="https://corp.example.org/privacypolicy/sv/",
+        login_page_url="https://corp.example.org/login/",
+        application_portfolio="https://portfolio.example.org/corp/",
+        discovery_service_url="https://discovery.example.org/",
+        sign_requests=True,
+        test=True,
+        validated=timezone.now(),
+        modified=False)
+    sp.nameidformat.add(nameidformat)
     sp.admins.add(u)
     ServiceProvider.objects.create(entity_id="https://sp.example.com/sp",
                                    service_type="saml",

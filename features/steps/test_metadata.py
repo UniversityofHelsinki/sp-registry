@@ -91,26 +91,61 @@ rKLt+NcwtbkI6weLISJu9lFZnPMYT7LpqDWD4aMHHUWr8THO0T6mbCeQRYMlfSpU
 @then(u'the page will have default metadata')
 def check_for_default_metadata(context):
     assert context.browser.is_text_present("""<EntityDescriptor xmlns:ds="http://www.w3.org/2000/09/xmldsig#" xmlns:mdui="urn:oasis:names:tc:SAML:metadata:ui" xmlns="urn:oasis:names:tc:SAML:2.0:metadata" entityID="https://sp.example.org/sp">
-  <SPSSODescriptor protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol">
+  <SPSSODescriptor AuthnRequestsSigned="true" protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol">
     <Extensions>
+      <idpdisc:DiscoveryResponse xmlns:idpdisc="urn:oasis:names:tc:SAML:profiles:SSO:idp-discovery-protocol" Binding="urn:oasis:names:tc:SAML:profiles:SSO:idp-discovery-protocol" Location="https://discovery.example.org/" index="1"/>
       <mdui:UIInfo>
+        <mdui:DisplayName xml:lang="fi">Mun ohjelma</mdui:DisplayName>
         <mdui:DisplayName xml:lang="en">My program name</mdui:DisplayName>
+        <mdui:DisplayName xml:lang="sv">Mitt program</mdui:DisplayName>
+        <mdui:Description xml:lang="fi">Tämän palvelun testaus</mdui:Description>
+        <mdui:Description xml:lang="en">Testing this service</mdui:Description>
+        <mdui:Description xml:lang="sv">Testa denna tjänst</mdui:Description>
+        <mdui:PrivacyStatementURL xml:lang="fi">https://corp.example.org/privacypolicy/fi/</mdui:PrivacyStatementURL>
+        <mdui:PrivacyStatementURL xml:lang="en">https://corp.example.org/privacypolicy/en/</mdui:PrivacyStatementURL>
+        <mdui:PrivacyStatementURL xml:lang="sv">https://corp.example.org/privacypolicy/sv/</mdui:PrivacyStatementURL>
       </mdui:UIInfo>
     </Extensions>
+    <NameIDFormat>urn:oasis:names:tc:SAML:2.0:nameid-format:persistent</NameIDFormat>
     <AttributeConsumingService index="1">
+      <ServiceName xml:lang="fi">Mun ohjelma</ServiceName>
       <ServiceName xml:lang="en">My program name</ServiceName>
+      <ServiceName xml:lang="sv">Mitt program</ServiceName>
+      <ServiceDescription xml:lang="fi">Tämän palvelun testaus</ServiceDescription>
+      <ServiceDescription xml:lang="en">Testing this service</ServiceDescription>
+      <ServiceDescription xml:lang="sv">Testa denna tjänst</ServiceDescription>
     </AttributeConsumingService>
   </SPSSODescriptor>
+  <Organization>
+    <OrganizationName xml:lang="fi">Corp Oy</OrganizationName>
+    <OrganizationName xml:lang="en">Corp Ltd</OrganizationName>
+    <OrganizationName xml:lang="sv">Corp Ab</OrganizationName>
+    <OrganizationDisplayName xml:lang="fi">Corporation Oy</OrganizationDisplayName>
+    <OrganizationDisplayName xml:lang="en">Corporation Ltd</OrganizationDisplayName>
+    <OrganizationDisplayName xml:lang="sv">Corporation Ab</OrganizationDisplayName>
+    <OrganizationURL xml:lang="fi">https://corp.example.org/fi/</OrganizationURL>
+    <OrganizationURL xml:lang="en">https://corp.example.org/en/</OrganizationURL>
+    <OrganizationURL xml:lang="sv">https://corp.example.org/sv/</OrganizationURL>
+  </Organization>
 </EntityDescriptor>""")
 
 
 @then(u'the page will have metadata 1')
 def check_for_unvalidated_metadata(context):
     assert context.browser.is_text_present("""<EntityDescriptor xmlns:ds="http://www.w3.org/2000/09/xmldsig#" xmlns:mdui="urn:oasis:names:tc:SAML:metadata:ui" xmlns="urn:oasis:names:tc:SAML:2.0:metadata" entityID="https://sp.example.org/sp">
-  <SPSSODescriptor protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol">
+  <SPSSODescriptor AuthnRequestsSigned="true" protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol">
     <Extensions>
+      <idpdisc:DiscoveryResponse xmlns:idpdisc="urn:oasis:names:tc:SAML:profiles:SSO:idp-discovery-protocol" Binding="urn:oasis:names:tc:SAML:profiles:SSO:idp-discovery-protocol" Location="https://discovery.example.org/" index="1"/>
       <mdui:UIInfo>
+        <mdui:DisplayName xml:lang="fi">Mun ohjelma</mdui:DisplayName>
         <mdui:DisplayName xml:lang="en">My program name</mdui:DisplayName>
+        <mdui:DisplayName xml:lang="sv">Mitt program</mdui:DisplayName>
+        <mdui:Description xml:lang="fi">Tämän palvelun testaus</mdui:Description>
+        <mdui:Description xml:lang="en">Testing this service</mdui:Description>
+        <mdui:Description xml:lang="sv">Testa denna tjänst</mdui:Description>
+        <mdui:PrivacyStatementURL xml:lang="fi">https://corp.example.org/privacypolicy/fi/</mdui:PrivacyStatementURL>
+        <mdui:PrivacyStatementURL xml:lang="en">https://corp.example.org/privacypolicy/en/</mdui:PrivacyStatementURL>
+        <mdui:PrivacyStatementURL xml:lang="sv">https://corp.example.org/privacypolicy/sv/</mdui:PrivacyStatementURL>
       </mdui:UIInfo>
     </Extensions>
     <KeyDescriptor>
@@ -147,10 +182,16 @@ rKLt+NcwtbkI6weLISJu9lFZnPMYT7LpqDWD4aMHHUWr8THO0T6mbCeQRYMlfSpU
         </ds:X509Data>
       </ds:KeyInfo>
     </KeyDescriptor>
+    <NameIDFormat>urn:oasis:names:tc:SAML:2.0:nameid-format:persistent</NameIDFormat>
     <AssertionConsumerService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST" Location="https://sp.example.org/Shibboleth.sso/SAML2/POST"/>
     <AssertionConsumerService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST" Location="https://sp.example.org/Shibboleth.sso/SAML2/POST/2"/>
     <AttributeConsumingService index="1">
+      <ServiceName xml:lang="fi">Mun ohjelma</ServiceName>
       <ServiceName xml:lang="en">My program name</ServiceName>
+      <ServiceName xml:lang="sv">Mitt program</ServiceName>
+      <ServiceDescription xml:lang="fi">Tämän palvelun testaus</ServiceDescription>
+      <ServiceDescription xml:lang="en">Testing this service</ServiceDescription>
+      <ServiceDescription xml:lang="sv">Testa denna tjänst</ServiceDescription>
       <RequestedAttribute FriendlyName="eduPersonScopedAffiliation" Name="urn:oid:1.3.6.1.4.1.5923.1.1.1.9" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri"/>
       <RequestedAttribute FriendlyName="mail" Name="urn:oid:0.9.2342.19200300.100.1.3" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri"/>
       <RequestedAttribute FriendlyName="schacPersonalUniqueCode" Name="urn:oid:1.3.6.1.4.1.25178.1.2.14" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri"/>
@@ -161,22 +202,48 @@ rKLt+NcwtbkI6weLISJu9lFZnPMYT7LpqDWD4aMHHUWr8THO0T6mbCeQRYMlfSpU
     <SurName>Testeri</SurName>
     <EmailAddress>tester@example.org</EmailAddress>
   </ContactPerson>
+  <Organization>
+    <OrganizationName xml:lang="fi">Corp Oy</OrganizationName>
+    <OrganizationName xml:lang="en">Corp Ltd</OrganizationName>
+    <OrganizationName xml:lang="sv">Corp Ab</OrganizationName>
+    <OrganizationDisplayName xml:lang="fi">Corporation Oy</OrganizationDisplayName>
+    <OrganizationDisplayName xml:lang="en">Corporation Ltd</OrganizationDisplayName>
+    <OrganizationDisplayName xml:lang="sv">Corporation Ab</OrganizationDisplayName>
+    <OrganizationURL xml:lang="fi">https://corp.example.org/fi/</OrganizationURL>
+    <OrganizationURL xml:lang="en">https://corp.example.org/en/</OrganizationURL>
+    <OrganizationURL xml:lang="sv">https://corp.example.org/sv/</OrganizationURL>
+  </Organization>
 </EntityDescriptor>""")
 
 
 @then(u'the page will have metadata 2')
 def check_for_validated_metadata(context):
     assert context.browser.is_text_present("""<EntityDescriptor xmlns:ds="http://www.w3.org/2000/09/xmldsig#" xmlns:mdui="urn:oasis:names:tc:SAML:metadata:ui" xmlns="urn:oasis:names:tc:SAML:2.0:metadata" entityID="https://sp.example.org/sp">
-  <SPSSODescriptor protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol">
+  <SPSSODescriptor AuthnRequestsSigned="true" protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol">
     <Extensions>
+      <idpdisc:DiscoveryResponse xmlns:idpdisc="urn:oasis:names:tc:SAML:profiles:SSO:idp-discovery-protocol" Binding="urn:oasis:names:tc:SAML:profiles:SSO:idp-discovery-protocol" Location="https://discovery.example.org/" index="1"/>
       <mdui:UIInfo>
+        <mdui:DisplayName xml:lang="fi">Mun ohjelma</mdui:DisplayName>
         <mdui:DisplayName xml:lang="en">My program name</mdui:DisplayName>
+        <mdui:DisplayName xml:lang="sv">Mitt program</mdui:DisplayName>
+        <mdui:Description xml:lang="fi">Tämän palvelun testaus</mdui:Description>
+        <mdui:Description xml:lang="en">Testing this service</mdui:Description>
+        <mdui:Description xml:lang="sv">Testa denna tjänst</mdui:Description>
+        <mdui:PrivacyStatementURL xml:lang="fi">https://corp.example.org/privacypolicy/fi/</mdui:PrivacyStatementURL>
+        <mdui:PrivacyStatementURL xml:lang="en">https://corp.example.org/privacypolicy/en/</mdui:PrivacyStatementURL>
+        <mdui:PrivacyStatementURL xml:lang="sv">https://corp.example.org/privacypolicy/sv/</mdui:PrivacyStatementURL>
       </mdui:UIInfo>
     </Extensions>
+    <NameIDFormat>urn:oasis:names:tc:SAML:2.0:nameid-format:persistent</NameIDFormat>
     <AssertionConsumerService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST" Location="https://sp.example.org/Shibboleth.sso/SAML2/POST"/>
     <AssertionConsumerService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST" Location="https://sp.example.org/Shibboleth.sso/SAML2/POST/2"/>
     <AttributeConsumingService index="1">
+      <ServiceName xml:lang="fi">Mun ohjelma</ServiceName>
       <ServiceName xml:lang="en">My program name</ServiceName>
+      <ServiceName xml:lang="sv">Mitt program</ServiceName>
+      <ServiceDescription xml:lang="fi">Tämän palvelun testaus</ServiceDescription>
+      <ServiceDescription xml:lang="en">Testing this service</ServiceDescription>
+      <ServiceDescription xml:lang="sv">Testa denna tjänst</ServiceDescription>
       <RequestedAttribute FriendlyName="eduPersonScopedAffiliation" Name="urn:oid:1.3.6.1.4.1.5923.1.1.1.9" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri"/>
       <RequestedAttribute FriendlyName="mail" Name="urn:oid:0.9.2342.19200300.100.1.3" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri"/>
     </AttributeConsumingService>
@@ -186,4 +253,15 @@ def check_for_validated_metadata(context):
     <SurName>Testeri</SurName>
     <EmailAddress>tester@example.org</EmailAddress>
   </ContactPerson>
+  <Organization>
+    <OrganizationName xml:lang="fi">Corp Oy</OrganizationName>
+    <OrganizationName xml:lang="en">Corp Ltd</OrganizationName>
+    <OrganizationName xml:lang="sv">Corp Ab</OrganizationName>
+    <OrganizationDisplayName xml:lang="fi">Corporation Oy</OrganizationDisplayName>
+    <OrganizationDisplayName xml:lang="en">Corporation Ltd</OrganizationDisplayName>
+    <OrganizationDisplayName xml:lang="sv">Corporation Ab</OrganizationDisplayName>
+    <OrganizationURL xml:lang="fi">https://corp.example.org/fi/</OrganizationURL>
+    <OrganizationURL xml:lang="en">https://corp.example.org/en/</OrganizationURL>
+    <OrganizationURL xml:lang="sv">https://corp.example.org/sv/</OrganizationURL>
+  </Organization>
 </EntityDescriptor>""")

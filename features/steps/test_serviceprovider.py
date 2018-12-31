@@ -33,6 +33,7 @@ def fill_techical_form_invalid(context):
 @when(u'filling technical information form')
 def fill_technical_form(context):
     context.browser.fill("entity_id", "https://sp.example.org/sp")
+    context.browser.select("nameidformat", "2")
     context.browser.find_by_text('Save').first.click()
 
 

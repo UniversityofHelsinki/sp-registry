@@ -108,6 +108,18 @@
     </tr>
 {% endif %}
 {% endfor %}
+{% if history_object %}
+    {% if object.nameidformat.all != history_object.nameidformat.all %}<tr class="table-warning">{% else %}<tr>{% endif %}
+      <td scope="row">{% trans "Name Identifier Format" %}</td>
+      <td>{% for n in object.nameidformat.all %}{{ n.nameidformat }}{% if not forloop.last %}<br>{% endif %}{% endfor %}</td>
+      <td>{% for n in history_object.nameidformat.all %}{{ n.nameidformat }}{% if not forloop.last %}<br>{% endif %}{% endfor %}</td>
+    </tr>
+{% else %}
+    <tr>
+      <td scope="row">{% trans "Name Identifier Format" %}</td>
+      <td>{% for n in object.nameidformat.all %}{{ n.nameidformat }}{% if not forloop.last %}<br>{% endif %}{% endfor %}</td>
+    </tr>
+{% endif %}
   </tbody>
 </table>
 <br>

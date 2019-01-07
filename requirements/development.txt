@@ -3,7 +3,7 @@
 behave>=1.2.6
 behave-django>=1.1.0
 factory-boy>=2.11.1
-Faker>=0.8.15
+Faker>=1.0.1
 parse>=1.8.2
 parse-type>=0.4.2
 selenium>=3.12.0

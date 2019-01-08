@@ -38,6 +38,8 @@ Scenario: Metadata validation
 	And removing attribute reason
 	And I visit the "/metadata/1"
 	Then the page will have metadata 1
+	When clicking visible link with text "Show unvalidated"
+	Then the page will have metadata 2
 	When I visit the "/summary/1"
 	And clicking object with name "validate_changes"
 	And I visit the "/metadata/1"

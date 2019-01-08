@@ -61,8 +61,6 @@ def metadata(request, pk):
     else:
         validated = True
     metadata_sp = sp
-    if validated and not sp.validated:
-        metadata_sp = ServiceProvider.objects.filter(history=sp.pk).exclude(validated=None).last()
     if metadata_sp:
         tree = metadata_generator(sp=metadata_sp, validated=validated)
         metadata = etree.tostring(tree, pretty_print=True,

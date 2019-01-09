@@ -37,3 +37,9 @@ Scenario: Service provider creation
     Then the result page will include text "Details"
     And the result page will include text "This service provider is currently not published to the production or the test IdPs. You may publish this SP in the Technical Attributes page."
     And message "0" in mailbox should have "[SP-Registry] New saml service added: https://new.example.org/sp" in subject
+    When clicking visible link with text "View Metadata"
+    Then the result page will include text "Could not find metadata"
+    When clicking visible link with text "Show unvalidated"
+    Then the result page will include text "EntityDescriptor"
+    And the result page will include text "https://new.example.org/sp"
+    

@@ -61,12 +61,12 @@ def metadata(request, pk):
     else:
         validated = True
     metadata_sp = sp
+    metadata = None
     if metadata_sp:
         tree = metadata_generator(sp=metadata_sp, validated=validated)
-        metadata = etree.tostring(tree, pretty_print=True,
-                                  encoding='UTF-8').replace(b'xmlns:xmlns', b'xmlns')
-    else:
-        metadata = None
+        if tree:
+            metadata = etree.tostring(tree, pretty_print=True,
+                                      encoding='UTF-8').replace(b'xmlns:xmlns', b'xmlns')
     return render(request, "rr/metadata.html", {'object': sp,
                                                 'metadata': metadata,
                                                 'validated': validated})

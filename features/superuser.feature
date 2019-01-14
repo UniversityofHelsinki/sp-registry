@@ -22,8 +22,8 @@ Scenario: Endpoint modifications and validation
 	Given test environment with logged in superuser exists
 	When clicking link with text "https://sp.example.com/sp"
 	And clicking visible link with text "SAML Endpoints"
-	And filling endpoint form with url "https://sp.example.org/Shibboleth.sso/SAML2/POST"
-	And filling endpoint form with url "https://sp.example.org/Shibboleth.sso/SAML2/POST/2"
+	And filling endpoint form with location "https://sp.example.org/Shibboleth.sso/SAML2/POST"
+	And filling endpoint form with location "https://sp.example.org/Shibboleth.sso/SAML2/POST/2"
 	And clicking visible link with text "Summary"
 	Then the result page will include text "https://sp.example.org/Shibboleth.sso/SAML2/POST/2"
 	And message "0" in mailbox should have "[SP-Registry] Changes waiting for validation" in subject

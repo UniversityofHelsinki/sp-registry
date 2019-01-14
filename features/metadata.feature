@@ -20,9 +20,10 @@ Scenario: Metadata validation
 	And I visit the "/attribute/1"
 	And filling attribute form
 	And I visit the "/endpoint/1"
-	And filling endpoint form with url "https://sp.example.org/Shibboleth.sso/SAML2/POST"
-	And filling endpoint form with url "https://sp.example.org/Shibboleth.sso/SAML2/POST/2"
-	And I visit the "/contact/1"
+	And filling endpoint form with location "https://sp.example.org/Shibboleth.sso/SAML2/POST"
+	And filling endpoint form with location and response "https://sp.example.org/Shibboleth.sso/SAML2/POST/2"
+	Then the result page will include text "Response: https://sp.example.org/Shibboleth.sso/SAML2/POST/2Response"
+	When I visit the "/contact/1"
 	And filling contact form with email "tester@example.org"
 	And I visit the "/metadata/1"
 	Then the page will have default metadata

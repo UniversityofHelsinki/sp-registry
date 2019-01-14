@@ -13,6 +13,8 @@ from django.utils import timezone
 from django.utils.translation import ugettext as _
 import logging
 from rr.models.nameidformat import NameIDFormat
+from django.db.utils import IntegrityError
+from django.core.exceptions import ValidationError
 
 logger = logging.getLogger(__name__)
 
@@ -134,32 +136,55 @@ def metadata_parser_servicetype(sp, element, validate, errors, servicetype, disa
     """
     binding = element.get("Binding")
     location = element.get("Location")
-    index = element.get("Index")
+    response_location = element.get("ResponseLocation", '')
+    index = element.get("index")
+    try:
+        index = int(index)
+    except ValueError:
+        index = None
+    except TypeError:
+        index = None
+    default = element.get("isDefault")
+    if default and default.lower() == "true" and index:
+        is_default = True
+    else:
+        is_default = False
     if not disable_checks and binding not in [i[0] for i in Endpoint.BINDINGCHOICES]:
         errors.append(
             sp.entity_id + " : " +
             _("Unsupported binding, please contact IdP admins if you really need this") +
             " : " + binding)
     else:
-        if not Endpoint.objects.filter(
-                sp=sp, type=servicetype, binding=binding, url=location, index=index).exists():
-            try:
-                if validate:
-                    Endpoint.objects.create(sp=sp,
-                                            type=servicetype,
-                                            binding=binding,
-                                            url=location,
-                                            index=index,
-                                            validated=timezone.now())
-                else:
-                    Endpoint.objects.create(sp=sp,
-                                            type=servicetype,
-                                            binding=binding,
-                                            url=location,
-                                            index=index,
-                                            validated=None)
-            except:
-                errors.append(sp.entity_id + " : " + _("Could not add") + " : " + servicetype)
+        if Endpoint.objects.filter(
+                sp=sp, type=servicetype, binding=binding, location=location, end_at=None).exists():
+            return
+        elif index and Endpoint.objects.filter(
+                sp=sp, type=servicetype, binding=binding, index=index, end_at=None).exists():
+            return
+        elif is_default and Endpoint.objects.filter(
+                sp=sp, type=servicetype, binding=binding, is_default=True, end_at=None).exists():
+            return
+        try:
+            if validate:
+                Endpoint.objects.create(sp=sp,
+                                        type=servicetype,
+                                        binding=binding,
+                                        location=location,
+                                        response_location=response_location,
+                                        index=index,
+                                        is_default=is_default,
+                                        validated=timezone.now())
+            else:
+                Endpoint.objects.create(sp=sp,
+                                        type=servicetype,
+                                        binding=binding,
+                                        location=location,
+                                        response_location=response_location,
+                                        index=index,
+                                        is_default=is_default,
+                                        validated=None)
+        except ValidationError:
+            errors.append(sp.entity_id + " : " + _("Could not add") + " : " + servicetype)
 
 
 def metadata_parser_attributeconsumingservice(sp, element, validate, errors):

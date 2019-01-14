@@ -36,6 +36,8 @@ Scenario: Metadata validation
 	And removing first certificate
 	And I visit the "/attribute/1"
 	And removing attribute reason
+	And I visit the "/technical/1"
+	And set metadata driven configuration
 	And I visit the "/metadata/1"
 	Then the page will have metadata 1
 	When clicking visible link with text "Show unvalidated"

@@ -30,4 +30,13 @@ Scenario: Endpoint modifications and validation
 	When checking "no_email"
 	And clicking object with name "validate_changes"
 	Then mailbox size should be "1"
-	
+
+Scenario: Manual configuration warning
+	Given test environment with logged in superuser exists
+	When clicking link with text "https://sp.example.org/sp"
+	And clicking visible link with text "Summary"
+	Then the result page will not include text "This service requires manual configuration"
+	When clicking visible link with text "Technical Attributes"
+	And setting manual configuration warning
+	And clicking visible link with text "Summary"
+	Then the result page will include text "This service requires manual configuration"

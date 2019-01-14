@@ -15,7 +15,11 @@
   </tbody>  
 </table>
 <br>
-
+{% if user.is_superuser and object.admin_require_manual_configuration %}
+<div class="alert alert-danger" role="alert">
+<p>{% trans "This service requires manual configuration. Detailed information should be in the admin notes." %}</p>
+</div>
+{% endif %}
 {% if not object.production and not object.test %}
 <div class="alert alert-info" role="alert">
 <p>{% trans "This service provider is currently not published to the production or the test IdPs. You may publish this SP in the Technical Attributes page." %}</p>

@@ -74,7 +74,8 @@ class TechnicalInformationForm(ModelForm):
     class Meta:
         model = ServiceProvider
         fields = ['entity_id', 'discovery_service_url', 'nameidformat', 'sign_assertions',
-                  'sign_requests', 'sign_responses', 'encrypt_assertions', 'production', 'test',
+                  'sign_requests', 'sign_responses', 'encrypt_assertions', 'force_mfa', 'force_sha1',
+                  'force_nameidformat', 'admin_require_manual_configuration', 'production', 'test',
                   'saml_product', 'autoupdate_idp_metadata']
         help_texts = {
             'entity_id': _('Should be URI including scheme, hostname of your application and path '
@@ -95,6 +96,18 @@ class TechnicalInformationForm(ModelForm):
             'encrypt_assertions': _('IdP encrypts attribute assertions sent to SP. Defaults to '
                                     'True. Do not change unless you are using a SP that does '
                                     'not support encryption.'),
+            'force_mfa': _('MFA authentication is required for all users. May be set here '
+                           'if the service does not support requesting specific authentication '
+                           'method in authentication request.'),
+            'force_sha1': _('Forces using of SHA-1 algorithm in signatures. Default is SHA-256. '
+                            'Should not be used unless using old SAML software which does not support '
+                            'SHA-256.'),
+            'force_nameidformat': _('This service provider requires the specific NameIdFormat. If set, '
+                                    'only one NameIdFormat must be chosen in the list above. '
+                                    'Do not set if you do not know what this means, as this is almost newer '
+                                    'required.'),
+            'admin_require_manual_configuration': _('This service provider requires manual configuration. '
+                                                    'Set by registry admins if necessary.'),
             'production': _('Publish this SP to the production IdP. Only validated data is used. '
                             'Any changes to production SPs must be validated by the IdP '
                             'administrators before coming into effect.'
@@ -115,6 +128,7 @@ class TechnicalInformationForm(ModelForm):
             # Limit choices to public and current values
             self.fields['nameidformat'].queryset = NameIDFormat.objects.filter(
                 Q(public=True) | Q(pk__in=self.instance.nameidformat.all()))
+            del self.fields['admin_require_manual_configuration']
 
     def clean_entity_id(self):
         """
@@ -143,7 +157,8 @@ class LdapTechnicalInformationForm(ModelForm):
         model = ServiceProvider
         fields = ['server_names', 'target_group', 'service_account', 'service_account_contact',
                   'can_access_all_ldap_groups', 'local_storage_users', 'local_storage_passwords',
-                  'local_storage_passwords_info', 'local_storage_groups', 'production']
+                  'local_storage_passwords_info', 'local_storage_groups', 'admin_require_manual_configuration',
+                  'production']
         widgets = {
           'service_account_contact': Textarea(attrs={'rows': 2}),
           'local_storage_passwords_info': Textarea(attrs={'rows': 5}),
@@ -170,12 +185,16 @@ class LdapTechnicalInformationForm(ModelForm):
                                               'idea.'),
             'local_storage_groups': _('Service stores requested groups and their member lists '
                                       'locally.'),
+            'admin_require_manual_configuration': _('This service provider requires manual configuration. '
+                                                    'Set by registry admins if necessary.'),
             'production': _('Publish this service to LDAP production servers.'),
         }
 
     def __init__(self, *args, **kwargs):
         self.request = kwargs.pop('request', None)
         super(LdapTechnicalInformationForm, self).__init__(*args, **kwargs)
+        if not self.request.user.is_superuser:
+            del self.fields['admin_require_manual_configuration']
 
     def clean_server_names(self):
         """
@@ -195,7 +214,7 @@ class LdapTechnicalInformationForm(ModelForm):
         Check service account contact format
         """
         service_account_contact = self.cleaned_data['service_account_contact']
-        pattern = re.compile("^($|[-a-z.]+@helsinki.fi 0[0-9]+)",re.I)
+        pattern = re.compile("^($|[-a-z.]+@helsinki.fi 0[0-9]+)", re.I)
         if not pattern.match(service_account_contact):
             raise ValidationError(_("Invalid service account contact."))
         return service_account_contact

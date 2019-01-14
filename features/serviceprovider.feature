@@ -26,7 +26,7 @@ Scenario: Technical information modifications
 	When filling technical information form
 	And clicking visible link with text "Summary"
 	Then the result page will include text "https://sp.example.org/sp"
-	Then the result page will include text "urn:oasis:names:tc:SAML:2.0:nameid-format:persistent"
+	And the result page will include text "urn:oasis:names:tc:SAML:2.0:nameid-format:persistent"
 
 	
 Scenario: Service provider creation

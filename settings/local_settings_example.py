@@ -67,3 +67,5 @@ LDAP_METADATA_FILENAME = 'ldap-metadata.xml'
 
 # Path to static files for collection
 STATIC_ROOT = '/path/to/rr/static/'
+
+MFA_AUTHENTICATION_CONTEXT = 'https://refeds.org/profile/mfa'

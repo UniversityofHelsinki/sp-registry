@@ -64,7 +64,7 @@ def metadata(request, pk):
     metadata = None
     if metadata_sp:
         tree = metadata_generator(sp=metadata_sp, validated=validated)
-        if tree:
+        if tree is not None:
             metadata = etree.tostring(tree, pretty_print=True,
                                       encoding='UTF-8').replace(b'xmlns:xmlns', b'xmlns')
     return render(request, "rr/metadata.html", {'object': sp,

@@ -37,7 +37,24 @@ def fill_technical_form(context):
     context.browser.find_by_text('Save').first.click()
 
 
+@when(u'setting manual configuration warning')
+def set_manual_configation_warning(context):
+    context.browser.check("admin_require_manual_configuration")
+    context.browser.find_by_text('Save').first.click()
+
+
 @when(u'setting publish to test servers')
 def publish_to_prodcution_Server(context):
     context.browser.check("test")
+    context.browser.find_by_text('Save').first.click()
+
+
+@when(u'set metadata driven configuration')
+def set_metadata_driven_configuration(context):
+    context.browser.check("sign_assertions")
+    context.browser.uncheck("encrypt_assertions")
+    context.browser.uncheck("sign_responses")
+    context.browser.check("force_mfa")
+    context.browser.check("force_sha1")
+    context.browser.check("force_nameidformat")
     context.browser.find_by_text('Save').first.click()

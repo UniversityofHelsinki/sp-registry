@@ -2,15 +2,19 @@
 Functions for genereating metadata of service providers
 """
 
-from rr.models.serviceprovider import SPAttribute, ServiceProvider
+import logging
+
+from lxml import etree
+
+from django.conf import settings
+from django.db.models import Q
+
 from rr.models.certificate import Certificate
 from rr.models.contact import Contact
 from rr.models.endpoint import Endpoint
-from lxml import etree
-import logging
-from rr.models.organization import Organization
 from rr.models.nameidformat import NameIDFormat
-from django.db.models import Q
+from rr.models.organization import Organization
+from rr.models.serviceprovider import SPAttribute, ServiceProvider
 
 logger = logging.getLogger(__name__)
 
@@ -27,12 +31,60 @@ def metadata_extensions(element, sp, privacypolicy):
     """
 
     Extensions = etree.SubElement(element, "Extensions")
+    EntityAttributes = etree.SubElement(Extensions, "{urn:oasis:names:tc:SAML:metadata:attribute}EntityAttributes")
+    if not sp.sign_responses:
+        Attribute = etree.SubElement(EntityAttributes, "{urn:oasis:names:tc:SAML:2.0:assertion}Attribute",
+                                     Name="http://shibboleth.net/ns/profiles/saml2/sso/browser/signResponses",
+                                     NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri")
+        AttributeValue = etree.SubElement(Attribute, "{urn:oasis:names:tc:SAML:2.0:assertion}AttributeValue")
+        AttributeValue.attrib['{http://www.w3.org/2001/XMLSchema-instance}type'] = "xsd:boolean"
+        AttributeValue.text = "false"
+    if not sp.encrypt_assertions:
+        Attribute = etree.SubElement(EntityAttributes, "{urn:oasis:names:tc:SAML:2.0:assertion}Attribute",
+                                     Name="http://shibboleth.net/ns/profiles/saml2/sso/browser/encryptAssertions",
+                                     NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri")
+        AttributeValue = etree.SubElement(Attribute, "{urn:oasis:names:tc:SAML:2.0:assertion}AttributeValue")
+        AttributeValue.attrib['{http://www.w3.org/2001/XMLSchema-instance}type'] = "xsd:boolean"
+        AttributeValue.text = "false"
+        Attribute = etree.SubElement(EntityAttributes, "{urn:oasis:names:tc:SAML:2.0:assertion}Attribute",
+                                     Name="http://shibboleth.net/ns/profiles/saml2/sso/browser/encryptNameIDs",
+                                     NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri")
+        AttributeValue = etree.SubElement(Attribute, "{urn:oasis:names:tc:SAML:2.0:assertion}AttributeValue")
+        AttributeValue.attrib['{http://www.w3.org/2001/XMLSchema-instance}type'] = "xsd:boolean"
+        AttributeValue.text = "false"
+    if sp.force_sha1:
+        Attribute = etree.SubElement(EntityAttributes, "{urn:oasis:names:tc:SAML:2.0:assertion}Attribute",
+                                     Name="http://shibboleth.net/ns/profiles/securityConfiguration",
+                                     NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri")
+        AttributeValue = etree.SubElement(Attribute, "{urn:oasis:names:tc:SAML:2.0:assertion}AttributeValue")
+        AttributeValue.text = "shibboleth.SecurityConfiguration.SHA1"
+    if sp.force_mfa and hasattr(settings, 'MFA_AUTHENTICATION_CONTEXT') and settings.MFA_AUTHENTICATION_CONTEXT:
+        Attribute = etree.SubElement(EntityAttributes, "{urn:oasis:names:tc:SAML:2.0:assertion}Attribute",
+                                     Name="http://shibboleth.net/ns/profiles/defaultAuthenticationMethods",
+                                     NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri")
+        AttributeValue = etree.SubElement(Attribute, "{urn:oasis:names:tc:SAML:2.0:assertion}AttributeValue")
+        AttributeValue.text = settings.MFA_AUTHENTICATION_CONTEXT
+        Attribute = etree.SubElement(EntityAttributes, "{urn:oasis:names:tc:SAML:2.0:assertion}Attribute",
+                                     Name="http://shibboleth.net/ns/profiles/disallowedFeatures",
+                                     NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri")
+        AttributeValue = etree.SubElement(Attribute, "{urn:oasis:names:tc:SAML:2.0:assertion}AttributeValue")
+        AttributeValue.text = "0x1"
+    if sp.force_nameidformat and len(sp.nameidformat.all()) == 1:
+        Attribute = etree.SubElement(EntityAttributes, "{urn:oasis:names:tc:SAML:2.0:assertion}Attribute",
+                                     Name="http://shibboleth.net/ns/profiles/nameIDFormatPrecedence",
+                                     NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri")
+        AttributeValue = etree.SubElement(Attribute, "{urn:oasis:names:tc:SAML:2.0:assertion}AttributeValue")
+        AttributeValue.text = sp.nameidformat.all()[0].nameidformat
+    if len(EntityAttributes) == 0:
+        Extensions.remove(EntityAttributes)
+
     if sp.discovery_service_url:
         etree.SubElement(Extensions, "{urn:oasis:names:tc:SAML:profiles:SSO:idp-discovery-protocol}DiscoveryResponse",
                          Binding="urn:oasis:names:tc:SAML:profiles:SSO:idp-discovery-protocol",
                          Location=sp.discovery_service_url,
                          index="1",
                          nsmap={"idpdisc": 'urn:oasis:names:tc:SAML:profiles:SSO:idp-discovery-protocol'})
+
     UIInfo = etree.SubElement(Extensions, "{urn:oasis:names:tc:SAML:metadata:ui}UIInfo")
     if sp.name_fi:
         DisplayName_fi = etree.SubElement(UIInfo, "{urn:oasis:names:tc:SAML:metadata:ui}DisplayName")
@@ -87,7 +139,8 @@ def metadata_extensions(element, sp, privacypolicy):
             PrivacyStatementURL_sv = etree.SubElement(UIInfo, "{urn:oasis:names:tc:SAML:metadata:ui}PrivacyStatementURL")
             PrivacyStatementURL_sv.attrib['{http://www.w3.org/XML/1998/namespace}lang'] = "sv"
             PrivacyStatementURL_sv.text = "https://www.helsinki.fi/fi/yliopisto/tietosuojaselosteet-0"
-
+    if len(UIInfo) == 0:
+        Extensions.remove(UIInfo)
 
 def metadata_certificates(element, sp, validation_date):
     """
@@ -385,7 +438,12 @@ def metadata_generator(sp, validated=True, privacypolicy=False, tree=None):
                                          entityID=entity_id,
                                          nsmap={"xmlns": 'urn:oasis:names:tc:SAML:2.0:metadata',
                                                 "ds": 'http://www.w3.org/2000/09/xmldsig#',
-                                                "mdui": 'urn:oasis:names:tc:SAML:metadata:ui'})
+                                                "mdui": 'urn:oasis:names:tc:SAML:metadata:ui',
+                                                "saml": 'urn:oasis:names:tc:SAML:2.0:assertion',
+                                                "mdattr": 'urn:oasis:names:tc:SAML:metadata:attribute',
+                                                "xsi": 'http://www.w3.org/2001/XMLSchema-instance',
+                                                "xsd": 'http://www.w3.org/2001/XMLSchema',
+                                                })
     metadata_spssodescriptor(EntityDescriptor, sp, history, validation_date, privacypolicy)
     metadata_contact(EntityDescriptor, sp, validation_date)
     if history:
@@ -414,7 +472,12 @@ def metadata_generator_list(validated=True, privacypolicy=False, production=Fals
     """
     tree = etree.Element("EntitiesDescriptor", Name="urn:mace:funet.fi:helsinki.fi", nsmap={"xmlns": 'urn:oasis:names:tc:SAML:2.0:metadata',
                                                                                             "ds": 'http://www.w3.org/2000/09/xmldsig#',
-                                                                                            "mdui": 'urn:oasis:names:tc:SAML:metadata:ui'})
+                                                                                            "mdui": 'urn:oasis:names:tc:SAML:metadata:ui',
+                                                                                            "saml": 'urn:oasis:names:tc:SAML:2.0:assertion',
+                                                                                            "mdattr": 'urn:oasis:names:tc:SAML:metadata:attribute',
+                                                                                            "xsi": 'http://www.w3.org/2001/XMLSchema-instance',
+                                                                                            "xsd": 'http://www.w3.org/2001/XMLSchema',
+                                                                                            })
     serviceproviders = ServiceProvider.objects.filter(end_at=None, service_type="saml")
     for sp in serviceproviders:
         if production and sp.production:

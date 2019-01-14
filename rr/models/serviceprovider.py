@@ -69,6 +69,12 @@ class ServiceProvider(models.Model):
     sign_responses = models.BooleanField(default=True, verbose_name=_('Sign SSO responses'))
     encrypt_assertions = models.BooleanField(default=True,
                                              verbose_name=_('Encrypt SSO assertions'))
+    force_mfa = models.BooleanField(default=False, verbose_name=_('Require MFA authentication'))
+    force_sha1 = models.BooleanField(default=False, verbose_name=_('Use SHA-1 as signature algorithm'))
+    force_nameidformat = models.BooleanField(default=False, verbose_name=_('Force use of specific nameIDFormat'))
+    admin_require_manual_configuration = models.BooleanField(
+                default=False,
+                verbose_name=_('This service requires manual configuration'))
 
     production = models.BooleanField(default=False,
                                      verbose_name=_('Publish to production servers'))
@@ -231,6 +237,7 @@ class ServiceProvider(models.Model):
             # Skip fields in list
             if f.editable and f.name in ('entity_id', 'discovery_service_url', 'name_format_transient', 'name_format_persistent',
                                          'sign_assertions', 'sign_requests', 'sign_responses', 'encrypt_assertions',
+                                         'force_mfa', 'force_sha1', 'force_nameidformat',
                                          'production', 'test', 'saml_product', 'autoupdate_idp_metadata'):
                 fields.append(
                   {

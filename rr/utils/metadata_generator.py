@@ -197,11 +197,18 @@ def metadata_endpoints(element, sp, validation_date):
     saml2_support = False
     saml1_support = False
     if validation_date:
-        endpoints = Endpoint.objects.filter(sp=sp).filter(Q(end_at=None) | Q(end_at__gt=validation_date)).exclude(validated=None)
+        endpoints = Endpoint.objects.filter(sp=sp).filter(Q(end_at=None) |
+                                                          Q(end_at__gt=validation_date)).exclude(validated=None)
     else:
         endpoints = Endpoint.objects.filter(sp=sp, end_at=None)
     for endpoint in endpoints:
-        etree.SubElement(element, endpoint.type, Binding=endpoint.binding, Location=endpoint.url)
+        subelement = etree.SubElement(element, endpoint.type, Binding=endpoint.binding, Location=endpoint.location)
+        if endpoint.response_location:
+            subelement.set('ResponseLocation', endpoint.response_location)
+        if endpoint.index:
+            subelement.set('index', str(endpoint.index))
+        if endpoint.is_default:
+            subelement.set('isDefault', "true")
         if endpoint.type == "AssertionConsumerService":
             if endpoint.binding == "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST":
                 saml2_support = True

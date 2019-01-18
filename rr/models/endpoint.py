@@ -25,9 +25,12 @@ class Endpoint(models.Model):
 
     type = models.CharField(max_length=30, choices=TYPECHOICES, verbose_name=_('Endpoint Type'))
     binding = models.CharField(max_length=60, choices=BINDINGCHOICES,
-                               verbose_name=_('Endpoint Binding'))
-    url = models.URLField(max_length=255, verbose_name=_('Endpoint URL'))
-    index = models.SmallIntegerField(null=True, blank=True, verbose_name=_('Endpoint Index'))
+                               verbose_name=_('Binding'))
+    location = models.URLField(max_length=255, verbose_name=_('Location'))
+    response_location = models.URLField(blank=True, max_length=255,
+                                        verbose_name=_('ResponseLocation'))
+    index = models.SmallIntegerField(null=True, blank=True, verbose_name=_('Index'))
+    is_default = models.BooleanField(default=False, verbose_name=_('isDefault'))
     created_at = models.DateTimeField(auto_now_add=True, verbose_name=_('Created at'))
     updated_at = models.DateTimeField(auto_now=True, verbose_name=_('Updated at'))
     end_at = models.DateTimeField(blank=True, null=True, verbose_name=_('Entry end time'))

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-12-13 09:06+0200\n"
+"POT-Creation-Date: 2019-01-14 15:19+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -94,8 +94,28 @@ msgstr ""
 msgid "Select template if you want to send email"
 msgstr ""
 
-#: forms/endpoint.py:25
+#: forms/endpoint.py:13
+msgid "Almost never used, leave empty if you do not know for sure."
+msgstr ""
+
+#: forms/endpoint.py:14 forms/endpoint.py:15
+msgid "Usually not used and is safe to leave empty."
+msgstr ""
+
+#: forms/endpoint.py:31
 msgid "Endpoint already exists"
+msgstr ""
+
+#: forms/endpoint.py:34
+msgid "Index already exists"
+msgstr ""
+
+#: forms/endpoint.py:36
+msgid "Default endpoint must be indexed"
+msgstr ""
+
+#: forms/endpoint.py:39
+msgid "Default endpoint already exists"
 msgstr ""
 
 #: forms/metadata.py:17
@@ -118,7 +138,7 @@ msgstr ""
 msgid "First element should be EntityDescriptor"
 msgstr ""
 
-#: forms/metadata.py:41 utils/metadata_parser.py:332
+#: forms/metadata.py:41 utils/metadata_parser.py:357
 msgid "Could not find entityID"
 msgstr ""
 
@@ -472,13 +492,13 @@ msgid "Shibboelth environmental variable for the attribute"
 msgstr ""
 
 #: models/attribute.py:30 models/certificate.py:83 models/contact.py:21
-#: models/endpoint.py:31 models/serviceprovider.py:114
+#: models/endpoint.py:34 models/serviceprovider.py:114
 #: models/serviceprovider.py:311 models/testuser.py:20 models/usergroup.py:13
 msgid "Created at"
 msgstr ""
 
 #: models/attribute.py:31 models/certificate.py:84 models/contact.py:22
-#: models/endpoint.py:32 models/serviceprovider.py:115
+#: models/endpoint.py:35 models/serviceprovider.py:115
 #: models/serviceprovider.py:312 models/testuser.py:21 models/usergroup.py:14
 msgid "Updated at"
 msgstr ""
@@ -493,7 +513,7 @@ msgstr ""
 
 #: models/certificate.py:77 templates/rr/certificate.html:23
 #: templates/rr/certificate_info.html:14
-#: templates/rr/serviceprovider_detail.html:186
+#: templates/rr/serviceprovider_detail.html:198
 msgid "Valid from"
 msgstr ""
 
@@ -501,14 +521,14 @@ msgstr ""
 #: templates/rr/certificate_admin_list.html:14
 #: templates/rr/certificate_admin_list.html:40
 #: templates/rr/certificate_info.html:12
-#: templates/rr/serviceprovider_detail.html:185 templates/rr/spadmin.html:48
+#: templates/rr/serviceprovider_detail.html:197 templates/rr/spadmin.html:48
 msgid "Valid until"
 msgstr ""
 
 #: models/certificate.py:79 templates/rr/certificate.html:24
 #: templates/rr/certificate_admin_list.html:15
 #: templates/rr/certificate_admin_list.html:41
-#: templates/rr/serviceprovider_detail.html:187
+#: templates/rr/serviceprovider_detail.html:199
 msgid "Key size"
 msgstr ""
 
@@ -525,13 +545,13 @@ msgstr ""
 msgid "Use for encryption"
 msgstr ""
 
-#: models/certificate.py:85 models/contact.py:23 models/endpoint.py:33
+#: models/certificate.py:85 models/contact.py:23 models/endpoint.py:36
 #: models/serviceprovider.py:116 models/serviceprovider.py:313
 #: models/testuser.py:22 models/usergroup.py:15
 msgid "Entry end time"
 msgstr ""
 
-#: models/certificate.py:86 models/contact.py:24 models/endpoint.py:34
+#: models/certificate.py:86 models/contact.py:24 models/endpoint.py:37
 #: models/serviceprovider.py:119 models/serviceprovider.py:314
 #: models/usergroup.py:16
 msgid "Validated on"
@@ -606,19 +626,31 @@ msgstr ""
 msgid "Endpoint Type"
 msgstr ""
 
-#: models/endpoint.py:28
-msgid "Endpoint Binding"
+#: models/endpoint.py:28 templates/rr/endpoint.html:21
+#: templates/rr/serviceprovider_detail.html:242
+msgid "Binding"
 msgstr ""
 
-#: models/endpoint.py:29
-msgid "Endpoint URL"
+#: models/endpoint.py:29 templates/rr/endpoint.html:22
+#: templates/rr/serviceprovider_detail.html:243
+msgid "Location"
 msgstr ""
 
-#: models/endpoint.py:30
-msgid "Endpoint Index"
+#: models/endpoint.py:31
+msgid "ResponseLocation"
 msgstr ""
 
-#: models/nameidformat.py:10
+#: models/endpoint.py:32 templates/rr/endpoint.html:23
+#: templates/rr/serviceprovider_detail.html:244
+msgid "Index"
+msgstr ""
+
+#: models/endpoint.py:33
+msgid "isDefault"
+msgstr ""
+
+#: models/nameidformat.py:10 templates/rr/serviceprovider_detail.html:113
+#: templates/rr/serviceprovider_detail.html:119
 msgid "Name Identifier Format"
 msgstr ""
 
@@ -853,13 +885,13 @@ msgid "Password"
 msgstr ""
 
 #: models/testuser.py:16 templates/rr/contact.html:20
-#: templates/rr/serviceprovider_detail.html:207 templates/rr/spadmin.html:19
+#: templates/rr/serviceprovider_detail.html:219 templates/rr/spadmin.html:19
 #: templates/rr/testuser.html:21 templates/rr/testuser.html:53
 msgid "First name"
 msgstr ""
 
 #: models/testuser.py:17 templates/rr/contact.html:21
-#: templates/rr/serviceprovider_detail.html:208 templates/rr/spadmin.html:20
+#: templates/rr/serviceprovider_detail.html:220 templates/rr/spadmin.html:20
 #: templates/rr/testuser.html:22 templates/rr/testuser.html:54
 msgid "Last name"
 msgstr ""
@@ -917,15 +949,15 @@ msgstr ""
 #: templates/attribute_test_service.html:56
 #: templates/rr/serviceprovider_detail.html:63
 #: templates/rr/serviceprovider_detail.html:91
-#: templates/rr/serviceprovider_detail.html:119
-#: templates/rr/serviceprovider_detail.html:166
+#: templates/rr/serviceprovider_detail.html:131
+#: templates/rr/serviceprovider_detail.html:178
 msgid "Attribute"
 msgstr ""
 
 #: templates/attribute_test_service.html:57
 #: templates/rr/serviceprovider_detail.html:64
 #: templates/rr/serviceprovider_detail.html:92
-#: templates/rr/serviceprovider_detail.html:120
+#: templates/rr/serviceprovider_detail.html:132
 msgid "Value"
 msgstr ""
 
@@ -969,7 +1001,7 @@ msgstr ""
 
 #: templates/base.html:52 templates/base.html:90 templates/base.html:169
 #: templates/base.html:206 templates/rr/certificate.html:6
-#: templates/rr/serviceprovider_detail.html:181
+#: templates/rr/serviceprovider_detail.html:193
 #: templates/rr/serviceprovider_saml_create_form.html:19
 msgid "Certificates"
 msgstr ""
@@ -983,7 +1015,7 @@ msgid "User Groups"
 msgstr ""
 
 #: templates/base.html:64 templates/base.html:181 templates/rr/contact.html:6
-#: templates/rr/serviceprovider_detail.html:202
+#: templates/rr/serviceprovider_detail.html:214
 msgid "Contacts"
 msgstr ""
 
@@ -1265,7 +1297,7 @@ msgid "Test"
 msgstr ""
 
 #: templates/rr/attribute_admin_view.html:29
-#: templates/rr/serviceprovider_detail.html:167
+#: templates/rr/serviceprovider_detail.html:179
 msgid "Reason"
 msgstr ""
 
@@ -1458,8 +1490,8 @@ msgid "List of contacts"
 msgstr ""
 
 #: templates/rr/contact.html:19 templates/rr/endpoint.html:20
-#: templates/rr/serviceprovider_detail.html:206
-#: templates/rr/serviceprovider_detail.html:229
+#: templates/rr/serviceprovider_detail.html:218
+#: templates/rr/serviceprovider_detail.html:241
 msgid "Type"
 msgstr ""
 
@@ -1526,16 +1558,12 @@ msgstr ""
 msgid "List of endpoints"
 msgstr ""
 
-#: templates/rr/endpoint.html:21 templates/rr/serviceprovider_detail.html:230
-msgid "Binding"
+#: templates/rr/endpoint.html:32 templates/rr/serviceprovider_detail.html:252
+msgid "Response:"
 msgstr ""
 
-#: templates/rr/endpoint.html:22 templates/rr/serviceprovider_detail.html:231
-msgid "URL"
-msgstr ""
-
-#: templates/rr/endpoint.html:23 templates/rr/serviceprovider_detail.html:232
-msgid "Index"
+#: templates/rr/endpoint.html:33 templates/rr/serviceprovider_detail.html:253
+msgid "default"
 msgstr ""
 
 #: templates/rr/endpoint.html:42
@@ -1717,51 +1745,51 @@ msgstr ""
 
 #: templates/rr/serviceprovider_detail.html:65
 #: templates/rr/serviceprovider_detail.html:93
-#: templates/rr/serviceprovider_detail.html:121
+#: templates/rr/serviceprovider_detail.html:133
 msgid "Validated value"
 msgstr ""
 
 #: templates/rr/serviceprovider_detail.html:87
-#: templates/rr/serviceprovider_detail.html:115
+#: templates/rr/serviceprovider_detail.html:127
 msgid "Technical attributes"
 msgstr ""
 
-#: templates/rr/serviceprovider_detail.html:143
+#: templates/rr/serviceprovider_detail.html:155
 msgid "Registry administrators"
 msgstr ""
 
-#: templates/rr/serviceprovider_detail.html:147
+#: templates/rr/serviceprovider_detail.html:159
 #: templates/rr/serviceprovider_list.html:18
 #: templates/rr/serviceprovider_list.html:57 templates/rr/usergroup.html:18
 msgid "Name"
 msgstr ""
 
-#: templates/rr/serviceprovider_detail.html:148
-#: templates/rr/serviceprovider_detail.html:209
+#: templates/rr/serviceprovider_detail.html:160
+#: templates/rr/serviceprovider_detail.html:221
 msgid "Email"
 msgstr ""
 
-#: templates/rr/serviceprovider_detail.html:162
+#: templates/rr/serviceprovider_detail.html:174
 msgid "Attribute requisitions"
 msgstr ""
 
-#: templates/rr/serviceprovider_detail.html:225
+#: templates/rr/serviceprovider_detail.html:237
 msgid "SAML endpoints"
 msgstr ""
 
-#: templates/rr/serviceprovider_detail.html:248
+#: templates/rr/serviceprovider_detail.html:260
 msgid "LDAP user groups"
 msgstr ""
 
-#: templates/rr/serviceprovider_detail.html:252
+#: templates/rr/serviceprovider_detail.html:264
 msgid "name"
 msgstr ""
 
-#: templates/rr/serviceprovider_detail.html:265
+#: templates/rr/serviceprovider_detail.html:277
 msgid "Removing this service provider"
 msgstr ""
 
-#: templates/rr/serviceprovider_detail.html:266
+#: templates/rr/serviceprovider_detail.html:278
 msgid "Click this link to remove this service provider"
 msgstr ""
 
@@ -2111,7 +2139,7 @@ msgstr ""
 msgid "Do you want to remove selected user groups?"
 msgstr ""
 
-#: utils/ldap_oldcsv_parser.py:96 utils/metadata_parser.py:199
+#: utils/ldap_oldcsv_parser.py:96 utils/metadata_parser.py:224
 msgid "Could not add attribute"
 msgstr ""
 
@@ -2131,31 +2159,31 @@ msgstr ""
 msgid "Could not find name"
 msgstr ""
 
-#: utils/metadata_parser.py:105
+#: utils/metadata_parser.py:107
 msgid "Could not add certificate"
 msgstr ""
 
-#: utils/metadata_parser.py:121
+#: utils/metadata_parser.py:123
 msgid "Unsupported nameid-format"
 msgstr ""
 
-#: utils/metadata_parser.py:141
+#: utils/metadata_parser.py:155
 msgid "Unsupported binding, please contact IdP admins if you really need this"
 msgstr ""
 
-#: utils/metadata_parser.py:162
+#: utils/metadata_parser.py:187
 msgid "Could not add"
 msgstr ""
 
-#: utils/metadata_parser.py:310
+#: utils/metadata_parser.py:335
 msgid "EntityID already exists, skipping"
 msgstr ""
 
-#: utils/metadata_parser.py:313
+#: utils/metadata_parser.py:338
 msgid "EntityID already exists, overwriting"
 msgstr ""
 
-#: utils/metadata_parser.py:322
+#: utils/metadata_parser.py:347
 msgid "EntityID does not exist, creating"
 msgstr ""
 
@@ -2211,11 +2239,11 @@ msgstr ""
 msgid "Email have been sent"
 msgstr ""
 
-#: views/endpoint.py:68
+#: views/endpoint.py:72
 msgid "Endpoint added."
 msgstr ""
 
-#: views/endpoint.py:80
+#: views/endpoint.py:84
 msgid "Endpoint removed."
 msgstr ""
 
@@ -2229,39 +2257,39 @@ msgstr ""
 msgid "Your user account has been deactivated."
 msgstr ""
 
-#: views/metadata.py:205
+#: views/metadata.py:203
 msgid "Git repository appears to have an invalid format."
 msgstr ""
 
-#: views/metadata.py:208
+#: views/metadata.py:206
 msgid "Repository path could not be accessed."
 msgstr ""
 
-#: views/metadata.py:211 views/metadata.py:227
+#: views/metadata.py:209 views/metadata.py:225
 msgid ""
 "Execution of git command failed. Might want to try git command locally from "
 "the command line and check that it works."
 msgstr ""
 
-#: views/metadata.py:217
+#: views/metadata.py:215
 msgid "Git repository has no origin."
 msgstr ""
 
-#: views/metadata.py:223
+#: views/metadata.py:221
 msgid "Remote repository not matching local, please fix manually."
 msgstr ""
 
-#: views/metadata.py:242
+#: views/metadata.py:240
 msgid "Pushing to remote did not work, please fix manually."
 msgstr ""
 
-#: views/metadata.py:244
+#: views/metadata.py:242
 msgid ""
 "Execution of git command failed. Might want to try git command locally  from "
 "the command line and check that it works."
 msgstr ""
 
-#: views/metadata.py:250
+#: views/metadata.py:248
 msgid "Metadata file has changed, please try again."
 msgstr ""
 

@@ -184,7 +184,7 @@ rKLt+NcwtbkI6weLISJu9lFZnPMYT7LpqDWD4aMHHUWr8THO0T6mbCeQRYMlfSpU
     </KeyDescriptor>
     <NameIDFormat>urn:oasis:names:tc:SAML:2.0:nameid-format:persistent</NameIDFormat>
     <AssertionConsumerService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST" Location="https://sp.example.org/Shibboleth.sso/SAML2/POST"/>
-    <AssertionConsumerService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST" Location="https://sp.example.org/Shibboleth.sso/SAML2/POST/2"/>
+    <AssertionConsumerService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST" Location="https://sp.example.org/Shibboleth.sso/SAML2/POST/2" ResponseLocation="https://sp.example.org/Shibboleth.sso/SAML2/POST/2Response" index="1" isDefault="true"/>
     <AttributeConsumingService index="1">
       <ServiceName xml:lang="fi">Mun ohjelma</ServiceName>
       <ServiceName xml:lang="en">My program name</ServiceName>
@@ -259,7 +259,7 @@ def check_for_validated_metadata(context):
     </Extensions>
     <NameIDFormat>urn:oasis:names:tc:SAML:2.0:nameid-format:persistent</NameIDFormat>
     <AssertionConsumerService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST" Location="https://sp.example.org/Shibboleth.sso/SAML2/POST"/>
-    <AssertionConsumerService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST" Location="https://sp.example.org/Shibboleth.sso/SAML2/POST/2"/>
+    <AssertionConsumerService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST" Location="https://sp.example.org/Shibboleth.sso/SAML2/POST/2" ResponseLocation="https://sp.example.org/Shibboleth.sso/SAML2/POST/2Response" index="1" isDefault="true"/>
     <AttributeConsumingService index="1">
       <ServiceName xml:lang="fi">Mun ohjelma</ServiceName>
       <ServiceName xml:lang="en">My program name</ServiceName>

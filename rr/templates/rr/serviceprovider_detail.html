@@ -244,17 +244,17 @@
     <tr>
       <th scope="col">{% trans "Type" %}</th>
       <th scope="col">{% trans "Binding" %}</th>
-      <th scope="col">{% trans "URL" %}</th>
+      <th scope="col">{% trans "Location" %}</th>
       <th scope="col">{% trans "Index" %}</th>
     </tr>
   </thead>
   <tbody>
-{% for a in endpoints %}
-    {% if a.end_at %}<tr class="table-danger">{% elif not a.validated %}<tr class="table-warning">{% else %}<tr>{% endif %}
-      <td scope="row">{{ a.get_type_display }}</td>
-      <td>{{ a.get_binding_display }}</td>
-      <td>{{ a.url }}</td>
-      <td>{{ a.index }}</td>
+{% for endpoint in endpoints %}
+    {% if endpoint.end_at %}<tr class="table-danger">{% elif not endpoint.validated %}<tr class="table-warning">{% else %}<tr>{% endif %}
+      <th scope="row">{{ endpoint.get_type_display }}</th>
+      <td>{{ endpoint.get_binding_display }}</td>
+      <td>{{ endpoint.location }}{% if endpoint.response_location %}<br>(<strong>{% trans "Response:" %}</strong> {{ endpoint.response_location }}){% endif %}</td>
+      <td>{% if endpoint.index %}{{ endpoint.index }}{% endif %}{% if endpoint.is_default %} ({% trans "default" %}){% endif %}</td>
     </tr>
 {% endfor %}
   </tbody>  

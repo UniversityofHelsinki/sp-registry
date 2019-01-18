@@ -55,13 +55,17 @@ def endpoint_list(request, pk):
             if form.is_valid():
                 contact_type = form.cleaned_data['type']
                 binding = form.cleaned_data['binding']
-                url = form.cleaned_data['url']
+                location = form.cleaned_data['location']
+                response_location = form.cleaned_data['response_location']
                 index = form.cleaned_data['index']
+                is_default = form.cleaned_data['is_default']
                 Endpoint.objects.create(sp=sp,
                                         type=contact_type,
                                         binding=binding,
-                                        url=url,
-                                        index=index)
+                                        location=location,
+                                        response_location=response_location,
+                                        index=index,
+                                        is_default=is_default)
                 sp.save_modified()
                 logger.info("Endpoint added for {sp} by {user}"
                             .format(sp=sp, user=request.user))

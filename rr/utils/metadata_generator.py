@@ -19,65 +19,18 @@ from rr.models.serviceprovider import SPAttribute, ServiceProvider
 logger = logging.getLogger(__name__)
 
 
-def metadata_extensions(element, sp, privacypolicy):
+def metadata_spssodescriptor_extensions(element, sp, privacypolicy):
     """
-    Generates Extensions element for SP metadata XML
+    Generates Extensions element for SP SSO Descriptor metadata XML
 
     element: etree.Element object for previous level (SPSSODescriptor)
     sp: ServiceProvider object
-    validated: if false, using unvalidated metadata
+    privacypolicy: fill empty privacypolicy URLs with default value
 
     Using CamelCase instead of regular underscore attribute names in element tree.
     """
 
     Extensions = etree.SubElement(element, "Extensions")
-    EntityAttributes = etree.SubElement(Extensions, "{urn:oasis:names:tc:SAML:metadata:attribute}EntityAttributes")
-    if not sp.sign_responses:
-        Attribute = etree.SubElement(EntityAttributes, "{urn:oasis:names:tc:SAML:2.0:assertion}Attribute",
-                                     Name="http://shibboleth.net/ns/profiles/saml2/sso/browser/signResponses",
-                                     NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri")
-        AttributeValue = etree.SubElement(Attribute, "{urn:oasis:names:tc:SAML:2.0:assertion}AttributeValue")
-        AttributeValue.attrib['{http://www.w3.org/2001/XMLSchema-instance}type'] = "xsd:boolean"
-        AttributeValue.text = "false"
-    if not sp.encrypt_assertions:
-        Attribute = etree.SubElement(EntityAttributes, "{urn:oasis:names:tc:SAML:2.0:assertion}Attribute",
-                                     Name="http://shibboleth.net/ns/profiles/saml2/sso/browser/encryptAssertions",
-                                     NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri")
-        AttributeValue = etree.SubElement(Attribute, "{urn:oasis:names:tc:SAML:2.0:assertion}AttributeValue")
-        AttributeValue.attrib['{http://www.w3.org/2001/XMLSchema-instance}type'] = "xsd:boolean"
-        AttributeValue.text = "false"
-        Attribute = etree.SubElement(EntityAttributes, "{urn:oasis:names:tc:SAML:2.0:assertion}Attribute",
-                                     Name="http://shibboleth.net/ns/profiles/saml2/sso/browser/encryptNameIDs",
-                                     NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri")
-        AttributeValue = etree.SubElement(Attribute, "{urn:oasis:names:tc:SAML:2.0:assertion}AttributeValue")
-        AttributeValue.attrib['{http://www.w3.org/2001/XMLSchema-instance}type'] = "xsd:boolean"
-        AttributeValue.text = "false"
-    if sp.force_sha1:
-        Attribute = etree.SubElement(EntityAttributes, "{urn:oasis:names:tc:SAML:2.0:assertion}Attribute",
-                                     Name="http://shibboleth.net/ns/profiles/securityConfiguration",
-                                     NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri")
-        AttributeValue = etree.SubElement(Attribute, "{urn:oasis:names:tc:SAML:2.0:assertion}AttributeValue")
-        AttributeValue.text = "shibboleth.SecurityConfiguration.SHA1"
-    if sp.force_mfa and hasattr(settings, 'MFA_AUTHENTICATION_CONTEXT') and settings.MFA_AUTHENTICATION_CONTEXT:
-        Attribute = etree.SubElement(EntityAttributes, "{urn:oasis:names:tc:SAML:2.0:assertion}Attribute",
-                                     Name="http://shibboleth.net/ns/profiles/defaultAuthenticationMethods",
-                                     NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri")
-        AttributeValue = etree.SubElement(Attribute, "{urn:oasis:names:tc:SAML:2.0:assertion}AttributeValue")
-        AttributeValue.text = settings.MFA_AUTHENTICATION_CONTEXT
-        Attribute = etree.SubElement(EntityAttributes, "{urn:oasis:names:tc:SAML:2.0:assertion}Attribute",
-                                     Name="http://shibboleth.net/ns/profiles/disallowedFeatures",
-                                     NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri")
-        AttributeValue = etree.SubElement(Attribute, "{urn:oasis:names:tc:SAML:2.0:assertion}AttributeValue")
-        AttributeValue.text = "0x1"
-    if sp.force_nameidformat and len(sp.nameidformat.all()) == 1:
-        Attribute = etree.SubElement(EntityAttributes, "{urn:oasis:names:tc:SAML:2.0:assertion}Attribute",
-                                     Name="http://shibboleth.net/ns/profiles/nameIDFormatPrecedence",
-                                     NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri")
-        AttributeValue = etree.SubElement(Attribute, "{urn:oasis:names:tc:SAML:2.0:assertion}AttributeValue")
-        AttributeValue.text = sp.nameidformat.all()[0].nameidformat
-    if len(EntityAttributes) == 0:
-        Extensions.remove(EntityAttributes)
-
     if sp.discovery_service_url:
         etree.SubElement(Extensions, "{urn:oasis:names:tc:SAML:profiles:SSO:idp-discovery-protocol}DiscoveryResponse",
                          Binding="urn:oasis:names:tc:SAML:profiles:SSO:idp-discovery-protocol",
@@ -141,6 +94,67 @@ def metadata_extensions(element, sp, privacypolicy):
             PrivacyStatementURL_sv.text = "https://www.helsinki.fi/fi/yliopisto/tietosuojaselosteet-0"
     if len(UIInfo) == 0:
         Extensions.remove(UIInfo)
+
+
+def metadata_entity_extensions(element, sp):
+    """
+    Generates Extensions element for SP EntityDescriptor metadata XML
+
+    element: etree.Element object for previous level (EntityDescriptor)
+    sp: ServiceProvider object
+
+    Using CamelCase instead of regular underscore attribute names in element tree.
+    """
+
+    Extensions = etree.SubElement(element, "Extensions")
+    EntityAttributes = etree.SubElement(Extensions, "{urn:oasis:names:tc:SAML:metadata:attribute}EntityAttributes")
+    if not sp.sign_responses:
+        Attribute = etree.SubElement(EntityAttributes, "{urn:oasis:names:tc:SAML:2.0:assertion}Attribute",
+                                     Name="http://shibboleth.net/ns/profiles/saml2/sso/browser/signResponses",
+                                     NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri")
+        AttributeValue = etree.SubElement(Attribute, "{urn:oasis:names:tc:SAML:2.0:assertion}AttributeValue")
+        AttributeValue.attrib['{http://www.w3.org/2001/XMLSchema-instance}type'] = "xsd:boolean"
+        AttributeValue.text = "false"
+    if not sp.encrypt_assertions:
+        Attribute = etree.SubElement(EntityAttributes, "{urn:oasis:names:tc:SAML:2.0:assertion}Attribute",
+                                     Name="http://shibboleth.net/ns/profiles/saml2/sso/browser/encryptAssertions",
+                                     NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri")
+        AttributeValue = etree.SubElement(Attribute, "{urn:oasis:names:tc:SAML:2.0:assertion}AttributeValue")
+        AttributeValue.attrib['{http://www.w3.org/2001/XMLSchema-instance}type'] = "xsd:boolean"
+        AttributeValue.text = "false"
+        Attribute = etree.SubElement(EntityAttributes, "{urn:oasis:names:tc:SAML:2.0:assertion}Attribute",
+                                     Name="http://shibboleth.net/ns/profiles/saml2/sso/browser/encryptNameIDs",
+                                     NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri")
+        AttributeValue = etree.SubElement(Attribute, "{urn:oasis:names:tc:SAML:2.0:assertion}AttributeValue")
+        AttributeValue.attrib['{http://www.w3.org/2001/XMLSchema-instance}type'] = "xsd:boolean"
+        AttributeValue.text = "false"
+    if sp.force_sha1:
+        Attribute = etree.SubElement(EntityAttributes, "{urn:oasis:names:tc:SAML:2.0:assertion}Attribute",
+                                     Name="http://shibboleth.net/ns/profiles/securityConfiguration",
+                                     NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri")
+        AttributeValue = etree.SubElement(Attribute, "{urn:oasis:names:tc:SAML:2.0:assertion}AttributeValue")
+        AttributeValue.text = "shibboleth.SecurityConfiguration.SHA1"
+    if sp.force_mfa and hasattr(settings, 'MFA_AUTHENTICATION_CONTEXT') and settings.MFA_AUTHENTICATION_CONTEXT:
+        Attribute = etree.SubElement(EntityAttributes, "{urn:oasis:names:tc:SAML:2.0:assertion}Attribute",
+                                     Name="http://shibboleth.net/ns/profiles/defaultAuthenticationMethods",
+                                     NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri")
+        AttributeValue = etree.SubElement(Attribute, "{urn:oasis:names:tc:SAML:2.0:assertion}AttributeValue")
+        AttributeValue.text = settings.MFA_AUTHENTICATION_CONTEXT
+        Attribute = etree.SubElement(EntityAttributes, "{urn:oasis:names:tc:SAML:2.0:assertion}Attribute",
+                                     Name="http://shibboleth.net/ns/profiles/disallowedFeatures",
+                                     NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri")
+        AttributeValue = etree.SubElement(Attribute, "{urn:oasis:names:tc:SAML:2.0:assertion}AttributeValue")
+        AttributeValue.text = "0x1"
+    if sp.force_nameidformat and len(sp.nameidformat.all()) == 1:
+        Attribute = etree.SubElement(EntityAttributes, "{urn:oasis:names:tc:SAML:2.0:assertion}Attribute",
+                                     Name="http://shibboleth.net/ns/profiles/nameIDFormatPrecedence",
+                                     NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri")
+        AttributeValue = etree.SubElement(Attribute, "{urn:oasis:names:tc:SAML:2.0:assertion}AttributeValue")
+        AttributeValue.text = sp.nameidformat.all()[0].nameidformat
+    if len(EntityAttributes) == 0:
+        Extensions.remove(EntityAttributes)
+        element.remove(Extensions)
+
 
 def metadata_certificates(element, sp, validation_date):
     """
@@ -384,13 +398,13 @@ def metadata_spssodescriptor(element, sp, history, validation_date, privacypolic
             SPSSODescriptor.set("WantAssertionsSigned", "true")
         if history.sign_requests:
             SPSSODescriptor.set("AuthnRequestsSigned", "true")
-        metadata_extensions(SPSSODescriptor, history, privacypolicy)
+        metadata_spssodescriptor_extensions(SPSSODescriptor, history, privacypolicy)
     else:
         if sp.sign_assertions:
             SPSSODescriptor.set("WantAssertionsSigned", "true")
         if sp.sign_requests:
             SPSSODescriptor.set("AuthnRequestsSigned", "true")
-        metadata_extensions(SPSSODescriptor, sp, privacypolicy)
+        metadata_spssodescriptor_extensions(SPSSODescriptor, sp, privacypolicy)
     metadata_certificates(SPSSODescriptor, sp, validation_date)
     if history:
         metadata_nameidformat(SPSSODescriptor, history)
@@ -451,6 +465,10 @@ def metadata_generator(sp, validated=True, privacypolicy=False, tree=None):
                                                 "xsi": 'http://www.w3.org/2001/XMLSchema-instance',
                                                 "xsd": 'http://www.w3.org/2001/XMLSchema',
                                                 })
+    if history:
+        metadata_entity_extensions(EntityDescriptor, history)
+    else:
+        metadata_entity_extensions(EntityDescriptor, sp)
     metadata_spssodescriptor(EntityDescriptor, sp, history, validation_date, privacypolicy)
     metadata_contact(EntityDescriptor, sp, validation_date)
     if history:

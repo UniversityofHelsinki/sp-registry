@@ -96,9 +96,9 @@ class TechnicalInformationForm(ModelForm):
             'encrypt_assertions': _('IdP encrypts attribute assertions sent to SP. Defaults to '
                                     'True. Do not change unless you are using a SP that does '
                                     'not support encryption.'),
-            'force_mfa': _('MFA authentication is required for all users. May be set here '
-                           'if the service does not support requesting specific authentication '
-                           'method in authentication request.'),
+            'force_mfa': _('MFA authentication is required for all users. If set here, service '
+                           'must not require specific authentication context class as it will '
+                           'trigger an error.'),
             'force_sha1': _('Forces using of SHA-1 algorithm in signatures. Default is SHA-256. '
                             'Should not be used unless using old SAML software which does not support '
                             'SHA-256.'),

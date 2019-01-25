@@ -14,9 +14,9 @@
     <div class="row">
       <main class="col-lg-10 offset-lg-2 col-xl-8 offset-xl-2 pt-3">
 <h1>{% trans "Attribute test service" %}</h1>
-<p>This service lists all attributes that can be released to service providers by the login service.</p>
-<p>Some deprecated attributes may be hidden from the view if they don't contain any value for you.</p>
-<p>The following icons are used to represent the status of each attribute: </p>
+<p>{% trans "This service lists all attributes that can be released to service providers by the login service." %}</p>
+<p>{% trans "Some deprecated attributes may be hidden from the view if they don't contain any value for you." %}</p>
+<p>{% trans "Following icons are used to represent the status of each attribute:" %}</p>
 <table class="table table-sm">
   <tbody>
     <tr>
@@ -33,7 +33,7 @@
     </tr>
   </tbody>
 </table>
-<p>In case the attribute values are incorrect or a required attribute was not released, please contact <a href="https://helpdesk.it.helsinki.fi/">Helpdesk.</a></p>
+<p>{% trans "In case the attribute values are incorrect or a required attribute was not released, please contact" %} <a href="https://helpdesk.it.helsinki.fi/">{% trans "Helpdesk" %}.</a></p>
 <h2>{% trans "Authentication context" %}</h2>
 <table class="table table-sm">
   <tbody>
@@ -47,7 +47,13 @@
     </tr>
   </tbody>
 </table>
-<a href="https://{{ request.META.SERVER_NAME }}/Shibboleth.sso/Login?authnContextClassRef=https://refeds.org/profile/mfa"><button type="button" class="btn btn-primary">{% trans "Login using MFA" %}</button></a>
+{% if shib_auth_context != "https://refeds.org/profile/mfa" %}
+<p>{% trans "You have logged in using single-factor authentication." %}</p>
+<p><a href="https://{{ request.META.SERVER_NAME }}/Shibboleth.sso/Login?authnContextClassRef=https://refeds.org/profile/mfa"><button type="button" class="btn btn-primary">{% trans "Login using multi-factor authentication" %}</button></a></p>
+{% else %}
+<p>{% trans "You have logged in using multi-factor authentication." %}</p>
+<p><a href="https://{{ request.META.SERVER_NAME }}/Shibboleth.sso/Login?authnContextClassRef=https://refeds.org/profile/sfa"><button type="button" class="btn btn-primary">{% trans "Login using single-factor authentication" %}</button></a></p>
+{% endif %}
 <h2>{% trans "Attributes" %}</h2>
 <table class="table table-sm">
   <thead>

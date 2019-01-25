@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-01-24 15:19+0200\n"
+"POT-Creation-Date: 2019-01-25 10:30+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -957,6 +957,22 @@ msgstr ""
 msgid "Attribute test service"
 msgstr ""
 
+#: templates/attribute_test_service.html:17
+msgid ""
+"This service lists all attributes that can be released to service providers "
+"by the login service."
+msgstr ""
+
+#: templates/attribute_test_service.html:18
+msgid ""
+"Some deprecated attributes may be hidden from the view if they don't contain "
+"any value for you."
+msgstr ""
+
+#: templates/attribute_test_service.html:19
+msgid "Following icons are used to represent the status of each attribute:"
+msgstr ""
+
 #: templates/attribute_test_service.html:24
 msgid "Attribute was released and it has a seemingly correct value."
 msgstr ""
@@ -973,21 +989,43 @@ msgid ""
 "attributes are available for all users."
 msgstr ""
 
+#: templates/attribute_test_service.html:36
+msgid ""
+"In case the attribute values are incorrect or a required attribute was not "
+"released, please contact"
+msgstr ""
+
+#: templates/attribute_test_service.html:36
+msgid "Helpdesk"
+msgstr ""
+
 #: templates/attribute_test_service.html:37
 msgid "Authentication context"
 msgstr ""
 
-#: templates/attribute_test_service.html:50
-msgid "Login using MFA"
+#: templates/attribute_test_service.html:51
+msgid "You have logged in using single-factor authentication."
 msgstr ""
 
-#: templates/attribute_test_service.html:51 templates/base.html:48
+#: templates/attribute_test_service.html:52
+msgid "Login using multi-factor authentication"
+msgstr ""
+
+#: templates/attribute_test_service.html:54
+msgid "You have logged in using multi-factor authentication."
+msgstr ""
+
+#: templates/attribute_test_service.html:55
+msgid "Login using single-factor authentication"
+msgstr ""
+
+#: templates/attribute_test_service.html:57 templates/base.html:48
 #: templates/base.html:87 templates/base.html:165 templates/base.html:203
 #: templates/rr/attribute_list.html:6
 msgid "Attributes"
 msgstr ""
 
-#: templates/attribute_test_service.html:56
+#: templates/attribute_test_service.html:62
 #: templates/rr/serviceprovider_detail.html:67
 #: templates/rr/serviceprovider_detail.html:95
 #: templates/rr/serviceprovider_detail.html:135
@@ -995,18 +1033,18 @@ msgstr ""
 msgid "Attribute"
 msgstr ""
 
-#: templates/attribute_test_service.html:57
+#: templates/attribute_test_service.html:63
 #: templates/rr/serviceprovider_detail.html:68
 #: templates/rr/serviceprovider_detail.html:96
 #: templates/rr/serviceprovider_detail.html:136
 msgid "Value"
 msgstr ""
 
-#: templates/attribute_test_service.html:58
+#: templates/attribute_test_service.html:64
 msgid "Value format (regex)"
 msgstr ""
 
-#: templates/attribute_test_service.html:72
+#: templates/attribute_test_service.html:78
 msgid "Logout using Single Logout"
 msgstr ""
 

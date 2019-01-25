@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-01-24 15:19+0200\n"
+"POT-Creation-Date: 2019-01-25 10:30+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -323,9 +323,9 @@ msgid ""
 "MFA authentication is required for all users. If set here, service must not "
 "require specific authentication context class as it will trigger an error."
 msgstr ""
-"Vahvempi tunnistautuminen vaaditaan kaikilta käyttäjiltä. Jos asetus on päällä, "
-"ei palvelu saa vaatia tiettyä autentikointitapaa tai kirjautuminen päättyy "
-"virheeseen."
+"Vahvempi tunnistautuminen vaaditaan kaikilta käyttäjiltä. Jos asetus on "
+"päällä, ei palvelu saa vaatia tiettyä autentikointitapaa tai kirjautuminen "
+"päättyy virheeseen."
 
 #: forms/serviceprovider.py:102
 msgid ""
@@ -1045,6 +1045,26 @@ msgstr "Attribuuttien testipalvelu"
 msgid "Attribute test service"
 msgstr "Attribuuttien testipalvelu"
 
+#: templates/attribute_test_service.html:17
+msgid ""
+"This service lists all attributes that can be released to service providers "
+"by the login service."
+msgstr ""
+"Tämä palvelu listaa kaikki tiedot, joita käyttäjästä on saatavilla "
+"keskitetyn kirjautumispalvelun kautta."
+
+#: templates/attribute_test_service.html:18
+msgid ""
+"Some deprecated attributes may be hidden from the view if they don't contain "
+"any value for you."
+msgstr ""
+"Osa käytöstä poistuvista attribuuteista on piilotettu näkymästä, jos ne "
+"eivät sisällä mitään arvoa teillä."
+
+#: templates/attribute_test_service.html:19
+msgid "Following icons are used to represent the status of each attribute:"
+msgstr "Seuraavia kuvakkeita käytetään näyttämään attribuutin status:"
+
 #: templates/attribute_test_service.html:24
 msgid "Attribute was released and it has a seemingly correct value."
 msgstr "Attribuutti julkaistiin ja sen arvo vaikuttaa oikeanlaiselta."
@@ -1065,21 +1085,45 @@ msgstr ""
 "Tämä attribuutti on vapaaehtoinen eikä sillä ollut arvoa teille. Kaikkia "
 "attribuutteja ei ole saatavilla kaikille käyttäjille."
 
+#: templates/attribute_test_service.html:36
+msgid ""
+"In case the attribute values are incorrect or a required attribute was not "
+"released, please contact"
+msgstr ""
+"Jos joukossa on vääriä tietoja tai vaaditulla attribuutilla ei ole arvoa, "
+"ole yhteyttä"
+
+#: templates/attribute_test_service.html:36
+msgid "Helpdesk"
+msgstr "Helpdeskiin"
+
 #: templates/attribute_test_service.html:37
 msgid "Authentication context"
 msgstr "Autentikointitapa"
 
-#: templates/attribute_test_service.html:50
-msgid "Login using MFA"
-msgstr "Kirjaudu kaksivaiheisella tunnistautumisella"
+#: templates/attribute_test_service.html:51
+msgid "You have logged in using single-factor authentication."
+msgstr "Olet kirjautunut käyttäen yksivaiheista tunnistusta."
 
-#: templates/attribute_test_service.html:51 templates/base.html:48
+#: templates/attribute_test_service.html:52
+msgid "Login using multi-factor authentication"
+msgstr "Kirjaudu käyttäen vahvennettua tunnistusta."
+
+#: templates/attribute_test_service.html:54
+msgid "You have logged in using multi-factor authentication."
+msgstr "Olet kirjautunut käyttäen vahvennettua tunnistusta."
+
+#: templates/attribute_test_service.html:55
+msgid "Login using single-factor authentication"
+msgstr "Kirjaudu käyttäen yksivaiheista tunnistusta."
+
+#: templates/attribute_test_service.html:57 templates/base.html:48
 #: templates/base.html:87 templates/base.html:165 templates/base.html:203
 #: templates/rr/attribute_list.html:6
 msgid "Attributes"
 msgstr "Attribuutit"
 
-#: templates/attribute_test_service.html:56
+#: templates/attribute_test_service.html:62
 #: templates/rr/serviceprovider_detail.html:67
 #: templates/rr/serviceprovider_detail.html:95
 #: templates/rr/serviceprovider_detail.html:135
@@ -1087,18 +1131,18 @@ msgstr "Attribuutit"
 msgid "Attribute"
 msgstr "Attribuutti"
 
-#: templates/attribute_test_service.html:57
+#: templates/attribute_test_service.html:63
 #: templates/rr/serviceprovider_detail.html:68
 #: templates/rr/serviceprovider_detail.html:96
 #: templates/rr/serviceprovider_detail.html:136
 msgid "Value"
 msgstr "Arvo"
 
-#: templates/attribute_test_service.html:58
+#: templates/attribute_test_service.html:64
 msgid "Value format (regex)"
 msgstr "Arvon muoto (regex)"
 
-#: templates/attribute_test_service.html:72
+#: templates/attribute_test_service.html:78
 msgid "Logout using Single Logout"
 msgstr "Kirjaudu ulos käyttäen kertauloskirjautumista"
 
@@ -2608,6 +2652,9 @@ msgstr "Käyttäjäryhmä lisätty."
 #: views/usergroup.py:71
 msgid "User group removed."
 msgstr "Käyttäjäryhmä poistettu."
+
+#~ msgid "Login using MFA"
+#~ msgstr "Kirjaudu kaksivaiheisella tunnistautumisella"
 
 #~ msgid "Endpoint Binding"
 #~ msgstr "Yhteysosoitteen muoto"

@@ -422,7 +422,7 @@ def metadata_spssodescriptor(element, sp, history, validation_date, privacypolic
     metadata_attributeconsumingservice(SPSSODescriptor, sp, history, validation_date)
 
 
-def metadata_generator(sp, validated=True, privacypolicy=False, tree=None):
+def metadata_generator(sp, validated=True, privacypolicy=False, tree=None, disable_entity_extensions=False):
     """
     Generates metadata for single SP.
 
@@ -465,10 +465,11 @@ def metadata_generator(sp, validated=True, privacypolicy=False, tree=None):
                                                 "xsi": 'http://www.w3.org/2001/XMLSchema-instance',
                                                 "xsd": 'http://www.w3.org/2001/XMLSchema',
                                                 })
-    if history:
-        metadata_entity_extensions(EntityDescriptor, history)
-    else:
-        metadata_entity_extensions(EntityDescriptor, sp)
+    if not disable_entity_extensions:
+        if history:
+            metadata_entity_extensions(EntityDescriptor, history)
+        else:
+            metadata_entity_extensions(EntityDescriptor, sp)
     metadata_spssodescriptor(EntityDescriptor, sp, history, validation_date, privacypolicy)
     metadata_contact(EntityDescriptor, sp, validation_date)
     if history:
@@ -504,11 +505,15 @@ def metadata_generator_list(validated=True, privacypolicy=False, production=Fals
                                                                                             "xsd": 'http://www.w3.org/2001/XMLSchema',
                                                                                             })
     serviceproviders = ServiceProvider.objects.filter(end_at=None, service_type="saml")
+    if hasattr(settings, 'DISABLE_METADATA_ENTITY_EXTENSIONS') and settings.DISABLE_METADATA_ENTITY_EXTENSIONS:
+        disable_entity_extensions = True
+    else:
+        disable_entity_extensions = False
     for sp in serviceproviders:
         if production and sp.production:
-            metadata_generator(sp, validated, privacypolicy, tree)
+            metadata_generator(sp, validated, privacypolicy, tree, disable_entity_extensions)
         elif test and sp.test:
-            metadata_generator(sp, validated, privacypolicy, tree)
+            metadata_generator(sp, validated, privacypolicy, tree, disable_entity_extensions)
         elif include and sp.entity_id in include:
-            metadata_generator(sp, validated, privacypolicy, tree)
+            metadata_generator(sp, validated, privacypolicy, tree, disable_entity_extensions)
     return tree

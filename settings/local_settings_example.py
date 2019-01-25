@@ -69,3 +69,5 @@ LDAP_METADATA_FILENAME = 'ldap-metadata.xml'
 STATIC_ROOT = '/path/to/rr/static/'
 
 MFA_AUTHENTICATION_CONTEXT = 'https://refeds.org/profile/mfa'
+
+DISABLE_METADATA_ENTITY_EXTENSIONS = False

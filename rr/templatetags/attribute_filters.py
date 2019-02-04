@@ -24,6 +24,16 @@ def get_item(value, arg):
         return None
 
 
+@register.filter
+def compare_querysets(queryset_1, queryset_2):
+    """
+    Return true if QuerySets are equal
+    """
+    if list(queryset_1) == list(queryset_2):
+        return True
+    return False
+
+
 @register.simple_tag
 def privacy_policy_url(name):
     if name in ["PRIVACY_POLICY_URL"]:

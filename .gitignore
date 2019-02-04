@@ -43,6 +43,7 @@ coverage.xml
 *.cover
 .hypothesis/
 .test-screenshots/
+test-screenshots/
 
 # Translations
 *.mo
@@ -76,3 +77,6 @@ venv.bak/
 .project
 .pydevproject
 .settings/
+
+# pycharm
+.idea/

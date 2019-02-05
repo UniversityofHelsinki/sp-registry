@@ -470,11 +470,10 @@ class ServiceProviderDelete(SuccessMessageMixin, DeleteView):
         return HttpResponseRedirect(success_url)
 
 
-class SingEncryptList(ListView):
+class SAMLAdminList(ListView):
     """
-    Displays a list of :model:`rr.ServiceProvider` where
-    signing and encryption attributes are not default
-
+    Displays a list of SAML :model:`rr.ServiceProvider` where
+    special configurations are enabled
 
     **Context**
 
@@ -483,13 +482,13 @@ class SingEncryptList(ListView):
 
     **Template:**
 
-    :template:`rr/serviceprovider_list.html`
+    :template:`rr/serviceprovider_saml_admin_list.html`
     """
     model = ServiceProvider
-    template_name_suffix = '_sign_encrypt_list'
+    template_name_suffix = '_saml_admin_list'
 
     def get_queryset(self):
         if self.request.user.is_superuser:
-            return ServiceProvider.objects.filter(end_at=None).order_by('entity_id')
+            return ServiceProvider.objects.filter(service_type="saml", end_at=None).order_by('entity_id')
         else:
             raise PermissionDenied

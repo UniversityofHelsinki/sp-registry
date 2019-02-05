@@ -1,0 +1,155 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load static %}
+{% load attribute_filters %}
+{% block content %}
+    <h1>{% trans "Special configurations" %}</h1>
+    <div class="alert alert-info" role="alert">
+        <a href="{% url 'saml-admin-list' %}?show=signing" class="btn btn-primary">{% trans "Sining and encryption" %}</a>
+        <a href="{% url 'saml-admin-list' %}?show=nameid" class="btn btn-success">{% trans "NameId settings" %}</a>
+        <a href="{% url 'saml-admin-list' %}?show=mfa" class="btn btn-danger">{% trans "MFA and authorization" %}</a>
+        <a href="{% url 'saml-admin-list' %}?show=samlproduct" class="btn btn-warning">{% trans "SAML Product" %}</a>
+    </div>
+    {% if request.GET.show == "signing" %}
+        <h2>{% trans "Service Provider Signing and Encryption" %}</h2>
+        <div class="alert alert-success" role="alert">
+            <p>{% trans "This list includes all service providers which do not have default signing and encryption attributes." %}</p>
+        </div>
+        <table class="table table-sm">
+            <thead>
+            <tr>
+                <th scope="col">{% trans "entityID" %}</th>
+                <th scope="col">{% trans "SHA1 algorithm" %}</th>
+                <th scope="col">{% trans "Sign assertions" %}</th>
+                <th scope="col">{% trans "Sign responses" %}</th>
+                <th scope="col">{% trans "Encrypt assertions" %}</th>
+                <th scope="col">{% trans "Prod" %}</th>
+                <th scope="col">{% trans "Test" %}</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for object in object_list %}
+                {% if force_sha1 or object.sign_assertions or not object.sign_responses or not object.encrypt_assertions %}
+                    <tr>
+                        <th scope="row"><a href="/summary/{{ object.pk }}/">{{ object.entity_id  }}</a></th>
+                        {% if object.force_sha1 %}<td class="text-success">&#10004;{% else %}<td class="text-danger">&#10005;{% endif %}</td>
+                        {% if object.sign_assertions %}<td class="text-success">&#10004;{% else %}<td class="text-danger">&#10005;{% endif %}</td>
+                        {% if object.sign_responses %}<td class="text-success">&#10004;{% else %}<td class="text-danger">&#10005;{% endif %}</td>
+                        {% if object.encrypt_assertions %}<td class="text-success">&#10004;{% else %}<td class="text-danger">&#10005;{% endif %}</td>
+                        {% if object|get_production_status %}<td class="text-success">&#10004;{% else %}<td class="text-danger">&#10005;{% endif %}</td>
+                        {% if object.test %}<td class="text-success">&#10004;{% else %}<td class="text-danger">&#10005;{% endif %}</td>
+                    </tr>
+                {% endif %}
+            {% empty %}
+                <tr>
+                    <th scope="row">{% trans "You do not have access to any service providers." %}</th>
+                    <td></td>
+                    <td></td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    {% elif request.GET.show == "nameid" %}
+        <h2>{% trans "NameId Format settings" %}</h2>
+        <div class="alert alert-success" role="alert">
+            <p>{% trans "This list includes all service providers which have specific NameIdFormat settings." %}</p>
+        </div>
+        <table class="table table-sm">
+            <thead>
+            <tr>
+                <th scope="col">{% trans "entityID" %}</th>
+                <th scope="col">{% trans "Force NameId" %}</th>
+                <th scope="col">{% trans "NameIds" %}</th>
+                <th scope="col">{% trans "Prod" %}</th>
+                <th scope="col">{% trans "Test" %}</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for object in object_list %}
+                {% if object.force_nameidformat or object.nameidformat.all %}
+                    <tr>
+                        <th scope="row"><a href="/summary/{{ object.pk }}/">{{ object.entity_id  }}</a></th>
+                        {% if object.force_nameidformat %}<td class="text-success">&#10004;{% else %}<td class="text-danger">&#10005;{% endif %}</td>
+                        <td>{% for n in object.nameidformat.all %}{{ n.nameidformat }}{% if not forloop.last %}<br>{% endif %}{% endfor %}</td>
+                        {% if object|get_production_status %}<td class="text-success">&#10004;{% else %}<td class="text-danger">&#10005;{% endif %}</td>
+                        {% if object.test %}<td class="text-success">&#10004;{% else %}<td class="text-danger">&#10005;{% endif %}</td>
+                    </tr>
+                {% endif %}
+            {% empty %}
+                <tr>
+                    <th scope="row">{% trans "You do not have access to any service providers." %}</th>
+                    <td></td>
+                    <td></td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    {% elif request.GET.show == "mfa" %}
+        <h2>{% trans "MFA and authorization settings" %}</h2>
+        <div class="alert alert-success" role="alert">
+            <p>{% trans "This list includes all service providers which have MFA forced from server side." %}</p>
+        </div>
+        <table class="table table-sm">
+            <thead>
+            <tr>
+                <th scope="col">{% trans "entityID" %}</th>
+                <th scope="col">{% trans "Force MFA" %}</th>
+                <th scope="col">{% trans "Prod" %}</th>
+                <th scope="col">{% trans "Test" %}</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for object in object_list %}
+                {% if object.force_mfa %}
+                    <tr>
+                        <th scope="row"><a href="/summary/{{ object.pk }}/">{{ object.entity_id  }}</a></th>
+                        {% if object.force_mfa %}<td class="text-success">&#10004;{% else %}<td class="text-danger">&#10005;{% endif %}</td>
+                        {% if object|get_production_status %}<td class="text-success">&#10004;{% else %}<td class="text-danger">&#10005;{% endif %}</td>
+                        {% if object.test %}<td class="text-success">&#10004;{% else %}<td class="text-danger">&#10005;{% endif %}</td>
+                    </tr>
+                {% endif %}
+            {% empty %}
+                <tr>
+                    <th scope="row">{% trans "You do not have access to any service providers." %}</th>
+                    <td></td>
+                    <td></td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    {% elif request.GET.show == "samlproduct" %}
+        <h2>{% trans "SAML Product" %}</h2>
+        <div class="alert alert-success" role="alert">
+            <p>{% trans "This list shows which SAML product services are using." %}</p>
+        </div>
+        <table class="table table-sm">
+            <thead>
+            <tr>
+                <th scope="col">{% trans "entityID" %}</th>
+                <th scope="col">{% trans "SAML Product" %}</th>
+                <th scope="col">{% trans "Autoupdate metadata" %}</th>
+                <th scope="col">{% trans "Prod" %}</th>
+                <th scope="col">{% trans "Test" %}</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for object in object_list %}
+                <tr>
+                    <th scope="row"><a href="/summary/{{ object.pk }}/">{{ object.entity_id  }}</a></th>
+                    <td>{{ object.saml_product }}</td>
+                    {% if object.saml_product %}<td class="text-success">&#10004;{% else %}<td class="text-danger">&#10005;{% endif %}</td>
+                    {% if object|get_production_status %}<td class="text-success">&#10004;{% else %}<td class="text-danger">&#10005;{% endif %}</td>
+                    {% if object.test %}<td class="text-success">&#10004;{% else %}<td class="text-danger">&#10005;{% endif %}</td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <th scope="row">{% trans "You do not have access to any service providers." %}</th>
+                    <td></td>
+                    <td></td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    {%  endif %}
+
+{% endblock %}

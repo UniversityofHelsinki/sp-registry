@@ -6,7 +6,7 @@ from django.contrib.auth.decorators import login_required
 from rr.views.serviceprovider import SamlServiceProviderCreate, BasicInformationUpdate
 from rr.views.serviceprovider import BasicInformationView, ServiceProviderDelete
 from rr.views.serviceprovider import ServiceProviderList, TechnicalInformationUpdate
-from rr.views.serviceprovider import SingEncryptList
+from rr.views.serviceprovider import SAMLAdminList
 from rr.views.serviceprovider import LdapServiceProviderCreate, LdapTechnicalInformationUpdate
 from rr.views.attribute import attribute_list, attribute_admin_list, attribute_view
 from rr.views.certificate import certificate_list, certificate_admin_list
@@ -64,8 +64,8 @@ urlpatterns = [
         login_required(ServiceProviderDelete.as_view()), name='serviceprovider-delete'),
     url(r'^serviceprovider/(?P<pk>[0-9]+)/$', login_required(BasicInformationUpdate.as_view()),
         name='basicinformation-update'),
-    url(r'^sign_encrypt_list/$', login_required(SingEncryptList.as_view()),
-        name='sign-encrypt-list'),
+    url(r'^saml_admin_list/$', login_required(SAMLAdminList.as_view()),
+        name='saml-admin-list'),
     url(r'^summary/(?P<pk>[0-9]+)/$', login_required(BasicInformationView.as_view()),
         name='summary-view'),
     url(r'^testuser/(?P<pk>[0-9]+)/$', testuser_list, name='testuser-list'),

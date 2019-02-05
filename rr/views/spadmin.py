@@ -155,13 +155,16 @@ def admin_list(request, pk):
         elif "remove_invite" in request.POST:
             for key, value in request.POST.dict().items():
                 if value == "on":
-                    invite = Keystore.objects.get(pk=key)
-                    if invite.sp == sp:
+                    invite = Keystore.objects.filter(pk=key).first()
+                    if invite and invite.sp == sp:
                         logger.info("Invite for {email} to {sp} deleted by {user}"
                                     .format(email=invite.email, sp=sp, user=request.user))
                         messages.add_message(request, messages.INFO,
                                              _('Invite removed for email ') + invite.email)
                         invite.delete()
+                    else:
+                        messages.add_message(request, messages.INFO,
+                                             _('Invite already used or removed'))
         elif "remove_admin" in request.POST:
             for key, value in request.POST.dict().items():
                 if value == "on":

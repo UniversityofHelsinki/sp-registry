@@ -2653,6 +2653,16 @@ msgstr "Käyttäjäryhmä lisätty."
 msgid "User group removed."
 msgstr "Käyttäjäryhmä poistettu."
 
+msgid "Does this service use the LDAPAuth proxy?"
+msgstr "Käyttääkö tämä palvelu LDAPAuthia?"
+
+msgid ""
+"Does this service use the LDAPAuth proxy in order to access "
+"user and group data for authentication and access control?"
+msgstr ""
+"Käyttääkö tämä palvelu käyttäjä- ja ryhmätietoja LDAPAuthin kautta "
+"autentikointia ja pääsynhallintaa varten?"
+
 #~ msgid "Login using MFA"
 #~ msgstr "Kirjaudu kaksivaiheisella tunnistautumisella"
 

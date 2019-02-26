@@ -88,7 +88,7 @@ class ServiceProvider(models.Model):
 
     # LDAP Technical information
     uses_ldapauth = models.BooleanField(default=False,
-                                          verbose_name=_('Does the service use the LDAPAuth proxy?'))
+                                          verbose_name=_('Does this service use the LDAPAuth proxy?'))
     server_names = models.TextField(blank=True,
                                     verbose_name=_('Server names (not IPs), one per line'))
     TARGETGROUPCHOICES = (('internet', _('Internet')),

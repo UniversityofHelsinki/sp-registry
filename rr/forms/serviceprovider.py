@@ -166,7 +166,8 @@ class LdapTechnicalInformationForm(ModelForm):
           'local_storage_passwords': CheckboxInput(attrs={'class': 'hideCheck2'}),
         }
         help_texts = {
-            'uses_ldapauth': _('Does this service use the LDAPAuth proxy?'),
+            'uses_ldapauth': _('Does this service use the LDAPAuth proxy in order to access '
+                               'user and group data for authentication and access control?'),
             'server_names': _('Full server names (not IPs), separated by space. User for access '
                               'control.'),
             'target_group': _('What is the target group (users) of this service?'),

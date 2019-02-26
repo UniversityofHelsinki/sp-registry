@@ -11,6 +11,7 @@
 <form action="" method="post" class="form">
     {% csrf_token %}
     {% bootstrap_form_errors form type='non_fields' %}
+    {% bootstrap_field form.uses_ldapauth layout='horizontal' %}
     {% bootstrap_field form.server_names layout='horizontal' %}
     {% bootstrap_field form.target_group layout='horizontal' %}
     {% bootstrap_field form.service_account layout='horizontal' %}

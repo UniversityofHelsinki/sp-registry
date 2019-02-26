@@ -155,7 +155,7 @@ class LdapTechnicalInformationForm(ModelForm):
 
     class Meta:
         model = ServiceProvider
-        fields = ['server_names', 'target_group', 'service_account', 'service_account_contact',
+        fields = ['uses_ldapauth', 'server_names', 'target_group', 'service_account', 'service_account_contact',
                   'can_access_all_ldap_groups', 'local_storage_users', 'local_storage_passwords',
                   'local_storage_passwords_info', 'local_storage_groups', 'admin_require_manual_configuration',
                   'production']
@@ -166,6 +166,7 @@ class LdapTechnicalInformationForm(ModelForm):
           'local_storage_passwords': CheckboxInput(attrs={'class': 'hideCheck2'}),
         }
         help_texts = {
+            'uses_ldapauth': _('Does this service use the LDAPAuth proxy?'),
             'server_names': _('Full server names (not IPs), separated by space. User for access '
                               'control.'),
             'target_group': _('What is the target group (users) of this service?'),
@@ -306,12 +307,14 @@ class LdapServiceProviderCreateForm(ModelForm):
 
     class Meta:
         model = ServiceProvider
-        fields = ['server_names', 'name_fi', 'name_en', 'name_sv', 'description_fi',
+        fields = ['uses_ldapauth', 'server_names', 'name_fi', 'name_en', 'name_sv', 'description_fi',
                   'description_en', 'description_sv', 'privacypolicy_fi', 'privacypolicy_en',
                   'privacypolicy_sv', 'login_page_url', 'application_portfolio', 'notes']
         help_texts = {
+            'uses_ldapauth': _('Does this service use the LDAPAuth proxy in order to access '
+                               'user and group data for authentication and access control?'),
             'server_names': _('Full server names (not IPs), one per line. Used for access '
-                              'control. <div class="text-danger">Required.</div>'),
+                              'control. <div class="text-danger">Required for non-ldapauth.</div>'),
             'name_fi': _('Short (max 70 characters) and descriptive name for the service in '
                          'Finnish. <div class="text-danger">Required. </div>'),
             'name_en': _('Short (max 70 characters) and descriptive name for the service in '

@@ -87,6 +87,8 @@ class ServiceProvider(models.Model):
         verbose_name=_('SP updates IdP metadata automatically'))
 
     # LDAP Technical information
+    uses_ldapauth = models.BooleanField(default=False,
+                                          verbose_name=_('Does the service use the LDAPAuth proxy?'))
     server_names = models.TextField(blank=True,
                                     verbose_name=_('Server names (not IPs), one per line'))
     TARGETGROUPCHOICES = (('internet', _('Internet')),
@@ -264,9 +266,9 @@ class ServiceProvider(models.Model):
                 except AttributeError:
                     value = None
             # Skip fields in list
-            if f.editable and f.name in ('server_names', 'target_group', 'service_account', 'service_account_contact', 'local_storage_users',
-                                         'local_storage_passwords', 'local_storage_passwords_info', 'local_storage_groups', 'production',
-                                         'can_access_all_ldap_groups'):
+            if f.editable and f.name in ('uses_ldapauth', 'server_names', 'target_group', 'service_account', 'service_account_contact',
+                                         'local_storage_users', 'local_storage_passwords', 'local_storage_passwords_info',
+                                         'local_storage_groups', 'production', 'can_access_all_ldap_groups'):
                 fields.append(
                   {
                    'label': f.verbose_name,

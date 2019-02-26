@@ -144,7 +144,7 @@ def ldap_metadata_generator_list(validated=True, production=False, include=None)
     """
     tree = etree.Element("LdapEntities", Name="ldap2015.helsinki.fi")
     serviceproviders = ServiceProvider.objects.filter(end_at=None, service_type="ldap")
-    for sp in serviceproviders:
+    for sp in filter(lambda x: not x.uses_ldapauth, serviceproviders):
         if production and sp.production:
             ldap_metadata_generator(sp, validated, tree)
         elif include and sp.entity_id in include:

@@ -333,13 +333,13 @@ def ldap_entity_id_from_name(horribleunicodestring):
 
     horribleunicodestring: Human language name
 
-    return cleaned-up string containing only lowercase ascii characters
+    return cleaned-up string containing only lowercase ascii characters and underscores
     """
     s = unicodedata.normalize('NFKD', horribleunicodestring).encode('ascii', 'ignore')
     s = s.decode()
     s = re.sub(r"\.helsinki\.fi$", "", s)
-    s = re.sub(r"[-,! ()\]\[{}]", "", s)
     s = re.sub(r"[./|]", "_", s)
+    s = re.sub(r"[^a-zA-Z0-9_]", "", s)
     s = s.lower()
 
     return s

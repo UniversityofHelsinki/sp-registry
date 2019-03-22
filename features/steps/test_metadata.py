@@ -7,7 +7,7 @@ from django.utils.six import StringIO
 @when(u'loading test metadata')
 def load_test_metadata(context):
     out = StringIO()
-    call_command('importmetadata', '-i', 'testdata/metadata.xml', '-a', stdout=out)
+    call_command('importmetadata', '-i', 'rr/testdata/metadata.xml', '-a', stdout=out)
 
 
 @then(u'the page will have same metadata')
@@ -94,6 +94,7 @@ def check_for_default_metadata(context):
   <SPSSODescriptor AuthnRequestsSigned="true" protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol">
     <Extensions>
       <idpdisc:DiscoveryResponse xmlns:idpdisc="urn:oasis:names:tc:SAML:profiles:SSO:idp-discovery-protocol" Binding="urn:oasis:names:tc:SAML:profiles:SSO:idp-discovery-protocol" Location="https://discovery.example.org/" index="1"/>
+      <init:RequestInitiator xmlns:init="urn:oasis:names:tc:SAML:profiles:SSO:request-init" Binding="urn:oasis:names:tc:SAML:profiles:SSO:request-init" Location="https://corp.example.org/login/"/>
       <mdui:UIInfo>
         <mdui:DisplayName xml:lang="fi">Mun ohjelma</mdui:DisplayName>
         <mdui:DisplayName xml:lang="en">My program name</mdui:DisplayName>
@@ -136,6 +137,7 @@ def check_for_unvalidated_metadata(context):
   <SPSSODescriptor AuthnRequestsSigned="true" protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol">
     <Extensions>
       <idpdisc:DiscoveryResponse xmlns:idpdisc="urn:oasis:names:tc:SAML:profiles:SSO:idp-discovery-protocol" Binding="urn:oasis:names:tc:SAML:profiles:SSO:idp-discovery-protocol" Location="https://discovery.example.org/" index="1"/>
+      <init:RequestInitiator xmlns:init="urn:oasis:names:tc:SAML:profiles:SSO:request-init" Binding="urn:oasis:names:tc:SAML:profiles:SSO:request-init" Location="https://corp.example.org/login/"/>
       <mdui:UIInfo>
         <mdui:DisplayName xml:lang="fi">Mun ohjelma</mdui:DisplayName>
         <mdui:DisplayName xml:lang="en">My program name</mdui:DisplayName>
@@ -247,6 +249,7 @@ def check_for_validated_metadata(context):
   <SPSSODescriptor WantAssertionsSigned="true" AuthnRequestsSigned="true" protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol">
     <Extensions>
       <idpdisc:DiscoveryResponse xmlns:idpdisc="urn:oasis:names:tc:SAML:profiles:SSO:idp-discovery-protocol" Binding="urn:oasis:names:tc:SAML:profiles:SSO:idp-discovery-protocol" Location="https://discovery.example.org/" index="1"/>
+      <init:RequestInitiator xmlns:init="urn:oasis:names:tc:SAML:profiles:SSO:request-init" Binding="urn:oasis:names:tc:SAML:profiles:SSO:request-init" Location="https://corp.example.org/login/"/>
       <mdui:UIInfo>
         <mdui:DisplayName xml:lang="fi">Mun ohjelma</mdui:DisplayName>
         <mdui:DisplayName xml:lang="en">My program name</mdui:DisplayName>

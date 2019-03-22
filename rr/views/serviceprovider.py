@@ -49,7 +49,7 @@ class ServiceProviderList(ListView):
     def get_queryset(self):
         if not settings.ACTIVATE_SAML:
             return ServiceProvider.objects.none()
-        if self.request.user.is_superuser:
+        if self.request.user and self.request.user.is_superuser:
             return ServiceProvider.objects.filter(
                 end_at=None, service_type="saml").order_by('-modified', '-production', '-test', 'entity_id')
         else:

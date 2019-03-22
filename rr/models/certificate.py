@@ -25,7 +25,7 @@ def load_certificate(certificate):
 
 
 class CertificateManager(models.Manager):
-    def add_certificate(self, certificate, sp, signing=None, encryption=None, validate=False):
+    def add_certificate(self, certificate, sp, signing=True, encryption=True, validate=False):
         """
         Manager for adding a certificate to database.
         """

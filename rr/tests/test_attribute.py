@@ -5,7 +5,7 @@ from django.urls import reverse
 
 from rr.forms.attribute import AttributeForm
 from rr.models.attribute import Attribute
-from rr.models.serviceprovider import ServiceProvider
+from rr.models.serviceprovider import ServiceProvider, SPAttribute
 from rr.views.attribute import attribute_list
 
 
@@ -65,3 +65,39 @@ class AttributeFormTestCase(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(len(self.user_sp.attributes.all()), 1)
         self.assertEqual(self.user_sp.attributes.all()[0], self.attr_eppn)
+
+    def test_attribute_view_denies_anonymous(self):
+        response = self.client.get(reverse('attribute-list', kwargs={'pk': self.user_sp.pk}), follow=True)
+        self.assertRedirects(response,
+                             reverse('login') + '?next=' + reverse('attribute-list', kwargs={'pk': self.user_sp.pk}))
+        response = self.client.post(reverse('attribute-list', kwargs={'pk': self.user_sp.pk}), follow=True)
+        self.assertRedirects(response,
+                             reverse('login') + '?next=' + reverse('attribute-list', kwargs={'pk': self.user_sp.pk}))
+
+    def test_attribute_view_denies_unauthorized_user(self):
+        self.client.force_login(self.user)
+        response = self.client.get(reverse('attribute-list', kwargs={'pk': self.admin_sp.pk}))
+        self.assertEqual(response.status_code, 404)
+        response = self.client.post(reverse('attribute-list', kwargs={'pk': self.admin_sp.pk}))
+        self.assertEqual(response.status_code, 404)
+
+    def test_attribute_view_list(self):
+        self.client.force_login(self.user)
+        response = self.client.get(reverse('attribute-list', kwargs={'pk': self.user_sp.pk}))
+        self.assertEqual(response.status_code, 200)
+
+    def test_attribute_view_post_attribute(self):
+        self.client.force_login(self.user)
+        response = self.client.post(reverse('attribute-list', kwargs={'pk': self.user_sp.pk}),
+                                    {'add_attribute': 'ok', 'eduPersonPrincipalName': 'User identification'})
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(self.user_sp.attributes.all()[0], self.attr_eppn)
+
+    def test_attribute_view_remove_attribute(self):
+        SPAttribute.objects.create(attribute=self.attr_eppn, sp=self.user_sp, reason='User identification')
+        self.assertEqual(self.user_sp.attributes.all()[0], self.attr_eppn)
+        self.client.force_login(self.user)
+        response = self.client.post(reverse('attribute-list', kwargs={'pk': self.user_sp.pk}),
+                                    {'add_attribute': 'ok', 'eduPersonPrincipalName': ''})
+        self.assertEqual(response.status_code, 200)
+        self.assertIsNotNone(SPAttribute.objects.get(attribute=self.attr_eppn, sp=self.user_sp).end_at)

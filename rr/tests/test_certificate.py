@@ -85,7 +85,27 @@ rKLt+NcwtbkI6weLISJu9lFZnPMYT7LpqDWD4aMHHUWr8THO0T6mbCeQRYMlfSpU
         form = CertificateForm(sp=self.user_sp, data=form_data)
         self.assertFalse(form.is_valid())
 
-    def test_attribute_form_view_add_certificate(self):
+    def test_certificate_view_denies_anonymous(self):
+        response = self.client.get(reverse('certificate-list', kwargs={'pk': self.user_sp.pk}), follow=True)
+        self.assertRedirects(response,
+                             reverse('login') + '?next=' + reverse('certificate-list', kwargs={'pk': self.user_sp.pk}))
+        response = self.client.post(reverse('certificate-list', kwargs={'pk': self.user_sp.pk}), follow=True)
+        self.assertRedirects(response,
+                             reverse('login') + '?next=' + reverse('certificate-list', kwargs={'pk': self.user_sp.pk}))
+
+    def test_certificate_view_denies_unauthorized_user(self):
+        self.client.force_login(self.user)
+        response = self.client.get(reverse('certificate-list', kwargs={'pk': self.admin_sp.pk}))
+        self.assertEqual(response.status_code, 404)
+        response = self.client.post(reverse('certificate-list', kwargs={'pk': self.admin_sp.pk}))
+        self.assertEqual(response.status_code, 404)
+
+    def test_certificate_view_list(self):
+        self.client.force_login(self.user)
+        response = self.client.get(reverse('certificate-list', kwargs={'pk': self.user_sp.pk}))
+        self.assertEqual(response.status_code, 200)
+
+    def test_certificate_form_view_add_certificate(self):
         form_data = {'certificate': self.valid_certificate, 'encryption': True, 'signing': True, 'add_cert': True}
         request = self.factory.post(reverse('certificate-list', kwargs={'pk': self.user_sp.pk}), form_data)
         request.user = self.user

@@ -1,20 +1,22 @@
 """
 Functions for genereating metadata of service providers
 """
+import logging
 
-from rr.models.serviceprovider import ServiceProvider, SPAttribute
+from cryptography.hazmat.primitives.serialization import Encoding
+from lxml import etree
+
+from django.conf import settings
+from django.core.exceptions import ValidationError
+from django.utils import timezone
+from django.utils.translation import ugettext as _
+
+from rr.models.attribute import Attribute
 from rr.models.certificate import Certificate, load_certificate
 from rr.models.contact import Contact
 from rr.models.endpoint import Endpoint
-from rr.models.attribute import Attribute
-from cryptography.hazmat.primitives.serialization import Encoding
-from lxml import etree
-from django.utils import timezone
-from django.utils.translation import ugettext as _
-import logging
 from rr.models.nameidformat import NameIDFormat
-from django.db.utils import IntegrityError
-from django.core.exceptions import ValidationError
+from rr.models.serviceprovider import ServiceProvider, SPAttribute
 
 logger = logging.getLogger(__name__)
 
@@ -60,9 +62,19 @@ def metadata_parser_requestinitiator(sp, element):
     sp.login_page_url = element.get("Location", "")
 
 
-def metadata_parser_extensions(sp, element):
+def metadata_parser_discoveryresponse(sp, element):
     """
-    Parses SP metadata extesions
+    Parses SP metadata extesions discovery response
+
+    sp: ServiceProvider object where information is saved
+    element: lxml element which is parsed
+    """
+    sp.discovery_service_url = element.get("Location", "")
+
+
+def metadata_parser_spsso_extensions(sp, element):
+    """
+    Parses SP metadata spsso extesions
 
     sp: ServiceProvider object where information is saved
     element: lxml element which is parsed
@@ -72,6 +84,45 @@ def metadata_parser_extensions(sp, element):
             metadata_parser_uiinfo(sp, child)
         if etree.QName(child.tag).localname == "RequestInitiator":
             metadata_parser_requestinitiator(sp, child)
+        if etree.QName(child.tag).localname == "DiscoveryResponse":
+            metadata_parser_discoveryresponse(sp, child)
+
+
+def metadata_parser_entityattributes(sp, element):
+    """
+    Parses SP metadata extesions entityattributes
+
+    sp: ServiceProvider object where information is saved
+    element: lxml element which is parsed
+    """
+    for child in element:
+        if etree.QName(child.tag).localname == "Attribute" and  etree.QName(child[0].tag).localname == "AttributeValue":
+            if child.get("Name") == "http://shibboleth.net/ns/profiles/defaultAuthenticationMethods":
+                if child[0].text == settings.MFA_AUTHENTICATION_CONTEXT:
+                    sp.force_mfa = True
+            if child.get("Name") == "http://shibboleth.net/ns/profiles/nameIDFormatPrecedence":
+                sp.force_nameidformat = True
+            if child.get("Name") == "http://shibboleth.net/ns/profiles/saml2/sso/browser/signResponses":
+                if child[0].text == "false":
+                    sp.sign_responses = False
+            if child.get("Name") == "http://shibboleth.net/ns/profiles/saml2/sso/browser/encryptAssertions":
+                if child[0].text == "false":
+                    sp.encrypt_assertions = False
+            if child.get("Name") == "http://shibboleth.net/ns/profiles/securityConfiguration":
+                if child[0].text == "shibboleth.SecurityConfiguration.SHA1":
+                    sp.force_sha1 = True
+
+
+def metadata_parser_extensions(sp, element):
+    """
+    Parses SP metadata extesions
+
+    sp: ServiceProvider object where information is saved
+    element: lxml element which is parsed
+    """
+    for child in element:
+        if etree.QName(child.tag).localname == "EntityAttributes":
+            metadata_parser_entityattributes(sp, child)
 
 
 def metadata_parser_keydescriptor(sp, element, validate, errors):
@@ -252,10 +303,9 @@ def metadata_parser_ssodescriptor(sp, element, validate, errors, disable_checks)
         sp.sign_requests = True
     if element.get("WantAssertionsSigned") == "true" or element.get("WantAssertionsSigned") == "1":
         sp.sign_assertions = True
-    # AuthnRequestsSigned = element.get("AuthnRequestsSigned")
     for child in element:
         if etree.QName(child.tag).localname == "Extensions":
-            metadata_parser_extensions(sp, child)
+            metadata_parser_spsso_extensions(sp, child)
         if etree.QName(child.tag).localname == "KeyDescriptor":
             metadata_parser_keydescriptor(sp, child, validate, errors)
         if etree.QName(child.tag).localname == "NameIDFormat":
@@ -351,6 +401,8 @@ def metadata_parser(entity, overwrite, verbosity, validate=False, disable_checks
                     metadata_parser_ssodescriptor(sp, element, validate, errors, disable_checks)
                 if etree.QName(element.tag).localname == "ContactPerson":
                     metadata_parser_contact(sp, element, validate)
+                if etree.QName(element.tag).localname == "Extensions":
+                    metadata_parser_extensions(sp, element)
             sp.save()
             return sp, errors
     else:

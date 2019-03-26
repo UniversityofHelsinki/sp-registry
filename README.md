@@ -1,6 +1,8 @@
-# SP Resource Registy
-Used for maintaining of SAML Service Provicer information. Similar to HAKA rr.
+# SP Resource Registry
+Used for maintaining of SAML Service Provider information.
 SP administrators can add new SPs and update information.
+
+Also has an option for LDAP connection registrations.
 
 SP metadata can be updated to test IdPs automatically.
 Includes validation of attributes for production use.
@@ -13,16 +15,18 @@ Includes validation of attributes for production use.
 * rr : main SP Resource Registry program
   * fixtures : json fixtures for models
   * forms : forms
+  * locale : Finnish translations
   * management : command line tools
   * migrations : database migration history
   * models : database models
   * static : static files
   * templates : templates
   * templatetags : template functions
+  * testdata : generated data for tests
+  * tests : unit tests
   * utils : generic functions, i.e. metadata generation and parsing
   * views : views
 * settings : settings for development and production
-* testdata : generated data for tests
 
 ## Documentation
 Project uses Django admin docs for development documentation:
@@ -44,7 +48,7 @@ Create a superuser with
   * Click the entityID for more information
   * Anyone who has access to site, may create a new SP
 
-#### If you have seleceted a service
+#### If you have selected a service
 * Summary
   * SP summary and possible modifications since last validation.
   * Validation for site admins
@@ -53,7 +57,7 @@ Create a superuser with
   * Basic administrative information and notes
   * Admin notes is only shown here if admin. It is shown to users in Summary view
 * Technical Attributes
-  * Techical attributes like entity_id, publishing to production etc.
+  * Technical attributes like entity_id, publishing to production etc.
      * Entity Id must be in URI format and unique in the system
      * site admins may override the URI requirement
 * Attributes
@@ -68,18 +72,30 @@ Create a superuser with
 * Admins
   * SP admins who can access and modify this SP in the registy
   * New admins may be invited by email, invitations are valid for 30 days
+* Test Users
+  * Custom test users for test services
 * View Metadata
   * Shows SP metadata. You may choose between validated and unvalidated metadata
 
 #### For site admins
 * Attributes
   * All attributes in the service
-  * By clicking the attribyte, you get list of SPs requesting it
+  * By clicking the attribute, you get list of SPs requesting it
   * Modification through Django Admin backend
 * Certificates
   * Lists expired and less than 2048 bit certificates
-* Sign and Encrypt
-  * Lists SPs which have non-default sining and encryption flags
+* SAML Special Configs
+  * SAML configuration summaries
+    * non-default signing and encryption
+    * NameId settings
+    * MFA and authorization
+    * SAML products
+* Emails
+  * Sending email to server admins. Templates are managed in django admin
+* Manage SAML metadata
+  * Saves updated SAML metadata to git repository
+* Manage LDAP metadata
+  * Saves updated LDAP metadata to git repository
 * Database Admin
   * Django Admin backend
 
@@ -87,14 +103,16 @@ Create a superuser with
 For more information run "./manage.py <command> -h"
 * cleandb
   * Cleans old services or personal information from the db
+* exportldap
+  * Exports LDAP registrations data (custom format)
 * exportmetadata
   * Exporting metadata or attribute filter
 * importattributefilter
-  * Importing attributes from old attributefilter
+  * Importing attributes from old attribute filter
 * importmetadata
   * Importing metadata from file
-* parsehakaattributes
-  * Reads metadata file and outpus attributefilter from it
+* nslookup
+  * Checks that service URLs exist
 
 ## Installation
 ### Requirements
@@ -173,9 +191,14 @@ This service can be made available in different Apache virtual host by pointing 
 It should also have it's own Shibboleth ApplicationOverride, with all the attributes enabled.
 
 ## Tests
-### Requirements
-Splinter is used for automated browser tests.
-Install Firefox and geckodriver for headless tests: http://splinter.readthedocs.io/en/latest/drivers/firefox.html
 
 ### Running tests
-./manage.py behave
+./manage.py test
+
+For behaviour testing with browser automation:
+./manage.py behave --settings=settings.development
+Behaviour tests have better coverage but usually take 3-4 minutes to run.
+
+### Requirements
+Splinter is required for browser automation tests.
+Install Firefox and geckodriver for headless tests: http://splinter.readthedocs.io/en/latest/drivers/firefox.html

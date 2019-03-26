@@ -12,8 +12,6 @@ from django.db.models import Q
 from rr.models.certificate import Certificate
 from rr.models.contact import Contact
 from rr.models.endpoint import Endpoint
-from rr.models.nameidformat import NameIDFormat
-from rr.models.organization import Organization
 from rr.models.serviceprovider import SPAttribute, ServiceProvider
 
 logger = logging.getLogger(__name__)
@@ -37,6 +35,11 @@ def metadata_spssodescriptor_extensions(element, sp, privacypolicy):
                          Location=sp.discovery_service_url,
                          index="1",
                          nsmap={"idpdisc": 'urn:oasis:names:tc:SAML:profiles:SSO:idp-discovery-protocol'})
+    if sp.login_page_url:
+        etree.SubElement(Extensions, "{urn:oasis:names:tc:SAML:profiles:SSO:request-init}RequestInitiator",
+                         Binding="urn:oasis:names:tc:SAML:profiles:SSO:request-init",
+                         Location=sp.login_page_url,
+                         nsmap={"init": 'urn:oasis:names:tc:SAML:profiles:SSO:request-init'})
 
     UIInfo = etree.SubElement(Extensions, "{urn:oasis:names:tc:SAML:metadata:ui}UIInfo")
     if sp.name_fi:
@@ -94,7 +97,8 @@ def metadata_spssodescriptor_extensions(element, sp, privacypolicy):
             PrivacyStatementURL_sv.text = "https://www.helsinki.fi/fi/yliopisto/tietosuojaselosteet-0"
     if len(UIInfo) == 0:
         Extensions.remove(UIInfo)
-
+    if len(Extensions) == 0:
+        element.remove(Extensions)
 
 def metadata_entity_extensions(element, sp):
     """
@@ -298,6 +302,8 @@ def metadata_attributeconsumingservice(element, sp, history, validation_date):
         etree.SubElement(AttributeConsumingService, "RequestedAttribute",
                          FriendlyName=attribute.attribute.friendlyname, Name=attribute.attribute.name,
                          NameFormat=attribute.attribute.nameformat)
+    if len(AttributeConsumingService) == 0:
+        element.remove(AttributeConsumingService)
 
 
 def metadata_contact(element, sp, validation_date):

@@ -1,11 +1,8 @@
 # SP Resource Registry
-Used for maintaining of SAML Service Provider information.
-SP administrators can add new SPs and update information.
+Used for maintaining information about services connected to SAML and LDAP.
 
-Also has an option for LDAP connection registrations.
-
-SP metadata can be updated to test IdPs automatically.
-Includes validation of attributes for production use.
+Allows registration of new services by the users and validation of information by IdP admins, before transferring
+metadata to production.
 
 ## Project structure
 * auth : Shibboleth authentication backend for Django
@@ -59,14 +56,16 @@ Create a superuser with
 * Technical Attributes
   * Technical attributes like entity_id, publishing to production etc.
      * Entity Id must be in URI format and unique in the system
-     * site admins may override the URI requirement
+     * Site admins may override the URI requirement
 * Attributes
   * Attribute requisitions and reasons for them
   * Only listing attributes that are marked for publishing
-* Certificates
+* Certificates (SAML only)
   * Certificates for the service
-* SAML Endpoints
+* SAML Endpoints (SAML only)
   * Allows only SAML2 bindings, admins may override this with metadata import
+* User Groups (LDAP only)
+  * List of groups that service has access
 * Contacts
   * Technical, administrative and support contacts for the service
 * Admins
@@ -202,3 +201,13 @@ Behaviour tests have better coverage but usually take 3-4 minutes to run.
 ### Requirements
 Splinter is required for browser automation tests.
 Install Firefox and geckodriver for headless tests: http://splinter.readthedocs.io/en/latest/drivers/firefox.html
+
+## SAML test service
+External SAML IdP may be used as a test service but configuration depends on the IdP solution and requires
+that IdP can use SQL database for user and attribute queries.
+
+* Metadata is reloaded with timed management script
+* Users are checked from the TestUsers table
+* Access to specific service is checked from the TestUser valid_for table
+* Attributes are checked from the TestUserData table
+

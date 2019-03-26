@@ -70,6 +70,8 @@ class CertificateManager(models.Manager):
 class Certificate(models.Model):
     """
     Stores a single certificate, related to :model:`rr.ServiceProvider`
+
+    SAML specific for saving certificate information.
     """
     sp = models.ForeignKey(ServiceProvider, on_delete=models.CASCADE)
     cn = models.CharField(max_length=255, blank=True, verbose_name=_('cn'))

@@ -7,6 +7,8 @@ from rr.models.serviceprovider import ServiceProvider
 class Endpoint(models.Model):
     """
     Stores a single certificate, related to :model:`rr.ServiceProvider`
+
+    SAML specific for saving SAML Endpoints of a service.
     """
     sp = models.ForeignKey(ServiceProvider, on_delete=models.CASCADE)
 

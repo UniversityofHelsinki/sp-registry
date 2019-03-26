@@ -8,6 +8,9 @@ from rr.models.serviceprovider import ServiceProvider
 class TestUser(models.Model):
     """
     Stores a test user, related to :model:`rr.ServiceProvider`
+
+    SAML specific. Used to save test users so that external test IdP may
+    read them.
     """
     sp = models.ForeignKey(ServiceProvider, on_delete=models.CASCADE)
     username = models.CharField(max_length=50, verbose_name=_('Login name'))
@@ -29,6 +32,10 @@ class TestUserData(models.Model):
     """
     Stores a attribute value for test user, related to :model:`rr.TestUser`
     and :model:`rr.Attribute`
+
+    SAML specific. username, friendlyname and entity_id are copied from
+    TestUSer and Attribute models for easier access with external test
+    IdP.
     """
     attribute = models.ForeignKey(Attribute, on_delete=models.CASCADE)
     user = models.ForeignKey(TestUser, on_delete=models.CASCADE)

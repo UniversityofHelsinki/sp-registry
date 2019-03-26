@@ -6,6 +6,9 @@ from rr.models.serviceprovider import ServiceProvider
 class UserGroup(models.Model):
     """
     Stores a single user group, related to :model:`rr.ServiceProvider`
+
+    LDAP specific. Used for specifying user groups where LDAP service
+    has access.
     """
     sp = models.ForeignKey(ServiceProvider, on_delete=models.CASCADE)
 

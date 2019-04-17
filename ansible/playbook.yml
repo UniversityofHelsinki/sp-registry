@@ -1,0 +1,265 @@
+---
+- hosts: all
+  become: yes
+  become_user: "root"
+  become_method: "sudo"
+
+  vars:
+    spregistry_install_dir: "/opt/sp-registry"
+    spregistry_install_user: "spregistry"
+    apache2_user: "www-data"
+    spregistry_db_user: "spregistry"
+    spregistry_db_pw: "testpass"
+    spregistry_db_name: "spregistry"
+    spregistry_superuser: "admin"
+    spregistry_superuser_email: "admin@example.org"
+    spregistry_superuser_pw: "adminpass"
+
+  tasks:
+  - name: sp-registry | Install required packages
+    apt:
+      name: "{{ packages }}"
+    vars:
+      packages:
+      - apache2
+      - python3
+      - python3-venv
+      - python3-dev
+      - python3-pip
+      - python-setuptools
+      - python-pexpect
+      - mariadb-server
+      - python-mysqldb
+      - libmariadbclient-dev
+      - libapache2-mod-wsgi-py3
+
+  - name: sp-registry | Enable apache2 ssl module
+    apache2_module:
+      state: present
+      name: ssl
+
+  - name: sp-registry | Create database
+    mysql_db:
+      name: "{{ spregistry_db_name }}"
+      state: present
+
+  - name: sp-registry | Create database user
+    mysql_user:
+      name: "{{ spregistry_db_user }}"
+      password: "{{ spregistry_db_pw }}"
+      priv: '{{ spregistry_db_name }}.*:ALL,GRANT'
+      state: present
+
+  - name: sp-registry | Create user for sp-registry
+    user:
+      name: "{{ spregistry_install_user }}"
+      comment: Service Provider registry
+
+  - name: sp-registry | Create directory for sp-registry
+    file:
+      path: "{{ spregistry_install_dir }}"
+      state: directory
+      owner: "{{ spregistry_install_user }}"
+      group: "{{ apache2_user }}"
+      mode: 0750
+
+  - name: sp-registry | Create logs directory for sp-registry
+    file:
+      path: "{{ spregistry_install_dir }}/logs"
+      state: directory
+      owner: "{{ spregistry_install_user }}"
+      group: "{{ apache2_user }}"
+      mode: 0770
+
+  - name: sp-registry | Clone sp-registry respository
+    git:
+      repo: "https://github.com/UniversityofHelsinki/sp-registry"
+      dest: "{{ spregistry_install_dir }}/sp-registry"
+    become_user: "{{ spregistry_install_user }}"
+
+  - name: sp-registry | Install virtual env and requirements
+    pip: 
+      requirements: "{{ spregistry_install_dir }}/sp-registry/requirements/development.txt"
+      virtualenv: "{{ spregistry_install_dir }}/venv"
+      virtualenv_command: /usr/bin/python3 -m venv
+    become_user: "{{ spregistry_install_user }}"
+
+  - name: sp-registry | Check if SAML metadata directory exists
+    stat:
+      path: "{{ spregistry_install_dir }}/metadata/saml"
+    register: saml_metadata_dir
+
+  - name: sp-registry | Create directory for sp-registry SAML metadata origin
+    file:
+      path: "{{ spregistry_install_dir }}/metadata/saml_origin"
+      state: directory
+      owner: "{{ spregistry_install_user }}"
+      group: "{{ spregistry_install_user }}"
+      mode: 0750
+    when: saml_metadata_dir.stat.exists == False
+
+  - name: sp-registry | Initialize SAML metadata origin git repo
+    command: "git init {{ spregistry_install_dir }}/metadata/saml_origin"
+    become_user: "{{ spregistry_install_user }}"
+    when: saml_metadata_dir.stat.exists == False
+
+  - name: sp-registry | Copy template metadata.xml to origin git repo
+    template: src=templates/metadata.xml dest="{{ spregistry_install_dir }}/metadata/saml_origin/metadata.xml"
+    when: saml_metadata_dir.stat.exists == False
+
+  - name: sp-registry | Commit metadata.xml to origin git repo
+    command: "{{ item }}"
+    with_items:
+      - git config user.email 'test@example.org'
+      - git config user.name 'test'
+      - git add metadata.xml
+      - git commit -m 'initial metadata'
+    args:
+      chdir: '{{ spregistry_install_dir }}/metadata/saml_origin'
+    become_user: "{{ spregistry_install_user }}"
+    when: saml_metadata_dir.stat.exists == False
+
+  - name: sp-registry | Clone origin repo as SAML metadata repo
+    command: "git clone {{ spregistry_install_dir }}/metadata/saml_origin {{ spregistry_install_dir }}/metadata/saml"
+    args:
+      chdir: "{{ spregistry_install_dir }}/metadata"
+    become_user: "{{ spregistry_install_user }}"
+    when: saml_metadata_dir.stat.exists == False
+
+  - name: sp-registry | Check if LDAP metadata directory exists
+    stat:
+      path: "{{ spregistry_install_dir }}/metadata/ldap"
+    register: ldap_metadata_dir
+
+  - name: sp-registry | Create directory for sp-registry LDAP metadata origin
+    file:
+      path: "{{ spregistry_install_dir }}/metadata/ldap_origin"
+      state: directory
+      owner: "{{ spregistry_install_user }}"
+      group: "{{ spregistry_install_user }}"
+      mode: 0750
+    when: ldap_metadata_dir.stat.exists == False
+
+  - name: sp-registry | Initialize LDAP metadata origin git repo
+    command: "git init {{ spregistry_install_dir }}/metadata/ldap_origin"
+    become_user: "{{ spregistry_install_user }}"
+    when: ldap_metadata_dir.stat.exists == False
+
+  - name: sp-registry | Copy template metadata.xml to origin git repo
+    template: src=templates/ldap-metadata.xml dest="{{ spregistry_install_dir }}/metadata/ldap_origin/ldap-metadata.xml"
+    when: ldap_metadata_dir.stat.exists == False
+
+  - name: sp-registry | Commit metadata.xml to origin git repo
+    command: "{{ item }}"
+    with_items:
+      - git config user.email 'test@example.org'
+      - git config user.name 'test'
+      - git add ldap-metadata.xml
+      - git commit -m 'initial metadata'
+    args:
+      chdir: '{{ spregistry_install_dir }}/metadata/ldap_origin'
+    become_user: "{{ spregistry_install_user }}"
+    when: ldap_metadata_dir.stat.exists == False
+
+  - name: sp-registry | Clone origin repo as LDAP metadata repo
+    command: "git clone {{ spregistry_install_dir }}/metadata/ldap_origin {{ spregistry_install_dir }}/metadata/ldap"
+    args:
+      chdir: "{{ spregistry_install_dir }}/metadata"
+    become_user: "{{ spregistry_install_user }}"
+    when: ldap_metadata_dir.stat.exists == False
+
+  - name: sp-registry | Copy local settings template
+    template: src=templates/local_settings_ansible.py dest="{{ spregistry_install_dir }}/sp-registry/settings/local_settings.py"
+
+  - name: sp-registry | migrate django database
+    django_manage:
+      command: migrate
+      app_path: "{{ spregistry_install_dir }}/sp-registry"
+      virtualenv: "{{ spregistry_install_dir }}/venv"
+    become_user: "{{ spregistry_install_user }}"
+
+  - name: sp-registry | migrate django database
+    django_manage:
+      command: migrate
+      app_path: "{{ spregistry_install_dir }}/sp-registry"
+      virtualenv: "{{ spregistry_install_dir }}/venv"
+    become_user: "{{ spregistry_install_user }}"
+
+  - name: sp-registry | collect django static files
+    django_manage:
+      command: collectstatic
+      app_path: "{{ spregistry_install_dir }}/sp-registry"
+      virtualenv: "{{ spregistry_install_dir }}/venv"
+    become_user: "{{ spregistry_install_user }}"
+
+  - name: sp-registry | check is superuser exists
+    django_manage:
+      app_path: "{{ spregistry_install_dir }}/sp-registry"
+      virtualenv: "{{ spregistry_install_dir }}/venv"
+      command: shell -c 'import sys; from django.contrib.auth.models import User; sys.stdout.write(str(0 if User.objects.filter(username="{{ spregistry_superuser }}").count() > 0 else 1))'
+    register: checksuperuser
+    ignore_errors: True
+    become_user: "{{ spregistry_install_user }}"
+    changed_when: False
+
+  - debug: msg="{{ checksuperuser }}"
+
+  - name: sp-registry | create superuser
+    expect:
+      command: "{{ spregistry_install_dir }}/venv/bin/python {{ spregistry_install_dir }}/sp-registry/manage.py createsuperuser --username={{ spregistry_superuser }} --email={{ spregistry_superuser_email }}"
+      responses:
+        "Password": "{{ spregistry_superuser_pw }}"
+        "Password (again)": "{{ spregistry_superuser_pw }}"
+      chdir: "{{ spregistry_install_dir }}"
+    become_user: "{{ spregistry_install_user }}"
+    when: checksuperuser.out != "0"
+
+  - name: sp-registry | Copy apache virtual host
+    template: src=templates/sp-registry-apache.conf dest=/etc/apache2/sites-available/sp-registry-apache.conf
+
+  - name: sp-registry | remove apache2 default site
+    command: "a2dissite 000-default"
+
+  - name: sp-registry | enable sp-registy apache2 site
+    command: "a2ensite sp-registry-apache"
+
+  - name: reload apache2
+    systemd:
+      name: apache2
+      state: reloaded
+
+  - name: sp-registry | check is fixtures are already loaded
+    django_manage:
+      app_path: "{{ spregistry_install_dir }}/sp-registry"
+      virtualenv: "{{ spregistry_install_dir }}/venv"
+      command: shell -c 'import sys; from rr.models.nameidformat import NameIDFormat; sys.stdout.write(str(0 if NameIDFormat.objects.all().count() > 0 else 1))'
+    register: nameid_fixtures_loaded
+    ignore_errors: True
+    become_user: "{{ spregistry_install_user }}"
+    changed_when: False
+
+  - name: sp-registry | Load fixtures, nameidformat
+    django_manage:
+      command: "loaddata {{ spregistry_install_dir }}/sp-registry/rr/fixtures/nameidformat.json"
+      app_path: "{{ spregistry_install_dir }}/sp-registry"
+      virtualenv: "{{ spregistry_install_dir }}/venv"
+    become_user: "{{ spregistry_install_user }}"
+    when: nameid_fixtures_loaded.out != "0"
+
+  - name: sp-registry | check is fixtures are already loaded
+    django_manage:
+      app_path: "{{ spregistry_install_dir }}/sp-registry"
+      virtualenv: "{{ spregistry_install_dir }}/venv"
+      command: shell -c 'import sys; from rr.models.attribute import Attribute; sys.stdout.write(str(0 if Attribute.objects.all().count() > 0 else 1))'
+    register: attribute_fixtures_loaded
+    ignore_errors: True
+    become_user: "{{ spregistry_install_user }}"
+    changed_when: False
+
+  - name: sp-registry | Load fixtures, attributes
+    django_manage:
+      command: "loaddata {{ spregistry_install_dir }}/sp-registry/rr/fixtures/attribute.json"
+      app_path: "{{ spregistry_install_dir }}/sp-registry"
+      virtualenv: "{{ spregistry_install_dir }}/venv"
+    become_user: "{{ spregistry_install_user }}"
+    when: attribute_fixtures_loaded.out != "0"

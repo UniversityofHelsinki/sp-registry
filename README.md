@@ -5,6 +5,7 @@ Allows registration of new services by the users and validation of information b
 metadata to production.
 
 ## Project structure
+* ansible : Ansible files for test environment installation
 * auth : Shibboleth authentication backend for Django
 * features : Tests using behave
 * log : log directory
@@ -120,7 +121,18 @@ Currently uses Django 1.11 (LTS version, support until Apr 2020)
 * MySQL/MariaDB 5.5+
 * Requires dev libraries for Python and MySQL/MariaDB for compiling python mysqlclient.
 
-### Ubuntu installation
+### Test environment
+Vagrantfile with Ansible provisioning is provided for test environment.
+
+Usage:
+1. Install vagrant (https://www.vagrantup.com/)
+1. run command "vagrant up" (and wait for it to set up )
+1. Open https://localhost:8443/ in browser (browser compains about security risk as self-signed certificate is used)
+1. Use local login with user admin, password adminpass
+
+Shibboleth and attribute test service are not yet included.
+
+### Installation
 
 Tested on 16.04 LTS
 

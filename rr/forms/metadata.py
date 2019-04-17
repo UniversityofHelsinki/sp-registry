@@ -28,8 +28,8 @@ class MetadataForm(Form):
 
     def clean(self):
         cleaned_data = super().clean()
-        metadata = cleaned_data.get("metadata")
-        parser = etree.XMLParser(ns_clean=True, remove_comments=True, remove_blank_text=True)
+        metadata = cleaned_data.get("metadata").encode('utf-8')
+        parser = etree.XMLParser(ns_clean=True, remove_comments=True, remove_blank_text=True, encoding='utf-8')
         try:
             root = etree.fromstring(metadata, parser)
         except etree.XMLSyntaxError as e:

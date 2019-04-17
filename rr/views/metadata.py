@@ -93,11 +93,11 @@ def metadata_import(request):
         if "import_metadata" in request.POST:
             form = MetadataForm(request.POST, user=request.user)
             if form.is_valid():
-                metadata = form.cleaned_data['metadata']
+                metadata = form.cleaned_data['metadata'].encode('utf-8')
                 disable_checks = request.POST.get('disable_checks', False)
                 validate = request.POST.get('validate', False)
                 parser = etree.XMLParser(ns_clean=True, remove_comments=True,
-                                         remove_blank_text=True)
+                                         remove_blank_text=True, encoding='utf-8')
                 entity = etree.fromstring(metadata, parser)
                 sp, errors = metadata_parser(entity, overwrite=False, verbosity=2,
                                              validate=validate, disable_checks=disable_checks)

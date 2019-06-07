@@ -3,6 +3,7 @@ Functions for genereating metadata of service providers
 """
 
 import hashlib
+import json
 import logging
 import os
 from datetime import datetime
@@ -24,8 +25,10 @@ from rr.forms.metadata import MetadataForm, MetadataCommitForm
 from rr.models.serviceprovider import ServiceProvider
 from rr.utils.metadata_generator import metadata_generator
 from rr.utils.metadata_generator import metadata_generator_list
+from rr.utils.oidc_metadata_generator import oidc_metadata_generator
 from rr.utils.metadata_parser import metadata_parser
 from rr.utils.ldap_metadata_generator import ldap_metadata_generator_list
+from rr.utils.oidc_metadata_generator import oidc_metadata_generator_list
 
 logger = logging.getLogger(__name__)
 
@@ -49,10 +52,9 @@ def metadata(request, pk):
     """
     try:
         if request.user.is_superuser:
-            sp = ServiceProvider.objects.get(pk=pk, end_at=None, service_type="saml")
+            sp = ServiceProvider.objects.get(pk=pk, end_at=None)
         else:
-            sp = ServiceProvider.objects.get(pk=pk, admins=request.user, end_at=None,
-                                             service_type="saml")
+            sp = ServiceProvider.objects.get(pk=pk, admins=request.user, end_at=None)
     except ServiceProvider.DoesNotExist:
         logger.debug("Tried to access unauthorized service provider")
         raise Http404("Service provider does not exist")
@@ -60,13 +62,20 @@ def metadata(request, pk):
         validated = False
     else:
         validated = True
-    metadata_sp = sp
     metadata = None
-    if metadata_sp:
-        tree = metadata_generator(sp=metadata_sp, validated=validated)
-        if tree is not None:
-            metadata = etree.tostring(tree, pretty_print=True,
-                                      encoding='UTF-8').replace(b'xmlns:xmlns', b'xmlns')
+    if sp:
+        if sp.service_type == "saml":
+            tree = metadata_generator(sp=sp, validated=validated)
+            if tree is not None:
+                metadata = etree.tostring(tree, pretty_print=True,
+                                          encoding='UTF-8').replace(b'xmlns:xmlns', b'xmlns')
+        elif sp.service_type == "oidc":
+            metadata = oidc_metadata_generator(sp=sp, validated=validated,
+                                               client_secret_encryption="masked")
+            metadata = json.dumps(metadata, indent=4)
+        else:
+            raise Http404("Service provider does not exist")
+
     return render(request, "rr/metadata.html", {'object': sp,
                                                 'metadata': metadata,
                                                 'validated': validated})
@@ -162,6 +171,15 @@ def write_ldap_metadata():
         return
 
 
+def write_oidc_metadata():
+    # Generate metadata and write it to file
+    metadata = oidc_metadata_generator_list(validated=True, privacypolicy=True, production=True,
+                                            client_secret_encryption="encrypted")
+    metadata_file = join(settings.METADATA_GIT_REPOSITORIO, settings.OIDC_METADATA_FILENAME)
+    with open(metadata_file, 'w') as f:
+        f.write(json.dumps(metadata, indent=4))
+
+
 @login_required
 def metadata_management(request, service_type="saml"):
     """
@@ -189,7 +207,7 @@ def metadata_management(request, service_type="saml"):
     form = None
     if not request.user.is_superuser:
         raise PermissionDenied
-    if service_type == "saml" and hasattr(settings, 'METADATA_GIT_REPOSITORIO') and \
+    if (service_type == "saml" or service_type == "oidc") and hasattr(settings, 'METADATA_GIT_REPOSITORIO') and \
             hasattr(settings, 'METADATA_FILENAME'):
         repo_location = settings.METADATA_GIT_REPOSITORIO
     elif service_type == "ldap" and hasattr(settings, 'LDAP_GIT_REPOSITORIO') and \
@@ -250,6 +268,9 @@ def metadata_management(request, service_type="saml"):
         if service_type == "saml":
             write_saml_metadata()
             repo.index.add([settings.METADATA_FILENAME])
+        if service_type == "oidc":
+            write_oidc_metadata()
+            repo.index.add([settings.OIDC_METADATA_FILENAME])
         if service_type == "ldap":
             write_ldap_metadata()
             repo.git.add(A=True)

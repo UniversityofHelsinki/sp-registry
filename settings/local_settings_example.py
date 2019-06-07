@@ -71,3 +71,8 @@ STATIC_ROOT = '/path/to/rr/static/'
 MFA_AUTHENTICATION_CONTEXT = 'https://refeds.org/profile/mfa'
 
 DISABLE_METADATA_ENTITY_EXTENSIONS = False
+
+# Generate Fernet key with:
+# from cryptography.fernet import Fernet
+# Fernet.generate_key().decode()
+OIDC_CLIENT_SECRET_KEY = 'generated fernet key'

@@ -127,6 +127,7 @@
   </tbody>
 </table>
 <br>
+
 {% elif object.service_type == "ldap" %}
 <h2>{% trans "Technical attributes" %}</h2>
 <table class="table table-sm">
@@ -151,6 +152,52 @@
       {% if f.value == True %}<td class="text-success">&#10004;{% elif f.value == False %}<td class="text-danger">x{% else %}<td>{{ f.value }}{% endif %}</td>
     </tr>
 {% endif %}
+{% endfor %}
+  </tbody>
+</table>
+<br>
+
+{% elif object.service_type == "oidc" %}
+<h2>{% trans "Technical attributes" %}</h2>
+<table class="table table-sm">
+  <thead>
+    <tr>
+      <th scope="col">{% trans "Attribute" %}</th>
+      <th scope="col">{% trans "Value" %}</th>{% if history_object %}
+      <th scope="col">{% trans "Validated value" %}</th>{% endif %}
+    </tr>
+  </thead>
+  <tbody>
+{% for f in object.get_oidc_technical_fields %}
+{% if history_object %}
+    {% if f.value != history_object|get_item:f.name %}<tr class="table-warning">{% else %}<tr>{% endif %}
+      <td scope="row">{{ f.label }}</td>
+      {% if f.value == True %}<td class="text-success">&#10004;{% elif f.value == False %}<td class="text-danger">x{% else %}<td>{{ f.value }}{% endif %}</td>
+      {% if history_object|get_item:f.name == True %}<td class="text-success">&#10004;{% elif history_object|get_item:f.name == False %}<td class="text-danger">&#10005;{% else %}<td>{{ history_object|get_item:f.name }}{% endif %}</td>
+    </tr>
+{% else %}
+    <tr>
+      <td scope="row">{{ f.label }}</td>
+      {% if f.value == True %}<td class="text-success">&#10004;{% elif f.value == False %}<td class="text-danger">x{% else %}<td>{{ f.value }}{% endif %}</td>
+    </tr>
+{% endif %}
+{% endfor %}
+  </tbody>
+</table>
+<br>
+
+<h2>{% trans "OIDC redirect URIs" %}</h2>
+<table class="table table-sm">
+  <thead>
+    <tr>
+      <th scope="col">{% trans "URL" %}</th>
+    </tr>
+  </thead>
+  <tbody>
+{% for a in redirecturis %}
+    {% if a.end_at %}<tr class="table-danger">{% elif not a.validated %}<tr class="table-warning">{% else %}<tr>{% endif %}
+      <td scope="row">{{ a.url }}</td>
+    </tr>
 {% endfor %}
   </tbody>
 </table>

@@ -3,24 +3,17 @@
 {% load static %}
 {% load bootstrap4 %}
 {% block content %}
-<h1>{% trans "Adding a new service provider" %}</h1>
+<h1>{% trans "Adding a new OIDC relying party" %}</h1>
 <div class="alert alert-success" role="alert">
-<p>{% trans "This form is used to add a new service to the University of Helsinki's single sign on system." %}</p>
+<p>{% trans "This form is used to add a new OIDC service to the University of Helsinki's single sign on system." %}</p>
 <p>{% trans "More information about configuring service providers can be found from <a href='https://wiki.helsinki.fi/display/IAMasioita/Ohjeet+Shibbolointiin'>https://wiki.helsinki.fi/display/IAMasioita/Ohjeet+Shibbolointiin</a> (in Finnish)" %}</p>
-<p><strong>{% trans "Required attributes for the production SPs." %}</strong></p>
+<p><strong>{% trans "Required attributes for the production RPs." %}</strong></p>
 <ul>
-  <li>{% trans "Entity Id" %}</li>
+  <li>{% trans "Client Id" %}</li>
   <li>{% trans "Service name in English or in Finnish" %}</li>
   <li>{% trans "Service description in English or in Finnish" %}</li>
   <li>{% trans "Privacy policy URL in English or in Finnish" %}</li>
 </ul>
-<p><strong>{% trans "Some of the attributes are defined later in different forms." %}</strong></p>
-<ul>
-  <li>{% trans "Certificates" %}</li>
-  <li>{% trans "AssertionConsumerService endpoint" %}</li>
-  <li>{% trans "Technical and support contacts" %}</li>
-</ul>
-<p><a href="{% url 'metadata-import' %}">{% trans "Add by importing service provider metadata" %}</a></p>
 </div>
 
 <form action="" method="post" class="form">

@@ -1,3 +1,11 @@
+import os
+import re
+import unicodedata
+import logging
+
+from cryptography.fernet import Fernet, InvalidToken
+
+from django.conf import settings
 from django.contrib.auth.models import User
 from django.core.validators import MaxLengthValidator
 from django.db import models
@@ -5,11 +13,24 @@ from django.utils.translation import ugettext_lazy as _, get_language
 
 from rr.models.attribute import Attribute
 from rr.models.nameidformat import NameIDFormat
+from rr.models.oidc import GrantType, ResponseType
 from rr.models.organization import Organization
 from rr.utils.notifications import admin_notification_modified_sp
 
-import unicodedata
-import re
+logger = logging.getLogger(__name__)
+
+
+def get_fernet_instance():
+    """Initializes Fernet instance for client secret encryption."""
+    if hasattr(settings, 'OIDC_CLIENT_SECRET_KEY') and settings.OIDC_CLIENT_SECRET_KEY:
+        key = settings.OIDC_CLIENT_SECRET_KEY.encode()
+        try:
+            f = Fernet(key)
+        # Invalid key value returns an exception of type Error.
+        except Exception:
+            logger.error("Invalid OIDC_CLIENT_SECRET_KEY.")
+            f = None
+    return f
 
 
 class ServiceProvider(models.Model):
@@ -19,7 +40,8 @@ class ServiceProvider(models.Model):
     """
     entity_id = models.CharField(max_length=255, verbose_name=_('Entity Id'))
     SERVICETYPECHOICES = (('saml', _('SAML / Shibboleth')),
-                          ('ldap', _('LDAP')))
+                          ('ldap', _('LDAP')),
+                          ('oidc', _('OIDC')))
     service_type = models.CharField(max_length=10, choices=SERVICETYPECHOICES,
                                     verbose_name=_('Service type (SAML/LDAP)'))
 
@@ -72,6 +94,22 @@ class ServiceProvider(models.Model):
     force_mfa = models.BooleanField(default=False, verbose_name=_('Require MFA authentication'))
     force_sha1 = models.BooleanField(default=False, verbose_name=_('Use SHA-1 as signature algorithm'))
     force_nameidformat = models.BooleanField(default=False, verbose_name=_('Force use of specific nameIDFormat'))
+
+    grant_types = models.ManyToManyField(GrantType, blank=True,)
+    response_types = models.ManyToManyField(ResponseType, blank=True,)
+
+    encrypted_client_secret = models.TextField(blank=True, verbose_name=_('Client secret'))
+
+    APPLICATIONTYPES = (('web', _('web')),
+                        ('native', _('native')))
+    application_type = models.CharField(default='web', max_length=8, choices=APPLICATIONTYPES,
+                                        verbose_name=_('Application type'))
+
+    SUBJECTIDENTIFIERS = (('public', _('public')),
+                          ('pairwise', _('pairwise')))
+    subject_identifier = models.CharField(blank=True, max_length=8, choices=SUBJECTIDENTIFIERS,
+                                          verbose_name=_('Subject identifier'))
+
     admin_require_manual_configuration = models.BooleanField(
                 default=False,
                 verbose_name=_('This service requires manual configuration'))
@@ -127,11 +165,14 @@ class ServiceProvider(models.Model):
     validated = models.DateTimeField(null=True, blank=True, verbose_name=_('Validated on'))
 
     def display_identifier(self):
-        """Returns an entity_id for SAML service and first server for LDAP service (or entity_id if servers are not defined)"""
+        """Returns an entity_id for SAML service and first server for
+        LDAP service (or entity_id if servers are not defined)"""
         if self.service_type == "saml":
             return self.entity_id
         elif self.service_type == "ldap":
             return self.entity_id
+        elif self.service_type == "oidc":
+            return self.name()
         else:
             return None
 
@@ -222,7 +263,7 @@ class ServiceProvider(models.Model):
         return fields
 
     def get_technical_fields(self):
-        """Returns a list of technical information field names on the instance."""
+        """Returns a list of SAML technical information field names on the instance."""
         fields = []
         for f in self._meta.fields:
 
@@ -237,7 +278,7 @@ class ServiceProvider(models.Model):
                 except AttributeError:
                     value = None
             # Skip fields in list
-            if f.editable and f.name in ('entity_id', 'discovery_service_url', 'name_format_transient', 'name_format_persistent',
+            if f.editable and f.name in ('entity_id', 'discovery_service_url',
                                          'sign_assertions', 'sign_requests', 'sign_responses', 'encrypt_assertions',
                                          'force_mfa', 'force_sha1', 'force_nameidformat',
                                          'production', 'test', 'saml_product', 'autoupdate_idp_metadata'):
@@ -277,6 +318,60 @@ class ServiceProvider(models.Model):
                   }
                 )
         return fields
+
+    def get_oidc_technical_fields(self):
+        """Returns a list of OIDC technical information field names on the instance."""
+        fields = []
+        for f in self._meta.fields:
+
+            fname = f.name
+            # resolve picklists/choices, with get_xyz_display() function
+            get_choice = 'get_'+fname+'_display'
+            if hasattr(self, get_choice):
+                value = getattr(self, get_choice)()
+            else:
+                try:
+                    value = getattr(self, fname)
+                except AttributeError:
+                    value = None
+            # Skip fields in list
+            if f.editable and f.name in ('entity_id', 'grant_types', 'response_types', 'application_type',
+                                         'subject_identifier',
+                                         'production', 'test', 'saml_product', 'autoupdate_idp_metadata'):
+                fields.append(
+                  {
+                   'label': f.verbose_name,
+                   'name': f.name,
+                   'value': value,
+                  }
+                )
+        return fields
+
+    def get_client_secret(self):
+        """Returns decrypted client secret in text."""
+        if self.encrypted_client_secret:
+            f = get_fernet_instance()
+            if f:
+                try:
+                    return f.decrypt(self.encrypted_client_secret.encode())
+                except TypeError:
+                    return None
+                except InvalidToken:
+                    logger.error("Incorrect OIDC_CLIENT_SECRET_KEY.")
+                    return _("Invalid decryption key, could not show the client secret.")
+        return None
+
+    def generate_client_secret(self):
+        """Generates client secret and encrypts it to model field."""
+        f = get_fernet_instance()
+        if f:
+            try:
+                self.encrypted_client_secret = f.encrypt(("secret_" + os.urandom(16).hex()).encode()).decode()
+            except TypeError:
+                return None
+            self.save()
+            return self.encrypted_client_secret
+        return None
 
     def save_modified(self, *args, **kwargs):
         """ Saves model and send notification if it was unmodified """
@@ -365,3 +460,15 @@ def new_ldap_entity_id_from_name(horribleunicodestring):
         sp = ServiceProvider.objects.filter(entity_id=entity_id).first()
 
     return entity_id
+
+
+def random_oidc_client_id():
+    """
+    Creates unique and random hex32 client ID value for OIDC RP.
+    """
+    while True:
+        client_id = "id_" + os.urandom(16).hex()
+        sp = ServiceProvider.objects.filter(entity_id=client_id, end_at=None).first()
+        if not sp:
+            break
+    return client_id

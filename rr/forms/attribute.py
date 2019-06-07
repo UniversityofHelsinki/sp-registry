@@ -24,6 +24,9 @@ class AttributeForm(Form):
         elif self.sp.service_type == "ldap":
             attributes = Attribute.objects.filter(Q(public_ldap=True) | Q(
                     spattribute__sp=self.sp, spattribute__end_at=None)).order_by('friendlyname')
+        elif self.sp.service_type == "oidc":
+            attributes = Attribute.objects.filter(Q(public_oidc=True) | Q(
+                spattribute__sp=self.sp, spattribute__end_at=None)).order_by('friendlyname')
         else:
             attributes = Attribute.objects.none()
         for field in attributes:
@@ -34,10 +37,13 @@ class AttributeForm(Form):
             else:
                 help_text = field.name
             if self.is_admin and self.sp.service_type == "saml" and not field.public_saml:
-                not_public_text = _('Not a public SAML attribute, might not be available from IdP.')
+                not_public_text = _('Not a public SAML attribute, might not be available for SAML services.')
                 help_text = help_text + '<p class="text-danger">' + not_public_text + '</p>'
             if self.is_admin and self.sp.service_type == "ldap" and not field.public_ldap:
                 not_public_text = _('Not a public LDAP attribute, might not be available from LDAP.')
+                help_text = help_text + '<p class="text-danger">' + not_public_text + '</p>'
+            if self.is_admin and self.sp.service_type == "oidc" and not field.public_oidc:
+                not_public_text = _('Not a public OIDC attribute, might not be available for OIDC services.')
                 help_text = help_text + '<p class="text-danger">' + not_public_text + '</p>'
             self.fields[field.friendlyname] = CharField(label=field.friendlyname, max_length=256,
                                                         required=False, help_text=help_text)

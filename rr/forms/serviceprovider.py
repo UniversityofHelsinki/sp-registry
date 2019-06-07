@@ -8,7 +8,7 @@ from django.forms.widgets import HiddenInput, Textarea, CheckboxInput
 from django.utils.translation import ugettext_lazy as _
 
 from rr.models.nameidformat import NameIDFormat
-from rr.models.serviceprovider import ServiceProvider, ldap_entity_id_from_name
+from rr.models.serviceprovider import ServiceProvider, ldap_entity_id_from_name, random_oidc_client_id
 
 
 class BasicInformationForm(ModelForm):
@@ -64,6 +64,15 @@ class BasicInformationForm(ModelForm):
         if not self.request.user.is_superuser:
             del self.fields['admin_notes']
             del self.fields['organization']
+
+    def clean(self):
+        """
+        Check that name is given in English or in Finnish
+        """
+        name_en = self.cleaned_data['name_en']
+        name_fi = self.cleaned_data['name_fi']
+        if not name_en and not name_fi:
+            raise ValidationError(_("Name in English or in Finnish is required."))
 
 
 class TechnicalInformationForm(ModelForm):
@@ -236,6 +245,64 @@ class LdapTechnicalInformationForm(ModelForm):
                                "Please give a reason for saving passwords.")
 
 
+class OidcTechnicalInformationForm(ModelForm):
+    """
+    Form for updating technical information from OIDC ServiceProvider object
+    """
+    reset_client_secret = BooleanField(label=_("Reset client secret"), required=False)
+    remove_client_secret = BooleanField(label=_("Remove client secret"), required=False)
+
+    class Meta:
+        model = ServiceProvider
+        fields = ['entity_id', 'admin_require_manual_configuration', 'grant_types', 'response_types',
+                  'application_type', 'subject_identifier', 'production', 'test',
+                  'saml_product', 'autoupdate_idp_metadata']
+        help_texts = {
+            'entity_id': _('Client identifier of the relying party. '
+                           'It is usually recommended to use random identifier. '
+                           '<div class="text-danger">Required for both production and test use.</div>'),
+            'admin_require_manual_configuration': _('This service provider requires manual configuration. '
+                                                    'Set by registry admins if necessary.'),
+            'production': _('Publish this SP to the production IdP. Only validated data is used. '
+                            'Any changes to production SPs must be validated by the IdP '
+                            'administrators before coming into effect.'
+                            '<div class="text-danger">Required for production use.</div>'),
+            'test': _('Publish this SP to the test IdP using unvalidated data. '
+                      'Any changes might take up to 15 minutes until they are published to '
+                      'the test IdP.'),
+            'saml_product': _('OIDC product used by this client. For administrative use e.g. for testing '
+                              'different RPs during IdP updates.'),
+            'autoupdate_idp_metadata': _('Does this RP automatically update IdP metadata at least '
+                                         'once a day?'),
+        }
+
+    def __init__(self, *args, **kwargs):
+        self.request = kwargs.pop('request', None)
+        super(OidcTechnicalInformationForm, self).__init__(*args, **kwargs)
+        self.fields['saml_product'].label = "OIDC product"
+        if not self.request.user.is_superuser:
+            del self.fields['admin_require_manual_configuration']
+
+    def clean_entity_id(self):
+        """
+        Allow only superusers set entity id something else than URL.
+        """
+        entity_id = self.cleaned_data['entity_id']
+        if ServiceProvider.objects.filter(entity_id=entity_id, end_at=None,
+                                          history=None).exclude(pk=self.instance.pk):
+            raise ValidationError(_("Client ID already exists"))
+        return entity_id
+
+    def clean(self):
+        cleaned_data = super().clean()
+        grant_types = cleaned_data.get("grant_types").values_list('name', flat=True)
+        response_types = cleaned_data.get("response_types").values_list('name', flat=True)
+        if cleaned_data.get("reset_client_secret") and cleaned_data.get("remove_client_secret"):
+            self.add_error('remove_client_secret', _('Both remove and reset client secret selected.'))
+        if 'code' in response_types and 'authorization_code' not in grant_types:
+            self.add_error('grant_types', _('authorization_code Grant type must be set for code Response type.'))
+
+
 class SamlServiceProviderCreateForm(ModelForm):
     """
     Form for creating a service provider. Same as basic information form and entity_id.
@@ -299,6 +366,15 @@ class SamlServiceProviderCreateForm(ModelForm):
                                           history=None).exclude(pk=self.instance.pk):
             raise ValidationError(_("Entity Id already exists"))
         return entity_id
+
+    def clean(self):
+        """
+        Check that name is given in English or in Finnish
+        """
+        name_en = self.cleaned_data['name_en']
+        name_fi = self.cleaned_data['name_fi']
+        if not name_en and not name_fi:
+            raise ValidationError(_("Name in English or in Finnish is required."))
 
 
 class LdapServiceProviderCreateForm(ModelForm):
@@ -366,6 +442,75 @@ class LdapServiceProviderCreateForm(ModelForm):
         if len(ldap_entity_id_from_name(name_fi)) == 0:
             raise ValidationError(_("Invalid Finnish name."))
         return name_fi
+
+
+class OidcServiceProviderCreateForm(ModelForm):
+    """
+    Form for creating a OIDC Relying Party. Same as basic information form and entity_id / client_id.
+    """
+
+    class Meta:
+        model = ServiceProvider
+        fields = ['entity_id', 'name_fi', 'name_en', 'name_sv', 'description_fi', 'description_en',
+                  'description_sv', 'privacypolicy_fi', 'privacypolicy_en', 'privacypolicy_sv',
+                  'login_page_url', 'application_portfolio', 'notes']
+        help_texts = {
+            'entity_id': _('Client identifier of the relying party. '
+                           'It is usually recommended to use random identifier. '
+                           '<div class="text-danger">Required for both production and test use.</div>'),
+            'name_fi': _('Short (max 70 characters) and descriptive name for the service '
+                         'in Finnish.<div class="text-danger">'
+                         'Required for both production and test use.</div>'),
+            'name_en': _('Short (max 70 characters) and descriptive name for the service '
+                         'in English.<div class="text-danger">'
+                         'Required for both production and test use.</div>'),
+            'name_sv': _('Short (max 70 characters) and descriptive name for the service '
+                         'in Swedish.'),
+            'description_fi': _('Short (max 140 characters) description of the service '
+                                'in Finnish. <div class="text-danger">'
+                                'Required for both production and test use.</div>'),
+            'description_en': _('Short (max 140 characters) description of the service '
+                                'in English. <div class="text-danger">'
+                                'Required for both production and test use.</div>'),
+            'description_sv': _('Short (max 140 characters) description of the service '
+                                'in Swedish.'),
+            'privacypolicy_fi': _('Link to privacy policy in Finnish. Link must be publicly '
+                                  'accessible. <div class="text-danger">Required for production '
+                                  'use if the service requests any personal information.</div>'),
+            'privacypolicy_en': _('Link to privacy policy in English. Link must be publicly '
+                                  'accessible. <div class="text-danger">Required for production '
+                                  'use if the service requests any personal information.</div>'),
+            'privacypolicy_sv': _('Link to privacy policy in Swedish. Link must be publicly '
+                                  'accessible.'),
+            'login_page_url': _('Used for debugging and testing services.'),
+            'application_portfolio': _('Link to external application portfolio.'),
+            'notes': _('Additional notes about this service.'),
+         }
+
+    def __init__(self, *args, **kwargs):
+        self.request = kwargs.pop('request', None)
+        super(OidcServiceProviderCreateForm, self).__init__(*args, **kwargs)
+        self.fields['entity_id'].label = "Client ID"
+        self.fields['entity_id'].initial = random_oidc_client_id
+
+    def clean_entity_id(self):
+        """
+        Checks that client id is unique
+        """
+        entity_id = self.cleaned_data['entity_id']
+        if ServiceProvider.objects.filter(entity_id=entity_id, end_at=None,
+                                          history=None).exclude(pk=self.instance.pk):
+            raise ValidationError(_("Client ID already exists"))
+        return entity_id
+
+    def clean(self):
+        """
+        Check that name is given in English or in Finnish
+        """
+        name_en = self.cleaned_data['name_en']
+        name_fi = self.cleaned_data['name_fi']
+        if not name_en and not name_fi:
+            raise ValidationError(_("Name in English or in Finnish is required."))
 
 
 class ServiceProviderCloseForm(Form):

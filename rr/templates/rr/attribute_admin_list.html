@@ -14,6 +14,7 @@
       <th scope="col">{% trans "OID / Name" %}</th>
       <th scope="col" data-toggle="tooltip" data-placement="top" title="{% trans "Public attribute for SAML." %}">{% trans "SAML" %}</th>
       <th scope="col" data-toggle="tooltip" data-placement="top" title="{% trans "Public attribute for LDAP." %}">{% trans "LDAP" %}</th>
+      <th scope="col" data-toggle="tooltip" data-placement="top" title="{% trans "Public attribute for OIDC." %}">{% trans "OIDC" %}</th>
     </tr>
   </thead>
   <tbody>
@@ -24,6 +25,7 @@
       <td>{{ object.name }}</td>
       {% if object.public_saml %}<td class="text-success">&#10004;{% else %}<td class="text-danger">&#10005;{% endif %}</td>
       {% if object.public_ldap %}<td class="text-success">&#10004;{% else %}<td class="text-danger">&#10005;{% endif %}</td>
+      {% if object.public_oidc %}<td class="text-success">&#10004;{% else %}<td class="text-danger">&#10005;{% endif %}</td>
     </tr>
 {% empty %}
     <tr>

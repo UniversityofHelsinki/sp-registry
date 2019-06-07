@@ -8,6 +8,7 @@ from rr.views.serviceprovider import BasicInformationView, ServiceProviderDelete
 from rr.views.serviceprovider import ServiceProviderList, TechnicalInformationUpdate
 from rr.views.serviceprovider import SAMLAdminList
 from rr.views.serviceprovider import LdapServiceProviderCreate, LdapTechnicalInformationUpdate
+from rr.views.serviceprovider import OidcServiceProviderCreate, OidcTechnicalInformationUpdate
 from rr.views.attribute import attribute_list, attribute_admin_list, attribute_view
 from rr.views.certificate import certificate_list, certificate_admin_list
 from rr.views.certificate import certificate_info
@@ -15,6 +16,7 @@ from rr.views.contact import contact_list
 from rr.views.endpoint import endpoint_list
 from rr.views.metadata import metadata, metadata_import, metadata_management
 from rr.views.login import ShibbolethLoginView, logout_redirect
+from rr.views.redirecturi import redirecturi_list
 from rr.views.spadmin import activate_key, admin_list
 from rr.views.testuser import testuser_list, testuser_attribute_data
 from rr.views.usergroup import usergroup_list
@@ -51,15 +53,22 @@ urlpatterns = [
         name='metadata-manage-saml'),
     url(r'^metadata/manage/ldap/$', metadata_management, {'service_type': 'ldap'},
         name='metadata-manage-ldap'),
+    url(r'^metadata/manage/oidc/$', metadata_management, {'service_type': 'oidc'},
+        name='metadata-manage-oidc'),
     url(r'^metadata/(?P<pk>[0-9]+)/$', metadata, name='metadata-view'),
+    url(r'^redirecturi/(?P<pk>[0-9]+)/$', redirecturi_list, name='redirecturi-list'),
     url(r'^technical/(?P<pk>[0-9]+)/$', login_required(TechnicalInformationUpdate.as_view()),
         name='technical-update'),
     url(r'^ldap/(?P<pk>[0-9]+)/$', login_required(LdapTechnicalInformationUpdate.as_view()),
         name='ldap-technical-update'),
+    url(r'^oidc/(?P<pk>[0-9]+)/$', login_required(OidcTechnicalInformationUpdate.as_view()),
+        name='oidc-technical-update'),
     url(r'^serviceprovider/add/saml/$', login_required(SamlServiceProviderCreate.as_view()),
         name='saml-serviceprovider-add'),
     url(r'^serviceprovider/add/ldap/$', login_required(LdapServiceProviderCreate.as_view()),
         name='ldap-serviceprovider-add'),
+    url(r'^serviceprovider/add/oidc/$', login_required(OidcServiceProviderCreate.as_view()),
+        name='oidc-serviceprovider-add'),
     url(r'^serviceprovider/remove/(?P<pk>[0-9]+)/$',
         login_required(ServiceProviderDelete.as_view()), name='serviceprovider-delete'),
     url(r'^serviceprovider/(?P<pk>[0-9]+)/$', login_required(BasicInformationUpdate.as_view()),

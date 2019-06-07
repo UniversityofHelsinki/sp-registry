@@ -5,7 +5,7 @@
 {% block content %}
     <h1>{% trans "Special configurations" %}</h1>
     <div class="alert alert-info" role="alert">
-        <a href="{% url 'saml-admin-list' %}?show=signing" class="btn btn-primary">{% trans "Sining and encryption" %}</a>
+        <a href="{% url 'saml-admin-list' %}?show=signing" class="btn btn-primary">{% trans "Signing and encryption" %}</a>
         <a href="{% url 'saml-admin-list' %}?show=nameid" class="btn btn-success">{% trans "NameId settings" %}</a>
         <a href="{% url 'saml-admin-list' %}?show=mfa" class="btn btn-danger">{% trans "MFA and authorization" %}</a>
         <a href="{% url 'saml-admin-list' %}?show=samlproduct" class="btn btn-warning">{% trans "SAML Product" %}</a>

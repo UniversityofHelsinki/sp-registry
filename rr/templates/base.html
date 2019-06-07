@@ -43,6 +43,10 @@
         <li class="nav-item">
           <a class="nav-link" href="{% url 'ldap-technical-update' object.pk %}">{% trans "Technical Attributes" %}</a>
         </li>
+{% elif object.service_type == "oidc" %}
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'oidc-technical-update' object.pk %}">{% trans "Technical Attributes" %}</a>
+        </li>
 {% endif %}
         <li class="nav-item">
           <a class="nav-link" href="{% url 'attribute-list' object.pk %}">{% trans "Attributes" %}</a>
@@ -60,6 +64,11 @@
           <a class="nav-link" href="{% url 'usergroup-list' object.pk %}">{% trans "User Groups" %}</a>
         </li>
 {% endif %}
+{% if object.service_type == "oidc" %}
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'redirecturi-list' object.pk %}">{% trans "Redirect URIs" %}</a>
+        </li>
+{% endif %}
         <li class="nav-item">
           <a class="nav-link" href="{% url 'contact-list' object.pk %}">{% trans "Contacts" %}</a>
         </li>
@@ -71,7 +80,7 @@
           <a class="nav-link" href="{% url 'testuser-list' object.pk %}">{% trans "Test users" %}</a>
         </li>
 {% endif %}
-{% if object.service_type == "saml" %}
+{% if object.service_type == "saml" or object.service_type == "oidc" %}
         <li class="nav-item">
           <a class="nav-link" href="{% url 'metadata-view' object.pk %}">{% trans "View Metadata" %}</a>
         </li>
@@ -100,6 +109,9 @@
         </li>
         <li class="nav-item">
           <a class="nav-link" href="{% url 'metadata-manage-ldap' %}">{% trans "Manage LDAP metadata" %}</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'metadata-manage-oidc' %}">{% trans "Manage OIDC metadata" %}</a>
         </li>
         <div class="dropdown-divider"></div>
         <li class="nav-item">
@@ -160,6 +172,10 @@
         <li class="nav-item">
           <a class="nav-link {% if request.path|slice:":7" == "/ldap/" %}active{% endif %}" href="{% url 'ldap-technical-update' object.pk %}">{% trans "Technical Attributes" %}</a>
         </li>
+{% elif object.service_type == "oidc" %}
+        <li class="nav-item">
+          <a class="nav-link {% if request.path|slice:":7" == "/oidc/" %}active{% endif %}" href="{% url 'oidc-technical-update' object.pk %}">{% trans "Technical Attributes" %}</a>
+        </li>
 {% endif %}
         <li class="nav-item">
           <a class="nav-link {% if request.path|slice:":11" == "/attribute/" %}active{% endif %}" href="{% url 'attribute-list' object.pk %}">{% trans "Attributes" %}</a>
@@ -177,6 +193,11 @@
           <a class="nav-link {% if request.path|slice:":11" == "/usergroup/" %}active{% endif %}" href="{% url 'usergroup-list' object.pk %}">{% trans "User Groups" %}</a>
         </li>
 {% endif %}
+{% if object.service_type == "oidc" %}
+        <li class="nav-item">
+          <a class="nav-link {% if request.path|slice:":13" == "/redirecturi/" %}active{% endif %}" href="{% url 'redirecturi-list' object.pk %}">{% trans "Redirect URIs" %}</a>
+        </li>
+{% endif %}
         <li class="nav-item">
           <a class="nav-link {% if request.path|slice:":9" == "/contact/" %}active{% endif %}" href="{% url 'contact-list' object.pk %}">{% trans "Contacts" %}</a>
         </li>
@@ -188,7 +209,7 @@
           <a class="nav-link {% if request.path|slice:":10" == "/testuser/" %}active{% endif %}" href="{% url 'testuser-list' object.pk %}">{% trans "Test Users" %}</a>
         </li>
 {% endif %}
-{% if object.service_type == "saml" %}
+{% if object.service_type == "saml" or object.service_type == "oidc" %}
         <li class="nav-item">
           <a class="nav-link {% if request.path|slice:":10" == "/metadata/" %}active{% endif %}" href="{% url 'metadata-view' object.pk %}">{% trans "View Metadata" %}</a>
         </li>
@@ -217,7 +238,10 @@
         <li class="nav-item">
           <a class="nav-link {% if request.path|slice:":22" == "/metadata/manage/ldap/" %}active{% endif %}" href="{% url 'metadata-manage-ldap' %}">{% trans "Manage LDAP metadata" %}</a>
         </li>
-       
+        <li class="nav-item">
+          <a class="nav-link {% if request.path|slice:":22" == "/metadata/manage/oidc/" %}active{% endif %}" href="{% url 'metadata-manage-oidc' %}">{% trans "Manage OIDC metadata" %}</a>
+        </li>
+
         <div class="dropdown-divider"></div>
         <li class="nav-item">
           <a class="nav-link" href="/admin_django/">{% trans "Database Admin" %}</a>
@@ -228,11 +252,17 @@
 {% endif %}
       <main class="col-lg-10 offset-lg-2 col-xl-8 offset-xl-2 pt-3">
 {% if messages %}
-<div class="alert alert-info" role="alert">
-    {% for message in messages %}
-    {{ message }}<br>
-    {% endfor %}
-</div>
+{% for message in messages %}
+    {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
+        <div class="alert alert-danger" role="alert">
+    {% elif message.level == DEFAULT_MESSAGE_LEVELS.WARNING%}
+        <div class="alert alert-warning" role="alert">
+    {% else %}
+        <div class="alert alert-info" role="alert">
+    {% endif %}
+        {{ message }}<br>
+        </div>
+{% endfor %}
 {% endif %}
 	{% block content %}
 	{% endblock %}

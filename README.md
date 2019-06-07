@@ -1,5 +1,5 @@
 # SP Resource Registry
-Used for maintaining information about services connected to SAML and LDAP.
+Used for maintaining information about services connected to SAML, OIDC and LDAP.
 
 Allows registration of new services by the users and validation of information by IdP admins, before transferring
 metadata to production.
@@ -67,6 +67,8 @@ Create a superuser with
   * Allows only SAML2 bindings, admins may override this with metadata import
 * User Groups (LDAP only)
   * List of groups that service has access
+* Redirect URIs (OIDC only)
+  * Allowed redirect URIs for OIDC
 * Contacts
   * Technical, administrative and support contacts for the service
 * Admins
@@ -74,7 +76,7 @@ Create a superuser with
   * New admins may be invited by email, invitations are valid for 30 days
 * Test Users
   * Custom test users for test services
-* View Metadata
+* View Metadata (SAML and OIDC only)
   * Shows SP metadata. You may choose between validated and unvalidated metadata
 
 #### For site admins
@@ -96,6 +98,8 @@ Create a superuser with
   * Saves updated SAML metadata to git repository
 * Manage LDAP metadata
   * Saves updated LDAP metadata to git repository
+* Manage OIDC metadata
+  * Saves updated OIDC metadata to git repository
 * Database Admin
   * Django Admin backend
 
@@ -107,6 +111,8 @@ For more information run "./manage.py <command> -h"
   * Exports LDAP registrations data (custom format)
 * exportmetadata
   * Exporting metadata or attribute filter
+* exportoidc
+  * Exporting OIDC metadata in JSON format
 * importattributefilter
   * Importing attributes from old attribute filter
 * importmetadata

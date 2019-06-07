@@ -31,7 +31,7 @@ Scenario: Technical information modifications
 	
 Scenario: Service provider creation
     Given test environment with logged in user exists
-    When clicking object with text "Add a new service provider"
+    When clicking object with text "Add a new SAML service provider"
     Then the result page will include text "Adding a new service provider"
     When filling service creation form
     Then the result page will include text "Details"

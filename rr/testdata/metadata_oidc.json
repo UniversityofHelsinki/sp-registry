@@ -1,0 +1,14 @@
+{
+    "client_id": "https://sp2.example.org/sp",
+    "client_secret": "******",
+    "application_type": "web",
+    "redirect_uris": [
+        "https://sp2.example.org/redirect_uri"
+    ],
+    "scope": "openid eppn",
+    "response_types": [
+        "none"
+    ],
+    "client_name#en": "SP2 Example service",
+    "policy_uri#fi": "https://example.org/privacyfi"
+}

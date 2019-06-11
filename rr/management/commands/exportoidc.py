@@ -52,8 +52,8 @@ class Command(BaseCommand):
                                                     test=test,
                                                     include=include,
                                                     client_secret_encryption=encryption)
-            if metadata:
+            if metadata is None:
+                self.stdout.write("Could not create metadata, check log for more information.")
+            else:
                 with open(metadata_output, 'w') as f:
                     f.write(json.dumps(metadata, indent=4))
-            else:
-                self.stdout.write("Could not create metadata, check log for more information.")

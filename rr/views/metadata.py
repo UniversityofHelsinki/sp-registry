@@ -263,6 +263,7 @@ def metadata_management(request, service_type="saml"):
                     error_message = _("Execution of git command failed. Might want to try git "
                                       "command locally  from the command line and check that it "
                                       "works.")
+                    return render(request, "error.html", {'error_message': error_message})
                 return render(request, "rr/metadata_management.html", {'log': log,
                                                                        'error': error})
             else:

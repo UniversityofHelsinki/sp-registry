@@ -207,9 +207,12 @@ def metadata_management(request, service_type="saml"):
     form = None
     if not request.user.is_superuser:
         raise PermissionDenied
-    if (service_type == "saml" or service_type == "oidc") and hasattr(settings, 'METADATA_GIT_REPOSITORIO') and \
+    if service_type == "saml" and hasattr(settings, 'METADATA_GIT_REPOSITORIO') and \
             hasattr(settings, 'METADATA_FILENAME'):
         repo_location = settings.METADATA_GIT_REPOSITORIO
+    elif service_type == "oidc" and hasattr(settings, 'OIDC_GIT_REPOSITORIO') and \
+            hasattr(settings, 'OIDC_METADATA_FILENAME'):
+        repo_location = settings.OIDC_GIT_REPOSITORIO
     elif service_type == "ldap" and hasattr(settings, 'LDAP_GIT_REPOSITORIO') and \
             hasattr(settings, 'LDAP_METADATA_FILENAME'):
         repo_location = settings.LDAP_GIT_REPOSITORIO

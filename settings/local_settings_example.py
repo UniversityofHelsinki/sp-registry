@@ -61,9 +61,12 @@ ATTRIBUTE_TEST_SERVICE_LOGOUT_URL = 'https://localhost/testservice/Shibboleth.ss
 # Path to git repositorio
 METADATA_GIT_REPOSITORIO = '/path/to/metadata/git/repo/'
 LDAP_GIT_REPOSITORIO = '/path/to/ldap/git/repo/'
+OIDC_GIT_REPOSITORIO = '/path/to/oidc/git/repo/'
+
 # Metadata file used for upload
 METADATA_FILENAME = 'metadata.xml'
 LDAP_METADATA_FILENAME = 'ldap-metadata.xml'
+OIDC_METADATA_FILENAME = 'oidc-metadata.json'
 
 # Path to static files for collection
 STATIC_ROOT = '/path/to/rr/static/'

@@ -1,1 +1,44 @@
-[{"model": "rr.responsetype", "pk": 1, "fields": {"name": "code"}}, {"model": "rr.responsetype", "pk": 2, "fields": {"name": "token"}}, {"model": "rr.responsetype", "pk": 3, "fields": {"name": "id_token"}}, {"model": "rr.granttype", "pk": 1, "fields": {"name": "authorization_code"}}, {"model": "rr.granttype", "pk": 2, "fields": {"name": "implicit"}}, {"model": "rr.granttype", "pk": 3, "fields": {"name": "refresh_token"}}]
+[
+    {
+        "model": "rr.responsetype",
+        "pk": 1,
+        "fields": {
+            "name": "code"
+        }
+    },
+    {
+        "model": "rr.responsetype",
+        "pk": 2,
+        "fields": {
+            "name": "token"
+        }
+    },
+    {
+        "model": "rr.responsetype",
+        "pk": 3,
+        "fields": {
+            "name": "id_token"
+        }
+    },
+    {
+        "model": "rr.granttype",
+        "pk": 1,
+        "fields": {
+            "name": "authorization_code"
+        }
+    },
+    {
+        "model": "rr.granttype",
+        "pk": 2,
+        "fields": {
+            "name": "refresh_token"
+        }
+    },
+    {
+        "model": "rr.oidcscope",
+        "pk": 1,
+        "fields": {
+            "name": "profile"
+        }
+    }
+]

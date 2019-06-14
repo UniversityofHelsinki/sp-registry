@@ -26,3 +26,16 @@ class GrantType(models.Model):
 
     class Meta:
         ordering = ["name"]
+
+
+class OIDCScope(models.Model):
+    """
+    Stores single OIDC scope.
+    """
+    name = models.CharField(max_length=25, verbose_name=_('OIDC Scope'))
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        ordering = ["name"]

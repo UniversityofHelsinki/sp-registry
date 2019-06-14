@@ -13,7 +13,7 @@ from django.utils.translation import ugettext_lazy as _, get_language
 
 from rr.models.attribute import Attribute
 from rr.models.nameidformat import NameIDFormat
-from rr.models.oidc import GrantType, ResponseType
+from rr.models.oidc import GrantType, ResponseType, OIDCScope
 from rr.models.organization import Organization
 from rr.utils.notifications import admin_notification_modified_sp
 
@@ -97,6 +97,7 @@ class ServiceProvider(models.Model):
 
     grant_types = models.ManyToManyField(GrantType, blank=True,)
     response_types = models.ManyToManyField(ResponseType, blank=True,)
+    oidc_scopes = models.ManyToManyField(OIDCScope, blank=True,)
 
     encrypted_client_secret = models.TextField(blank=True, verbose_name=_('Client secret'))
 
@@ -336,7 +337,7 @@ class ServiceProvider(models.Model):
                     value = None
             # Skip fields in list
             if f.editable and f.name in ('entity_id', 'grant_types', 'response_types', 'application_type',
-                                         'subject_identifier',
+                                         'subject_identifier', 'oidc_scopes',
                                          'production', 'test', 'saml_product', 'autoupdate_idp_metadata'):
                 fields.append(
                   {
@@ -412,6 +413,10 @@ class SPAttribute(models.Model):
     sp = models.ForeignKey(ServiceProvider, on_delete=models.CASCADE)
     reason = models.CharField(max_length=255,
                               verbose_name=_('Reason for the attribute requisition'))
+    oidc_userinfo = models.BooleanField(default=False,
+                                        verbose_name=_('Release from the userinfo endpoint'))
+    oidc_id_token = models.BooleanField(default=False,
+                                        verbose_name=_('Release in the ID Token'))
     created_at = models.DateTimeField(auto_now_add=True, verbose_name=_('Created at'))
     updated_at = models.DateTimeField(auto_now=True, verbose_name=_('Updated at'))
     end_at = models.DateTimeField(blank=True, null=True, verbose_name=_('Entry end time'))

@@ -52,7 +52,7 @@ class AttributeFormTestCase(TestCase):
         form = AttributeForm(sp=self.user_sp, is_admin=False, data=form_data)
         self.assertTrue(form.is_valid())
         self.assertTrue(form.fields['eduPersonPrincipalName'].has_changed)
-        self.assertEqual(form.fields['eduPersonPrincipalName'].help_text, '<a target="_blank" href="https://wiki.eduuni.fi/display/CSCHAKA/funetEduPersonSchema2dot2#funetEduPersonSchema2dot2-eduPersonPrincipalName">urn:oid:1.3.6.1.4.1.5923.1.1.1.6</a>')
+        self.assertEqual('Name: urn:oid:1.3.6.1.4.1.5923.1.1.1.6 (<a target="_blank" href="https://wiki.eduuni.fi/display/CSCHAKA/funetEduPersonSchema2dot2#funetEduPersonSchema2dot2-eduPersonPrincipalName">schema</a>)', form.fields['eduPersonPrincipalName'].help_text)
 
     def test_attribute_form_view(self):
         form_data = {'eduPersonPrincipalName': 'User Identification'}

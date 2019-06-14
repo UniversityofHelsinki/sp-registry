@@ -1,10 +1,10 @@
 from django.db.models import Q
-from django.forms import Form, CharField
+from django.forms import Form, BooleanField, CharField
 from django.forms.widgets import TextInput
 from django.utils.translation import ugettext as _
 
 from rr.models.attribute import Attribute
-from rr.models.serviceprovider import SPAttribute
+from rr.models.serviceprovider import ServiceProvider, SPAttribute
 
 
 class AttributeForm(Form):
@@ -30,12 +30,17 @@ class AttributeForm(Form):
         else:
             attributes = Attribute.objects.none()
         for field in attributes:
+            if self.sp.service_type == "oidc" and not field.oidc_claim:
+                continue
+            if self.sp.service_type == "oidc":
+                help_text = _('OIDC claim: ') + field.oidc_claim
+            else:
+                help_text = _('Name: ') + field.name
+
             if field.schemalink:
                 schema_link = "https://wiki.eduuni.fi/display/CSCHAKA/funetEduPersonSchema2dot2" \
                              "#funetEduPersonSchema2dot2-" + field.friendlyname
-                help_text = '<a target="_blank" href="' + schema_link + '">' + field.name + '</a>'
-            else:
-                help_text = field.name
+                help_text = help_text + ' (<a target="_blank" href="' + schema_link + '">' + _('schema') + '</a>)'
             if self.is_admin and self.sp.service_type == "saml" and not field.public_saml:
                 not_public_text = _('Not a public SAML attribute, might not be available for SAML services.')
                 help_text = help_text + '<p class="text-danger">' + not_public_text + '</p>'
@@ -43,10 +48,16 @@ class AttributeForm(Form):
                 not_public_text = _('Not a public LDAP attribute, might not be available from LDAP.')
                 help_text = help_text + '<p class="text-danger">' + not_public_text + '</p>'
             if self.is_admin and self.sp.service_type == "oidc" and not field.public_oidc:
-                not_public_text = _('Not a public OIDC attribute, might not be available for OIDC services.')
+                not_public_text = _('Not a public OIDC attribute.')
                 help_text = help_text + '<p class="text-danger">' + not_public_text + '</p>'
             self.fields[field.friendlyname] = CharField(label=field.friendlyname, max_length=256,
                                                         required=False, help_text=help_text)
+            if self.sp.service_type == "oidc":
+                self.fields['extra_userinfo_' + field.friendlyname] = BooleanField(
+                    label='Userinfo', required=False, help_text=_('Release from the userinfo endpoint'))
+                self.fields['extra_id_token_' + field.friendlyname] = BooleanField(
+                    label='ID Token', required=False, help_text=_('Release in the ID Token'))
+
             attribute = SPAttribute.objects.filter(sp=self.sp, attribute=field,
                                                    end_at=None).first()
             if attribute:
@@ -57,5 +68,8 @@ class AttributeForm(Form):
                     self.fields[field.friendlyname].widget = TextInput(
                         attrs={'class': 'is-invalid'})
                 self.fields[field.friendlyname].initial = attribute.reason
+                if self.sp.service_type == "oidc":
+                    self.fields['extra_userinfo_' + field.friendlyname].initial = attribute.oidc_userinfo
+                    self.fields['extra_id_token_' + field.friendlyname].initial = attribute.oidc_id_token
             else:
                 self.fields[field.friendlyname].widget = TextInput(attrs={'placeholder': ''})

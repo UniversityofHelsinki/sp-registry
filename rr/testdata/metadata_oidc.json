@@ -1,14 +1,23 @@
 {
-    "client_id": "https://sp2.example.org/sp",
-    "client_secret": "******",
     "application_type": "web",
+    "claims": {
+        "userinfo": {
+            "eppn": null
+        }
+    },
+    "client_id": "https://sp2.example.org/sp",
+    "client_name#en": "SP2 Example service",
+    "client_secret": "******",
+    "grant_types": [
+        "authorization_code"
+    ],
+    "policy_uri#fi": "https://example.org/privacyfi",
     "redirect_uris": [
         "https://sp2.example.org/redirect_uri"
     ],
-    "scope": "openid eppn",
     "response_types": [
-        "none"
+        "code",
+        "id_token"
     ],
-    "client_name#en": "SP2 Example service",
-    "policy_uri#fi": "https://example.org/privacyfi"
+    "scope": "openid profile"
 }

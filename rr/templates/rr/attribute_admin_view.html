@@ -13,8 +13,8 @@
     <dd class="col-sm-9">{{ attribute.nameformat }}</dd>
     <dt class="col-sm-3">{% trans "LDAP attribute group" %}</dt>
     <dd class="col-sm-9">{{ attribute.group }}</dd>
-    <dt class="col-sm-3">{% trans "OIDC scope" %}</dt>
-    <dd class="col-sm-9">{{ attribute.oidc_scope }}</dd>
+    <dt class="col-sm-3">{% trans "OIDC claim" %}</dt>
+    <dd class="col-sm-9">{{ attribute.oidc_claim }}</dd>
     <dt class="col-sm-3">{% trans "Public SAML" %}</dt>
     {% if attribute.public_saml %}<dd class="col-sm-9 text-success">&#10004;{% else %}<dd class="col-sm-9 text-danger">&#10005;{% endif %}</dd>
     <dt class="col-sm-3">{% trans "Public LDAP" %}</dt>

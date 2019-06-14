@@ -19,7 +19,7 @@ class Attribute(models.Model):
     public_ldap = models.BooleanField(default=True, verbose_name=_('Show in LDAP attribute list'))
     public_oidc = models.BooleanField(default=True, verbose_name=_('Show in OIDC attribute list'))
     group = models.CharField(max_length=255, blank=True, verbose_name=_('Attribute Group for LDAP'))
-    oidc_scope = models.CharField(max_length=255, blank=True, verbose_name=_('Attribute scope for OIDC'))
+    oidc_claim = models.CharField(max_length=255, blank=True, verbose_name=_('Attribute claim name for OIDC'))
 
     test_service = models.BooleanField(default=True,
                                        verbose_name=_('Show in Attribute test service'))

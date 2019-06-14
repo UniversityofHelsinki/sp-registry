@@ -547,6 +547,7 @@ class OidcTechnicalInformationUpdate(SuccessMessageMixin, UpdateView):
                 admins = sp.admins.all()
                 grant_types = sp.grant_types.all()
                 response_types = sp.response_types.all()
+                oidc_scopes = sp.oidc_scopes.all()
                 sp.history = sp.pk
                 sp.pk = None
                 sp.end_at = timezone.now()
@@ -554,6 +555,7 @@ class OidcTechnicalInformationUpdate(SuccessMessageMixin, UpdateView):
                 sp.admins.set(admins)
                 sp.grant_types.set(grant_types)
                 sp.response_types.set(response_types)
+                sp.oidc_scopes.set(oidc_scopes)
             redirect_url = super().form_valid(form)
             self.object.updated_by = self.request.user
             self.object.validated = None

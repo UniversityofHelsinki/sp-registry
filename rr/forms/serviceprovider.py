@@ -254,7 +254,7 @@ class OidcTechnicalInformationForm(ModelForm):
 
     class Meta:
         model = ServiceProvider
-        fields = ['entity_id', 'admin_require_manual_configuration', 'grant_types', 'response_types',
+        fields = ['entity_id', 'admin_require_manual_configuration', 'grant_types', 'response_types', 'oidc_scopes',
                   'application_type', 'subject_identifier', 'production', 'test',
                   'saml_product', 'autoupdate_idp_metadata']
         help_texts = {

@@ -48,22 +48,30 @@ def metadata_uiinfo(metadata, sp, privacypolicy):
     return metadata
 
 
-def metadata_scopes(sp, validation_date):
+def metadata_claims(sp, validation_date):
     """
-    Generates scopes for RP metadata
+    Generates claims for RP metadata
 
     sp: ServiceProvider object
     validation_date: if None, using unvalidated metadata
     """
     if validation_date:
-        attributes = SPAttribute.objects.filter(sp=sp).filter(Q(end_at=None) | Q(end_at__gt=validation_date)).exclude(validated=None)
+        attributes = SPAttribute.objects.filter(sp=sp).filter(
+            Q(end_at=None) | Q(end_at__gt=validation_date)).exclude(validated=None)
     else:
         attributes = SPAttribute.objects.filter(sp=sp, end_at=None)
-    scopes = ["openid"]
-    for attribute in attributes:
-        if attribute.attribute.oidc_scope:
-            scopes.append(attribute.attribute.oidc_scope)
-    return scopes
+    claims = {}
+    attributes_id_token = attributes.filter(oidc_id_token=True)
+    if attributes_id_token:
+        claims['id_token'] = {}
+        for attribute in attributes_id_token:
+            claims['id_token'][attribute.attribute.oidc_claim] = None
+    attributes_userinfo = attributes.filter(oidc_userinfo=True)
+    if attributes_userinfo:
+        claims['userinfo'] = {}
+        for attribute in attributes_userinfo:
+            claims['userinfo'][attribute.attribute.oidc_claim] = None
+    return claims
 
 
 def metadata_redirect_uris(sp, validation_date):
@@ -130,18 +138,23 @@ def oidc_metadata_generator(sp, validated=True, privacypolicy=False, client_secr
         metadata['subject_type'] = entity.subject_identifier
     grant_types = entity.grant_types.all()
     response_types = entity.response_types.all()
+    oidc_scopes = entity.oidc_scopes.all()
     redirect_uris = metadata_redirect_uris(sp=sp, validation_date=validation_date)
-    scopes = metadata_scopes(sp=sp, validation_date=validation_date)
+    claims = metadata_claims(sp=sp, validation_date=validation_date)
     if redirect_uris:
         metadata['redirect_uris'] = redirect_uris
-    if scopes:
-        metadata['scope'] = ' '.join(scopes)
+    if claims:
+        metadata['claims'] = claims
     if grant_types:
         metadata['grant_types'] = list(grant_types.values_list('name', flat=True))
     if response_types:
         metadata['response_types'] = list(response_types.values_list('name', flat=True))
     else:
         metadata['response_types'] = ["none"]
+    scopes = ['openid']
+    if oidc_scopes:
+        scopes = scopes + list(oidc_scopes.values_list('name', flat=True))
+    metadata['scope'] = ' '.join(map(str, scopes))
     metadata = metadata_uiinfo(metadata, entity, privacypolicy)
     return metadata
 

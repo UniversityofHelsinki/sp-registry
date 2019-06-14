@@ -54,34 +54,44 @@ def attribute_list(request, pk):
             added_attributes = []
             modified_attributes = []
             for field in form:
-                data = form.cleaned_data.get(field.name)
-                sp_attribute = SPAttribute.objects.filter(sp=sp, attribute__friendlyname=field.name,
-                                                          end_at=None).first()
-                if sp_attribute and not data:
-                    sp_attribute.end_at = timezone.now()
-                    sp_attribute.save()
-                    sp.save_modified()
-                    logger.info("Attribute requisition for {attribute} removed from {sp} by {user}"
-                                .format(attribute=sp_attribute.attribute, sp=sp,
-                                        user=request.user))
-                    removed_attributes.append(field.name)
-                elif data:
-                    if not sp_attribute:
-                        attribute = Attribute.objects.filter(friendlyname=field.name).first()
-                        SPAttribute.objects.create(sp=sp, attribute=attribute, reason=data)
+                if not field.name.startswith('extra_'):
+                    data = form.cleaned_data.get(field.name)
+                    sp_attribute = SPAttribute.objects.filter(sp=sp, attribute__friendlyname=field.name,
+                                                              end_at=None).first()
+                    if sp_attribute and not data:
+                        sp_attribute.end_at = timezone.now()
+                        sp_attribute.save()
                         sp.save_modified()
-                        logger.info("Attribute {attribute} requested for {sp} by {user}"
-                                    .format(attribute=attribute, sp=sp, user=request.user))
-                        added_attributes.append(field.name)
-                    else:
-                        if sp_attribute.reason != data:
-                            sp_attribute.reason = data
-                            sp_attribute.save()
+                        logger.info("Attribute requisition for {attribute} removed from {sp} by {user}"
+                                    .format(attribute=sp_attribute.attribute, sp=sp,
+                                            user=request.user))
+                        removed_attributes.append(field.name)
+                    elif data:
+                        if sp.service_type == "oidc":
+                            userinfo = form.cleaned_data.get('extra_userinfo_' + field.name)
+                            id_token = form.cleaned_data.get('extra_id_token_' + field.name)
+                        else:
+                            userinfo = False
+                            id_token = False
+                        if not sp_attribute:
+                            attribute = Attribute.objects.filter(friendlyname=field.name).first()
+                            SPAttribute.objects.create(sp=sp, attribute=attribute, reason=data, oidc_userinfo=userinfo,
+                                                       oidc_id_token=id_token)
                             sp.save_modified()
-                            logger.info("Attribute {attribute} reason updated for {sp} by {user}"
-                                        .format(attribute=sp_attribute.attribute, sp=sp,
-                                                user=request.user))
-                            modified_attributes.append(field.name)
+                            logger.info("Attribute {attribute} requested for {sp} by {user}"
+                                        .format(attribute=attribute, sp=sp, user=request.user))
+                            added_attributes.append(field.name)
+                        else:
+                            if sp_attribute.reason != data or sp_attribute.oidc_userinfo != userinfo or sp_attribute.oidc_id_token != id_token:
+                                sp_attribute.reason = data
+                                sp_attribute.oidc_userinfo = userinfo
+                                sp_attribute.oidc_id_token = id_token
+                                sp_attribute.save()
+                                sp.save_modified()
+                                logger.info("Attribute {attribute} updated for {sp} by {user}"
+                                            .format(attribute=sp_attribute.attribute, sp=sp,
+                                                    user=request.user))
+                                modified_attributes.append(field.name)
             if added_attributes:
                 messages.add_message(request, messages.INFO,
                                      _('Attributes added: ') + ', '.join(added_attributes))
@@ -91,7 +101,9 @@ def attribute_list(request, pk):
             if removed_attributes:
                 messages.add_message(request, messages.INFO,
                                      _('Attributes removed: ') + ', '.join(removed_attributes))
-        form = AttributeForm(request.POST, sp=sp, is_admin=request.user.is_superuser)
+            form = AttributeForm(sp=sp, is_admin=request.user.is_superuser)
+        else:
+            form = AttributeForm(request.POST, sp=sp, is_admin=request.user.is_superuser)
     else:
         form = AttributeForm(sp=sp, is_admin=request.user.is_superuser)
     return render(request, "rr/attribute_list.html", {'form': form,

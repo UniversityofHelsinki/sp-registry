@@ -53,7 +53,6 @@
 <table class="table table-sm">
   <thead>
     <tr>
-      <th scope="col">{% trans "entityID" %}</th>
       <th scope="col">{% trans "Name" %}</th>
       <th scope="col" data-toggle="tooltip" data-placement="top" title="{% trans "Publish to production IdP (validated status)" %}">{% trans "Prod" %}</th>
       <th scope="col" data-toggle="tooltip" data-placement="top" title="{% trans "Publish to test IdP" %}">{% trans "Test" %}</th>
@@ -67,7 +66,6 @@
 {% for object in oidc_providers %}
     <tr>
       <th scope="row">{% if object.display_identifier|length > 60 %}<a data-toggle="tooltip" data-placement="top" title="{{ display_identifier }}" href="/summary/{{ object.pk }}/">{{ object.display_identifier|truncatechars:60 }}{% else %}<a href="/summary/{{ object.pk }}/">{{ object.display_identifier }}{% endif %}</a></th>
-      {% if object.name|length > 50 %}<td data-toggle="tooltip" data-placement="top" title="{{ object.name }}" href="/summary/{{ object.pk }}/">{{ object.name|truncatechars:50 }}{% else %}<td>{{ object.name }}{% endif %}</td>
       {% if object|get_production_status %}<td class="text-success">&#10004;{% else %}<td class="text-danger">&#10005;{% endif %}</td>
       {% if object.test %}<td class="text-success">&#10004;{% else %}<td class="text-danger">&#10005;{% endif %}</td>
       {% if object.validated and not object.modified %}<td class="table-success">{% trans "OK "%}</td>{% elif not object|get_production_status and not object.production %}<td class="table-info">{% trans "Modified "%}</td>{% else %}<td class="table-warning">{% trans "Modified "%}</td>{% endif %}{% if user.is_superuser %}
@@ -92,7 +90,7 @@
 <table class="table table-sm">
   <thead>
     <tr>
-      <th scope="col">{% trans "entityID" %}</th>
+      <th scope="col">{% trans "ID" %}</th>
       <th scope="col">{% trans "Name" %}</th>
       <th scope="col" data-toggle="tooltip" data-placement="top" title="{% trans "Publish to production" %}">{% trans "Prod" %}</th>
       <th scope="col" data-toggle="tooltip" data-placement="top" title="{% trans "OK / Modified, modified are waiting for validation" %}">{% trans "Status" %}</th>{% if user.is_superuser %}

@@ -56,4 +56,4 @@ class Command(BaseCommand):
                 self.stdout.write("Could not create metadata, check log for more information.")
             else:
                 with open(metadata_output, 'w') as f:
-                    f.write(json.dumps(metadata, indent=4))
+                    f.write(json.dumps(metadata, indent=4, sort_keys=True))

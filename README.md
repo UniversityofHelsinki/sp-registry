@@ -122,8 +122,8 @@ For more information run "./manage.py <command> -h"
 
 ## Installation
 ### Requirements
-Currently uses Django 1.11 (LTS version, support until Apr 2020)
-* Python 3.4-3.6
+* Django 2.2 (tested also with 1.11)
+* Python 3.5-3.6
 * MySQL/MariaDB 5.5+
 * Requires dev libraries for Python and MySQL/MariaDB for compiling python mysqlclient.
 

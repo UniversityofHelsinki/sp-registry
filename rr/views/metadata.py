@@ -68,7 +68,7 @@ def metadata(request, pk):
             tree = metadata_generator(sp=sp, validated=validated)
             if tree is not None:
                 metadata = etree.tostring(tree, pretty_print=True,
-                                          encoding='UTF-8').replace(b'xmlns:xmlns', b'xmlns')
+                                          encoding='UTF-8').replace(b'xmlns:xmlns', b'xmlns').decode()
         elif sp.service_type == "oidc":
             metadata = oidc_metadata_generator(sp=sp, validated=validated,
                                                client_secret_encryption="masked")

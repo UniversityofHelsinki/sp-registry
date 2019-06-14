@@ -46,10 +46,10 @@ def testuser_list(request, pk):
     """
     try:
         if request.user.is_superuser:
-            sp = ServiceProvider.objects.get(pk=pk, end_at=None, service_type="saml")
+            sp = ServiceProvider.objects.get(pk=pk, end_at=None, service_type__in=["saml", "oidc"])
         else:
             sp = ServiceProvider.objects.get(pk=pk, admins=request.user, end_at=None,
-                                             service_type="saml")
+                                             service_type__in=["saml", "oidc"])
     except ServiceProvider.DoesNotExist:
         logger.debug("Tried to access unauthorized service provider")
         raise Http404(_("Service provided does not exist"))

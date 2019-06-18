@@ -267,10 +267,16 @@
   <tbody>
 {% for a in attributes %}
     {% if a.end_at %}<tr class="table-danger">{% elif not a.validated %}<tr class="table-warning">{% else %}<tr>{% endif %}
+{% if object.service_type == "oidc" %}
       <td scope="row">{{ a.attribute }}{% if a.attribute.friendlyname != a.attribute.oidc_claim %} ({{  a.attribute.oidc_claim }}){% endif %}</td>
+{% else %}
+      <td scope="row">{{ a.attribute }}</td>
+{% endif %}
       <td>{{ a.reason }}</td>
+{% if object.service_type == "oidc" %}
       {% if a.oidc_userinfo %}<td class="text-success">&#10004;{% else %}<td class="text-danger">x{% endif %}</td>
       {% if a.oidc_id_token %}<td class="text-success">&#10004;{% else %}<td class="text-danger">x{% endif %}</td>
+{% endif %}
     </tr>
 {% endfor %}
   </tbody>

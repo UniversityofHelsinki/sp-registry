@@ -1,12 +1,9 @@
 from django.contrib.auth.models import User
-from django.contrib.messages.storage.fallback import FallbackStorage
 from django.test import RequestFactory, TestCase
 from django.urls import reverse
 
-from rr.forms.contact import ContactForm
 from rr.models.contact import Contact
-from rr.models.serviceprovider import ServiceProvider, SPAttribute
-from rr.views.attribute import attribute_list
+from rr.models.serviceprovider import ServiceProvider
 
 
 class ContactTestCase(TestCase):
@@ -38,7 +35,7 @@ class ContactTestCase(TestCase):
         response = self.client.get(reverse('contact-list', kwargs={'pk': self.user_sp.pk}))
         self.assertEqual(response.status_code, 200)
 
-    def test_contact_view_post_attribute(self):
+    def test_contact_view_post_add_contact(self):
         self.client.force_login(self.user)
         response = self.client.post(reverse('contact-list', kwargs={'pk': self.user_sp.pk}),
                                     {'add_contact': 'ok',

@@ -6,7 +6,7 @@ from django.urls import reverse
 from rr.forms.certificate import CertificateForm
 from rr.models.certificate import Certificate
 from rr.models.serviceprovider import ServiceProvider
-from rr.views.certificate import certificate_info, certificate_list
+from rr.views.certificate import certificate_list
 
 
 class CertificateFormTestCase(TestCase):

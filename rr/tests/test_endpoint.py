@@ -1,5 +1,4 @@
 from django.contrib.auth.models import User
-from django.contrib.messages.storage.fallback import FallbackStorage
 from django.test import RequestFactory, TestCase
 from django.urls import reverse
 

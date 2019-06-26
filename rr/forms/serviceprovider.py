@@ -145,10 +145,7 @@ class TechnicalInformationForm(ModelForm):
         """
         entity_id = self.cleaned_data['entity_id']
         if not self.request.user.is_superuser and "entity_id" in self.changed_data:
-            url_validator = URLValidator()
-            try:
-                url_validator(entity_id)
-            except ValidationError:
+            if ":" not in entity_id:
                 raise ValidationError(_("Entity Id should be URI, please contact IdP admins if "
                                         "this is not possible."))
         if ServiceProvider.objects.filter(entity_id=entity_id, end_at=None,
@@ -356,12 +353,10 @@ class SamlServiceProviderCreateForm(ModelForm):
         """
         entity_id = self.cleaned_data['entity_id']
         if not self.request.user.is_superuser and "entity_id" in self.changed_data:
-            url_validator = URLValidator()
-            try:
-                url_validator(entity_id)
-            except ValidationError:
+            if ":" not in entity_id:
                 raise ValidationError(_("Entity Id should be URI, please contact IdP admins if "
                                         "this is not possible."))
+
         if ServiceProvider.objects.filter(entity_id=entity_id, end_at=None,
                                           history=None).exclude(pk=self.instance.pk):
             raise ValidationError(_("Entity Id already exists"))

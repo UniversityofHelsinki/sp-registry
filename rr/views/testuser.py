@@ -180,7 +180,7 @@ def testuser_attribute_data(request, pk):
             if user_update_form.is_valid():
                 testuser.firstname = user_update_form.cleaned_data['firstname']
                 testuser.lastname = user_update_form.cleaned_data['lastname']
-                testuser.valid_for = user_update_form.cleaned_data['valid_for']
+                testuser.valid_for.set(user_update_form.cleaned_data['valid_for'])
                 password = user_update_form.cleaned_data['password']
                 if password:
                     testuser.password = hashlib.sha256(password.encode('utf-8')).hexdigest()

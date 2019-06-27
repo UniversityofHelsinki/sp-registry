@@ -1,9 +1,12 @@
+import re
+
 from django.db.models import Q
 from django.core.validators import ValidationError
 from django.forms import ModelForm, Form, CharField, BooleanField, PasswordInput
 from django.forms.widgets import TextInput
 from django.utils.translation import ugettext_lazy as _
 
+from rr.models.attribute import Attribute
 from rr.models.serviceprovider import SPAttribute, ServiceProvider
 from rr.models.testuser import TestUser, TestUserData
 
@@ -71,3 +74,15 @@ class TestUserDataForm(Form):
             else:
                 self.fields[field.attribute.friendlyname].widget = TextInput(
                     attrs={'placeholder': ''})
+
+    def clean(self):
+        cleaned_data = super().clean()
+        for field in cleaned_data:
+            data = cleaned_data.get(field)
+            values = data.split(';')
+            attribute = Attribute.objects.filter(friendlyname=field).first()
+            if attribute.scoped:
+                scoped_test = re.compile('^[^@\s]+@[^@\s]+$')
+                for value in values:
+                    if not scoped_test.match(value):
+                        raise ValidationError({field: [_("Value must be scoped")]})

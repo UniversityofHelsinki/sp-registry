@@ -25,6 +25,8 @@ class Attribute(models.Model):
                                        verbose_name=_('Show in Attribute test service'))
     test_service_required = models.BooleanField(default=False,
                                                 verbose_name=_('Required attribute in test service'))
+    scoped = models.BooleanField(default=False,
+                                 verbose_name=_('Scoped attribute'))
     regex_test = models.CharField(blank=True, max_length=255,
                                   verbose_name=_('Regex text for attribute validation'))
     shib_env = models.CharField(blank=True, max_length=255,

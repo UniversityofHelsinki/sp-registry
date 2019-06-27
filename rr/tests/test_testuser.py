@@ -31,7 +31,8 @@ class TestUserTestCase(TestCase):
                                                   attributeid='id-urn:mace:dir:attribute-def:eduPersonPrincipalName',
                                                   nameformat='urn:oasis:names:tc:SAML:2.0:attrname-format:uri',
                                                   public_saml=True,
-                                                  public_oidc=True)
+                                                  public_oidc=True,
+                                                  scoped=True)
         SPAttribute.objects.create(attribute=self.attr_cn, sp=self.saml_sp, reason='User name')
         SPAttribute.objects.create(attribute=self.attr_eppn, sp=self.saml_sp, reason='User identification')
         SPAttribute.objects.create(attribute=self.attr_eppn, sp=self.oidc_sp, reason='User identification',
@@ -123,3 +124,23 @@ class TestUserTestCase(TestCase):
         self.assertIn('User info updated: jack', response.content.decode())
         test_jack = TestUser.objects.get(username="jack")
         self.assertEqual(test_jack.password, hashlib.sha256("word".encode('utf-8')).hexdigest())
+
+    def test_testuser_view_userdata_change(self):
+        self.client.force_login(self.user)
+        response = self.client.post(reverse('testuser-attribute-data', kwargs={'pk': self.testuser.pk}),
+                                    {'save_data': 'ok',
+                                     'cn': 'Team User',
+                                     'eduPersonPrincipalName': 'teamuser@example.net'})
+        self.assertEqual(response.status_code, 200)
+        self.assertIn('Test user attributes updated: jack', response.content.decode())
+        self.assertIn('Team User', response.content.decode())
+
+    def test_testuser_view_invalid_userdata_change(self):
+        self.client.force_login(self.user)
+        response = self.client.post(reverse('testuser-attribute-data', kwargs={'pk': self.testuser.pk}),
+                                    {'save_data': 'ok',
+                                     'cn': 'Team User',
+                                     'eduPersonPrincipalName': 'teamuser'})
+        self.assertEqual(response.status_code, 200)
+        self.assertNotIn('Test user attributes updated: jack', response.content.decode())
+        self.assertIn('Value must be scoped', response.content.decode())

@@ -1,4 +1,4 @@
-SECRET_KEY = 'change_this_secret_key'
+SECRET_KEY = '{{ spregistry_secret_key }}'
 
 ALLOWED_HOSTS = ['*']
 
@@ -58,9 +58,12 @@ SAML_ATTR_AFFILIATION = 'shib_affiliation'
 # Path to git repositorio
 METADATA_GIT_REPOSITORIO = '{{ spregistry_install_dir }}/metadata/saml/'
 LDAP_GIT_REPOSITORIO = '{{ spregistry_install_dir }}/metadata/ldap/'
+OIDC_GIT_REPOSITORIO = '{{ spregistry_install_dir }}/metadata/oidc/'
+
 # Metadata file used for upload
 METADATA_FILENAME = 'metadata.xml'
 LDAP_METADATA_FILENAME = 'ldap-metadata.xml'
+OIDC_METADATA_FILENAME = 'oidc-metadata.json'
 
 # Path to static files for collection
 STATIC_ROOT = '{{ spregistry_install_dir }}/sp-registry/static/'
@@ -68,3 +71,8 @@ STATIC_ROOT = '{{ spregistry_install_dir }}/sp-registry/static/'
 MFA_AUTHENTICATION_CONTEXT = 'https://refeds.org/profile/mfa'
 
 DISABLE_METADATA_ENTITY_EXTENSIONS = False
+
+# Generate Fernet key with:
+# from cryptography.fernet import Fernet
+# Fernet.generate_key().decode()
+OIDC_CLIENT_SECRET_KEY = '{{ spregistry_fernet_key }}'

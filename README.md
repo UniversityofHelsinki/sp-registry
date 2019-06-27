@@ -134,7 +134,7 @@ Usage:
 1. Install vagrant (https://www.vagrantup.com/)
 1. run command "vagrant up" (and wait for it to set up )
 1. Open https://localhost:8443/ in browser (browser compains about security risk as self-signed certificate is used)
-1. Use local login with user admin, password adminpass
+1. Use local login with user admin, password RandomPass12
 
 Shibboleth and attribute test service are not yet included.
 

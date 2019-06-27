@@ -38,6 +38,20 @@
         "model": "rr.oidcscope",
         "pk": 1,
         "fields": {
+            "name": "email"
+        }
+    },
+    {
+        "model": "rr.oidcscope",
+        "pk": 2,
+        "fields": {
+            "name": "offline_access"
+        }
+    },
+    {
+        "model": "rr.oidcscope",
+        "pk": 3,
+        "fields": {
             "name": "profile"
         }
     }

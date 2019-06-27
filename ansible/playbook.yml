@@ -13,7 +13,9 @@
     spregistry_db_name: "spregistry"
     spregistry_superuser: "admin"
     spregistry_superuser_email: "admin@example.org"
-    spregistry_superuser_pw: "adminpass"
+    spregistry_superuser_pw: "RandomPass12"
+    spregistry_secret_key: "django_secret_key"
+    spregistry_fernet_key: "yRHPoU0Cbq4fwffY8RdKCqpdSkTEdXfVJbeasSNeVQ8="
 
   tasks:
   - name: sp-registry | Install required packages
@@ -32,6 +34,7 @@
       - python-mysqldb
       - libmariadbclient-dev
       - libapache2-mod-wsgi-py3
+      - gettext
 
   - name: sp-registry | Enable apache2 ssl module
     apache2_module:
@@ -91,7 +94,7 @@
 
   - name: sp-registry | Create directory for sp-registry SAML metadata origin
     file:
-      path: "{{ spregistry_install_dir }}/metadata/saml_origin"
+      path: "{{ spregistry_install_dir }}/metadata/saml"
       state: directory
       owner: "{{ spregistry_install_user }}"
       group: "{{ spregistry_install_user }}"
@@ -99,30 +102,7 @@
     when: saml_metadata_dir.stat.exists == False
 
   - name: sp-registry | Initialize SAML metadata origin git repo
-    command: "git init {{ spregistry_install_dir }}/metadata/saml_origin"
-    become_user: "{{ spregistry_install_user }}"
-    when: saml_metadata_dir.stat.exists == False
-
-  - name: sp-registry | Copy template metadata.xml to origin git repo
-    template: src=templates/metadata.xml dest="{{ spregistry_install_dir }}/metadata/saml_origin/metadata.xml"
-    when: saml_metadata_dir.stat.exists == False
-
-  - name: sp-registry | Commit metadata.xml to origin git repo
-    command: "{{ item }}"
-    with_items:
-      - git config user.email 'test@example.org'
-      - git config user.name 'test'
-      - git add metadata.xml
-      - git commit -m 'initial metadata'
-    args:
-      chdir: '{{ spregistry_install_dir }}/metadata/saml_origin'
-    become_user: "{{ spregistry_install_user }}"
-    when: saml_metadata_dir.stat.exists == False
-
-  - name: sp-registry | Clone origin repo as SAML metadata repo
-    command: "git clone {{ spregistry_install_dir }}/metadata/saml_origin {{ spregistry_install_dir }}/metadata/saml"
-    args:
-      chdir: "{{ spregistry_install_dir }}/metadata"
+    command: "git init {{ spregistry_install_dir }}/metadata/saml"
     become_user: "{{ spregistry_install_user }}"
     when: saml_metadata_dir.stat.exists == False
 
@@ -133,7 +113,7 @@
 
   - name: sp-registry | Create directory for sp-registry LDAP metadata origin
     file:
-      path: "{{ spregistry_install_dir }}/metadata/ldap_origin"
+      path: "{{ spregistry_install_dir }}/metadata/ldap"
       state: directory
       owner: "{{ spregistry_install_user }}"
       group: "{{ spregistry_install_user }}"
@@ -141,32 +121,28 @@
     when: ldap_metadata_dir.stat.exists == False
 
   - name: sp-registry | Initialize LDAP metadata origin git repo
-    command: "git init {{ spregistry_install_dir }}/metadata/ldap_origin"
+    command: "git init {{ spregistry_install_dir }}/metadata/ldap"
     become_user: "{{ spregistry_install_user }}"
     when: ldap_metadata_dir.stat.exists == False
 
-  - name: sp-registry | Copy template metadata.xml to origin git repo
-    template: src=templates/ldap-metadata.xml dest="{{ spregistry_install_dir }}/metadata/ldap_origin/ldap-metadata.xml"
-    when: ldap_metadata_dir.stat.exists == False
+  - name: sp-registry | Check if OIDC metadata directory exists
+    stat:
+      path: "{{ spregistry_install_dir }}/metadata/oidc"
+    register: oidc_metadata_dir
 
-  - name: sp-registry | Commit metadata.xml to origin git repo
-    command: "{{ item }}"
-    with_items:
-      - git config user.email 'test@example.org'
-      - git config user.name 'test'
-      - git add ldap-metadata.xml
-      - git commit -m 'initial metadata'
-    args:
-      chdir: '{{ spregistry_install_dir }}/metadata/ldap_origin'
-    become_user: "{{ spregistry_install_user }}"
-    when: ldap_metadata_dir.stat.exists == False
+  - name: sp-registry | Create directory for sp-registry OIDC metadata origin
+    file:
+      path: "{{ spregistry_install_dir }}/metadata/oidc"
+      state: directory
+      owner: "{{ spregistry_install_user }}"
+      group: "{{ spregistry_install_user }}"
+      mode: 0750
+    when: oidc_metadata_dir.stat.exists == False
 
-  - name: sp-registry | Clone origin repo as LDAP metadata repo
-    command: "git clone {{ spregistry_install_dir }}/metadata/ldap_origin {{ spregistry_install_dir }}/metadata/ldap"
-    args:
-      chdir: "{{ spregistry_install_dir }}/metadata"
+  - name: sp-registry | Initialize OIDC metadata origin git repo
+    command: "git init {{ spregistry_install_dir }}/metadata/oidc"
     become_user: "{{ spregistry_install_user }}"
-    when: ldap_metadata_dir.stat.exists == False
+    when: oidc_metadata_dir.stat.exists == False
 
   - name: sp-registry | Copy local settings template
     template: src=templates/local_settings_ansible.py dest="{{ spregistry_install_dir }}/sp-registry/settings/local_settings.py"
@@ -214,6 +190,13 @@
     become_user: "{{ spregistry_install_user }}"
     when: checksuperuser.out != "0"
 
+  - name: sp-registry | compile translations
+    django_manage:
+      command: compilemessages
+      app_path: "{{ spregistry_install_dir }}/sp-registry"
+      virtualenv: "{{ spregistry_install_dir }}/venv"
+    become_user: "{{ spregistry_install_user }}"
+
   - name: sp-registry | Copy apache virtual host
     template: src=templates/sp-registry-apache.conf dest=/etc/apache2/sites-available/sp-registry-apache.conf
 
@@ -228,7 +211,7 @@
       name: apache2
       state: reloaded
 
-  - name: sp-registry | check is fixtures are already loaded
+  - name: sp-registry | check is nameidformat fixtures are already loaded
     django_manage:
       app_path: "{{ spregistry_install_dir }}/sp-registry"
       virtualenv: "{{ spregistry_install_dir }}/venv"
@@ -246,7 +229,7 @@
     become_user: "{{ spregistry_install_user }}"
     when: nameid_fixtures_loaded.out != "0"
 
-  - name: sp-registry | check is fixtures are already loaded
+  - name: sp-registry | check is attribute fixtures are already loaded
     django_manage:
       app_path: "{{ spregistry_install_dir }}/sp-registry"
       virtualenv: "{{ spregistry_install_dir }}/venv"
@@ -263,3 +246,21 @@
       virtualenv: "{{ spregistry_install_dir }}/venv"
     become_user: "{{ spregistry_install_user }}"
     when: attribute_fixtures_loaded.out != "0"
+
+  - name: sp-registry | check is OIDC fixtures are already loaded
+    django_manage:
+      app_path: "{{ spregistry_install_dir }}/sp-registry"
+      virtualenv: "{{ spregistry_install_dir }}/venv"
+      command: shell -c 'import sys; from rr.models.oidc import OIDCScope; sys.stdout.write(str(0 if OIDCScope.objects.all().count() > 0 else 1))'
+    register: oidc_fixtures_loaded
+    ignore_errors: True
+    become_user: "{{ spregistry_install_user }}"
+    changed_when: False
+
+  - name: sp-registry | Load fixtures, OIDC
+    django_manage:
+      command: "loaddata {{ spregistry_install_dir }}/sp-registry/rr/fixtures/oidc.json"
+      app_path: "{{ spregistry_install_dir }}/sp-registry"
+      virtualenv: "{{ spregistry_install_dir }}/venv"
+    become_user: "{{ spregistry_install_user }}"
+    when: oidc_fixtures_loaded.out != "0"

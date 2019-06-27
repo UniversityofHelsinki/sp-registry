@@ -282,7 +282,10 @@ def metadata_management(request, service_type="saml"):
     if service_type == "ldap":
         write_ldap_metadata()
         repo.git.add(A=True)
-    diff = repo.git.diff('HEAD')
+    try:
+        diff = repo.git.diff('HEAD')
+    except GitCommandError:
+        diff = repo.git.diff('4b825dc642cb6eb9a060e54bf8d69288fbee4904')
     diff_hash = hashlib.md5(diff.encode('utf-8')).hexdigest()
     form = MetadataCommitForm(diff_hash=diff_hash)
     return render(request, "rr/metadata_management.html", {'form': form,

@@ -136,46 +136,46 @@ def last_commits(repo, n):
 
 
 def write_saml_metadata():
-        # Generate metadata and write it to file
-        metadata = metadata_generator_list(validated=True, privacypolicy=True, production=True)
-        metadata_file = join(settings.METADATA_GIT_REPOSITORIO, settings.METADATA_FILENAME)
-        with open(metadata_file, 'wb') as f:
-            f.write('<?xml version="1.0" encoding="UTF-8"?>\n'.encode('utf-8'))
-            # Hack for correcting namespace definition by removing prefix.
-            f.write(etree.tostring(metadata, pretty_print=True,
-                                   encoding='UTF-8').replace(b'xmlns:xmlns', b'xmlns'))
+    # Generate metadata and write it to file
+    metadata = metadata_generator_list(validated=True, privacypolicy=True, production=True)
+    metadata_file = join(settings.METADATA_GIT_REPOSITORIO, settings.METADATA_FILENAME)
+    with open(metadata_file, 'wb') as f:
+        f.write('<?xml version="1.0" encoding="UTF-8"?>\n'.encode('utf-8'))
+        # Hack for correcting namespace definition by removing prefix.
+        f.write(etree.tostring(metadata, pretty_print=True,
+                               encoding='UTF-8').replace(b'xmlns:xmlns', b'xmlns'))
 
 
 def write_ldap_metadata():
-        # Generate metadata and write it to file
-        tree = ldap_metadata_generator_list(validated=True, production=True)
-        files = []
-        metadata_file = join(settings.LDAP_GIT_REPOSITORIO, settings.LDAP_METADATA_FILENAME)
-        files.append(settings.LDAP_METADATA_FILENAME)
-        with open(metadata_file, 'wb') as f:
-            f.write('<?xml version="1.0" encoding="UTF-8"?>\n'.encode('utf-8'))
-            f.write(etree.tostring(tree, pretty_print=True, encoding='UTF-8'))
-        # Generate separate files for all entities
-        for entity in tree:
-            entity_id = entity.get("ID")
-            if entity_id:
-                metadata_file = join(settings.LDAP_GIT_REPOSITORIO, entity_id + '.xml')
-                files.append(entity_id + '.xml')
-                with open(metadata_file, 'wb') as f:
-                    f.write('<?xml version="1.0" encoding="UTF-8"?>\n'.encode('utf-8'))
-                    f.write(etree.tostring(entity, pretty_print=True, encoding='UTF-8'))
-        # Remove all other xml-files from repository
-        for f in glob(settings.LDAP_GIT_REPOSITORIO + '*.xml'):
-            if f.replace(settings.LDAP_GIT_REPOSITORIO, '') not in files:
-                os.remove(f)
-        return
+    # Generate metadata and write it to file
+    tree = ldap_metadata_generator_list(validated=True, production=True)
+    files = []
+    metadata_file = join(settings.LDAP_GIT_REPOSITORIO, settings.LDAP_METADATA_FILENAME)
+    files.append(settings.LDAP_METADATA_FILENAME)
+    with open(metadata_file, 'wb') as f:
+        f.write('<?xml version="1.0" encoding="UTF-8"?>\n'.encode('utf-8'))
+        f.write(etree.tostring(tree, pretty_print=True, encoding='UTF-8'))
+    # Generate separate files for all entities
+    for entity in tree:
+        entity_id = entity.get("ID")
+        if entity_id:
+            metadata_file = join(settings.LDAP_GIT_REPOSITORIO, entity_id + '.xml')
+            files.append(entity_id + '.xml')
+            with open(metadata_file, 'wb') as f:
+                f.write('<?xml version="1.0" encoding="UTF-8"?>\n'.encode('utf-8'))
+                f.write(etree.tostring(entity, pretty_print=True, encoding='UTF-8'))
+    # Remove all other xml-files from repository
+    for f in glob(settings.LDAP_GIT_REPOSITORIO + '*.xml'):
+        if f.replace(settings.LDAP_GIT_REPOSITORIO, '') not in files:
+            os.remove(f)
+    return
 
 
 def write_oidc_metadata():
     # Generate metadata and write it to file
     metadata = oidc_metadata_generator_list(validated=True, privacypolicy=True, production=True,
                                             client_secret_encryption="encrypted")
-    metadata_file = join(settings.METADATA_GIT_REPOSITORIO, settings.OIDC_METADATA_FILENAME)
+    metadata_file = join(settings.OIDC_GIT_REPOSITORIO, settings.OIDC_METADATA_FILENAME)
     with open(metadata_file, 'w') as f:
         f.write(json.dumps(metadata, indent=4))
 
@@ -203,8 +203,9 @@ def metadata_management(request, service_type="saml"):
 
     :template:`rr/repositorio_management.html`
     """
-    error = None
+    error = []
     form = None
+    origin = True
     if not request.user.is_superuser:
         raise PermissionDenied
     if service_type == "saml" and hasattr(settings, 'METADATA_GIT_REPOSITORIO') and \
@@ -233,19 +234,22 @@ def metadata_management(request, service_type="saml"):
     try:
         origin = repo.remotes.origin
     except AttributeError:
-        error_message = _("Git repository has no origin.")
-        return render(request, "error.html", {'error_message': error_message})
-    diff = repo.git.diff('HEAD')
-    log = last_commits(repo, 5)
+        origin = False
+        error.append(_("Git repository has no origin."))
     try:
-        if repo.commit().hexsha != origin.fetch()[0].commit.hexsha:
-            error = _("Remote repository not matching local, please fix manually.")
-            return render(request, "rr/metadata_management.html", {'log': log,
-                                                                   'error': error})
+        diff = repo.git.diff('HEAD')
     except GitCommandError:
-        error_message = _("Execution of git command failed. Might want to try git command locally "
-                          "from the command line and check that it works.")
-        return render(request, "error.html", {'error_message': error_message})
+        diff = repo.git.diff('4b825dc642cb6eb9a060e54bf8d69288fbee4904')
+    log = last_commits(repo, 5)
+    if origin:
+        try:
+            if repo.commit().hexsha != origin.fetch()[0].commit.hexsha:
+                origin = False
+                error.append(_("Remote repository not matching local, please fix manually."))
+        except GitCommandError:
+            error_message = _("Execution of git command failed. Might want to try git command locally "
+                              "from the command line and check that it works.")
+            return render(request, "error.html", {'error_message': error_message})
     if request.method == "POST":
         form = MetadataCommitForm(request.POST)
         if form.is_valid() and diff:
@@ -253,12 +257,13 @@ def metadata_management(request, service_type="saml"):
             form_hash = form.cleaned_data['diff_hash']
             # Check that file has not changed
             if form_hash == hashlib.md5(diff.encode('utf-8')).hexdigest():
-                repo.index.commit(commit_message)
                 try:
-                    origin.push()
+                    repo.index.commit(commit_message)
                     log = last_commits(repo, 5)
-                    if repo.commit().hexsha != origin.fetch()[0].commit.hexsha:
-                        error = _("Pushing to remote did not work, please fix manually.")
+                    if origin:
+                        origin.push()
+                        if repo.commit().hexsha != origin.fetch()[0].commit.hexsha:
+                            error.append(_("Pushing to remote did not work, please fix manually."))
                 except GitCommandError:
                     error_message = _("Execution of git command failed. Might want to try git "
                                       "command locally  from the command line and check that it "
@@ -267,18 +272,17 @@ def metadata_management(request, service_type="saml"):
                 return render(request, "rr/metadata_management.html", {'log': log,
                                                                        'error': error})
             else:
-                error = _("Metadata file has changed, please try again.")
-    if not error:
-        if service_type == "saml":
-            write_saml_metadata()
-            repo.index.add([settings.METADATA_FILENAME])
-        if service_type == "oidc":
-            write_oidc_metadata()
-            repo.index.add([settings.OIDC_METADATA_FILENAME])
-        if service_type == "ldap":
-            write_ldap_metadata()
-            repo.git.add(A=True)
-        diff = repo.git.diff('HEAD')
+                error.append(_("Metadata file has changed, please try again."))
+    if service_type == "saml":
+        write_saml_metadata()
+        repo.index.add([settings.METADATA_FILENAME])
+    if service_type == "oidc":
+        write_oidc_metadata()
+        repo.index.add([settings.OIDC_METADATA_FILENAME])
+    if service_type == "ldap":
+        write_ldap_metadata()
+        repo.git.add(A=True)
+    diff = repo.git.diff('HEAD')
     diff_hash = hashlib.md5(diff.encode('utf-8')).hexdigest()
     form = MetadataCommitForm(diff_hash=diff_hash)
     return render(request, "rr/metadata_management.html", {'form': form,

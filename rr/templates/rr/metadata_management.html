@@ -9,7 +9,9 @@
 </div>
 {% if error %}
 <div class="alert alert-danger" role="alert">
-<p>{{ error }}</p>
+{% for message in error %}
+<p>{{ message }}</p>
+{% endfor %}
 </div>
 {% endif %}
 {% if log %}

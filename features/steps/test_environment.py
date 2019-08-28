@@ -139,6 +139,7 @@ def create_test_environment_with_superuser(context):
     context.browser.fill("username", username)
     context.browser.fill("password", password)
     context.browser.find_by_text('Submit').first.click()
+    context.browser.find_by_name('collapsesaml').first.click()
 
 
 @given(u'invite exists')

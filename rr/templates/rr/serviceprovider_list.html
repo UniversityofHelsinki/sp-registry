@@ -11,6 +11,7 @@
 <h2>{% trans "SAML Providers" %}</h2>
 <p><a href="{% url 'saml-serviceprovider-add' %}"><button type="button" class="btn btn-primary btn-lg btn-block">{% trans "Add a new SAML service provider" %}</button></a></p>
 {% if object_list %}
+{% if user.is_superuser %}<button type="button" class="btn" data-toggle="collapse" data-target=".collapsesaml">{% trans "Show all SAML providers" %}</button>{% endif %}
 <table class="table table-sm">
   <thead>
     <tr>
@@ -26,7 +27,7 @@
   <form action="" method='POST'>
   {% csrf_token %}
 {% for object in object_list %}
-    <tr>
+      {% if user.is_superuser %}{% if object|get_production_status or object.production %}{% if object.modified and not object.validated %}<tr>{% else %}<tr class="collapse out collapsesaml">{% endif %}{% else %}<tr class="collapse out collapsesaml">{% endif %}{% else %}<tr>{% endif %}
       <th scope="row">{% if object.display_identifier|length > 60 %}<a data-toggle="tooltip" data-placement="top" title="{{ display_identifier }}" href="/summary/{{ object.pk }}/">{{ object.display_identifier|truncatechars:60 }}{% else %}<a href="/summary/{{ object.pk }}/">{{ object.display_identifier }}{% endif %}</a></th>
       {% if object.name|length > 50 %}<td data-toggle="tooltip" data-placement="top" title="{{ object.name }}" href="/summary/{{ object.pk }}/">{{ object.name|truncatechars:50 }}{% else %}<td>{{ object.name }}{% endif %}</td>
       {% if object|get_production_status %}<td class="text-success">&#10004;{% else %}<td class="text-danger">&#10005;{% endif %}</td>
@@ -50,6 +51,7 @@
 <h2>{% trans "OIDC Providers" %}</h2>
 <p><a href="{% url 'oidc-serviceprovider-add' %}"><button type="button" class="btn btn-primary btn-lg btn-block">{% trans "Add a new OIDC relying party" %}</button></a></p>
 {% if oidc_providers %}
+{% if user.is_superuser %}<button type="button" class="btn" data-toggle="collapse" data-target=".collapseoidc">{% trans "Show all OIDC providers" %}</button>{% endif %}
 <table class="table table-sm">
   <thead>
     <tr>
@@ -64,7 +66,7 @@
   <form action="" method='POST'>
   {% csrf_token %}
 {% for object in oidc_providers %}
-    <tr>
+    {% if user.is_superuser %}{% if object|get_production_status or object.production %}{% if object.modified and not object.validated %}<tr>{% else %}<tr class="collapse out collapseoidc">{% endif %}{% else %}<tr class="collapse out collapseoidc">{% endif %}{% else %}<tr>{% endif %}
       <th scope="row">{% if object.display_identifier|length > 60 %}<a data-toggle="tooltip" data-placement="top" title="{{ display_identifier }}" href="/summary/{{ object.pk }}/">{{ object.display_identifier|truncatechars:60 }}{% else %}<a href="/summary/{{ object.pk }}/">{{ object.display_identifier }}{% endif %}</a></th>
       {% if object|get_production_status %}<td class="text-success">&#10004;{% else %}<td class="text-danger">&#10005;{% endif %}</td>
       {% if object.test %}<td class="text-success">&#10004;{% else %}<td class="text-danger">&#10005;{% endif %}</td>
@@ -87,6 +89,7 @@
 <h2>{% trans "LDAP Providers" %}</h2>
 <p><a href="{% url 'ldap-serviceprovider-add' %}"><button type="button" class="btn btn-primary btn-lg btn-block">{% trans "Add a new LDAP connection" %}</button></a></p>
 {% if ldap_providers %}
+{% if user.is_superuser %}<button type="button" class="btn" data-toggle="collapse" data-target=".collapseldap">{% trans "Show all LDAP providers" %}</button>{% endif %}
 <table class="table table-sm">
   <thead>
     <tr>
@@ -101,7 +104,7 @@
   <form action="" method='POST'>
   {% csrf_token %}
 {% for object in ldap_providers %}
-    <tr>
+    {% if user.is_superuser %}{% if object|get_production_status or object.production %}{% if object.modified and not object.validated %}<tr>{% else %}<tr class="collapse out collapseldap">{% endif %}{% else %}<tr class="collapse out collapseldap">{% endif %}{% else %}<tr>{% endif %}
       <th scope="row">{% if object.display_identifier|length > 60 %}<a data-toggle="tooltip" data-placement="top" title="{{ display_identifier }}" href="/summary/{{ object.pk }}/">{{ object.display_identifier|truncatechars:60 }}{% else %}<a href="/summary/{{ object.pk }}/">{{ object.display_identifier }}{% endif %}</a></th>
       {% if object.name|length > 50 %}<td data-toggle="tooltip" data-placement="top" title="{{ object.name }}" href="/summary/{{ object.pk }}/">{{ object.name|truncatechars:50 }}{% else %}<td>{{ object.name }}{% endif %}</td>
       {% if object.production %}<td class="text-success">&#10004;{% else %}<td class="text-danger">&#10005;{% endif %}</td>

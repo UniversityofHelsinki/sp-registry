@@ -599,8 +599,20 @@ class ServiceProviderDelete(SuccessMessageMixin, DeleteView):
         """
         self.object = self.get_object()
         success_url = self.get_success_url()
-        self.object.end_at = timezone.now()
-        self.object.save()
+        allow_delete = True
+        if self.object.production:
+            allow_delete = False
+        if not self.object.validated:
+            history = ServiceProvider.objects.filter(history=self.object.pk).exclude(validated=None).last()
+            if history and history.production:
+                allow_delete = False
+        if allow_delete:
+            self.object.end_at = timezone.now()
+            self.object.save()
+            messages.add_message(request, messages.INFO, self.success_message)
+        else:
+            messages.add_message(request, messages.ERROR, _("Service removal is not allowed for production services."))
+            success_url = reverse_lazy('summary-view', kwargs={'pk': self.object.pk})
         return HttpResponseRedirect(success_url)
 
 

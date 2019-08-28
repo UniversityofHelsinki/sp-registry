@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-06-26 14:37+0300\n"
+"POT-Creation-Date: 2019-08-28 13:11+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -648,17 +648,21 @@ msgstr "Sähköpostiosoite, johon kutsu lähetetään"
 msgid "Using default template if none given."
 msgstr "Käytetään kutsun oletuspohjaa, jos muuta ei valita."
 
-#: forms/testuser.py:14
+#: forms/testuser.py:17
 msgid "Generate attribute data for name and username based fields."
 msgstr "Täytä nimi- ja käyttäjänimipohjaiset attribuutit auttomaattisesti."
 
-#: forms/testuser.py:16
+#: forms/testuser.py:19
 msgid "Generate random attribute data for other fields."
 msgstr "Luo satunnaiset arvot muille kentille."
 
-#: forms/testuser.py:34
+#: forms/testuser.py:37
 msgid "Username already exists"
 msgstr "Käyttäjänimi on jo olemassa"
+
+#: forms/testuser.py:88
+msgid "Value must be scoped"
+msgstr "Arvon täytyy olla pääteellinen"
 
 #: forms/usergroup.py:20
 msgid "Group already added"
@@ -718,20 +722,24 @@ msgid "Required attribute in test service"
 msgstr "Vaadittu arvo testipalvelussa"
 
 #: models/attribute.py:29
+msgid "Scoped attribute"
+msgstr "Päätteellinen attribuutti"
+
+#: models/attribute.py:31
 msgid "Regex text for attribute validation"
 msgstr "Regex attribuutin arvon tarkistamiseen"
 
-#: models/attribute.py:31
+#: models/attribute.py:33
 msgid "Shibboelth environmental variable for the attribute"
 msgstr "Shibboleth ympäristömuuttuja attribuutille"
 
-#: models/attribute.py:32 models/certificate.py:85 models/contact.py:21
+#: models/attribute.py:34 models/certificate.py:85 models/contact.py:21
 #: models/endpoint.py:36 models/redirecturi.py:15 models/serviceprovider.py:161
 #: models/serviceprovider.py:420 models/testuser.py:23 models/usergroup.py:16
 msgid "Created at"
 msgstr "Luotu"
 
-#: models/attribute.py:33 models/certificate.py:86 models/contact.py:22
+#: models/attribute.py:35 models/certificate.py:86 models/contact.py:22
 #: models/endpoint.py:37 models/redirecturi.py:16 models/serviceprovider.py:162
 #: models/serviceprovider.py:421 models/testuser.py:24 models/usergroup.py:17
 msgid "Updated at"
@@ -1624,7 +1632,7 @@ msgid "Public attribute for OIDC."
 msgstr "Julkinen attribuutti OIDC-palveluille."
 
 #: templates/rr/attribute_admin_list.html:32
-#: templates/rr/attribute_admin_view.html:50
+#: templates/rr/attribute_admin_view.html:52
 msgid "No attributes"
 msgstr "Ei attribuuttia"
 
@@ -1661,27 +1669,31 @@ msgid "Public OIDC"
 msgstr "Julkinen, OIDC"
 
 #: templates/rr/attribute_admin_view.html:24
+msgid "Scoped"
+msgstr ""
+
+#: templates/rr/attribute_admin_view.html:26
 msgid "Information"
 msgstr "Lisätietoja"
 
-#: templates/rr/attribute_admin_view.html:27
+#: templates/rr/attribute_admin_view.html:29
 msgid "Edit in Django admin view"
 msgstr "Muokkaa tietoja Django-hallinassa"
 
-#: templates/rr/attribute_admin_view.html:28
+#: templates/rr/attribute_admin_view.html:30
 msgid "Service Providers using the attribute"
 msgstr "Palvelut, jotka käyttävät tätä attribuuttia"
 
-#: templates/rr/attribute_admin_view.html:32
+#: templates/rr/attribute_admin_view.html:34
 #: templates/rr/certificate_admin_list.html:13
 #: templates/rr/certificate_admin_list.html:39
 msgid "SP"
 msgstr "Palvelu"
 
-#: templates/rr/attribute_admin_view.html:33
-#: templates/rr/serviceprovider_list.html:19
-#: templates/rr/serviceprovider_list.html:57
-#: templates/rr/serviceprovider_list.html:95
+#: templates/rr/attribute_admin_view.html:35
+#: templates/rr/serviceprovider_list.html:20
+#: templates/rr/serviceprovider_list.html:59
+#: templates/rr/serviceprovider_list.html:98
 #: templates/rr/serviceprovider_saml_admin_list.html:26
 #: templates/rr/serviceprovider_saml_admin_list.html:63
 #: templates/rr/serviceprovider_saml_admin_list.html:97
@@ -1689,9 +1701,9 @@ msgstr "Palvelu"
 msgid "Prod"
 msgstr "Tuotanto"
 
-#: templates/rr/attribute_admin_view.html:34
-#: templates/rr/serviceprovider_list.html:20
-#: templates/rr/serviceprovider_list.html:58
+#: templates/rr/attribute_admin_view.html:36
+#: templates/rr/serviceprovider_list.html:21
+#: templates/rr/serviceprovider_list.html:60
 #: templates/rr/serviceprovider_saml_admin_list.html:27
 #: templates/rr/serviceprovider_saml_admin_list.html:64
 #: templates/rr/serviceprovider_saml_admin_list.html:98
@@ -1699,12 +1711,12 @@ msgstr "Tuotanto"
 msgid "Test"
 msgstr "Testi"
 
-#: templates/rr/attribute_admin_view.html:35
+#: templates/rr/attribute_admin_view.html:37
 #: templates/rr/serviceprovider_detail.html:260
 msgid "Reason"
 msgstr "Syy"
 
-#: templates/rr/attribute_admin_view.html:36
+#: templates/rr/attribute_admin_view.html:38
 msgid "Validated"
 msgstr "Hyväksytty"
 
@@ -1954,7 +1966,7 @@ msgstr "Listaa sähköpostiosoitteet / Näytä viesti"
 msgid "Send email"
 msgstr "Lähetä sähköpostit"
 
-#: templates/rr/email.html:36 templates/rr/metadata_management.html:21
+#: templates/rr/email.html:36 templates/rr/metadata_management.html:23
 msgid "Message"
 msgstr "Viesti"
 
@@ -2073,27 +2085,27 @@ msgstr "Voit viedä tehdyt muutokset metatietoihin täällä."
 msgid "Using production SPs with validated data."
 msgstr "Käytetään tuotanto-SP:tä hyväksytyillä metatiedoilla."
 
-#: templates/rr/metadata_management.html:16
+#: templates/rr/metadata_management.html:18
 msgid "Previous commits"
 msgstr "Edelliset muutokset"
 
-#: templates/rr/metadata_management.html:20
+#: templates/rr/metadata_management.html:22
 msgid "Time"
 msgstr "Aika"
 
-#: templates/rr/metadata_management.html:36
+#: templates/rr/metadata_management.html:38
 msgid "Commit changes"
 msgstr "Muutokset"
 
-#: templates/rr/metadata_management.html:41
+#: templates/rr/metadata_management.html:43
 msgid "Export"
 msgstr "Vie"
 
-#: templates/rr/metadata_management.html:46
+#: templates/rr/metadata_management.html:48
 msgid "Changes to previous commit"
 msgstr "Muutokset edelliseen versioon"
 
-#: templates/rr/metadata_management.html:52
+#: templates/rr/metadata_management.html:54
 msgid "There are no uncommitted changes."
 msgstr "Muutoksia ei ole tehty."
 
@@ -2245,7 +2257,6 @@ msgstr ""
 
 #: templates/rr/serviceprovider_detail.html:192
 #: templates/rr/serviceprovider_detail.html:207
-
 msgid "Response types"
 msgstr ""
 
@@ -2267,9 +2278,9 @@ msgid "Registry administrators"
 msgstr "Palvelun ylläpitäjät"
 
 #: templates/rr/serviceprovider_detail.html:240
-#: templates/rr/serviceprovider_list.html:18
-#: templates/rr/serviceprovider_list.html:56
-#: templates/rr/serviceprovider_list.html:94 templates/rr/usergroup.html:18
+#: templates/rr/serviceprovider_list.html:19
+#: templates/rr/serviceprovider_list.html:58
+#: templates/rr/serviceprovider_list.html:97 templates/rr/usergroup.html:18
 msgid "Name"
 msgstr "Nimi"
 
@@ -2384,7 +2395,11 @@ msgstr "SAML-palvelut"
 msgid "Add a new SAML service provider"
 msgstr "Lisää uusi SAML palvelu"
 
-#: templates/rr/serviceprovider_list.html:17
+#: templates/rr/serviceprovider_list.html:14
+msgid "Show all SAML providers"
+msgstr "Näytä kaikki SAML-palvelut"
+
+#: templates/rr/serviceprovider_list.html:18
 #: templates/rr/serviceprovider_saml_admin_list.html:21
 #: templates/rr/serviceprovider_saml_admin_list.html:60
 #: templates/rr/serviceprovider_saml_admin_list.html:95
@@ -2392,18 +2407,18 @@ msgstr "Lisää uusi SAML palvelu"
 msgid "entityID"
 msgstr ""
 
-#: templates/rr/serviceprovider_list.html:19
-#: templates/rr/serviceprovider_list.html:57
+#: templates/rr/serviceprovider_list.html:20
+#: templates/rr/serviceprovider_list.html:59
 msgid "Publish to production IdP (validated status)"
 msgstr "Tuotantoon julkaistu (hyväksytty tieto)"
 
-#: templates/rr/serviceprovider_list.html:20
-#: templates/rr/serviceprovider_list.html:58
+#: templates/rr/serviceprovider_list.html:21
+#: templates/rr/serviceprovider_list.html:60
 msgid "Publish to test IdP"
 msgstr "Testiin julkaistu"
 
-#: templates/rr/serviceprovider_list.html:21
-#: templates/rr/serviceprovider_list.html:59
+#: templates/rr/serviceprovider_list.html:22
+#: templates/rr/serviceprovider_list.html:61
 msgid ""
 "OK / Modified, modified are waiting for validation. Yellow means change in "
 "production, blue change in test service."
@@ -2411,39 +2426,39 @@ msgstr ""
 "OK / Muutettu, muutetut odottavat hyväksyntää. Keltainen merkitsee muutosta "
 "tuotannossa, sininen testipalvelussa."
 
-#: templates/rr/serviceprovider_list.html:21
-#: templates/rr/serviceprovider_list.html:59
-#: templates/rr/serviceprovider_list.html:96
+#: templates/rr/serviceprovider_list.html:22
+#: templates/rr/serviceprovider_list.html:61
+#: templates/rr/serviceprovider_list.html:99
 msgid "Status"
 msgstr "Status"
 
-#: templates/rr/serviceprovider_list.html:22
-#: templates/rr/serviceprovider_list.html:60
-#: templates/rr/serviceprovider_list.html:97
+#: templates/rr/serviceprovider_list.html:23
+#: templates/rr/serviceprovider_list.html:62
+#: templates/rr/serviceprovider_list.html:100
 msgid "Number of admins (invites)"
 msgstr "Ylläpitäjien määrä (kutsuja)"
 
-#: templates/rr/serviceprovider_list.html:22
-#: templates/rr/serviceprovider_list.html:60
-#: templates/rr/serviceprovider_list.html:97
+#: templates/rr/serviceprovider_list.html:23
+#: templates/rr/serviceprovider_list.html:62
+#: templates/rr/serviceprovider_list.html:100
 msgid "A/I"
 msgstr "A/I"
 
-#: templates/rr/serviceprovider_list.html:34
-#: templates/rr/serviceprovider_list.html:71
-#: templates/rr/serviceprovider_list.html:108
+#: templates/rr/serviceprovider_list.html:35
+#: templates/rr/serviceprovider_list.html:73
+#: templates/rr/serviceprovider_list.html:111
 msgid "OK "
 msgstr "OK"
 
-#: templates/rr/serviceprovider_list.html:34
-#: templates/rr/serviceprovider_list.html:71
-#: templates/rr/serviceprovider_list.html:108
+#: templates/rr/serviceprovider_list.html:35
+#: templates/rr/serviceprovider_list.html:73
+#: templates/rr/serviceprovider_list.html:111
 msgid "Modified "
 msgstr "Muutettu"
 
-#: templates/rr/serviceprovider_list.html:39
-#: templates/rr/serviceprovider_list.html:76
-#: templates/rr/serviceprovider_list.html:113
+#: templates/rr/serviceprovider_list.html:40
+#: templates/rr/serviceprovider_list.html:78
+#: templates/rr/serviceprovider_list.html:116
 #: templates/rr/serviceprovider_saml_admin_list.html:45
 #: templates/rr/serviceprovider_saml_admin_list.html:80
 #: templates/rr/serviceprovider_saml_admin_list.html:113
@@ -2451,31 +2466,39 @@ msgstr "Muutettu"
 msgid "You do not have access to any service providers."
 msgstr "Teillä ei ole oikeuksia yhteenkään palveluun."
 
-#: templates/rr/serviceprovider_list.html:50
+#: templates/rr/serviceprovider_list.html:51
 msgid "OIDC Providers"
 msgstr "OIDC-palvelut"
 
-#: templates/rr/serviceprovider_list.html:51
+#: templates/rr/serviceprovider_list.html:52
 msgid "Add a new OIDC relying party"
 msgstr "Lisää uusi OIDC-palvelu"
 
-#: templates/rr/serviceprovider_list.html:87
+#: templates/rr/serviceprovider_list.html:54
+msgid "Show all OIDC providers"
+msgstr "Näytä kaikki OIDC-palvelut"
+
+#: templates/rr/serviceprovider_list.html:89
 msgid "LDAP Providers"
 msgstr "LDAP-palvelut"
 
-#: templates/rr/serviceprovider_list.html:88
+#: templates/rr/serviceprovider_list.html:90
 msgid "Add a new LDAP connection"
 msgstr "Lisää uusi LDAP-palvelu"
 
-#: templates/rr/serviceprovider_list.html:93
+#: templates/rr/serviceprovider_list.html:92
+msgid "Show all LDAP providers"
+msgstr "Näytä kaikki LDAP-palvelut"
+
+#: templates/rr/serviceprovider_list.html:96
 msgid "ID"
 msgstr ""
 
-#: templates/rr/serviceprovider_list.html:95
+#: templates/rr/serviceprovider_list.html:98
 msgid "Publish to production"
 msgstr "Julkaise tuotantoon"
 
-#: templates/rr/serviceprovider_list.html:96
+#: templates/rr/serviceprovider_list.html:99
 msgid "OK / Modified, modified are waiting for validation"
 msgstr "OK / Muutettu, muutetut odottavat hyväksyntää"
 
@@ -2922,15 +2945,15 @@ msgstr ""
 msgid "Your user account has been deactivated."
 msgstr "Käyttäjätilisi on suljettu"
 
-#: views/metadata.py:224
+#: views/metadata.py:225
 msgid "Git repository appears to have an invalid format."
 msgstr "Git repositorio vaikuttaisi olevan väärässä muodossa."
 
-#: views/metadata.py:227
+#: views/metadata.py:228
 msgid "Repository path could not be accessed."
 msgstr "Repositorion sijaintia ei voidu lukea."
 
-#: views/metadata.py:230 views/metadata.py:246
+#: views/metadata.py:231 views/metadata.py:250
 msgid ""
 "Execution of git command failed. Might want to try git command locally from "
 "the command line and check that it works."
@@ -2938,20 +2961,20 @@ msgstr ""
 "git-komennon suorittaminen epäonnistui. Kannattaa tarkastaa komentorivillä "
 "että se toimii oikein."
 
-#: views/metadata.py:236
+#: views/metadata.py:238
 msgid "Git repository has no origin."
 msgstr "Git repositoriolla ei ole lähdettä"
 
-#: views/metadata.py:242
+#: views/metadata.py:248
 msgid "Remote repository not matching local, please fix manually."
 msgstr "Ulkoinen repositorio ei vastaa paikallista, korjaa tämä käsin."
 
-#: views/metadata.py:261
+#: views/metadata.py:266
 msgid "Pushing to remote did not work, please fix manually."
 msgstr ""
 "Tietojen vienti ulkoiseen repositorioon ei toiminut, korjaa tämä käsin."
 
-#: views/metadata.py:263
+#: views/metadata.py:268
 msgid ""
 "Execution of git command failed. Might want to try git command locally  from "
 "the command line and check that it works."
@@ -2959,7 +2982,7 @@ msgstr ""
 "git-komennon suorittaminen epäonnistui. Kannattaa tarkastaa komentorivillä "
 "että se toimii oikein."
 
-#: views/metadata.py:270
+#: views/metadata.py:275
 msgid "Metadata file has changed, please try again."
 msgstr "Metatiedot ovat muuttuneet, tarkasta muutokset ja yritä uudelleen."
 
@@ -3007,6 +3030,10 @@ msgstr "Palvelun salaisuus poistettu"
 #: views/serviceprovider.py:587
 msgid "Service deleted."
 msgstr "Palvelu poistettu."
+
+#: views/serviceprovider.py:614
+msgid "Service removal is not allowed for production services."
+msgstr "Tuotantopalvelun poisto ei ole sallittua."
 
 #: views/spadmin.py:80
 msgid ""

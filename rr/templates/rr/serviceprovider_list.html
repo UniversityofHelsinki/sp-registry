@@ -27,7 +27,7 @@
   <form action="" method='POST'>
   {% csrf_token %}
 {% for object in object_list %}
-      {% if user.is_superuser %}{% if object|get_production_status or object.production %}{% if object.modified and not object.validated %}<tr>{% else %}<tr class="collapse out collapsesaml">{% endif %}{% else %}<tr class="collapse out collapsesaml">{% endif %}{% else %}<tr>{% endif %}
+      {% if user.is_superuser %}{% if object|get_production_status or object.production %}{% if object.modified %}<tr>{% else %}<tr class="collapse out collapsesaml">{% endif %}{% else %}<tr class="collapse out collapsesaml">{% endif %}{% else %}<tr>{% endif %}
       <th scope="row">{% if object.display_identifier|length > 60 %}<a data-toggle="tooltip" data-placement="top" title="{{ display_identifier }}" href="/summary/{{ object.pk }}/">{{ object.display_identifier|truncatechars:60 }}{% else %}<a href="/summary/{{ object.pk }}/">{{ object.display_identifier }}{% endif %}</a></th>
       {% if object.name|length > 50 %}<td data-toggle="tooltip" data-placement="top" title="{{ object.name }}" href="/summary/{{ object.pk }}/">{{ object.name|truncatechars:50 }}{% else %}<td>{{ object.name }}{% endif %}</td>
       {% if object|get_production_status %}<td class="text-success">&#10004;{% else %}<td class="text-danger">&#10005;{% endif %}</td>
@@ -66,7 +66,7 @@
   <form action="" method='POST'>
   {% csrf_token %}
 {% for object in oidc_providers %}
-    {% if user.is_superuser %}{% if object|get_production_status or object.production %}{% if object.modified and not object.validated %}<tr>{% else %}<tr class="collapse out collapseoidc">{% endif %}{% else %}<tr class="collapse out collapseoidc">{% endif %}{% else %}<tr>{% endif %}
+    {% if user.is_superuser %}{% if object|get_production_status or object.production %}{% if object.modified %}<tr>{% else %}<tr class="collapse out collapseoidc">{% endif %}{% else %}<tr class="collapse out collapseoidc">{% endif %}{% else %}<tr>{% endif %}
       <th scope="row">{% if object.display_identifier|length > 60 %}<a data-toggle="tooltip" data-placement="top" title="{{ display_identifier }}" href="/summary/{{ object.pk }}/">{{ object.display_identifier|truncatechars:60 }}{% else %}<a href="/summary/{{ object.pk }}/">{{ object.display_identifier }}{% endif %}</a></th>
       {% if object|get_production_status %}<td class="text-success">&#10004;{% else %}<td class="text-danger">&#10005;{% endif %}</td>
       {% if object.test %}<td class="text-success">&#10004;{% else %}<td class="text-danger">&#10005;{% endif %}</td>
@@ -104,7 +104,7 @@
   <form action="" method='POST'>
   {% csrf_token %}
 {% for object in ldap_providers %}
-    {% if user.is_superuser %}{% if object|get_production_status or object.production %}{% if object.modified and not object.validated %}<tr>{% else %}<tr class="collapse out collapseldap">{% endif %}{% else %}<tr class="collapse out collapseldap">{% endif %}{% else %}<tr>{% endif %}
+    {% if user.is_superuser %}{% if object|get_production_status or object.production %}{% if object.modified %}<tr>{% else %}<tr class="collapse out collapseldap">{% endif %}{% else %}<tr class="collapse out collapseldap">{% endif %}{% else %}<tr>{% endif %}
       <th scope="row">{% if object.display_identifier|length > 60 %}<a data-toggle="tooltip" data-placement="top" title="{{ display_identifier }}" href="/summary/{{ object.pk }}/">{{ object.display_identifier|truncatechars:60 }}{% else %}<a href="/summary/{{ object.pk }}/">{{ object.display_identifier }}{% endif %}</a></th>
       {% if object.name|length > 50 %}<td data-toggle="tooltip" data-placement="top" title="{{ object.name }}" href="/summary/{{ object.pk }}/">{{ object.name|truncatechars:50 }}{% else %}<td>{{ object.name }}{% endif %}</td>
       {% if object.production %}<td class="text-success">&#10004;{% else %}<td class="text-danger">&#10005;{% endif %}</td>

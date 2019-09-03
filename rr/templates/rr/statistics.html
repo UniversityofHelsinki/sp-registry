@@ -17,7 +17,7 @@
   <thead>
     <tr>
       <th scope="col">{% trans "Date" %}</th>
-      <th scope="col">{% trans "Logins" %}</th>
+      <th scope="col">{% trans "Number of logins" %}</th>
     </tr>
   </thead>
   <tbody>
@@ -44,7 +44,7 @@
       data: {
         labels: [{% for i in object_list %}"{{ i.date|date:"Y-m-d" }}",{% endfor %}],
         datasets: [{
-          label: 'Number of logins',
+          label: '{% trans "Number of logins" %}',
           data: [{% for i in object_list %}{{ i.logins }},{% endfor %}]
         }]
       },

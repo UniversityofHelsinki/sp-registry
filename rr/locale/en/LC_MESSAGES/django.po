@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-08-28 13:11+0300\n"
+"POT-Creation-Date: 2019-09-03 10:27+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1090,6 +1090,15 @@ msgstr ""
 msgid "Email address"
 msgstr ""
 
+#: models/statistics.py:12 templates/rr/statistics.html:20
+#: templates/rr/statistics.html:47
+msgid "Number of logins"
+msgstr ""
+
+#: models/statistics.py:13
+msgid "Login date"
+msgstr ""
+
 #: models/testuser.py:16 models/testuser.py:44
 msgid "Login name"
 msgstr ""
@@ -1193,7 +1202,7 @@ msgid "Login using single-factor authentication"
 msgstr ""
 
 #: templates/attribute_test_service.html:57 templates/base.html:52
-#: templates/base.html:96 templates/base.html:181 templates/base.html:224
+#: templates/base.html:99 templates/base.html:184 templates/base.html:230
 #: templates/rr/attribute_list.html:6
 msgid "Attributes"
 msgstr ""
@@ -1231,54 +1240,54 @@ msgstr ""
 msgid "SP Registry"
 msgstr ""
 
-#: templates/base.html:24 templates/base.html:154
+#: templates/base.html:24 templates/base.html:157
 #: templates/rr/serviceprovider_list.html:6
 msgid "Service Providers"
 msgstr ""
 
-#: templates/base.html:29 templates/base.html:159
+#: templates/base.html:29 templates/base.html:162
 msgid "SP Configuration"
 msgstr ""
 
-#: templates/base.html:33 templates/base.html:162
+#: templates/base.html:33 templates/base.html:165
 msgid "Summary"
 msgstr ""
 
-#: templates/base.html:36 templates/base.html:165
+#: templates/base.html:36 templates/base.html:168
 msgid "Basic Information"
 msgstr ""
 
 #: templates/base.html:40 templates/base.html:44 templates/base.html:48
-#: templates/base.html:169 templates/base.html:173 templates/base.html:177
+#: templates/base.html:172 templates/base.html:176 templates/base.html:180
 msgid "Technical Attributes"
 msgstr ""
 
-#: templates/base.html:56 templates/base.html:99 templates/base.html:185
-#: templates/base.html:227 templates/rr/certificate.html:6
+#: templates/base.html:56 templates/base.html:102 templates/base.html:188
+#: templates/base.html:233 templates/rr/certificate.html:6
 #: templates/rr/serviceprovider_detail.html:286
 #: templates/rr/serviceprovider_saml_create_form.html:19
 msgid "Certificates"
 msgstr ""
 
-#: templates/base.html:59 templates/base.html:188
+#: templates/base.html:59 templates/base.html:191
 msgid "SAML Endpoints"
 msgstr ""
 
-#: templates/base.html:64 templates/base.html:193 templates/rr/usergroup.html:6
+#: templates/base.html:64 templates/base.html:196 templates/rr/usergroup.html:6
 msgid "User Groups"
 msgstr ""
 
-#: templates/base.html:69 templates/base.html:198
+#: templates/base.html:69 templates/base.html:201
 #: templates/rr/redirecturi.html:6
 msgid "Redirect URIs"
 msgstr ""
 
-#: templates/base.html:73 templates/base.html:202 templates/rr/contact.html:6
+#: templates/base.html:73 templates/base.html:205 templates/rr/contact.html:6
 #: templates/rr/serviceprovider_detail.html:307
 msgid "Contacts"
 msgstr ""
 
-#: templates/base.html:76 templates/base.html:205 templates/rr/spadmin.html:6
+#: templates/base.html:76 templates/base.html:208 templates/rr/spadmin.html:6
 msgid "Admins"
 msgstr ""
 
@@ -1286,47 +1295,52 @@ msgstr ""
 msgid "Test users"
 msgstr ""
 
-#: templates/base.html:85 templates/base.html:214
+#: templates/base.html:85 templates/base.html:217
 msgid "View Metadata"
 msgstr ""
 
-#: templates/base.html:92 templates/base.html:221
+#: templates/base.html:88 templates/base.html:220
+#: templates/rr/statistics.html:6
+msgid "Login Statistics"
+msgstr ""
+
+#: templates/base.html:95 templates/base.html:227
 msgid "Administration"
 msgstr ""
 
-#: templates/base.html:102 templates/base.html:230
+#: templates/base.html:105 templates/base.html:236
 msgid "SAML Special Configs"
 msgstr ""
 
-#: templates/base.html:105 templates/base.html:233 templates/rr/email.html:6
+#: templates/base.html:108 templates/base.html:239 templates/rr/email.html:6
 msgid "Emails"
 msgstr ""
 
-#: templates/base.html:108 templates/base.html:236
+#: templates/base.html:111 templates/base.html:242
 msgid "Manage SAML metadata"
 msgstr ""
 
-#: templates/base.html:111 templates/base.html:239
+#: templates/base.html:114 templates/base.html:245
 msgid "Manage LDAP metadata"
 msgstr ""
 
-#: templates/base.html:114 templates/base.html:242
+#: templates/base.html:117 templates/base.html:248
 msgid "Manage OIDC metadata"
 msgstr ""
 
-#: templates/base.html:118 templates/base.html:247
+#: templates/base.html:121 templates/base.html:253
 msgid "Database Admin"
 msgstr ""
 
-#: templates/base.html:137 templates/registration/login.html:11
+#: templates/base.html:140 templates/registration/login.html:11
 msgid "Logout"
 msgstr ""
 
-#: templates/base.html:141 templates/registration/logout.html:7
+#: templates/base.html:144 templates/registration/logout.html:7
 msgid "Login"
 msgstr ""
 
-#: templates/base.html:209
+#: templates/base.html:212
 msgid "Test Users"
 msgstr ""
 
@@ -2540,6 +2554,34 @@ msgstr ""
 
 #: templates/rr/spadmin.html:102
 msgid "Do you want to remove selected admins/invites?"
+msgstr ""
+
+#: templates/rr/statistics.html:8
+msgid "Week"
+msgstr ""
+
+#: templates/rr/statistics.html:9
+msgid "Month"
+msgstr ""
+
+#: templates/rr/statistics.html:10
+msgid "Year"
+msgstr ""
+
+#: templates/rr/statistics.html:11
+msgid "All"
+msgstr ""
+
+#: templates/rr/statistics.html:15
+msgid "Show table"
+msgstr ""
+
+#: templates/rr/statistics.html:19
+msgid "Date"
+msgstr ""
+
+#: templates/rr/statistics.html:34
+msgid "No statistics"
 msgstr ""
 
 #: templates/rr/testuser.html:8

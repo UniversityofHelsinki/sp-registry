@@ -11,7 +11,7 @@
 <h2>{% trans "SAML Providers" %}</h2>
 <p><a href="{% url 'saml-serviceprovider-add' %}"><button type="button" class="btn btn-primary btn-lg btn-block">{% trans "Add a new SAML service provider" %}</button></a></p>
 {% if object_list %}
-{% if user.is_superuser %}<button type="button" class="btn" name="collapsesaml" data-toggle="collapse" data-target=".collapsesaml">{% trans "Show all SAML providers" %}</button>{% endif %}
+  {% if user.is_superuser %}<p><button type="button" class="btn btn-warning" name="collapsesaml" data-toggle="collapse" data-target=".collapsesaml">{% trans "Show all SAML providers" %}</button></p>{% endif %}
 <table class="table table-sm">
   <thead>
     <tr>
@@ -51,7 +51,7 @@
 <h2>{% trans "OIDC Providers" %}</h2>
 <p><a href="{% url 'oidc-serviceprovider-add' %}"><button type="button" class="btn btn-primary btn-lg btn-block">{% trans "Add a new OIDC relying party" %}</button></a></p>
 {% if oidc_providers %}
-{% if user.is_superuser %}<button type="button" class="btn" name="collapseoidc" data-toggle="collapse" data-target=".collapseoidc">{% trans "Show all OIDC providers" %}</button>{% endif %}
+{% if user.is_superuser %}<p><button type="button" class="btn btn-warning" name="collapseoidc" data-toggle="collapse" data-target=".collapseoidc">{% trans "Show all OIDC providers" %}</button></p>{% endif %}
 <table class="table table-sm">
   <thead>
     <tr>
@@ -89,7 +89,7 @@
 <h2>{% trans "LDAP Providers" %}</h2>
 <p><a href="{% url 'ldap-serviceprovider-add' %}"><button type="button" class="btn btn-primary btn-lg btn-block">{% trans "Add a new LDAP connection" %}</button></a></p>
 {% if ldap_providers %}
-{% if user.is_superuser %}<button type="button" name="collapseldap" class="btn" data-toggle="collapse" data-target=".collapseldap">{% trans "Show all LDAP providers" %}</button>{% endif %}
+{% if user.is_superuser %}<p><button type="button" name="collapseldap" class="btn btn-warning" data-toggle="collapse" data-target=".collapseldap">{% trans "Show all LDAP providers" %}</button></p>{% endif %}
 <table class="table table-sm">
   <thead>
     <tr>

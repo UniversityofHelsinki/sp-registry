@@ -22,6 +22,9 @@
   /*jslint nomen: true, evil: true*/
   $.fn.extend({
     popConfirm: function (options) {
+      var myDefaultWhiteList = $.fn.tooltip.Constructor.Default.whiteList;
+      myDefaultWhiteList.button = [];
+
       var defaults = {
           title: 'Confirmation',
           content: 'Are you really sure ?',
@@ -116,7 +119,7 @@
           placement: options.placement,
           container: options.container,
           //Avoid using multiline strings, no support in older browsers.
-          content: options.content + '<p class="button-group" style="margin-top: 10px; text-align: center;"><button type="button" class="btn btn-small confirm-dialog-btn-abort">' + options.noBtn + '</button> <button type="button" class="btn btn-small btn-danger confirm-dialog-btn-confirm">' + options.yesBtn + '</button></p>'
+          content: options.content + '<br><button type="button" class="btn btn-sm btn-info confirm-dialog-btn-abort">' + options.noBtn + '</button> <button type="button" class="btn btn-sm btn-danger confirm-dialog-btn-confirm">' + options.yesBtn + '</button>'
         }).click(function (e) {
           if (last && last !== self) {
             last.popover('hide').removeClass('popconfirm-active');

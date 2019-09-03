@@ -9,6 +9,7 @@ from rr.models.oidc import GrantType, ResponseType, OIDCScope
 from rr.models.organization import Organization
 from rr.models.serviceprovider import ServiceProvider, SPAttribute
 from rr.models.spadmin import Keystore
+from rr.models.statistics import Statistics
 from rr.models.testuser import TestUser, TestUserData
 from rr.models.usergroup import UserGroup
 
@@ -25,6 +26,7 @@ admin.site.register(Keystore)
 admin.site.register(NameIDFormat)
 admin.site.register(OIDCScope)
 admin.site.register(ResponseType)
+admin.site.register(Statistics)
 admin.site.register(Template)
 admin.site.register(TestUser)
 admin.site.register(TestUserData)

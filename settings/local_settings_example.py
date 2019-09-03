@@ -15,6 +15,12 @@ DATABASES = {
     }
 }
 
+# Database settings for importstatistic management command
+STATISTICS_DATABASE_HOST = None
+STATISTICS_DATABASE_USER = None
+STATISTICS_DATABASE_PASSWORD = None
+STATISTICS_DATABASE_NAME = None
+
 TIME_ZONE = 'EET'
 
 # Activate SAML/LDAP SP listing

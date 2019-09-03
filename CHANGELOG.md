@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.1.0] - 2019-09-03
+### Changes
+* Added login statistics
+* Added scoped attribute check for test service
+* Using git empty tree object for diff if HEAD is not found
+* Limit SP default list for superusers to production changes
+* Allow service removal when it does not affect production
+* Load Bootstrap and jQuery from CDN
+
+### Updating notes
+* Includes added database fields and tables, run migrations
+
 ## [1.0.0] - 2019-06-26
 Started keeping a changelog
 

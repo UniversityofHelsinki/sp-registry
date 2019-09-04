@@ -41,3 +41,38 @@ class StatisticsTestCase(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertIn('1561', response.content.decode())
         self.assertNotIn('3356', response.content.decode())
+
+
+class StatisticsSummaryTestCase(TestCase):
+    def setUp(self):
+        self.factory = RequestFactory()
+        self.user = User.objects.create(username='tester')
+        self.superuser = User.objects.create(username="superuser", is_superuser=True)
+        self.user_sp = ServiceProvider.objects.create(entity_id='https://sp2.example.org/sp', service_type='saml',
+                                                      production=True)
+        self.user_sp.admins.add(self.user)
+        Statistics.objects.create(sp=self.user_sp, date=date.today() - timedelta(days=1), logins=1561)
+        Statistics.objects.create(sp=self.user_sp, date=date.today() - timedelta(days=2), logins=124)
+        Statistics.objects.create(sp=self.user_sp, date=date.today() - timedelta(days=33), logins=3356)
+
+    def test_statistics_summary_view_denies_anonymous(self):
+        response = self.client.get(reverse('statistics-summary-list'), follow=True)
+        self.assertRedirects(response,
+                             reverse('login') + '?next=' + reverse('statistics-summary-list'))
+        response = self.client.post(reverse('statistics-summary-list'), follow=True)
+        self.assertRedirects(response,
+                             reverse('login') + '?next=' + reverse('statistics-summary-list'))
+
+    def test_statistics_summary_view_denies_unauthorized_user(self):
+        self.client.force_login(self.user)
+        response = self.client.get(reverse('statistics-summary-list'))
+        self.assertEqual(response.status_code, 403)
+        response = self.client.post(reverse('statistics-summary-list'))
+        self.assertEqual(response.status_code, 403)
+
+    def test_statistics_summary_view_list_with_admin(self):
+        self.client.force_login(self.superuser)
+        response = self.client.get(reverse('statistics-summary-list'))
+        self.assertEqual(response.status_code, 200)
+        self.assertIn('1685', response.content.decode())
+        self.assertIn('5041', response.content.decode())

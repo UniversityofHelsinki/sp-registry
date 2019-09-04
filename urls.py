@@ -21,7 +21,7 @@ from rr.views.spadmin import activate_key, admin_list
 from rr.views.testuser import testuser_list, testuser_attribute_data
 from rr.views.usergroup import usergroup_list
 from rr.views.email import email_list
-from rr.views.statistics import statistics_list
+from rr.views.statistics import statistics_list, statistics_summary_list
 
 # Overwrite default status handlers
 handler400 = 'rr.views.handlers.bad_request'
@@ -76,6 +76,7 @@ urlpatterns = [
         name='basicinformation-update'),
     url(r'^saml_admin_list/$', login_required(SAMLAdminList.as_view()),
         name='saml-admin-list'),
+    url(r'^statistics/summary/$', statistics_summary_list, name='statistics-summary-list'),
     url(r'^statistics/(?P<pk>[0-9]+)/$', statistics_list, name='statistics-list'),
     url(r'^summary/(?P<pk>[0-9]+)/$', login_required(BasicInformationView.as_view()),
         name='summary-view'),

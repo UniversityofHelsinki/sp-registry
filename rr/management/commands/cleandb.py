@@ -19,6 +19,7 @@ logger = logging.getLogger(__name__)
 
 
 class Command(BaseCommand):
+    list_only = False
 
     def add_arguments(self, parser):
         parser.add_argument('-d', type=int, action='store', dest='days',
@@ -40,6 +41,50 @@ class Command(BaseCommand):
         else:
             logger.info(text)
 
+    def remove_sp(self, date_limit):
+        """ Delete contacts from 'removed' services"""
+        for provider in ServiceProvider.objects.filter(end_at__lt=date_limit, history=None):
+            # Check for history versions
+            for sp in ServiceProvider.objects.filter(history=provider.pk):
+                self.output("Removing service provider (history): " + sp.entity_id)
+                if not self.list_only:
+                    sp.delete()
+            self.output("Removing service provider: " + provider.entity_id)
+            if not self.list_only:
+                provider.delete()
+
+    def remove_contact(self, date_limit):
+        """ Delete contacts from 'removed' services"""
+        for provider in ServiceProvider.objects.filter(end_at__lt=date_limit, history=None):
+            # Check for history versions
+            for sp in ServiceProvider.objects.filter(history=provider.pk):
+                for contact in Contact.objects.filter(sp=sp):
+                    self.output(sp.entity_id + ": Removing contact (history): "
+                                + contact.firstname + " " + contact.lastname)
+                    if not self.list_only:
+                        contact.delete()
+            for contact in Contact.objects.filter(sp=provider):
+                self.output(provider.entity_id + ": Removing contact: "
+                            + contact.firstname + " " + contact.lastname)
+                if not self.list_only:
+                    contact.delete()
+
+    def remove_obsolete_users(self, date_limit):
+        """Delete users without active logins during date_limit and who are no admins"""
+        for user in User.objects.filter(last_login__lt=date_limit):
+            if not ServiceProvider.objects.filter(admins=user):
+                self.output("Removing user: " + user.username)
+                if not self.list_only:
+                    user.delete()
+
+    def remove_expired_invites(self):
+        expired_invites = Keystore.objects.filter(valid_until__lt=timezone.now())
+        for invite in expired_invites:
+            self.output("Removing invite: " + invite.sp.entity_id + " "
+                        + invite.valid_until.strftime('%Y-%m-%d') + " " + invite.email)
+            if not self.list_only:
+                invite.delete()
+
     def handle(self, *args, **options):
         days = options['days']
         remove_sp = options['remove_sp']
@@ -52,45 +97,14 @@ class Command(BaseCommand):
         if days is None:
             days = 365
         if days >= 0:
-            remove_time = timezone.now() - relativedelta(days=days)
-            if remove_sp or remove_contact:
-                for provider in ServiceProvider.objects.filter(end_at__gte=remove_time,
-                                                               history=None):
-                    # Check for history versions
-                    for sp in ServiceProvider.objects.filter(history=provider.pk):
-                        if remove_sp:
-                            self.output("Removing service provider (history): " + sp.entity_id)
-                            if not self.list_only:
-                                sp.delete()
-                        elif remove_contact:
-                            for contact in Contact.objects.filter(sp=sp):
-                                self.output(sp.entity_id + ": Removing contact (history): "
-                                            + contact.firstname + " " + contact.lastname)
-                                if not self.list_only:
-                                    contact.delete()
-                    if remove_sp:
-                        self.output("Removing service provider: " + provider.entity_id)
-                        if not self.list_only:
-                            provider.delete()
-                    elif remove_contact:
-                        for contact in Contact.objects.filter(sp=provider):
-                            self.output(provider.entity_id + ": Removing contact: "
-                                        + contact.firstname + " " + contact.lastname)
-                            if not self.list_only:
-                                contact.delete()
+            date_limit = timezone.now() - relativedelta(days=days)
+            if remove_sp:
+                self.remove_sp(date_limit)
+            if remove_contact:
+                self.remove_contact(date_limit)
             if remove_user:
-                # Remove users without SPs and no recent logins
-                for user in User.objects.filter(last_login__gte=remove_time):
-                    if not ServiceProvider.objects.filter(admins=user):
-                        self.output("Removing user: " + user.username)
-                        if not self.list_only:
-                            user.delete()
+                self.remove_obsolete_users(date_limit)
             if remove_invite:
-                expired_invites = Keystore.objects.filter(valid_until__lt=timezone.now())
-                for invite in expired_invites:
-                    self.output("Removing invite: " + invite.sp.entity_id + " "
-                                + invite.valid_until.strftime('%Y-%m-%d') + " " + invite.email)
-                    if not self.list_only:
-                        invite.delete()
+                self.remove_expired_invites()
         else:
             print("Error: -d must be positive")

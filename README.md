@@ -78,6 +78,8 @@ Create a superuser with
   * Custom test users for test services
 * View Metadata (SAML and OIDC only)
   * Shows SP metadata. You may choose between validated and unvalidated metadata
+* Login Statistics (SAML only)
+  * Show daily login statistics
 
 #### For site admins
 * Attributes
@@ -92,6 +94,8 @@ Create a superuser with
     * NameId settings
     * MFA and authorization
     * SAML products
+* SAML Login Summary
+  * Login statistics for SAML services
 * Emails
   * Sending email to server admins. Templates are managed in django admin
 * Manage SAML metadata
@@ -107,6 +111,8 @@ Create a superuser with
 For more information run "./manage.py <command> -h"
 * cleandb
   * Cleans old services or personal information from the db
+* decryptclientsecret
+  * Decrypt client secrets from OIDC metadata (if ecncrypted)
 * exportldap
   * Exports LDAP registrations data (custom format)
 * exportmetadata
@@ -117,6 +123,8 @@ For more information run "./manage.py <command> -h"
   * Importing attributes from old attribute filter
 * importmetadata
   * Importing metadata from file
+* importstatistics
+  * Importing statistics from external database
 * nslookup
   * Checks that service URLs exist
 

@@ -1,7 +1,7 @@
 """
-Command line script for descrypting client_secrets in JSON metadata file.
+Command line script for decrypting client_secrets in JSON metadata file.
 
-Usage help: ./manage.py cleandb -h
+Usage help: ./manage.py decryptclientsecret -h
 """
 import json
 from cryptography.fernet import Fernet, InvalidToken
@@ -26,7 +26,7 @@ class Command(BaseCommand):
             except TypeError:
                 return None
             except InvalidToken:
-                print('ERROR, secret is not a valid Fernet token: %s ', encrypted_client_secret)
+                print('ERROR, secret is not a valid Fernet token: %s ' % encrypted_client_secret)
                 return None
         return None
 

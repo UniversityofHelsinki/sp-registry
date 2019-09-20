@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.2.0] - 2019-09-20
+### Changes
+* Added statistics summary page for superusers
+* Fixed date limit in cleandb script
+* Fixed bootstrap css url in attribute test service
+* Fixed endpoint parameter in nslookup script
+* Fixed missing OIDC option in administation emails
+* Code refactoring for reduced complexity
+
 ## [1.1.0] - 2019-09-03
 ### Changes
 * Added login statistics

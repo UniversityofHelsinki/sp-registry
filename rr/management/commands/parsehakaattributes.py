@@ -18,16 +18,16 @@ def haka_attribute_parser(filename):
     parser = etree.XMLParser(ns_clean=True, remove_comments=True, remove_blank_text=True)
     tree = etree.parse(filename, parser)
     root = tree.getroot()
-    AttributeFilterPolicyGroup = etree.Element("AttributeFilterPolicyGroup",
+    attribute_filter_policy_group = etree.Element("AttributeFilterPolicyGroup",
                                                id="urn:mace:funet.fi:haka",
                                                nsmap={"xmlns": 'urn:mace:shibboleth:2.0:afp'})
-    AttributeFilterPolicyGroup.attrib[
+    attribute_filter_policy_group.attrib[
         '{urn:mace:shibboleth:2.0:afp}basic'
         ] = "urn:mace:shibboleth:2.0:afp:mf:basic"
-    AttributeFilterPolicyGroup.attrib[
+    attribute_filter_policy_group.attrib[
         '{urn:mace:shibboleth:2.0:afp}saml'
         ] = "urn:mace:shibboleth:2.0:afp:mf:saml"
-    AttributeFilterPolicyGroup.attrib[
+    attribute_filter_policy_group.attrib[
         '{http://www.w3.org/2001/XMLSchema-instance}schemaLocation'
         ] = "urn:mace:shibboleth:2.0:afp classpath:/schema/shibboleth-2.0-afp.xsd " \
         "urn:mace:shibboleth:2.0:afp:mf:basic " \
@@ -35,8 +35,8 @@ def haka_attribute_parser(filename):
         "urn:mace:shibboleth:2.0:afp:mf:saml " \
         "classpath:/schema/shibboleth-2.0-afp-mf-saml.xsd"
     for a in root:
-        entityID = a.get("entityID")
-        if entityID:
+        entity_id = a.get("entityID")
+        if entity_id:
             for b in a:
                 if etree.QName(b.tag).localname == "SPSSODescriptor":
                     attributes = []
@@ -55,26 +55,26 @@ def haka_attribute_parser(filename):
                                             attributes.append(attribute)
                                         else:
                                             print("Could not add attribute " + friendlyname + ", "
-                                                  + name + " for " + entityID)
+                                                  + name + " for " + entity_id)
                     if attributes:
-                        AttributeFilterPolicy = etree.SubElement(AttributeFilterPolicyGroup,
+                        attribute_filter_policy = etree.SubElement(attribute_filter_policy_group,
                                                                  "AttributeFilterPolicy",
-                                                                 id="haka-default-" + entityID)
-                        PolicyRequirementRule = etree.SubElement(AttributeFilterPolicy,
+                                                                 id="haka-default-" + entity_id)
+                        policy_requirement_rule = etree.SubElement(attribute_filter_policy,
                                                                  "PolicyRequirementRule",
-                                                                 value=entityID)
-                        PolicyRequirementRule.attrib[
+                                                                 value=entity_id)
+                        policy_requirement_rule.attrib[
                             '{http://www.w3.org/2001/XMLSchema-instance}type'
                             ] = "basic:AttributeRequesterString"
                         for attribute in attributes:
-                            AttributeRule = etree.SubElement(AttributeFilterPolicy,
+                            attribute_rule = etree.SubElement(attribute_filter_policy,
                                                              "AttributeRule",
                                                              attributeID=attribute.attributeid)
-                            PermitValueRule = etree.SubElement(AttributeRule, "PermitValueRule")
-                            PermitValueRule.attrib[
+                            permit_value_rule = etree.SubElement(attribute_rule, "PermitValueRule")
+                            permit_value_rule.attrib[
                                 '{http://www.w3.org/2001/XMLSchema-instance}type'
                                 ] = "basic:ANY"
-    return(etree.tostring(AttributeFilterPolicyGroup, pretty_print=True, encoding='UTF-8'))
+    return etree.tostring(attribute_filter_policy_group, pretty_print=True, encoding='UTF-8')
 
 
 class Command(BaseCommand):

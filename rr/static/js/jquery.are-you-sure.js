@@ -14,7 +14,7 @@
   
   $.fn.areYouSure = function(options) {
       
-    var settings = $.extend(
+    let settings = $.extend(
       {
         'message' : 'You have unsaved changes!',
         'dirtyClass' : 'dirty',
@@ -25,7 +25,7 @@
         'fieldSelector': ":input:not(input[type=submit]):not(input[type=button])"
       }, options);
 
-    var getValue = function($field) {
+    let getValue = function($field) {
       if ($field.hasClass('ays-ignore')
           || $field.hasClass('aysIgnore')
           || $field.attr('data-ays-ignore')
@@ -37,8 +37,8 @@
         return 'ays-disabled';
       }
 
-      var val;
-      var type = $field.attr('type');
+      let val;
+      let type = $field.attr('type');
       if ($field.is('select')) {
         type = 'select';
       }
@@ -64,21 +64,21 @@
       return val;
     };
 
-    var storeOrigValue = function($field) {
+    let storeOrigValue = function($field) {
       $field.data('ays-orig', getValue($field));
     };
 
-    var checkForm = function(evt) {
+    let checkForm = function(evt) {
 
-      var isFieldDirty = function($field) {
-        var origValue = $field.data('ays-orig');
+      let isFieldDirty = function($field) {
+        let origValue = $field.data('ays-orig');
         if (undefined === origValue) {
           return false;
         }
         return (getValue($field) != origValue);
       };
 
-      var $form = ($(this).is('form')) 
+      let $form = ($(this).is('form'))
                     ? $(this)
                     : $(this).parents('form');
 
@@ -88,11 +88,11 @@
         return;
       }
 
-      $fields = $form.find(settings.fieldSelector);
+      let $fields = $form.find(settings.fieldSelector);
 
       if (settings.addRemoveFieldsMarksDirty) {              
         // Check if field count has changed
-        var origCount = $form.data("ays-orig-field-count");
+        let origCount = $form.data("ays-orig-field-count");
         if (origCount != $fields.length) {
           setDirtyStatus($form, true);
           return;
@@ -100,9 +100,9 @@
       }
 
       // Brute force - check each field
-      var isDirty = false;
+      let isDirty = false;
       $fields.each(function() {
-        $field = $(this);
+        let $field = $(this);
         if (isFieldDirty($field)) {
           isDirty = true;
           return false; // break
@@ -112,8 +112,8 @@
       setDirtyStatus($form, isDirty);
     };
 
-    var initForm = function($form) {
-      var fields = $form.find(settings.fieldSelector);
+    let initForm = function($form) {
+      let fields = $form.find(settings.fieldSelector);
       $(fields).each(function() { storeOrigValue($(this)); });
       $(fields).unbind(settings.fieldEvents, checkForm);
       $(fields).bind(settings.fieldEvents, checkForm);
@@ -121,8 +121,8 @@
       setDirtyStatus($form, false);
     };
 
-    var setDirtyStatus = function($form, isDirty) {
-      var changed = isDirty != $form.hasClass(settings.dirtyClass);
+    let setDirtyStatus = function($form, isDirty) {
+      let changed = isDirty != $form.hasClass(settings.dirtyClass);
       $form.toggleClass(settings.dirtyClass, isDirty);
         
       // Fire change event if required
@@ -135,11 +135,11 @@
       }
     };
 
-    var rescan = function() {
-      var $form = $(this);
-      var fields = $form.find(settings.fieldSelector);
+    let rescan = function() {
+      let $form = $(this);
+      let fields = $form.find(settings.fieldSelector);
       $(fields).each(function() {
-        var $field = $(this);
+        let $field = $(this);
         if (!$field.data('ays-orig')) {
           storeOrigValue($field);
           $field.bind(settings.fieldEvents, checkForm);
@@ -149,14 +149,14 @@
       $form.trigger('checkform.areYouSure');
     };
 
-    var reinitialize = function() {
+    let reinitialize = function() {
       initForm($(this));
     }
 
     if (!settings.silent && !window.aysUnloadSet) {
       window.aysUnloadSet = true;
       $(window).bind('beforeunload', function() {
-        $dirtyForms = $("form").filter('.' + settings.dirtyClass);
+        let $dirtyForms = $("form").filter('.' + settings.dirtyClass);
         if ($dirtyForms.length == 0) {
           return;
         }
@@ -176,7 +176,7 @@
       if (!$(this).is('form')) {
         return;
       }
-      var $form = $(this);
+      let $form = $(this);
         
       $form.submit(function() {
         $form.removeClass(settings.dirtyClass);

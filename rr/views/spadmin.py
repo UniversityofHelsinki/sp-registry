@@ -9,7 +9,6 @@ from django.contrib.auth.models import User
 from django.core.mail import send_mail
 from django.core.mail.message import BadHeaderError
 from django.http import HttpResponseRedirect
-from django.http.response import Http404
 from django.shortcuts import render
 from django.template.context import Context
 from django.template.engine import Engine
@@ -21,6 +20,7 @@ from rr.forms.spadmin import SPAdminForm
 from rr.models.email import Template
 from rr.models.serviceprovider import ServiceProvider
 from rr.models.spadmin import Keystore
+from rr.utils.serviceprovider import get_service_provider
 
 
 logger = logging.getLogger(__name__)
@@ -105,83 +105,22 @@ def admin_list(request, pk):
 
     :template:`rr/admin.html`
     """
-    try:
-        if request.user.is_superuser:
-            sp = ServiceProvider.objects.get(pk=pk, end_at=None)
-        else:
-            sp = ServiceProvider.objects.get(pk=pk, admins=request.user, end_at=None)
-    except ServiceProvider.DoesNotExist:
-        logger.debug("Tried to access unauthorized service provider")
-        raise Http404("Service provider does not exist")
+    sp = get_service_provider(pk, request.user)
     form = SPAdminForm(superuser=request.user.is_superuser)
     subject = None
     message = None
     error = None
     if request.method == "POST":
-        if "add_invite" in request.POST or "show_message" in request.POST:
-            if "add_invite" in request.POST:
-                send = True
-            else:
-                send = False
-            form = SPAdminForm(request.POST, superuser=request.user.is_superuser)
-            if form.is_valid():
-                email = form.cleaned_data['email']
-                template = request.POST.get('template', None)
-                key = Keystore.objects.create_key(sp=sp, creator=request.user, email=email)
-                subject, message, error = create_invite_email(request, key, template)
-                if send and not error:
-                    try:
-                        send_mail(subject, message, settings.SERVER_EMAIL, [email],
-                                  fail_silently=False)
-                        logger.info("Invite for {sp} sent to {email} by {user}"
-                                    .format(sp=sp, email=email, user=request.user))
-                        form = SPAdminForm(superuser=request.user.is_superuser)
-                        subject = None
-                        message = None
-                        messages.add_message(request, messages.INFO,
-                                             _('Invite sent to ') + email)
-                    except SMTPException:
-                        logger.warning("Could not send invite to {email}"
-                                       .format(email=email))
-                        error = _("Could not send email.")
-                        key.delete()
-                    except BadHeaderError:
-                        logger.warning("Email from {user} contained invalid headers."
-                                       .format(user=request.user))
-                        error = _("Invalid header found, could not send email.")
-                        key.delete()
-                else:
-                    key.delete()
+        if "add_invite" in request.POST:
+            form, subject, message, error = _create_invite(request, sp, True)
+        elif "show_message" in request.POST:
+            form, subject, message, error = _create_invite(request, sp, False)
         elif "remove_invite" in request.POST:
-            for key, value in request.POST.dict().items():
-                if value == "on":
-                    invite = Keystore.objects.filter(pk=key).first()
-                    if invite and invite.sp == sp:
-                        logger.info("Invite for {email} to {sp} deleted by {user}"
-                                    .format(email=invite.email, sp=sp, user=request.user))
-                        messages.add_message(request, messages.INFO,
-                                             _('Invite removed for email ') + invite.email)
-                        invite.delete()
-                    else:
-                        messages.add_message(request, messages.INFO,
-                                             _('Invite already used or removed'))
+            _remove_invites(request, sp)
         elif "remove_admin" in request.POST:
-            for key, value in request.POST.dict().items():
-                if value == "on":
-                    admin = User.objects.get(pk=key)
-                    logger.info("Admin {admin} removed from {sp} by {user}"
-                                .format(admin=admin, sp=sp, user=request.user))
-                    messages.add_message(request, messages.INFO,
-                                         _('Admin removed: ') + admin.username)
-                    sp.admins.remove(admin)
-                    try:
-                        if request.user.is_superuser:
-                            sp = ServiceProvider.objects.get(pk=pk, end_at=None)
-                        else:
-                            sp = ServiceProvider.objects.get(pk=pk, admins=request.user,
-                                                             end_at=None)
-                    except ServiceProvider.DoesNotExist:
-                        return HttpResponseRedirect(reverse('serviceprovider-list'))
+            remove_self = _remove_admins(request, sp)
+            if remove_self:
+                return HttpResponseRedirect(reverse('serviceprovider-list'))
     invites = Keystore.objects.filter(sp=sp)
     return render(request, "rr/spadmin.html", {'object_list': invites,
                                                'form': form,
@@ -189,6 +128,78 @@ def admin_list(request, pk):
                                                'subject': subject,
                                                'message': message,
                                                'error': error})
+
+
+def _create_invite(request, sp, send):
+    form = SPAdminForm(request.POST, superuser=request.user.is_superuser)
+    subject = None
+    message = None
+    error = None
+    if form.is_valid():
+        email = form.cleaned_data['email']
+        template = request.POST.get('template', None)
+        key = Keystore.objects.create_key(sp=sp, creator=request.user, email=email)
+        subject, message, error = create_invite_email(request, key, template)
+        if send and not error:
+            try:
+                send_mail(subject, message, settings.SERVER_EMAIL, [email],
+                          fail_silently=False)
+                logger.info("Invite for {sp} sent to {email} by {user}"
+                            .format(sp=sp, email=email, user=request.user))
+                form = SPAdminForm(superuser=request.user.is_superuser)
+                subject = None
+                message = None
+                messages.add_message(request, messages.INFO,
+                                     _('Invite sent to ') + email)
+            except SMTPException:
+                logger.warning("Could not send invite to {email}"
+                               .format(email=email))
+                error = _("Could not send email.")
+                key.delete()
+            except BadHeaderError:
+                logger.warning("Email from {user} contained invalid headers."
+                               .format(user=request.user))
+                error = _("Invalid header found, could not send email.")
+                key.delete()
+        else:
+            key.delete()
+    return form, subject, message, error
+
+
+def _remove_invites(request, sp):
+    for key, value in request.POST.dict().items():
+        if value == "on":
+            invite = Keystore.objects.filter(pk=key).first()
+            if invite and invite.sp == sp:
+                logger.info("Invite for {email} to {sp} deleted by {user}"
+                            .format(email=invite.email, sp=sp, user=request.user))
+                messages.add_message(request, messages.INFO,
+                                     _('Invite removed for email ') + invite.email)
+                invite.delete()
+            else:
+                messages.add_message(request, messages.INFO,
+                                     _('Invite already used or removed'))
+
+
+def _remove_admins(request, sp):
+    removed_self = False
+    for key, value in request.POST.dict().items():
+        if value == "on":
+            admin = User.objects.get(pk=key)
+            logger.info("Admin {admin} removed from {sp} by {user}"
+                        .format(admin=admin, sp=sp, user=request.user))
+            messages.add_message(request, messages.INFO,
+                                 _('Admin removed: ') + admin.username)
+            sp.admins.remove(admin)
+            try:
+                if request.user.is_superuser:
+                    sp = ServiceProvider.objects.get(pk=sp.pk, end_at=None)
+                else:
+                    sp = ServiceProvider.objects.get(pk=sp.pk, admins=request.user,
+                                                     end_at=None)
+            except ServiceProvider.DoesNotExist:
+                removed_self = True
+    return removed_self
 
 
 @login_required

@@ -8,6 +8,7 @@
 {% if errors %}
 <div class="alert alert-warning" role="alert">
 <p>{% trans "Service provider imported with following notifications"  %}
+<ul>
 {% for error in errors %}
 <li>{{ error }}</li>
 {% endfor %}
@@ -15,7 +16,8 @@
 </div>
 {% else %}
 <div class="alert alert-success" role="alert">
-<p>{% trans "Service provider imported succesfully"  %}
+<p>{% trans "Service provider imported succesfully"  %}</p>
+</div>
 {% endif %}
 <p><a href="{% url 'summary-view' sp.pk %}">{% trans "Continue to summary view" %}</a>
 {% elif errors %}

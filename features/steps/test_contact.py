@@ -1,4 +1,4 @@
-from behave import when, then, given
+from behave import when
 
 
 @when(u'filling contact form with email "{email}"')

@@ -1,4 +1,3 @@
-import difflib
 import os
 
 from lxml import etree
@@ -9,8 +8,8 @@ from django.test import  TestCase
 from rr.models.attribute import Attribute
 from rr.models.nameidformat import NameIDFormat
 from rr.models.organization import Organization
-from rr.utils.metadata_generator import metadata_generator
-from rr.utils.metadata_parser import metadata_parser
+from rr.utils.saml_metadata_generator import saml_metadata_generator
+from rr.utils.saml_metadata_parser import saml_metadata_parser
 
 TESTDATA_FILENAME = os.path.join(os.path.dirname(__file__), '../testdata/metadata.xml')
 TESTDATA_MINIMAL_FILENAME = os.path.join(os.path.dirname(__file__), '../testdata/metadata_minimal.xml')
@@ -41,8 +40,9 @@ class MetadataParserGenerationTestCase(TestCase):
         parser = etree.XMLParser(ns_clean=True, remove_comments=True,
                                  remove_blank_text=True)
         entity = etree.fromstring(self.test_metadata, parser)
-        self.sp, self.errors = metadata_parser(entity, overwrite=False, verbosity=2,
-                                               validate=True, disable_checks=False)
+        self.sp, self.errors = saml_metadata_parser(entity, overwrite=False, verbosity=2,
+                                                    validate=True, disable_checks=False)
+        self.maxDiff = None
 
     def test_metadata_parser(self):
         self.assertEqual(self.errors, [])
@@ -67,7 +67,7 @@ class MetadataParserGenerationTestCase(TestCase):
         self.assertEqual(self.sp.privacypolicy_sv, 'https://sp.example.org/privacy/policy_sv.pdf')
 
     def test_metadata_generation(self):
-        metadata_tree = metadata_generator(sp=self.sp)
+        metadata_tree = saml_metadata_generator(sp=self.sp)
         metadata = etree.tostring(metadata_tree, pretty_print=True,
                                   encoding='UTF-8').replace(b'xmlns:xmlns', b'xmlns')
         # for line in difflib.unified_diff(metadata.decode("utf-8").splitlines(), self.test_metadata.splitlines()):
@@ -98,8 +98,8 @@ class MetadataMinimalParserGenerationTestCase(TestCase):
         parser = etree.XMLParser(ns_clean=True, remove_comments=True,
                                  remove_blank_text=True)
         entity = etree.fromstring(self.test_metadata, parser)
-        self.sp, self.errors = metadata_parser(entity, overwrite=False, verbosity=2,
-                                               validate=True, disable_checks=False)
+        self.sp, self.errors = saml_metadata_parser(entity, overwrite=False, verbosity=2,
+                                                    validate=True, disable_checks=False)
         self.sp.save()
 
     def test_metadata_parser(self):
@@ -125,7 +125,7 @@ class MetadataMinimalParserGenerationTestCase(TestCase):
         self.assertEqual(self.sp.privacypolicy_sv, '')
 
     def test_metadata_generation(self):
-        metadata_tree = metadata_generator(sp=self.sp)
+        metadata_tree = saml_metadata_generator(sp=self.sp)
         metadata = etree.tostring(metadata_tree, pretty_print=True,
                                   encoding='UTF-8').replace(b'xmlns:xmlns', b'xmlns')
         # for line in difflib.unified_diff(metadata.decode("utf-8").splitlines(), self.test_metadata.splitlines()):
@@ -140,7 +140,7 @@ class MetadataMinimalParserGenerationTestCase(TestCase):
                                                    url_en="https://example.org/")
         self.sp.organization = organization
         self.sp.save()
-        metadata_tree = metadata_generator(sp=self.sp)
+        metadata_tree = saml_metadata_generator(sp=self.sp)
         metadata = etree.tostring(metadata_tree, pretty_print=True,
                                   encoding='UTF-8').replace(b'xmlns:xmlns', b'xmlns')
         self.assertEqual(metadata.decode("utf-8"), open(TESTDATA_MINIMAL_ORGANIZATION_FILENAME).read())

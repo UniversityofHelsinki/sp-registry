@@ -5,7 +5,7 @@ from django.contrib.auth.decorators import login_required
 
 from rr.views.serviceprovider import SamlServiceProviderCreate, BasicInformationUpdate
 from rr.views.serviceprovider import BasicInformationView, ServiceProviderDelete
-from rr.views.serviceprovider import ServiceProviderList, TechnicalInformationUpdate
+from rr.views.serviceprovider import ServiceProviderList, SamlTechnicalInformationUpdate
 from rr.views.serviceprovider import SAMLAdminList
 from rr.views.serviceprovider import LdapServiceProviderCreate, LdapTechnicalInformationUpdate
 from rr.views.serviceprovider import OidcServiceProviderCreate, OidcTechnicalInformationUpdate
@@ -58,7 +58,7 @@ urlpatterns = [
         name='metadata-manage-oidc'),
     url(r'^metadata/(?P<pk>[0-9]+)/$', metadata, name='metadata-view'),
     url(r'^redirecturi/(?P<pk>[0-9]+)/$', redirecturi_list, name='redirecturi-list'),
-    url(r'^technical/(?P<pk>[0-9]+)/$', login_required(TechnicalInformationUpdate.as_view()),
+    url(r'^technical/(?P<pk>[0-9]+)/$', login_required(SamlTechnicalInformationUpdate.as_view()),
         name='technical-update'),
     url(r'^ldap/(?P<pk>[0-9]+)/$', login_required(LdapTechnicalInformationUpdate.as_view()),
         name='ldap-technical-update'),

@@ -8,6 +8,7 @@ from django.db.models import Q
 
 from rr.models.serviceprovider import SPAttribute, ServiceProvider
 from rr.models.redirecturi import RedirectUri
+from rr.utils.metadata_generator_common import get_entity
 
 logger = logging.getLogger(__name__)
 
@@ -32,19 +33,16 @@ def metadata_uiinfo(metadata, sp, privacypolicy):
 
     if sp.privacypolicy_fi:
         metadata['policy_uri#fi'] = sp.privacypolicy_fi
-    else:
-        if sp.organization and sp.organization.name_fi == "Helsingin yliopisto" and privacypolicy:
-            metadata['policy_uri#fi'] = "https://www.helsinki.fi/fi/yliopisto/tietosuojaselosteet"
+    elif sp.organization and sp.organization.name_fi == "Helsingin yliopisto" and privacypolicy:
+        metadata['policy_uri#fi'] = "https://www.helsinki.fi/fi/yliopisto/tietosuojaselosteet"
     if sp.privacypolicy_en:
         metadata['policy_uri#en'] = sp.privacypolicy_en
-    else:
-        if sp.organization and sp.organization.name_fi == "Helsingin yliopisto" and privacypolicy:
-            metadata['policy_uri#en'] = "https://www.helsinki.fi/fi/yliopisto/tietosuojaselosteet"
+    elif sp.organization and sp.organization.name_fi == "Helsingin yliopisto" and privacypolicy:
+        metadata['policy_uri#en'] = "https://www.helsinki.fi/fi/yliopisto/tietosuojaselosteet"
     if sp.privacypolicy_sv:
         metadata['policy_uri#sv'] = sp.privacypolicy_sv
-    else:
-        if sp.organization and sp.organization.name_fi == "Helsingin yliopisto" and privacypolicy:
-            metadata['policy_uri#sv'] = "https://www.helsinki.fi/fi/yliopisto/tietosuojaselosteet"
+    elif sp.organization and sp.organization.name_fi == "Helsingin yliopisto" and privacypolicy:
+        metadata['policy_uri#sv'] = "https://www.helsinki.fi/fi/yliopisto/tietosuojaselosteet"
     return metadata
 
 
@@ -103,36 +101,12 @@ def oidc_metadata_generator(sp, validated=True, privacypolicy=False, client_secr
 
     return json object
     """
-    # Set history object if using validated metadata and newest version is not validated.
-    # Set validation_date to last point where metadata was validated
     metadata = {}
-    error = []
-    if validated and not sp.validated:
-        history = ServiceProvider.objects.filter(history=sp.pk).exclude(validated=None).last()
-        if not history:
-            return None
-        validation_date = history.validated
-    else:
-        history = None
-        if validated:
-            validation_date = sp.validated
-        else:
-            validation_date = None
-    if history:
-        entity = history
-    else:
-        entity = sp
+    entity, history, validation_date = get_entity(sp, validated)
+    if not entity:
+        return metadata
     metadata['client_id'] = entity.entity_id
-    if entity.encrypted_client_secret:
-        if client_secret_encryption == "encrypted":
-            metadata['client_secret'] = entity.encrypted_client_secret
-        elif client_secret_encryption == "decrypted":
-            try:
-                metadata['client_secret'] = entity.get_client_secret().decode()
-            except AttributeError:
-                return None
-        else:
-            metadata['client_secret'] = "******"
+    metadata = _get_client_secret(entity, metadata, client_secret_encryption)
     metadata['application_type'] = entity.application_type
     if entity.subject_identifier:
         metadata['subject_type'] = entity.subject_identifier
@@ -156,6 +130,20 @@ def oidc_metadata_generator(sp, validated=True, privacypolicy=False, client_secr
         scopes = scopes + list(oidc_scopes.values_list('name', flat=True))
     metadata['scope'] = ' '.join(map(str, scopes))
     metadata = metadata_uiinfo(metadata, entity, privacypolicy)
+    return metadata
+
+
+def _get_client_secret(entity, metadata, client_secret_encryption):
+    if entity.encrypted_client_secret:
+        if client_secret_encryption == "encrypted":
+            metadata['client_secret'] = entity.encrypted_client_secret
+        elif client_secret_encryption == "decrypted":
+            try:
+                metadata['client_secret'] = entity.get_client_secret().decode()
+            except AttributeError:
+                return None
+        else:
+            metadata['client_secret'] = "******"
     return metadata
 
 

@@ -11,6 +11,7 @@ from django.utils.translation import ugettext as _
 from rr.forms.attribute import AttributeForm
 from rr.models.attribute import Attribute
 from rr.models.serviceprovider import ServiceProvider, SPAttribute
+from rr.utils.serviceprovider import get_service_provider
 
 logger = logging.getLogger(__name__)
 
@@ -39,68 +40,11 @@ def attribute_list(request, pk):
 
     :template:`rr/attribute_list.html`
     """
-    try:
-        if request.user.is_superuser:
-            sp = ServiceProvider.objects.get(pk=pk, end_at=None)
-        else:
-            sp = ServiceProvider.objects.get(pk=pk, admins=request.user, end_at=None)
-    except ServiceProvider.DoesNotExist:
-        logger.debug("Tried to access unauthorized service provider")
-        raise Http404(_("Service provider does not exist"))
+    sp = get_service_provider(pk, request.user)
     if request.method == "POST":
         form = AttributeForm(request.POST, sp=sp, is_admin=request.user.is_superuser)
         if form.is_valid():
-            removed_attributes = []
-            added_attributes = []
-            modified_attributes = []
-            for field in form:
-                if not field.name.startswith('extra_'):
-                    data = form.cleaned_data.get(field.name)
-                    sp_attribute = SPAttribute.objects.filter(sp=sp, attribute__friendlyname=field.name,
-                                                              end_at=None).first()
-                    if sp_attribute and not data:
-                        sp_attribute.end_at = timezone.now()
-                        sp_attribute.save()
-                        sp.save_modified()
-                        logger.info("Attribute requisition for {attribute} removed from {sp} by {user}"
-                                    .format(attribute=sp_attribute.attribute, sp=sp,
-                                            user=request.user))
-                        removed_attributes.append(field.name)
-                    elif data:
-                        if sp.service_type == "oidc":
-                            userinfo = form.cleaned_data.get('extra_userinfo_' + field.name)
-                            id_token = form.cleaned_data.get('extra_id_token_' + field.name)
-                        else:
-                            userinfo = False
-                            id_token = False
-                        if not sp_attribute:
-                            attribute = Attribute.objects.filter(friendlyname=field.name).first()
-                            SPAttribute.objects.create(sp=sp, attribute=attribute, reason=data, oidc_userinfo=userinfo,
-                                                       oidc_id_token=id_token)
-                            sp.save_modified()
-                            logger.info("Attribute {attribute} requested for {sp} by {user}"
-                                        .format(attribute=attribute, sp=sp, user=request.user))
-                            added_attributes.append(field.name)
-                        else:
-                            if sp_attribute.reason != data or sp_attribute.oidc_userinfo != userinfo or sp_attribute.oidc_id_token != id_token:
-                                sp_attribute.reason = data
-                                sp_attribute.oidc_userinfo = userinfo
-                                sp_attribute.oidc_id_token = id_token
-                                sp_attribute.save()
-                                sp.save_modified()
-                                logger.info("Attribute {attribute} updated for {sp} by {user}"
-                                            .format(attribute=sp_attribute.attribute, sp=sp,
-                                                    user=request.user))
-                                modified_attributes.append(field.name)
-            if added_attributes:
-                messages.add_message(request, messages.INFO,
-                                     _('Attributes added: ') + ', '.join(added_attributes))
-            if modified_attributes:
-                messages.add_message(request, messages.INFO,
-                                     _('Attributes modified: ') + ', '.join(modified_attributes))
-            if removed_attributes:
-                messages.add_message(request, messages.INFO,
-                                     _('Attributes removed: ') + ', '.join(removed_attributes))
+            _check_form(request, sp, form)
             form = AttributeForm(sp=sp, is_admin=request.user.is_superuser)
         else:
             form = AttributeForm(request.POST, sp=sp, is_admin=request.user.is_superuser)
@@ -108,6 +52,68 @@ def attribute_list(request, pk):
         form = AttributeForm(sp=sp, is_admin=request.user.is_superuser)
     return render(request, "rr/attribute_list.html", {'form': form,
                                                       'object': sp})
+
+
+def _check_form(request, sp, form):
+    removed_attributes = []
+    added_attributes = []
+    modified_attributes = []
+    for field in form:
+        if not field.name.startswith('extra_'):
+            data = form.cleaned_data.get(field.name)
+            sp_attribute = SPAttribute.objects.filter(sp=sp, attribute__friendlyname=field.name,
+                                                      end_at=None).first()
+            userinfo, id_token = _get_oidc_fields(sp, form, field)
+            if sp_attribute and not data:
+                sp_attribute.end_at = timezone.now()
+                sp_attribute.save()
+                sp.save_modified()
+                logger.info("Attribute requisition for {attribute} removed from {sp} by {user}"
+                            .format(attribute=sp_attribute.attribute, sp=sp,
+                                    user=request.user))
+                removed_attributes.append(field.name)
+            elif data and not sp_attribute:
+                attribute = Attribute.objects.filter(friendlyname=field.name).first()
+                SPAttribute.objects.create(sp=sp, attribute=attribute, reason=data, oidc_userinfo=userinfo,
+                                           oidc_id_token=id_token)
+                sp.save_modified()
+                logger.info("Attribute {attribute} requested for {sp} by {user}"
+                            .format(attribute=attribute, sp=sp, user=request.user))
+                added_attributes.append(field.name)
+            elif (data and sp_attribute and (sp_attribute.reason != data or sp_attribute.oidc_userinfo != userinfo or
+                                             sp_attribute.oidc_id_token != id_token)):
+                sp_attribute.reason = data
+                sp_attribute.oidc_userinfo = userinfo
+                sp_attribute.oidc_id_token = id_token
+                sp_attribute.save()
+                sp.save_modified()
+                logger.info("Attribute {attribute} updated for {sp} by {user}"
+                            .format(attribute=sp_attribute.attribute, sp=sp,
+                                    user=request.user))
+                modified_attributes.append(field.name)
+    _create_messages(request, added_attributes, modified_attributes, removed_attributes)
+
+
+def _create_messages(request, added_attributes, modified_attributes, removed_attributes):
+    if added_attributes:
+        messages.add_message(request, messages.INFO,
+                             _('Attributes added: ') + ', '.join(added_attributes))
+    if modified_attributes:
+        messages.add_message(request, messages.INFO,
+                             _('Attributes modified: ') + ', '.join(modified_attributes))
+    if removed_attributes:
+        messages.add_message(request, messages.INFO,
+                             _('Attributes removed: ') + ', '.join(removed_attributes))
+
+
+def _get_oidc_fields(sp, form, field):
+    if sp.service_type == "oidc":
+        userinfo = form.cleaned_data.get('extra_userinfo_' + field.name)
+        id_token = form.cleaned_data.get('extra_id_token_' + field.name)
+    else:
+        userinfo = False
+        id_token = False
+    return userinfo, id_token
 
 
 @login_required

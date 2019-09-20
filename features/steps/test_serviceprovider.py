@@ -1,4 +1,4 @@
-from behave import when, then, given
+from behave import when
 
 
 @when(u'filling basic information form with invalid information')
@@ -44,7 +44,7 @@ def set_manual_configation_warning(context):
 
 
 @when(u'setting publish to test servers')
-def publish_to_prodcution_Server(context):
+def publish_to_prodcution_server(context):
     context.browser.check("test")
     context.browser.find_by_text('Save').first.click()
 

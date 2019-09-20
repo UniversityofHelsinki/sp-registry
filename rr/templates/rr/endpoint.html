@@ -31,7 +31,7 @@
       <td>{{ endpoint.get_binding_display }}</td>
       <td>{{ endpoint.location }}{% if endpoint.response_location %}<br>(<strong>{% trans "Response:" %}</strong> {{ endpoint.response_location }}){% endif %}</td>
       <td>{% if endpoint.index %}{{ endpoint.index }}{% endif %}{% if endpoint.is_default %} ({% trans "default" %}){% endif %}</td>
-      <td><div class="checkbox"><input type="checkbox" name="{{ endpoint.pk }}" id="id_endpoint_{{ endpoint.pk }}" /></div></td>
+      <td><div class="checkbox"><input type="checkbox" aria-label="{%  trans "Mark for removal" %}" name="{{ endpoint.pk }}" id="id_endpoint_{{ endpoint.pk }}" /></div></td>
     </tr>
 {% endfor %}
   </tbody>

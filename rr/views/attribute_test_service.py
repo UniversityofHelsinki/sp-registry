@@ -31,20 +31,7 @@ def attribute_test_service(request):
     for attribute in attributes:
         value = request.META.get(attribute.shib_env, '').encode('latin1').decode('utf-8', 'ignore')
         regex = attribute.regex_test
-        if value:
-            if regex:
-                try:
-                    RegexValidator(regex)(value)
-                    icon = "valid"
-                except ValidationError:
-                    icon = "invalid"
-            else:
-                icon = "valid"
-        else:
-            if attribute.test_service_required:
-                icon = "invalid"
-            else:
-                icon = "optional"
+        icon = _check_status(attribute, value, regex)
         if attribute.public_saml or value:
             object_list.append({'friendlyname': attribute.friendlyname,
                                 'name': attribute.name,
@@ -54,7 +41,27 @@ def attribute_test_service(request):
         logout_url = settings.ATTRIBUTE_TEST_SERVICE_LOGOUT_URL
     else:
         logout_url = None
-    return render(request, "attribute_test_service.html", {'object_list': object_list,
-                                                           'logout_url': logout_url,
-                                                           'shib_auth_context': request.META.get('Shib-AuthnContext-Class', ''),
-                                                           'shib_auth_method': request.META.get('Shib-Authentication-Method', '')})
+    return render(request, "attribute_test_service.html", {
+        'object_list': object_list,
+        'logout_url': logout_url,
+        'shib_auth_context': request.META.get('Shib-AuthnContext-Class', ''),
+        'shib_auth_method': request.META.get('Shib-Authentication-Method', '')
+    })
+
+
+def _check_status(attribute, value, regex):
+    if value:
+        if regex:
+            try:
+                RegexValidator(regex)(value)
+                icon = "valid"
+            except ValidationError:
+                icon = "invalid"
+        else:
+            icon = "valid"
+    else:
+        if attribute.test_service_required:
+            icon = "invalid"
+        else:
+            icon = "optional"
+    return icon

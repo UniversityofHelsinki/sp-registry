@@ -23,7 +23,7 @@
 {% for usergroup in object_list %}
     <tr>
       <th scope="row">{{ usergroup.name }}</th>
-      <td><div class="checkbox"><input type="checkbox" name="{{ usergroup.pk }}" class="" id="id_usergroup" /></div></td>
+      <td><div class="checkbox"><input type="checkbox" aria-label="{%  trans "Mark for removal" %}" name="{{ usergroup.pk }}" class="" id="id_usergroup" /></div></td>
     </tr>
 {% endfor %}
   </tbody>

@@ -19,15 +19,14 @@ def attributefilter_parser(filename, validate):
     root = tree.getroot()
     for a in root:
         if etree.QName(a.tag).localname == "AttributeFilterPolicy":
-            entityID = a.get("id")
-            if not entityID:
-                if etree.QName(a[0].tag).localname == "PolicyRequirementRule":
-                    entityID = a[0].get("value")
+            entity_id = a.get("id")
+            if not entity_id and etree.QName(a[0].tag).localname == "PolicyRequirementRule":
+                entity_id = a[0].get("value")
             sp = None
             try:
-                sp = ServiceProvider.objects.get(entity_id=entityID, end_at=None)
+                sp = ServiceProvider.objects.get(entity_id=entity_id, end_at=None)
             except ServiceProvider.DoesNotExist:
-                print("ServiceProvider does not exist: " + entityID)
+                print("ServiceProvider does not exist: " + entity_id)
             if sp:
                 for b in a:
                     if etree.QName(b.tag).localname == "AttributeRule":
@@ -48,10 +47,10 @@ def attributefilter_parser(filename, validate):
                                         validated=validated)
                                 else:
                                     print("Attribute " + attribute_name + " already exists for "
-                                          + entityID)
+                                          + entity_id)
                             except Attribute.DoesNotExist:
                                 print("Could not add attribute " + attribute_name + " for "
-                                      + entityID)
+                                      + entity_id)
 
 
 class Command(BaseCommand):

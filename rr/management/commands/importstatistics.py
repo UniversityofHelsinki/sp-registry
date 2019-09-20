@@ -55,22 +55,24 @@ class Command(BaseCommand):
             row = cursor.fetchone()
             if row is None:
                 break
-            sp = serviceproviders.filter(entity_id=row[0]).first()
-            if sp:
-                try:
-                    obj = Statistics.objects.get(sp=sp, date=row[1])
-                    if obj.logins != row[2]:
-                        obj.logins = row[2]
-                        obj.save()
-                        if verbose:
-                            print("UPDATED: %s: %s: %s" % (row[0], row[1], row[2]))
-                    else:
-                        if verbose:
-                            print("EXISTS: %s: %s: %s" % (row[0], row[1], row[2]))
-                except Statistics.DoesNotExist:
-                    Statistics.objects.create(sp=sp, date=row[1], logins=row[2])
-                    if verbose:
-                        print("CREATED: %s: %s: %s" % (row[0], row[1], row[2]))
+            _save_statistics(row, serviceproviders, verbose)
+
+
+def _save_statistics(row, serviceproviders, verbose):
+    sp = serviceproviders.filter(entity_id=row[0]).first()
+    if sp:
+        try:
+            obj = Statistics.objects.get(sp=sp, date=row[1])
+            if obj.logins != row[2]:
+                obj.logins = row[2]
+                obj.save()
+                status = "UPDATED"
             else:
-                if verbose:
-                    print("UNKNOWN SP: %s: %s: %s" % (row[0], row[1], row[2]))
+                status = "EXISTS"
+        except Statistics.DoesNotExist:
+            Statistics.objects.create(sp=sp, date=row[1], logins=row[2])
+            status = "CREATED"
+    else:
+        status = "UNKNOWN SP"
+    if verbose:
+        print("%s: %s: %s: %s" % (status, row[0], row[1], row[2]))

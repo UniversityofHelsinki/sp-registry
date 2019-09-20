@@ -28,10 +28,6 @@ ACTIVATE_SAML = True
 ACTIVATE_LDAP = True
 ACTIVATE_OIDC = True
 
-# Attribute test service
-ATTRIBUTE_TEST_SERVICE = True
-ATTRIBUTE_TEST_SERVICE_LOGOUT_URL = 'https://localhost:8080/testservice/Shibboleth.sso/Logout'
-
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 # Email address used as send address
 SERVER_EMAIL = 'noreply@example.org'
@@ -61,6 +57,7 @@ SAML_ATTR_AFFILIATION = 'shib_affiliation'
 # Uncomment to redirect logout to local Shibboleth logout
 # SHIBBOLETH_LOGOUT_URL = "/Shibboleth.sso/Logout"
 
+# Attribute test service
 ATTRIBUTE_TEST_SERVICE = True
 ATTRIBUTE_TEST_SERVICE_LOGOUT_URL = 'https://localhost/testservice/Shibboleth.sso/Logout'
 

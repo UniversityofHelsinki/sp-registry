@@ -26,7 +26,7 @@ class RedirectUriForm(ModelForm):
                 raise ValidationError(_('Web application URIs must begin with https: scheme'))
             if '#' in uri:
                 raise ValidationError(_('URIs must not contain fragments'))
-            if self.sp.application_type == 'native':
-                if uri.startswith('http') and not uri.startswith('http://localhost'):
-                    raise ValidationError(_('Native applications must use custom URI schemes or http: scheme with '
-                                            'localhost as the hostname.'))
+            if (self.sp.application_type == 'native' and  uri.startswith('http') and
+                    not uri.startswith('http://localhost')):
+                raise ValidationError(_('Native applications must use custom URI schemes or http: scheme with '
+                                        'localhost as the hostname.'))

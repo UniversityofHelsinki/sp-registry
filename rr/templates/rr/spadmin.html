@@ -28,13 +28,13 @@
       <td>{{ admin.first_name }}</td>
       <td>{{ admin.last_name }}</td>
       <td>{{ admin.email }}</td>
-      <td><div class="checkbox"><input type="checkbox" name="{{ admin.pk }}" class="" id="id_admin" /></div></td>
+      <td><div class="checkbox"><input type="checkbox" aria-label="{%  trans "Mark for removal" %}" name="{{ admin.pk }}" class="" id="id_admin" /></div></td>
     </tr>
 {% endfor %}
-  </form>
   </tbody>
 </table>
 <p><input class="btn btn-danger" type="submit" data-toggle="confirmation" name="remove_admin" value="{% trans "Remove selected" %}" /></p>
+</form>
 {% else %}
 <p>{% trans "No admins" %}</p>
 {% endif %}
@@ -57,13 +57,13 @@
       <td>{{ invite.email }}</td>
       <td>{{ invite.valid_until|date:'j.n.Y' }}</td>
       <td>{{ invite.creator.first_name }} {{ invite.creator.last_name }}</td>
-      <td><div class="checkbox"><input type="checkbox" name="{{ invite.pk }}" class="" id="id_invite" /></div></td>
+      <td><div class="checkbox"><input type="checkbox" aria-label="{%  trans "Mark for removal" %}" name="{{ invite.pk }}" class="" id="id_invite" /></div></td>
     </tr>
 {% endfor %}
-  </form>
   </tbody>
 </table>
 <p><input class="btn btn-danger" type="submit" data-toggle="confirmation" name="remove_invite" value="{% trans "Remove selected" %}" /></p>
+</form>
 {% else %}
 <p>{% trans "No invites" %}</p>
 {% endif %}
@@ -71,14 +71,14 @@
 <h2>{% trans "Add admin" %}</h2>
 {% if error %}
 <div class="alert alert-danger" role="alert">
-<p>{{ error }}</p>
+<p>{{ error }}</p>
 </div>
 {% endif %}
 {% if subject and message %}
 <h4>{% trans "Example message" %}</h4>
 {% trans "Subject" %}
 <div class="alert alert-info" role="alert">
-<pre>{{ subject }}</pre>
+<pre>{{ subject }}</pre>
 </div>
 {% trans "Body" %}
 <div class="alert alert-info" role="alert">

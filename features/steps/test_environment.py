@@ -1,4 +1,4 @@
-from behave import when, then, given
+from behave import given
 
 from django.contrib.auth.models import User
 from django.utils import timezone
@@ -68,7 +68,7 @@ def create_ldap_test_environment(context):
 
 
 @given(u'additional SP with admin exists')
-def create_additional_SP(context):
+def create_additional_sp(context):
     u = User.objects.all().first()
     sp = ServiceProvider.objects.create(entity_id="https://sp.example.net/sp",
                                         service_type="saml",

@@ -9,7 +9,7 @@ from lxml import etree
 from django.core.management.base import BaseCommand
 
 from rr.models.serviceprovider import ServiceProvider, SPAttribute
-from rr.utils.metadata_generator import metadata_generator_list
+from rr.utils.saml_metadata_generator import saml_metadata_generator_list
 
 
 def attributefilter_generate(element, sp, validated=True):
@@ -21,17 +21,17 @@ def attributefilter_generate(element, sp, validated=True):
     else:
         attributes = SPAttribute.objects.filter(sp=sp, end_at=None)
     if attributes:
-        AttributeFilterPolicy = etree.SubElement(element, "AttributeFilterPolicy",
-                                                 id="hy-default-" + sp.entity_id)
-        PolicyRequirementRule = etree.SubElement(AttributeFilterPolicy, "PolicyRequirementRule",
-                                                 value=sp.entity_id)
-        PolicyRequirementRule.attrib['{http://www.w3.org/2001/XMLSchema-instance}type'] = \
+        attribute_filter_policy = etree.SubElement(element, "AttributeFilterPolicy",
+                                                   id="hy-default-" + sp.entity_id)
+        policy_requirement_rule = etree.SubElement(attribute_filter_policy, "PolicyRequirementRule",
+                                                   value=sp.entity_id)
+        policy_requirement_rule.attrib['{http://www.w3.org/2001/XMLSchema-instance}type'] = \
             "basic:AttributeRequesterString"
         for attribute in attributes:
-            AttributeRule = etree.SubElement(AttributeFilterPolicy, "AttributeRule",
-                                             attributeID=attribute.attribute.attributeid)
-            PermitValueRule = etree.SubElement(AttributeRule, "PermitValueRule")
-            PermitValueRule.attrib['{http://www.w3.org/2001/XMLSchema-instance}type'] = "basic:ANY"
+            attribute_rule = etree.SubElement(attribute_filter_policy, "AttributeRule",
+                                              attributeID=attribute.attribute.attributeid)
+            permit_value_rule = etree.SubElement(attribute_rule, "PermitValueRule")
+            permit_value_rule.attrib['{http://www.w3.org/2001/XMLSchema-instance}type'] = "basic:ANY"
 
 
 class Command(BaseCommand):
@@ -66,7 +66,7 @@ class Command(BaseCommand):
                               "arguments")
         # Create XML containing selected EntityDescriptors
         if metadata_output:
-            metadata = metadata_generator_list(validated, privacypolicy, production, test, include)
+            metadata = saml_metadata_generator_list(validated, privacypolicy, production, test, include)
             with open(metadata_output, 'wb') as f:
                 f.write('<?xml version="1.0" encoding="UTF-8"?>\n'.encode('utf-8'))
                 # Hack for correcting namespace definition by removing prefix.
@@ -88,11 +88,7 @@ class Command(BaseCommand):
                 "classpath:/schema/shibboleth-2.0-afp-mf-saml.xsd"
             serviceproviders = ServiceProvider.objects.filter(end_at=None)
             for sp in serviceproviders:
-                if production and sp.production:
-                    attributefilter_generate(attributefilter, sp, validated)
-                elif test and sp.test:
-                    attributefilter_generate(attributefilter, sp, validated)
-                elif include and sp.entity_id in include:
+                if (production and sp.production) or (test and sp.test) or (include and sp.entity_id in include):
                     attributefilter_generate(attributefilter, sp, validated)
             with open(attributefilter_output, 'wb') as f:
                 f.write('<?xml version="1.0" encoding="UTF-8"?>\n'.encode('utf-8'))

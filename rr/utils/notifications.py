@@ -53,30 +53,34 @@ def admin_notification_created_sp(sp):
             logger.error("Admin notification email contained invalid headers.")
 
 
+def _render_validation_notification_message(sp):
+    if sp.service_type == "saml":
+        message = render_to_string('email/validation_notification_saml.txt',
+                                   {'entity_id': sp.entity_id})
+    elif sp.service_type == "ldap":
+        message = render_to_string('email/validation_notification_ldap.txt',
+                                   {'entity_id': sp.entity_id})
+    else:
+        message = render_to_string('email/validation_notification.txt',
+                                   {'entity_id': sp.entity_id})
+    return message
+
+
 def validation_notification(sp):
     """
     Sends validation message to SP admins.
     """
-    if (hasattr(settings, 'VALIDATION_NOTIFICATION') and settings.VALIDATION_NOTIFICATION):
+    if hasattr(settings, 'VALIDATION_NOTIFICATION') and settings.VALIDATION_NOTIFICATION:
         admins = sp.admins.all()
         admin_emails = []
         for admin in admins:
             admin_emails.append(admin.email)
         if sp and admin_emails:
             subject = render_to_string('email/validation_notification_subject.txt')
-            if sp.service_type == "saml":
-                message = render_to_string('email/validation_notification_saml.txt',
-                                           {'entity_id': sp.entity_id})
-            elif sp.service_type == "ldap":
-                message = render_to_string('email/validation_notification_ldap.txt',
-                                           {'entity_id': sp.entity_id})
-            else:
-                message = render_to_string('email/validation_notification.txt',
-                                           {'entity_id': sp.entity_id})
+            message = _render_validation_notification_message(sp)
             try:
                 send_mail(subject, message, settings.SERVER_EMAIL, admin_emails, fail_silently=False)
             except SMTPException:
                 logger.warning("SMTP error when sending validation notification.")
             except BadHeaderError:
                 logger.error("Validation notification email contained invalid headers.")
-

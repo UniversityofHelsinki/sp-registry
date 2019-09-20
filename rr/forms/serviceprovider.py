@@ -1,6 +1,6 @@
 import re
 
-from django.core.validators import URLValidator, ValidationError
+from django.core.validators import ValidationError
 from django.db.models import Q
 from django.forms import ModelForm, Form, BooleanField
 from django.forms.fields import CharField
@@ -75,9 +75,9 @@ class BasicInformationForm(ModelForm):
             raise ValidationError(_("Name in English or in Finnish is required."))
 
 
-class TechnicalInformationForm(ModelForm):
+class SamlTechnicalInformationForm(ModelForm):
     """
-    Form for updating technical information from ServiceProvider object
+    Form for updating SAML technical information from ServiceProvider object
     """
 
     class Meta:
@@ -132,7 +132,7 @@ class TechnicalInformationForm(ModelForm):
 
     def __init__(self, *args, **kwargs):
         self.request = kwargs.pop('request', None)
-        super(TechnicalInformationForm, self).__init__(*args, **kwargs)
+        super(SamlTechnicalInformationForm, self).__init__(*args, **kwargs)
         if not self.request.user.is_superuser:
             # Limit choices to public and current values
             self.fields['nameidformat'].queryset = NameIDFormat.objects.filter(
@@ -144,10 +144,9 @@ class TechnicalInformationForm(ModelForm):
         Allow only superusers set entity id something else than URL.
         """
         entity_id = self.cleaned_data['entity_id']
-        if not self.request.user.is_superuser and "entity_id" in self.changed_data:
-            if ":" not in entity_id:
-                raise ValidationError(_("Entity Id should be URI, please contact IdP admins if "
-                                        "this is not possible."))
+        if not self.request.user.is_superuser and "entity_id" in self.changed_data and ":" not in entity_id:
+            raise ValidationError(_("Entity Id should be URI, please contact IdP admins if "
+                                    "this is not possible."))
         if ServiceProvider.objects.filter(entity_id=entity_id, end_at=None,
                                           history=None).exclude(pk=self.instance.pk):
             raise ValidationError(_("Entity Id already exists"))
@@ -233,13 +232,10 @@ class LdapTechnicalInformationForm(ModelForm):
         service_account_contact = cleaned_data.get("service_account_contact")
         local_storage_passwords = cleaned_data.get("local_storage_passwords")
         local_storage_passwords_info = cleaned_data.get("local_storage_passwords_info")
-        if service_account:
-            if not service_account_contact:
-                self.add_error('service_account_contact', "Please give contact information.")
-        if local_storage_passwords:
-            if not local_storage_passwords_info:
-                self.add_error('local_storage_passwords_info',
-                               "Please give a reason for saving passwords.")
+        if service_account and not service_account_contact:
+            self.add_error('service_account_contact', "Please give contact information.")
+        if local_storage_passwords and not local_storage_passwords_info:
+            self.add_error('local_storage_passwords_info', "Please give a reason for saving passwords.")
 
 
 class OidcTechnicalInformationForm(ModelForm):
@@ -352,10 +348,9 @@ class SamlServiceProviderCreateForm(ModelForm):
         Allow only superusers set entity id something else than URL.
         """
         entity_id = self.cleaned_data['entity_id']
-        if not self.request.user.is_superuser and "entity_id" in self.changed_data:
-            if ":" not in entity_id:
-                raise ValidationError(_("Entity Id should be URI, please contact IdP admins if "
-                                        "this is not possible."))
+        if not self.request.user.is_superuser and "entity_id" in self.changed_data and ":" not in entity_id:
+            raise ValidationError(_("Entity Id should be URI, please contact IdP admins if "
+                                    "this is not possible."))
 
         if ServiceProvider.objects.filter(entity_id=entity_id, end_at=None,
                                           history=None).exclude(pk=self.instance.pk):

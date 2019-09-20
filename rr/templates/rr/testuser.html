@@ -29,7 +29,7 @@
       <th scope="row"><a href="{% url 'testuser-attribute-data' testuser.pk %}">{{ testuser.username }}</a></th>
       <td>{{ testuser.firstname }}</td>
       <td>{{ testuser.lastname }}</td>
-      <td><div class="checkbox"><input type="checkbox" name="{{ testuser.pk }}" class="" id="id_user" /></div></td>
+      <td><div class="checkbox"><input type="checkbox" aria-label="{%  trans "Mark for removal" %}" name="{{ testuser.pk }}" class="" id="id_user" /></div></td>
     </tr>
 {% endfor %}
   </tbody>
@@ -61,7 +61,7 @@
       <th scope="row"><a href="{% url 'testuser-attribute-data' testuser.pk %}">{{ testuser.username }}</a></th>
       <td>{{ testuser.firstname }}</td>
       <td>{{ testuser.lastname }}</td>
-      <td><div class="checkbox"><input type="checkbox" name="{{ testuser.pk }}" class="" id="id_user" /></div></td>
+      <td><div class="checkbox"><input type="checkbox" aria-label="{%  trans "Mark for removal" %}" name="{{ testuser.pk }}" class="" id="id_user" /></div></td>
     </tr>
 {% endfor %}
   </tbody>

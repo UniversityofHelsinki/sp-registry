@@ -1,3 +1,4 @@
+import binascii
 import logging
 
 from cryptography.hazmat.primitives import hashes
@@ -13,7 +14,7 @@ from django.utils.translation import ugettext as _
 from rr.forms.certificate import CertificateForm
 from rr.models.certificate import Certificate, load_certificate
 from rr.models.serviceprovider import ServiceProvider
-import binascii
+from rr.utils.serviceprovider import get_service_provider
 
 logger = logging.getLogger(__name__)
 
@@ -71,52 +72,53 @@ def certificate_list(request, pk):
 
     :template:`rr/certificate.html`
     """
-    try:
-        if request.user.is_superuser:
-            sp = ServiceProvider.objects.get(pk=pk, end_at=None, service_type="saml")
-        else:
-            sp = ServiceProvider.objects.get(pk=pk, admins=request.user, end_at=None,
-                                             service_type="saml")
-    except ServiceProvider.DoesNotExist:
-        logger.debug("Tried to access unauthorized service provider")
-        raise Http404("Service provider does not exist")
+    sp = get_service_provider(pk, request.user, service_type=["saml"])
     form = CertificateForm(sp=sp)
     if request.method == "POST":
         if "add_cert" in request.POST:
-            form = CertificateForm(request.POST, sp=sp)
-            if form.is_valid():
-                certificate = form.cleaned_data['certificate']
-                signing = form.cleaned_data['signing']
-                encryption = form.cleaned_data['encryption']
-                if not signing and not encryption:
-                    signing = True
-                    encryption = True
-                if Certificate.objects.add_certificate(certificate, sp, signing=signing,
-                                                       encryption=encryption):
-                    form = CertificateForm(sp=sp)
-                    sp.save_modified()
-                    logger.info("Certificate added for {sp} by {user}"
-                                .format(sp=sp, user=request.user))
-                    messages.add_message(request, messages.INFO, _('Certificate added.'))
-                else:
-                    messages.add_message(request, messages.WARNING,
-                                         _('Could not add certificate.'))
+            form = _add_certificate(request, sp)
         elif "remove_certificate" in request.POST:
-            for key, value in request.POST.dict().items():
-                if value == "on":
-                    cert = Certificate.objects.get(pk=key)
-                    if cert.sp == sp:
-                        cert.end_at = timezone.now()
-                        cert.save()
-                        sp.save_modified()
-                        logger.info("Certificate removed from {sp} by {user}"
-                                    .format(sp=sp, user=request.user))
-                        messages.add_message(request, messages.INFO,
-                                             _('Certificate removed: ') + cert.cn)
+            _remove_certificates(request, sp)
     certificates = Certificate.objects.filter(sp=sp, end_at=None)
     return render(request, "rr/certificate.html", {'object_list': certificates,
                                                    'form': form,
                                                    'object': sp})
+
+
+def _add_certificate(request, sp):
+    form = CertificateForm(request.POST, sp=sp)
+    if form.is_valid():
+        certificate = form.cleaned_data['certificate']
+        signing = form.cleaned_data['signing']
+        encryption = form.cleaned_data['encryption']
+        if not signing and not encryption:
+            signing = True
+            encryption = True
+        if Certificate.objects.add_certificate(certificate, sp, signing=signing,
+                                               encryption=encryption):
+            form = CertificateForm(sp=sp)
+            sp.save_modified()
+            logger.info("Certificate added for {sp} by {user}"
+                        .format(sp=sp, user=request.user))
+            messages.add_message(request, messages.INFO, _('Certificate added.'))
+        else:
+            messages.add_message(request, messages.WARNING,
+                                 _('Could not add certificate.'))
+    return form
+
+
+def _remove_certificates(request, sp):
+    for key, value in request.POST.dict().items():
+        if value == "on":
+            cert = Certificate.objects.get(pk=key)
+            if cert.sp == sp:
+                cert.end_at = timezone.now()
+                cert.save()
+                sp.save_modified()
+                logger.info("Certificate removed from {sp} by {user}"
+                            .format(sp=sp, user=request.user))
+                messages.add_message(request, messages.INFO,
+                                     _('Certificate removed: ') + cert.cn)
 
 
 @login_required
@@ -150,7 +152,7 @@ def certificate_info(request, pk):
     """
     try:
         certificate = Certificate.objects.get(pk=pk, end_at=None)
-    except certificate.DoesNotExist:
+    except Certificate.DoesNotExist:
         raise Http404(_("Certificate provided does not exist"))
     if not request.user.is_superuser and not ServiceProvider.objects.filter(pk=certificate.sp.pk,
                                                                             admins=request.user,

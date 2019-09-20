@@ -24,12 +24,10 @@
     </tr>
   </thead>
   <tbody>
-  <form action="" method='POST'>
-  {% csrf_token %}
 {% for object in object_list %}
       {% if user.is_superuser %}{% if object|get_production_status or object.production %}{% if object.modified %}<tr>{% else %}<tr class="collapse out collapsesaml">{% endif %}{% else %}<tr class="collapse out collapsesaml">{% endif %}{% else %}<tr>{% endif %}
       <th scope="row">{% if object.display_identifier|length > 60 %}<a data-toggle="tooltip" data-placement="top" title="{{ display_identifier }}" href="/summary/{{ object.pk }}/">{{ object.display_identifier|truncatechars:60 }}{% else %}<a href="/summary/{{ object.pk }}/">{{ object.display_identifier }}{% endif %}</a></th>
-      {% if object.name|length > 50 %}<td data-toggle="tooltip" data-placement="top" title="{{ object.name }}" href="/summary/{{ object.pk }}/">{{ object.name|truncatechars:50 }}{% else %}<td>{{ object.name }}{% endif %}</td>
+      {% if object.name|length > 50 %}<td data-toggle="tooltip" data-placement="top" title="{{ object.name }}">{{ object.name|truncatechars:50 }}{% else %}<td>{{ object.name }}{% endif %}</td>
       {% if object|get_production_status %}<td class="text-success">&#10004;{% else %}<td class="text-danger">&#10005;{% endif %}</td>
       {% if object.test %}<td class="text-success">&#10004;{% else %}<td class="text-danger">&#10005;{% endif %}</td>
       {% if object.validated and not object.modified %}<td class="table-success">{% trans "OK "%}</td>{% elif not object|get_production_status and not object.production %}<td class="table-info">{% trans "Modified "%}</td>{% else %}<td class="table-warning">{% trans "Modified "%}</td>{% endif %}{% if user.is_superuser %}
@@ -42,7 +40,6 @@
       <td></td>
     </tr>
 {% endfor %}
-  </form>
   </tbody>
 </table>
 {% endif %}
@@ -63,8 +60,6 @@
     </tr>
   </thead>
   <tbody>
-  <form action="" method='POST'>
-  {% csrf_token %}
 {% for object in oidc_providers %}
     {% if user.is_superuser %}{% if object|get_production_status or object.production %}{% if object.modified %}<tr>{% else %}<tr class="collapse out collapseoidc">{% endif %}{% else %}<tr class="collapse out collapseoidc">{% endif %}{% else %}<tr>{% endif %}
       <th scope="row">{% if object.display_identifier|length > 60 %}<a data-toggle="tooltip" data-placement="top" title="{{ display_identifier }}" href="/summary/{{ object.pk }}/">{{ object.display_identifier|truncatechars:60 }}{% else %}<a href="/summary/{{ object.pk }}/">{{ object.display_identifier }}{% endif %}</a></th>
@@ -80,7 +75,6 @@
       <td></td>
     </tr>
 {% endfor %}
-  </form>
   </tbody>
 </table>
 {% endif %}
@@ -101,12 +95,10 @@
     </tr>
   </thead>
   <tbody>
-  <form action="" method='POST'>
-  {% csrf_token %}
 {% for object in ldap_providers %}
     {% if user.is_superuser %}{% if object|get_production_status or object.production %}{% if object.modified %}<tr>{% else %}<tr class="collapse out collapseldap">{% endif %}{% else %}<tr class="collapse out collapseldap">{% endif %}{% else %}<tr>{% endif %}
       <th scope="row">{% if object.display_identifier|length > 60 %}<a data-toggle="tooltip" data-placement="top" title="{{ display_identifier }}" href="/summary/{{ object.pk }}/">{{ object.display_identifier|truncatechars:60 }}{% else %}<a href="/summary/{{ object.pk }}/">{{ object.display_identifier }}{% endif %}</a></th>
-      {% if object.name|length > 50 %}<td data-toggle="tooltip" data-placement="top" title="{{ object.name }}" href="/summary/{{ object.pk }}/">{{ object.name|truncatechars:50 }}{% else %}<td>{{ object.name }}{% endif %}</td>
+      {% if object.name|length > 50 %}<td data-toggle="tooltip" data-placement="top" title="{{ object.name }}">{{ object.name|truncatechars:50 }}{% else %}<td>{{ object.name }}{% endif %}</td>
       {% if object.production %}<td class="text-success">&#10004;{% else %}<td class="text-danger">&#10005;{% endif %}</td>
       {% if object.validated and not object.modified %}<td class="table-success">{% trans "OK "%}</td>{% else %}<td class="table-warning">{% trans "Modified "%}</td>{% endif %}{% if user.is_superuser %}
       {% if not object.admins.count %}<td class="text-danger">&#10005;{% else %}<td>{{ object.admins.count }}{% endif %}  {% if object.keystore_set.count %}({{ object.keystore_set.count }}){% endif %}</td>{% endif %}
@@ -118,7 +110,6 @@
       <td></td>
     </tr>
 {% endfor %}
-  </form>
   </tbody>
 </table>
 {% endif %}

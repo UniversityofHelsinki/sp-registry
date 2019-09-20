@@ -23,7 +23,7 @@
 {% for uri in object_list %}
     <tr>
       <th scope="row">{{ uri.uri }}</th>
-      <td><div class="checkbox"><input type="checkbox" name="{{ uri.pk }}" class="" id="id_redirecturi" /></div></td>
+      <td><div class="checkbox"><input type="checkbox" aria-label="{%  trans "Mark for removal" %}" name="{{ uri.pk }}" class="" id="id_redirecturi" /></div></td>
     </tr>
 {% endfor %}
   </tbody>

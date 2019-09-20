@@ -1,4 +1,5 @@
-from behave import when, then, given
+from behave import when
+
 
 @when(u'filling ldap technical information form with invalid information')
 def fill_techical_form_invalid(context):

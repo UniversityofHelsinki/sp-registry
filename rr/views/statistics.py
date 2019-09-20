@@ -4,11 +4,11 @@ from datetime import date, timedelta
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import PermissionDenied
 from django.db.models import Sum
-from django.http.response import Http404
 from django.shortcuts import render
 
 from rr.models.statistics import Statistics
 from rr.models.serviceprovider import ServiceProvider
+from rr.utils.serviceprovider import get_service_provider
 
 logger = logging.getLogger(__name__)
 
@@ -31,15 +31,7 @@ def statistics_list(request, pk):
 
     :template:`rr/statistics.html`
     """
-    try:
-        if request.user.is_superuser:
-            sp = ServiceProvider.objects.get(pk=pk, end_at=None, service_type="saml")
-        else:
-            sp = ServiceProvider.objects.get(pk=pk, admins=request.user, end_at=None,
-                                             service_type="saml")
-    except ServiceProvider.DoesNotExist:
-        logger.debug("Tried to access unauthorized service provider")
-        raise Http404("Service provider does not exist")
+    sp = get_service_provider(pk, request.user, service_type=["saml"])
     try:
         days = int(request.GET.get('days', 31))
     except ValueError:

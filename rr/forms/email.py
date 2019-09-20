@@ -13,7 +13,8 @@ class EmailSelectForm(Form):
     Form for selecting email addresses
     """
     SERVICETYPECHOICES = (('saml', _('SAML / Shibboleth')),
-                          ('ldap', _('LDAP')))
+                          ('ldap', _('LDAP')),
+                          ('oidc', _('OIDC')))
     service_type = MultipleChoiceField(required=True, widget=CheckboxSelectMultiple,
                                        choices=SERVICETYPECHOICES)
     production_sp = BooleanField(required=False, help_text=_("Select production SPs."))

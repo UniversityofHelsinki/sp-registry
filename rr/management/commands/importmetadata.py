@@ -7,7 +7,7 @@ from lxml import etree
 
 from django.core.management.base import BaseCommand
 
-from rr.utils.metadata_parser import metadata_parser
+from rr.utils.saml_metadata_parser import saml_metadata_parser
 
 
 class Command(BaseCommand):
@@ -38,7 +38,7 @@ class Command(BaseCommand):
                 else:
                     root = tree.getroot()
                     for entity in root:
-                        sp, errors = metadata_parser(entity, overwrite, verbosity, validate,
-                                                     disable)
+                        sp, errors = saml_metadata_parser(entity, overwrite, verbosity, validate,
+                                                          disable)
                         for error in errors:
                             print(error)

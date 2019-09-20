@@ -73,13 +73,13 @@
 {% for f in object.get_basic_fields %}
 {% if history_object %}
     {% if f.value != history_object|get_item:f.name %}<tr class="table-warning">{% else %}<tr>{% endif %}
-      <td scope="row">{{ f.label }}</td>
+      <td>{{ f.label }}</td>
       {% if f.value == True %}<td class="text-success">&#10004;{% elif f.value == False %}<td class="text-danger">&#10005;{% else %}<td>{{ f.value }}{% endif %}</td>
       {% if history_object|get_item:f.name == True %}<td class="text-success">&#10004;{% elif history_object|get_item:f.name == False %}<td class="text-danger">&#10005;{% else %}<td>{{ history_object|get_item:f.name }}{% endif %}</td>
     </tr>
 {% else %}
     <tr>
-      <td scope="row">{{ f.label }}</td>
+      <td>{{ f.label }}</td>
       {% if f.value == True %}<td class="text-success">&#10004;{% elif f.value == False %}<td class="text-danger">x{% else %}<td>{{ f.value }}{% endif %}</td>
     </tr>
 {% endif %}
@@ -101,26 +101,26 @@
 {% for f in object.get_technical_fields %}
 {% if history_object %}
     {% if f.value != history_object|get_item:f.name %}<tr class="table-warning">{% else %}<tr>{% endif %}
-      <td scope="row">{{ f.label }}</td>
+      <td>{{ f.label }}</td>
       {% if f.value == True %}<td class="text-success">&#10004;{% elif f.value == False %}<td class="text-danger">x{% else %}<td>{{ f.value }}{% endif %}</td>
       {% if history_object|get_item:f.name == True %}<td class="text-success">&#10004;{% elif history_object|get_item:f.name == False %}<td class="text-danger">&#10005;{% else %}<td>{{ history_object|get_item:f.name }}{% endif %}</td>
     </tr>
 {% else %}
     <tr>
-      <td scope="row">{{ f.label }}</td>
+      <td>{{ f.label }}</td>
       {% if f.value == True %}<td class="text-success">&#10004;{% elif f.value == False %}<td class="text-danger">x{% else %}<td>{{ f.value }}{% endif %}</td>
     </tr>
 {% endif %}
 {% endfor %}
 {% if history_object %}
     {% if not object.nameidformat.all|compare_querysets:history_object.nameidformat.all %}<tr class="table-warning">{% else %}<tr>{% endif %}
-      <td scope="row">{% trans "Name Identifier Format" %}</td>
+      <td>{% trans "Name Identifier Format" %}</td>
       <td>{% for n in object.nameidformat.all %}{{ n.nameidformat }}{% if not forloop.last %}<br>{% endif %}{% endfor %}</td>
       <td>{% for n in history_object.nameidformat.all %}{{ n.nameidformat }}{% if not forloop.last %}<br>{% endif %}{% endfor %}</td>
     </tr>
 {% else %}
     <tr>
-      <td scope="row">{% trans "Name Identifier Format" %}</td>
+      <td>{% trans "Name Identifier Format" %}</td>
       <td>{% for n in object.nameidformat.all %}{{ n.nameidformat }}{% if not forloop.last %}<br>{% endif %}{% endfor %}</td>
     </tr>
 {% endif %}
@@ -142,13 +142,13 @@
 {% for f in object.get_ldap_technical_fields %}
 {% if history_object %}
     {% if f.value != history_object|get_item:f.name %}<tr class="table-warning">{% else %}<tr>{% endif %}
-      <td scope="row">{{ f.label }}</td>
+      <td>{{ f.label }}</td>
       {% if f.value == True %}<td class="text-success">&#10004;{% elif f.value == False %}<td class="text-danger">x{% else %}<td>{{ f.value }}{% endif %}</td>
       {% if history_object|get_item:f.name == True %}<td class="text-success">&#10004;{% elif history_object|get_item:f.name == False %}<td class="text-danger">&#10005;{% else %}<td>{{ history_object|get_item:f.name }}{% endif %}</td>
     </tr>
 {% else %}
     <tr>
-      <td scope="row">{{ f.label }}</td>
+      <td>{{ f.label }}</td>
       {% if f.value == True %}<td class="text-success">&#10004;{% elif f.value == False %}<td class="text-danger">x{% else %}<td>{{ f.value }}{% endif %}</td>
     </tr>
 {% endif %}
@@ -171,44 +171,44 @@
 {% for f in object.get_oidc_technical_fields %}
 {% if history_object %}
     {% if f.value != history_object|get_item:f.name %}<tr class="table-warning">{% else %}<tr>{% endif %}
-      <td scope="row">{{ f.label }}</td>
+      <td>{{ f.label }}</td>
       {% if f.value == True %}<td class="text-success">&#10004;{% elif f.value == False %}<td class="text-danger">x{% else %}<td>{{ f.value }}{% endif %}</td>
       {% if history_object|get_item:f.name == True %}<td class="text-success">&#10004;{% elif history_object|get_item:f.name == False %}<td class="text-danger">&#10005;{% else %}<td>{{ history_object|get_item:f.name }}{% endif %}</td>
     </tr>
 {% else %}
     <tr>
-      <td scope="row">{{ f.label }}</td>
+      <td>{{ f.label }}</td>
       {% if f.value == True %}<td class="text-success">&#10004;{% elif f.value == False %}<td class="text-danger">x{% else %}<td>{{ f.value }}{% endif %}</td>
     </tr>
 {% endif %}
 {% endfor %}
 {% if history_object %}
     {% if not object.grant_types.all|compare_querysets:history_object.grant_types.all %}<tr class="table-warning">{% else %}<tr>{% endif %}
-      <td scope="row">{% trans "Grant types" %}</td>
+      <td>{% trans "Grant types" %}</td>
       <td>{% for n in object.grant_types.all %}{{ n.name }}{% if not forloop.last %}<br>{% endif %}{% endfor %}</td>
       <td>{% for n in history_object.grant_types.all %}{{ n.name }}{% if not forloop.last %}<br>{% endif %}{% endfor %}</td>
     </tr>
     {% if not object.response_types.all|compare_querysets:history_object.response_types.all %}<tr class="table-warning">{% else %}<tr>{% endif %}
-      <td scope="row">{% trans "Response types" %}</td>
+      <td>{% trans "Response types" %}</td>
       <td>{% for n in object.response_types.all %}{{ n.name }}{% if not forloop.last %}<br>{% endif %}{% endfor %}</td>
       <td>{% for n in history_object.response_types.all %}{{ n.name }}{% if not forloop.last %}<br>{% endif %}{% endfor %}</td>
     </tr>
     {% if not object.oidc_scopes.all|compare_querysets:history_object.oidc_scopes.all %}<tr class="table-warning">{% else %}<tr>{% endif %}
-      <td scope="row">{% trans "Scopes" %}</td>
+      <td>{% trans "Scopes" %}</td>
       <td>{% for n in object.oidc_scopes.all %}{{ n.name }}{% if not forloop.last %}<br>{% endif %}{% endfor %}</td>
       <td>{% for n in history_object.oidc_scopes.all %}{{ n.name }}{% if not forloop.last %}<br>{% endif %}{% endfor %}</td>
     </tr>
 {% else %}
     <tr>
-      <td scope="row">{% trans "Grant types" %}</td>
+      <td>{% trans "Grant types" %}</td>
       <td>{% for n in object.grant_types.all %}{{ n.name }}{% if not forloop.last %}<br>{% endif %}{% endfor %}</td>
     </tr>
     <tr>
-      <td scope="row">{% trans "Response types" %}</td>
+      <td>{% trans "Response types" %}</td>
       <td>{% for n in object.response_types.all %}{{ n.name }}{% if not forloop.last %}<br>{% endif %}{% endfor %}</td>
     </tr>
     <tr>
-      <td scope="row">{% trans "Scopes" %}</td>
+      <td>{% trans "Scopes" %}</td>
       <td>{% for n in object.oidc_scopes.all %}{{ n.name }}{% if not forloop.last %}<br>{% endif %}{% endfor %}</td>
     </tr>
 {% endif %}
@@ -226,7 +226,7 @@
   <tbody>
 {% for a in redirecturis %}
     {% if a.end_at %}<tr class="table-danger">{% elif not a.validated %}<tr class="table-warning">{% else %}<tr>{% endif %}
-      <td scope="row">{{ a.uri }}</td>
+      <td>{{ a.uri }}</td>
     </tr>
 {% endfor %}
   </tbody>
@@ -244,7 +244,7 @@
   <tbody>
 {% for o in object.admins.all %}
     <tr>
-      <td scope="row">{{ o.first_name }} {{ o.last_name }}</td>
+      <td>{{ o.first_name }} {{ o.last_name }}</td>
       <td>{{ o.email }}</td>
     </tr>
 {% endfor %}
@@ -268,9 +268,9 @@
 {% for a in attributes %}
     {% if a.end_at %}<tr class="table-danger">{% elif not a.validated %}<tr class="table-warning">{% else %}<tr>{% endif %}
 {% if object.service_type == "oidc" %}
-      <td scope="row">{{ a.attribute }}{% if a.attribute.friendlyname != a.attribute.oidc_claim %} ({{  a.attribute.oidc_claim }}){% endif %}</td>
+      <td>{{ a.attribute }}{% if a.attribute.friendlyname != a.attribute.oidc_claim %} ({{  a.attribute.oidc_claim }}){% endif %}</td>
 {% else %}
-      <td scope="row">{{ a.attribute }}</td>
+      <td>{{ a.attribute }}</td>
 {% endif %}
       <td>{{ a.reason }}</td>
 {% if object.service_type == "oidc" %}
@@ -295,7 +295,7 @@
   <tbody>
 {% for a in certificates %}
     {% if a.end_at %}<tr class="table-danger">{% elif not a.validated %}<tr class="table-warning">{% else %}<tr>{% endif %}
-      <td scope="row">{{ a.valid_until }}</td>
+      <td>{{ a.valid_until }}</td>
       <td>{{ a.valid_from }}</td>
       <td>{{ a.key_size }}</td>
     </tr>
@@ -317,7 +317,7 @@
   <tbody>
 {% for a in contacts %}
     {% if a.end_at %}<tr class="table-danger">{% elif not a.validated %}<tr class="table-warning">{% else %}<tr>{% endif %}
-      <td scope="row">{{ a.get_type_display }}</td>
+      <td>{{ a.get_type_display }}</td>
       <td>{{ a.firstname }}</td>
       <td>{{ a.lastname }}</td>
       <td>{{ a.email }}</td>
@@ -360,7 +360,7 @@
   <tbody>
 {% for a in usergroups %}
     {% if a.end_at %}<tr class="table-danger">{% elif not a.validated %}<tr class="table-warning">{% else %}<tr>{% endif %}
-      <td scope="row">{{ a.name }}</td>
+      <td>{{ a.name }}</td>
     </tr>
 {% endfor %}
   </tbody>  

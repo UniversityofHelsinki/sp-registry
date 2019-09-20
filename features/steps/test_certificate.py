@@ -1,4 +1,4 @@
-from behave import when, then, given
+from behave import when
 
 
 @when(u'filling certificate form with invalid certificate')

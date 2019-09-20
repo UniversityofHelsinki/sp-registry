@@ -292,13 +292,13 @@ def ldap_oldcsv_parser(entity, overwrite, verbosity, validate=False):
                 if verbosity > 1:
                     errors.append(name + " : " + _("Name already exists, overwriting"))
         except ServiceProvider.DoesNotExist:
-            entityID = new_ldap_entity_id_from_name(name)
+            entity_id = new_ldap_entity_id_from_name(name)
             if validate:
-                sp = ServiceProvider.objects.create(entity_id=entityID, name_fi=name,
+                sp = ServiceProvider.objects.create(entity_id=entity_id, name_fi=name,
                                                     service_type="ldap", validated=timezone.now(),
                                                     modified=False)
             else:
-                sp = ServiceProvider.objects.create(entity_id=entityID, name_fi=name,
+                sp = ServiceProvider.objects.create(entity_id=entity_id, name_fi=name,
                                                     service_type="ldap", validated=None,
                                                     modified=True)
             if verbosity > 3:

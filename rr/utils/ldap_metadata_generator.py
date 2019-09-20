@@ -1,12 +1,14 @@
 """
 Functions for genereating metadata of service providers
 """
+import logging
+
+from lxml import etree
+from django.db.models import Q
 
 from rr.models.serviceprovider import SPAttribute, ServiceProvider
 from rr.models.usergroup import UserGroup
-from lxml import etree
-import logging
-from django.db.models import Q
+from rr.utils.metadata_generator_common import get_entity
 
 logger = logging.getLogger(__name__)
 
@@ -20,7 +22,8 @@ def ldap_metadata_usergroups(element, sp, validation_date):
     validation_date: if None, using unvalidated metadata
     """
     if validation_date:
-        usergroups = UserGroup.objects.filter(sp=sp).filter(Q(end_at=None) | Q(end_at__gt=validation_date)).exclude(validated=None)
+        usergroups = UserGroup.objects.filter(sp=sp).filter(Q(end_at=None) |
+                                                            Q(end_at__gt=validation_date)).exclude(validated=None)
     else:
         usergroups = UserGroup.objects.filter(sp=sp, end_at=None)
     entity = etree.SubElement(element, "UserGroups")
@@ -38,7 +41,8 @@ def ldap_metadata_attributes(element, sp, validation_date):
     validation_date: if None, using unvalidated metadata
     """
     if validation_date:
-        attributes = SPAttribute.objects.filter(sp=sp).filter(Q(end_at=None) | Q(end_at__gt=validation_date)).exclude(validated=None)
+        attributes = SPAttribute.objects.filter(sp=sp).filter(Q(end_at=None) |
+                                                              Q(end_at__gt=validation_date)).exclude(validated=None)
     else:
         attributes = SPAttribute.objects.filter(sp=sp, end_at=None)
     attribute_groups = attributes.order_by().values_list('attribute__group').distinct()
@@ -62,69 +66,36 @@ def ldap_metadata_generator(sp, validated=True, tree=None):
 
     return tree
     """
-
-    if validated and not sp.validated:
-        history = ServiceProvider.objects.filter(history=sp.pk).exclude(validated=None).last()
-        if not history:
-            return tree
-        validation_date = history.validated
-    else:
-        history = None
-        if validated:
-            validation_date = sp.validated
-        else:
-            validation_date = None
-    if history:
-        entity_id = history.entity_id
-        server_names = history.server_names
-    else:
-        entity_id = sp.entity_id
-        server_names = sp.server_names
+    provider, history, validation_date = get_entity(sp, validated)
+    if not provider:
+        return tree
     if validation_date:
-        entity = etree.SubElement(tree, "Entity", ID=entity_id, validated=validation_date.strftime('%Y-%m-%dT%H:%M:%S%z'))
+        entity = etree.SubElement(tree, "Entity", ID=provider.entity_id,
+                                  validated=validation_date.strftime('%Y-%m-%dT%H:%M:%S%z'))
     else:
-        entity = etree.SubElement(tree, "Entity", ID=entity_id, validated="false")
-    if server_names:
+        entity = etree.SubElement(tree, "Entity", ID=provider.entity_id, validated="false")
+    if provider.server_names:
         servers_element = etree.SubElement(entity, "Servers")
-        servers = server_names.splitlines()
+        servers = provider.server_names.splitlines()
         for server in servers:
             etree.SubElement(servers_element, "Server", name=server)
-    if history:
-        etree.SubElement(entity, "TargetGroup", value=history.target_group)
-        if history.service_account:
-            etree.SubElement(entity, "ServiceAccount", value="true", contact=history.service_account_contact)
-        else:
-            etree.SubElement(entity, "ServiceAccount", value="false")
-        if history.local_storage_users:
-            etree.SubElement(entity, "LocalStorageUsers", value="true")
-        else:
-            etree.SubElement(entity, "LocalStorageUsers", value="false")
-        if history.local_storage_groups:
-            etree.SubElement(entity, "LocalStorageGroups", value="true")
-        else:
-            etree.SubElement(entity, "LocalStorageGroups", value="false")
-        if history.can_access_all_ldap_groups:
-            etree.SubElement(entity, "CanAccessAllLdapGroups", value="true")
-        else:
-            etree.SubElement(entity, "CanAccessAllLdapGroups", value="false")
+    etree.SubElement(entity, "TargetGroup", value=provider.target_group)
+    if provider.service_account:
+        etree.SubElement(entity, "ServiceAccount", value="true", contact=provider.service_account_contact)
     else:
-        etree.SubElement(entity, "TargetGroup", value=sp.target_group)
-        if sp.service_account:
-            etree.SubElement(entity, "ServiceAccount", value="true", contact=sp.service_account_contact)
-        else:
-            etree.SubElement(entity, "ServiceAccount", value="false")
-        if sp.local_storage_users:
-            etree.SubElement(entity, "LocalStorageUsers", value="true")
-        else:
-            etree.SubElement(entity, "LocalStorageUsers", value="false")
-        if sp.local_storage_groups:
-            etree.SubElement(entity, "LocalStorageGroups", value="true")
-        else:
-            etree.SubElement(entity, "LocalStorageGroups", value="false")
-        if sp.can_access_all_ldap_groups:
-            etree.SubElement(entity, "CanAccessAllLdapGroups", value="true")
-        else:
-            etree.SubElement(entity, "CanAccessAllLdapGroups", value="false")
+        etree.SubElement(entity, "ServiceAccount", value="false")
+    if provider.local_storage_users:
+        etree.SubElement(entity, "LocalStorageUsers", value="true")
+    else:
+        etree.SubElement(entity, "LocalStorageUsers", value="false")
+    if provider.local_storage_groups:
+        etree.SubElement(entity, "LocalStorageGroups", value="true")
+    else:
+        etree.SubElement(entity, "LocalStorageGroups", value="false")
+    if provider.can_access_all_ldap_groups:
+        etree.SubElement(entity, "CanAccessAllLdapGroups", value="true")
+    else:
+        etree.SubElement(entity, "CanAccessAllLdapGroups", value="false")
     ldap_metadata_attributes(entity, sp, validation_date)
     ldap_metadata_usergroups(entity, sp, validation_date)
     return tree
@@ -145,8 +116,6 @@ def ldap_metadata_generator_list(validated=True, production=False, include=None)
     tree = etree.Element("LdapEntities", Name="ldap2015.helsinki.fi")
     serviceproviders = ServiceProvider.objects.filter(end_at=None, service_type="ldap")
     for sp in filter(lambda x: not x.uses_ldapauth, serviceproviders):
-        if production and sp.production:
-            ldap_metadata_generator(sp, validated, tree)
-        elif include and sp.entity_id in include:
+        if (production and sp.production) or (include and sp.entity_id in include):
             ldap_metadata_generator(sp, validated, tree)
     return tree

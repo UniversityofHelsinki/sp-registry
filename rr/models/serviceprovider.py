@@ -374,6 +374,29 @@ class ServiceProvider(models.Model):
             return self.encrypted_client_secret
         return None
 
+    def _create_notification(self):
+        services = ServiceProvider.objects.filter(end_at=None,
+                                                  modified=True).order_by('entity_id')
+        in_production = []
+        add_production = []
+        remove_production = []
+        in_test = []
+        for service in services:
+            history = ServiceProvider.objects.filter(
+                history=service.pk).exclude(validated=None).last()
+            if history and history.production and service.production:
+                in_production.append(service.entity_id)
+            elif history and history.production and not service.production:
+                remove_production.append(service.entity_id)
+            elif service.production and service.validated:
+                in_production.append(service.entity_id)
+            elif service.production:
+                add_production.append(service.entity_id)
+            if service.test:
+                in_test.append(service.entity_id)
+        admin_notification_modified_sp(self.entity_id, in_production, add_production,
+                                       remove_production, in_test)
+
     def save_modified(self, *args, **kwargs):
         """ Saves model and send notification if it was unmodified """
         if self.modified and not self.production:
@@ -381,27 +404,7 @@ class ServiceProvider(models.Model):
         else:
             self.modified = True
             self.save()
-            services = ServiceProvider.objects.filter(end_at=None,
-                                                      modified=True).order_by('entity_id')
-            in_production = []
-            add_production = []
-            remove_production = []
-            in_test = []
-            for service in services:
-                history = ServiceProvider.objects.filter(
-                    history=service.pk).exclude(validated=None).last()
-                if history and history.production and service.production:
-                    in_production.append(service.entity_id)
-                elif history and history.production and not service.production:
-                    remove_production.append(service.entity_id)
-                elif service.production and service.validated:
-                    in_production.append(service.entity_id)
-                elif service.production:
-                    add_production.append(service.entity_id)
-                if service.test:
-                    in_test.append(service.entity_id)
-            admin_notification_modified_sp(self.entity_id, in_production, add_production,
-                                           remove_production, in_test)
+            self._create_notification()
 
 
 class SPAttribute(models.Model):

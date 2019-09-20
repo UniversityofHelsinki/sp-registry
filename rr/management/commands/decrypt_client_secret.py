@@ -18,17 +18,16 @@ class Command(BaseCommand):
     @staticmethod
     def get_client_secret(encrypted_client_secret):
         """Returns decrypted client secret in text."""
-        if encrypted_client_secret:
-            if hasattr(settings, 'OIDC_CLIENT_SECRET_KEY') and settings.OIDC_CLIENT_SECRET_KEY:
-                key = settings.OIDC_CLIENT_SECRET_KEY.encode()
-                try:
-                    f = Fernet(key)
-                    return f.decrypt(encrypted_client_secret.encode()).decode()
-                except TypeError:
-                    return None
-                except InvalidToken:
-                    print('ERROR, secret is not a valid Fernet token: %s ', encrypted_client_secret)
-                    return None
+        if encrypted_client_secret and hasattr(settings, 'OIDC_CLIENT_SECRET_KEY') and settings.OIDC_CLIENT_SECRET_KEY:
+            key = settings.OIDC_CLIENT_SECRET_KEY.encode()
+            try:
+                f = Fernet(key)
+                return f.decrypt(encrypted_client_secret.encode()).decode()
+            except TypeError:
+                return None
+            except InvalidToken:
+                print('ERROR, secret is not a valid Fernet token: %s ', encrypted_client_secret)
+                return None
         return None
 
     def handle(self, *args, **options):

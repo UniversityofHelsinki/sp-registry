@@ -1,5 +1,9 @@
 # Changelog
 
+## [1.2.1] - 2019-09-24
+### Changes
+* Fix error and warning messages in metadata git management
+
 ## [1.2.0] - 2019-09-20
 ### Changes
 * Added statistics summary page for superusers

@@ -135,28 +135,37 @@ def metadata_management(request, service_type="saml"):
 
     :template:`rr/repositorio_management.html`
     """
-    error = []
+    warning = []
     if not request.user.is_superuser:
         raise PermissionDenied
-    repo = _get_repositorio(request, service_type)
+    repo, error = _get_repositorio(service_type)
+    if error:
+        return render(request, "error.html", {'error_message': error})
+    _write_medadata(repo, service_type)
     diff = _get_diff(repo)
     log = _get_last_commits(repo, 5)
-    origin, error = _get_origin(request, repo, error)
+    origin, warning, error = _get_origin(repo, warning)
+    if error:
+        return render(request, "error.html", {'error_message': error})
     if request.method == "POST":
         form = MetadataCommitForm(request.POST)
         if form.is_valid() and diff:
-            error = _commit_and_push(request, form, repo, diff, origin, error)
-    _write_medadata(repo, service_type)
+            repo, warning, error = _commit_and_push(form, repo, diff, origin, warning)
+            if error:
+                return render(request, "error.html", {'error_message': error})
+            log = _get_last_commits(repo, 5)
     diff = _get_diff(repo)
     diff_hash = hashlib.md5(diff.encode('utf-8')).hexdigest()
     form = MetadataCommitForm(diff_hash=diff_hash)
     return render(request, "rr/metadata_management.html", {'form': form,
                                                            'diff': diff,
                                                            'log': log,
-                                                           'error': error})
+                                                           'warning': warning})
 
 
-def _get_repositorio(request, service_type):
+def _get_repositorio(service_type):
+    error = None
+    repo = None
     if service_type == "saml" and hasattr(settings, 'METADATA_GIT_REPOSITORIO') and \
             hasattr(settings, 'METADATA_FILENAME'):
         repo_location = settings.METADATA_GIT_REPOSITORIO
@@ -171,16 +180,13 @@ def _get_repositorio(request, service_type):
     try:
         repo = Repo(repo_location)
     except InvalidGitRepositoryError:
-        error_message = _("Git repository appears to have an invalid format.")
-        return render(request, "error.html", {'error_message': error_message})
+        error = _("Git repository appears to have an invalid format.")
     except NoSuchPathError:
-        error_message = _("Repository path could not be accessed.")
-        return render(request, "error.html", {'error_message': error_message})
+        error = _("Repository path could not be accessed.")
     except GitCommandError:
-        error_message = _("Execution of git command failed. Might want to try git command locally "
-                          "from the command line and check that it works.")
-        return render(request, "error.html", {'error_message': error_message})
-    return repo
+        error = _("Execution of git command failed. Might want to try git command locally "
+                  "from the command line and check that it works.")
+    return repo, error
 
 
 def _get_diff(repo):
@@ -262,43 +268,40 @@ def _write_oidc_metadata():
         f.write(json.dumps(metadata, indent=4))
 
 
-def _get_origin(request, repo, error):
+def _get_origin(repo, warning):
+    error = None
     try:
         origin = repo.remotes.origin
     except AttributeError:
         origin = None
-        error.append(_("Git repository has no origin."))
+        warning.append(_("Git repository has no origin."))
     if origin:
         try:
             if repo.commit().hexsha != origin.fetch()[0].commit.hexsha:
                 origin = False
-                error.append(_("Remote repository not matching local, please fix manually."))
+                warning.append(_("Remote repository not matching local, please fix manually."))
         except GitCommandError:
-            error_message = _("Execution of git command failed. Might want to try git command locally "
-                              "from the command line and check that it works.")
-            return render(request, "error.html", {'error_message': error_message})
-    return origin, error
+            error = _("Execution of git command failed. Might want to try git command locally "
+                      "from the command line and check that it works.")
+    return origin, warning, error
 
 
-def _commit_and_push(request, form, repo, diff, origin, error):
+def _commit_and_push(form, repo, diff, origin, warning):
+    error = None
     commit_message = form.cleaned_data['commit_message']
     form_hash = form.cleaned_data['diff_hash']
     # Check that file has not changed
     if form_hash == hashlib.md5(diff.encode('utf-8')).hexdigest():
         try:
             repo.index.commit(commit_message)
-            log = _get_last_commits(repo, 5)
             if origin:
                 origin.push()
                 if repo.commit().hexsha != origin.fetch()[0].commit.hexsha:
-                    error.append(_("Pushing to remote did not work, please fix manually."))
+                    warning.append(_("Pushing to remote did not work, please fix manually."))
         except GitCommandError:
-            error_message = _("Execution of git command failed. Might want to try git "
-                              "command locally  from the command line and check that it "
-                              "works.")
-            return render(request, "error.html", {'error_message': error_message})
-        return render(request, "rr/metadata_management.html", {'log': log,
-                                                               'error': error})
+            error = _("Execution of git command failed. Might want to try git "
+                      "command locally  from the command line and check that it "
+                      "works.")
     else:
-        error.append(_("Metadata file has changed, please try again."))
-    return error
+        warning.append(_("Metadata file has changed, please try again."))
+    return repo, warning, error

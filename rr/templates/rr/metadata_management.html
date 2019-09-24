@@ -7,9 +7,9 @@
 <p>{% trans "You may commit changes to metadata here." %}</p>
 <p>{% trans "Using production SPs with validated data." %}</p>
 </div>
-{% if error %}
+{% if warning %}
 <div class="alert alert-danger" role="alert">
-{% for message in error %}
+{% for message in warning %}
 <p>{{ message }}</p>
 {% endfor %}
 </div>
@@ -49,7 +49,7 @@
 {{ diff }}
 </code></pre>
 {% endif %}
-{% if not diff and not error %}
+{% if not diff and not warning %}
 <p>{% trans "There are no uncommitted changes." %}
 {% endif %}
 {% endblock %}

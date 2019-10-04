@@ -435,13 +435,13 @@ def saml_metadata_generator(sp, validated=True, privacypolicy=False, tree=None, 
     else:
         entity_descriptor = etree.Element("EntityDescriptor",
                                           entityID=entity.entity_id,
-                                          nsmap={"xmlns": 'urn:oasis:names:tc:SAML:2.0:metadata',
-                                                 "ds": 'http://www.w3.org/2000/09/xmldsig#',
+                                          nsmap={"ds": 'http://www.w3.org/2000/09/xmldsig#',
+                                                 "mdattr": 'urn:oasis:names:tc:SAML:metadata:attribute',
                                                  "mdui": 'urn:oasis:names:tc:SAML:metadata:ui',
                                                  "saml": 'urn:oasis:names:tc:SAML:2.0:assertion',
-                                                 "mdattr": 'urn:oasis:names:tc:SAML:metadata:attribute',
-                                                 "xsi": 'http://www.w3.org/2001/XMLSchema-instance',
+                                                 "xmlns": 'urn:oasis:names:tc:SAML:2.0:metadata',
                                                  "xsd": 'http://www.w3.org/2001/XMLSchema',
+                                                 "xsi": 'http://www.w3.org/2001/XMLSchema-instance',
                                                  })
     if not disable_entity_extensions:
         if history:
@@ -474,13 +474,13 @@ def saml_metadata_generator_list(validated=True, privacypolicy=False, production
 
     Using CamelCase instead of regular underscore attribute names in element tree.
     """
-    tree = etree.Element("EntitiesDescriptor", Name="urn:mace:funet.fi:helsinki.fi", nsmap={"xmlns": 'urn:oasis:names:tc:SAML:2.0:metadata',
-                                                                                            "ds": 'http://www.w3.org/2000/09/xmldsig#',
+    tree = etree.Element("EntitiesDescriptor", Name="urn:mace:funet.fi:helsinki.fi", nsmap={"ds": 'http://www.w3.org/2000/09/xmldsig#',
+                                                                                            "mdattr": 'urn:oasis:names:tc:SAML:metadata:attribute',
                                                                                             "mdui": 'urn:oasis:names:tc:SAML:metadata:ui',
                                                                                             "saml": 'urn:oasis:names:tc:SAML:2.0:assertion',
-                                                                                            "mdattr": 'urn:oasis:names:tc:SAML:metadata:attribute',
-                                                                                            "xsi": 'http://www.w3.org/2001/XMLSchema-instance',
+                                                                                            "xmlns": 'urn:oasis:names:tc:SAML:2.0:metadata',
                                                                                             "xsd": 'http://www.w3.org/2001/XMLSchema',
+                                                                                            "xsi": 'http://www.w3.org/2001/XMLSchema-instance',
                                                                                             })
     serviceproviders = ServiceProvider.objects.filter(end_at=None, service_type="saml")
     if hasattr(settings, 'DISABLE_METADATA_ENTITY_EXTENSIONS') and settings.DISABLE_METADATA_ENTITY_EXTENSIONS:

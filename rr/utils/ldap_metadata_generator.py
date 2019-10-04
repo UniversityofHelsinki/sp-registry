@@ -81,7 +81,7 @@ def ldap_metadata_generator(sp, validated=True, tree=None):
             etree.SubElement(servers_element, "Server", name=server)
     etree.SubElement(entity, "TargetGroup", value=provider.target_group)
     if provider.service_account:
-        etree.SubElement(entity, "ServiceAccount", value="true", contact=provider.service_account_contact)
+        etree.SubElement(entity, "ServiceAccount", contact=provider.service_account_contact, value="true")
     else:
         etree.SubElement(entity, "ServiceAccount", value="false")
     if provider.local_storage_users:

@@ -1,0 +1,22 @@
+<LdapEntities Name="ldap2015.helsinki.fi">
+  <Entity ID="ldaptestservice" validated="2019-01-02T10:01:02+0000">
+    <Servers>
+      <Server name="ldaptest.example.org"/>
+      <Server name="ldaptest-2.example.org"/>
+    </Servers>
+    <TargetGroup value="restricted"/>
+    <ServiceAccount contact="service.user@example.org +358501234567" value="true"/>
+    <LocalStorageUsers value="false"/>
+    <LocalStorageGroups value="false"/>
+    <CanAccessAllLdapGroups value="false"/>
+    <AttributeGroups>
+      <AttributeGroup name="name"/>
+    </AttributeGroups>
+    <Attributes>
+      <Attribute friendlyName="mail"/>
+    </Attributes>
+    <UserGroups>
+      <UserGroup name="grp-gamma"/>
+    </UserGroups>
+  </Entity>
+</LdapEntities>

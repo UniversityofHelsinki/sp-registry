@@ -37,7 +37,7 @@ class Command(BaseCommand):
 
     def output(self, text):
         if self.list_only:
-            print("(List only) " + text)
+            self.stdout.write("(List only) " + text)
         else:
             logger.info(text)
 
@@ -107,4 +107,4 @@ class Command(BaseCommand):
             if remove_invite:
                 self.remove_expired_invites()
         else:
-            print("Error: -d must be positive")
+            self.stderr.write("Error: -d must be positive")

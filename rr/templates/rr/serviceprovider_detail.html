@@ -6,15 +6,20 @@
 {% block content %}
 <h1>{% trans "Details" %} - <small>{{ object.display_identifier }}</small></h1>
 <table class="table table-sm">
+  <thead>
+    <tr>
+      <th scope="col">{% trans "Colors legend" %}</th>
+    </tr>
+  </thead>
   <tbody>
     <tr>
-      <td>{% trans "Colors legend:" %}</td>
       <td class="table-warning">{% trans "Modified since last validation" %}</td>
+    </tr>
+    <tr>
       <td class="table-danger">{% trans "Removed since last validation" %}</td>
     </tr>
   </tbody>  
 </table>
-<br>
 {% if user.is_superuser and object.admin_require_manual_configuration %}
 <div class="alert alert-danger" role="alert">
 <p>{% trans "This service requires manual configuration. Detailed information should be in the admin notes." %}</p>

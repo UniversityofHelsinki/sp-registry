@@ -47,6 +47,8 @@ PRIVACY_POLICY_URL = 'https://example.org/DataPrivacyPolicy.pdf'
 # Path to save test screenshots
 TEST_SCREENSHOT_DIR = '/path/to/test-screenshots/'
 
+ATTRIBUTE_INFO_URL = 'https://wiki.eduuni.fi/display/CSCHAKA/funetEduPersonSchema2dot2'
+
 SAML_LOGIN_URL = 'https://localhost/Shibboleth.sso/?target=https://localhost/login/?next='
 SAML_ATTR_EPPN = 'shib_eppn'
 SAML_ATTR_FIRST_NAME = 'shib_first_name'

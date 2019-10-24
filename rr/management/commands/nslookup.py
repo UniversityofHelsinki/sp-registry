@@ -56,8 +56,7 @@ class Command(BaseCommand):
             if sp.service_type == "oidc":
                 self._check_oidc_service(sp)
 
-    @staticmethod
-    def _check_saml_service(sp):
+    def _check_saml_service(self, sp):
         endpoints = []
         for endpoint in Endpoint.objects.filter(sp=sp, end_at=None).values_list('location', flat=True):
             endpoints.append(urlparse(endpoint).netloc.split(":")[0])
@@ -65,11 +64,10 @@ class Command(BaseCommand):
             try:
                 getaddrinfo(endpoint, None)
             except gaierror:
-                print("Address does not resolve | SAML entity: %s | address: %s" %
-                      (sp.entity_id, endpoint))
+                self.stdout.write("Address does not resolve | SAML entity: %s | address: %s" %
+                                 (sp.entity_id, endpoint))
 
-    @staticmethod
-    def _check_oidc_service(sp):
+    def _check_oidc_service(self, sp):
         redirecturis = []
         for redirecuri in RedirectUri.objects.filter(sp=sp, end_at=None).values_list('uri', flat=True):
             redirecturis.append(urlparse(redirecuri).netloc.split(":")[0])
@@ -77,14 +75,13 @@ class Command(BaseCommand):
             try:
                 getaddrinfo(redirecuri, None)
             except gaierror:
-                print("Address does not resolve | OIDC entity: %s | address: %s" %
-                      (sp.entity_id, redirecuri))
+                self.stdout.write("Address does not resolve | OIDC entity: %s | address: %s" %
+                                 (sp.entity_id, redirecuri))
 
-    @staticmethod
-    def _check_ldap_service(sp):
+    def _check_ldap_service(self, sp):
         for server_address in sp.server_names.splitlines():
             try:
                 getaddrinfo(server_address.strip(), None)
             except gaierror:
-                print("Address does not resolve | LDAP entity: %s | address: %s" %
-                      (sp.entity_id, server_address))
+                self.stdout.write("Address does not resolve | LDAP entity: %s | address: %s" %
+                                 (sp.entity_id, server_address))

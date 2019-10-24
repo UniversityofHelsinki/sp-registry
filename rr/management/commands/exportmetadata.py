@@ -1,37 +1,15 @@
 """
 Command line script for exporting metadata
 
-Usage help: ./manage.py cleandb -h
+Usage help: ./manage.py exportmetadata -h
 """
 
+from argparse import FileType
 from lxml import etree
 
 from django.core.management.base import BaseCommand
 
-from rr.models.serviceprovider import ServiceProvider, SPAttribute
 from rr.utils.saml_metadata_generator import saml_metadata_generator_list
-
-
-def attributefilter_generate(element, sp, validated=True):
-    """
-    Using CamelCase instead of regular underscore attribute names in element tree.
-    """
-    if validated:
-        attributes = SPAttribute.objects.filter(sp=sp, end_at=None).exclude(validated=None)
-    else:
-        attributes = SPAttribute.objects.filter(sp=sp, end_at=None)
-    if attributes:
-        attribute_filter_policy = etree.SubElement(element, "AttributeFilterPolicy",
-                                                   id="hy-default-" + sp.entity_id)
-        policy_requirement_rule = etree.SubElement(attribute_filter_policy, "PolicyRequirementRule",
-                                                   value=sp.entity_id)
-        policy_requirement_rule.attrib['{http://www.w3.org/2001/XMLSchema-instance}type'] = \
-            "basic:AttributeRequesterString"
-        for attribute in attributes:
-            attribute_rule = etree.SubElement(attribute_filter_policy, "AttributeRule",
-                                              attributeID=attribute.attribute.attributeid)
-            permit_value_rule = etree.SubElement(attribute_rule, "PermitValueRule")
-            permit_value_rule.attrib['{http://www.w3.org/2001/XMLSchema-instance}type'] = "basic:ANY"
 
 
 class Command(BaseCommand):
@@ -42,10 +20,8 @@ class Command(BaseCommand):
                             help='Include production service providers')
         parser.add_argument('-t', action='store_true', dest='test',
                             help='Include test service providers')
-        parser.add_argument('-m', type=str, action='store', dest='metadata',
+        parser.add_argument('-m', type=FileType('w'), dest='metadata',
                             help='Metadata output file name')
-        parser.add_argument('-a', type=str, action='store', dest='attributefilter',
-                            help='Attribute filter output file name')
         parser.add_argument('-i', type=str,  nargs='+', action='store', dest='include',
                             help='List of included entityIDs')
         parser.add_argument('-u', action='store_true', dest='unvalidated',
@@ -56,42 +32,18 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         production = options['production']
         test = options['test']
-        metadata_output = options['metadata']
-        attributefilter_output = options['attributefilter']
+        metadata_output = options['metadata'] if options['metadata'] else self.stdout
         include = options['include']
         validated = not options['unvalidated']
         privacypolicy = options['privacypolicy']
         if not production and not test and not include:
-            self.stdout.write("Give production, test or included entityIDs as command line "
-                              "arguments")
+            self.stderr.write('Give production, test or included entityIDs as command line '
+                              'arguments, use "-h" for help.')
+            exit(1)
         # Create XML containing selected EntityDescriptors
         if metadata_output:
             metadata = saml_metadata_generator_list(validated, privacypolicy, production, test, include)
-            with open(metadata_output, 'wb') as f:
-                f.write('<?xml version="1.0" encoding="UTF-8"?>\n'.encode('utf-8'))
-                # Hack for correcting namespace definition by removing prefix.
-                f.write(etree.tostring(metadata, pretty_print=True,
-                                       encoding='UTF-8').replace(b'xmlns:xmlns', b'xmlns'))
-        if attributefilter_output:
-            attributefilter = etree.Element("AttributeFilterPolicyGroup",
-                                            id="urn:mace:funet.fi:haka",
-                                            nsmap={"xmlns": 'urn:mace:shibboleth:2.0:afp'})
-            attributefilter.attrib['{urn:mace:shibboleth:2.0:afp}basic'] = \
-                "urn:mace:shibboleth:2.0:afp:mf:basic"
-            attributefilter.attrib['{urn:mace:shibboleth:2.0:afp}saml'] = \
-                "urn:mace:shibboleth:2.0:afp:mf:saml"
-            attributefilter.attrib['{http://www.w3.org/2001/XMLSchema-instance}schemaLocation'] = \
-                "urn:mace:shibboleth:2.0:afp classpath:/schema/shibboleth-2.0-afp.xsd " \
-                "urn:mace:shibboleth:2.0:afp:mf:basic " \
-                "classpath:/schema/shibboleth-2.0-afp-mf-basic.xsd " \
-                "urn:mace:shibboleth:2.0:afp:mf:saml " \
-                "classpath:/schema/shibboleth-2.0-afp-mf-saml.xsd"
-            serviceproviders = ServiceProvider.objects.filter(end_at=None)
-            for sp in serviceproviders:
-                if (production and sp.production) or (test and sp.test) or (include and sp.entity_id in include):
-                    attributefilter_generate(attributefilter, sp, validated)
-            with open(attributefilter_output, 'wb') as f:
-                f.write('<?xml version="1.0" encoding="UTF-8"?>\n'.encode('utf-8'))
-                # Hack for correcting namespace definition by removing prefix.
-                f.write(etree.tostring(attributefilter, pretty_print=True,
-                                       encoding='UTF-8').replace(b'xmlns:xmlns', b'xmlns'))
+            metadata_output.write('<?xml version="1.0" encoding="UTF-8"?>\n')
+            # Hack for correcting namespace definition by removing prefix.
+            metadata_output.write(etree.tostring(metadata, pretty_print=True,
+                                  encoding='unicode').replace('xmlns:xmlns', 'xmlns'))

@@ -1,5 +1,6 @@
 import logging
 
+from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import PermissionDenied
@@ -50,8 +51,10 @@ def attribute_list(request, pk):
             form = AttributeForm(request.POST, sp=sp, is_admin=request.user.is_superuser)
     else:
         form = AttributeForm(sp=sp, is_admin=request.user.is_superuser)
+    info_url = settings.ATTRIBUTE_INFO_URL if hasattr(settings, 'ATTRIBUTE_INFO_URL') else None
     return render(request, "rr/attribute_list.html", {'form': form,
-                                                      'object': sp})
+                                                      'object': sp,
+                                                      'info_url': info_url})
 
 
 def _check_form(request, sp, form):

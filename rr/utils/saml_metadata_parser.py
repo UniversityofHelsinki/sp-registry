@@ -295,6 +295,7 @@ def _parse_attribute(sp, element, validate, errors):
             errors.append(
                 sp.entity_id + " : " +
                 _("Could not add attribute") + " : " + friendly_name + ", " + name)
+    return errors
 
 
 def metadata_parser_ssodescriptor(sp, element, validate, errors, disable_checks):

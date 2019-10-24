@@ -7,7 +7,9 @@
 <div class="alert alert-success" role="alert">
 <p>{% trans "Give reasons for the attribute requisitions. Remove reason to remove requisition." %}</p>
 <p>{% trans "Attributes with green border are validated and attributes with red border still need to be validated." %}</p>
-<p>{% trans 'Check the <a target="_blank" href="https://wiki.helsinki.fi/pages/viewpage.action?pageId=226580829">Wiki of the University of Helsinki</a> for attribute classifications.' %}</p>
+{% if info_url %}
+  <p>{% trans 'For more information about attributes, visit the external info page:'%} <a target="_blank" rel="noopener noreferrer" href="{{ info_url }}">{{ info_url }}</a></p>
+{% endif %}
 </div>
 
 <h2>{% trans "Attribute list" %}</h2>

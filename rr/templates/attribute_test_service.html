@@ -18,6 +18,12 @@
 <p>{% trans "Some deprecated attributes may be hidden from the view if they don't contain any value for you." %}</p>
 <p>{% trans "Following icons are used to represent the status of each attribute:" %}</p>
 <table class="table table-sm">
+  <thead>
+    <tr>
+      <th scope="col">{% trans "Icon" %}</th>
+      <th scope="col">{% trans "Description" %}</th>
+    </tr>
+  </thead>
   <tbody>
     <tr>
       <td class="text-success">&#10004;</td>
@@ -36,6 +42,12 @@
 <p>{% trans "In case the attribute values are incorrect or a required attribute was not released, please contact" %} <a href="https://helpdesk.it.helsinki.fi/">{% trans "Helpdesk" %}.</a></p>
 <h2>{% trans "Authentication context" %}</h2>
 <table class="table table-sm">
+  <thead>
+    <tr>
+      <th scope="col">{% trans "Context" %}</th>
+      <th scope="col">{% trans "Value" %}</th>
+    </tr>
+  </thead>
   <tbody>
     <tr>
       <td>Authentication Context Class</td>
@@ -58,7 +70,7 @@
 <table class="table table-sm">
   <thead>
     <tr>
-      <th scope="col"></th>
+      <th scope="col">{% trans "Status" %}</th>
       <th scope="col">{% trans "Attribute" %}</th>
       <th scope="col">{% trans "Value" %}</th>
       <th scope="col">{% trans "Value format (regex)" %}</th>

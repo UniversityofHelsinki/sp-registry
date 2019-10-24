@@ -4,6 +4,8 @@ Command line script for decrypting client_secrets in JSON metadata file.
 Usage help: ./manage.py decryptclientsecret -h
 """
 import json
+from argparse import FileType
+from sys import stdin, stdout
 from cryptography.fernet import Fernet, InvalidToken
 from django.conf import settings
 from django.core.management.base import BaseCommand
@@ -12,8 +14,10 @@ from django.core.management.base import BaseCommand
 class Command(BaseCommand):
 
     def add_arguments(self, parser):
-        parser.add_argument('-i', type=str, action='store', dest='input', help='Input JSON')
-        parser.add_argument('-o', type=str, action='store', dest='output', help='Output JSON')
+        parser.add_argument('-i', type=FileType('r'), dest='input', nargs='?', default=stdin,
+                            help='Input JSON file, defaults to stdin.')
+        parser.add_argument('-o', type=FileType('w'), dest='output',
+                            help='Output JSON file, defaults to stdout.')
 
     @staticmethod
     def get_client_secret(encrypted_client_secret):
@@ -32,11 +36,10 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         input_file = options['input']
-        output_file = options['output']
+        output_file = options['output'] if options['output'] else self.stdout
         error = False
         if input_file and output_file:
-            with open(input_file, 'r') as file:
-                data = json.load(file)
+            data = json.load(input_file)
             for service in data:
                 if 'client_secret' in service:
                     encrypted_secret = service['client_secret']
@@ -46,5 +49,4 @@ class Command(BaseCommand):
                     else:
                         error = True
             if not error:
-                with open(output_file, 'w') as file:
-                    json.dump(data, file,  indent=4)
+                output_file.write(json.dumps(data, indent=4))

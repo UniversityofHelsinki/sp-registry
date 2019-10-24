@@ -3,7 +3,7 @@ import os
 from lxml import etree
 
 from django.contrib.auth.models import User
-from django.test import  TestCase
+from django.test import TestCase
 
 from rr.models.attribute import Attribute
 from rr.models.nameidformat import NameIDFormat

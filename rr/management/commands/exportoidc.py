@@ -1,10 +1,13 @@
 """
 Command line script for exporting OIDC metadata
 
-Usage help: ./manage.py cleandb -h
+Usage help: ./manage.py exportoidc -h
 """
 
 import json
+
+from argparse import FileType
+from sys import stdout
 
 from django.core.management.base import BaseCommand
 
@@ -19,7 +22,7 @@ class Command(BaseCommand):
                             help='Include production service providers')
         parser.add_argument('-t', action='store_true', dest='test',
                             help='Include test service providers')
-        parser.add_argument('-m', type=str, action='store', dest='metadata',
+        parser.add_argument('-m', type=FileType('w'), dest='metadata',
                             help='Metadata output file name')
         parser.add_argument('-e', action='store_true', dest='encryption',
                             help='Encrypt client secrets')
@@ -33,7 +36,7 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         production = options['production']
         test = options['test']
-        metadata_output = options['metadata']
+        metadata_output = options['metadata'] if options['metadata'] else self.stdout
         if options['encryption']:
             encryption = "encrypted"
         else:
@@ -42,7 +45,7 @@ class Command(BaseCommand):
         validated = not options['unvalidated']
         privacypolicy = options['privacypolicy']
         if not production and not test and not include:
-            self.stdout.write("Give production, test or included client IDs as command line "
+            self.stderr.write("Give production, test or included client IDs as command line "
                               "arguments")
         # Create XML containing selected EntityDescriptors
         if metadata_output:
@@ -53,7 +56,6 @@ class Command(BaseCommand):
                                                     include=include,
                                                     client_secret_encryption=encryption)
             if metadata is None:
-                self.stdout.write("Could not create metadata, check log for more information.")
+                self.stderr.write("Could not create metadata, check log for more information.")
             else:
-                with open(metadata_output, 'w') as f:
-                    f.write(json.dumps(metadata, indent=4, sort_keys=True))
+                metadata_output.write(json.dumps(metadata, indent=4, sort_keys=True))

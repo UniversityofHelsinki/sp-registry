@@ -7,9 +7,13 @@
 {% if success %}
 <p>{% trans "Emails have been sent." %}</p>
 {% if errors %}
-<p>{% trans "Sending failed to following addresses:" %}</p>
 <table class="table">
-<tbody>
+  <thead>
+    <tr>
+      <th scope="col">{% trans "Sending failed to following addresses:" %}</th>
+    </tr>
+  </thead>
+  <tbody>
 {% for email in errors %}
     <tr>
       <td>{{ email }}</td>
@@ -39,7 +43,12 @@
 {% if object_list %}
 <h2>{% trans "Email addresses" %}</h2>
 <table class="table">
-<tbody>
+  <thead>
+    <tr>
+      <th scope="col">{% trans "Address" %}</th>
+    </tr>
+  </thead>
+  <tbody>
 {% for email in object_list %}
     <tr>
       <td>{{ email }}</td>

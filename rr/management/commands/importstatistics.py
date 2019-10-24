@@ -34,7 +34,7 @@ class Command(BaseCommand):
             password = settings.STATISTICS_DATABASE_PASSWORD
             database = settings.STATISTICS_DATABASE_NAME
         except AttributeError:
-            print("Missing database settings")
+            self.stderr.write("Missing database settings")
             exit(1)
         db = MySQLdb.connect(
             host=host,
@@ -55,24 +55,23 @@ class Command(BaseCommand):
             row = cursor.fetchone()
             if row is None:
                 break
-            _save_statistics(row, serviceproviders, verbose)
+            self._save_statistics(row, serviceproviders, verbose)
 
-
-def _save_statistics(row, serviceproviders, verbose):
-    sp = serviceproviders.filter(entity_id=row[0]).first()
-    if sp:
-        try:
-            obj = Statistics.objects.get(sp=sp, date=row[1])
-            if obj.logins != row[2]:
-                obj.logins = row[2]
-                obj.save()
-                status = "UPDATED"
-            else:
-                status = "EXISTS"
-        except Statistics.DoesNotExist:
-            Statistics.objects.create(sp=sp, date=row[1], logins=row[2])
-            status = "CREATED"
-    else:
-        status = "UNKNOWN SP"
-    if verbose:
-        print("%s: %s: %s: %s" % (status, row[0], row[1], row[2]))
+    def _save_statistics(self, row, serviceproviders, verbose):
+        sp = serviceproviders.filter(entity_id=row[0]).first()
+        if sp:
+            try:
+                obj = Statistics.objects.get(sp=sp, date=row[1])
+                if obj.logins != row[2]:
+                    obj.logins = row[2]
+                    obj.save()
+                    status = "UPDATED"
+                else:
+                    status = "EXISTS"
+            except Statistics.DoesNotExist:
+                Statistics.objects.create(sp=sp, date=row[1], logins=row[2])
+                status = "CREATED"
+        else:
+            status = "UNKNOWN SP"
+        if verbose:
+            self.stdout.write("%s: %s: %s: %s" % (status, row[0], row[1], row[2]))

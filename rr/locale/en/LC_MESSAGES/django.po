@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-09-20 12:36+0300\n"
+"POT-Creation-Date: 2019-10-25 07:58+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -167,7 +167,7 @@ msgstr ""
 msgid "First element should be EntityDescriptor"
 msgstr ""
 
-#: forms/metadata.py:41 utils/saml_metadata_parser.py:408
+#: forms/metadata.py:41 utils/saml_metadata_parser.py:409
 msgid "Could not find entityID"
 msgstr ""
 
@@ -659,7 +659,7 @@ msgstr ""
 
 #: models/certificate.py:79 templates/rr/certificate.html:23
 #: templates/rr/certificate_info.html:14
-#: templates/rr/serviceprovider_detail.html:291
+#: templates/rr/serviceprovider_detail.html:296
 msgid "Valid from"
 msgstr ""
 
@@ -667,14 +667,14 @@ msgstr ""
 #: templates/rr/certificate_admin_list.html:14
 #: templates/rr/certificate_admin_list.html:40
 #: templates/rr/certificate_info.html:12
-#: templates/rr/serviceprovider_detail.html:290 templates/rr/spadmin.html:48
+#: templates/rr/serviceprovider_detail.html:295 templates/rr/spadmin.html:48
 msgid "Valid until"
 msgstr ""
 
 #: models/certificate.py:81 templates/rr/certificate.html:24
 #: templates/rr/certificate_admin_list.html:15
 #: templates/rr/certificate_admin_list.html:41
-#: templates/rr/serviceprovider_detail.html:292
+#: templates/rr/serviceprovider_detail.html:297
 msgid "Key size"
 msgstr ""
 
@@ -773,12 +773,12 @@ msgid "Endpoint Type"
 msgstr ""
 
 #: models/endpoint.py:30 templates/rr/endpoint.html:21
-#: templates/rr/serviceprovider_detail.html:335
+#: templates/rr/serviceprovider_detail.html:340
 msgid "Binding"
 msgstr ""
 
 #: models/endpoint.py:31 templates/rr/endpoint.html:22
-#: templates/rr/serviceprovider_detail.html:336
+#: templates/rr/serviceprovider_detail.html:341
 msgid "Location"
 msgstr ""
 
@@ -787,7 +787,7 @@ msgid "ResponseLocation"
 msgstr ""
 
 #: models/endpoint.py:34 templates/rr/endpoint.html:23
-#: templates/rr/serviceprovider_detail.html:337
+#: templates/rr/serviceprovider_detail.html:342
 msgid "Index"
 msgstr ""
 
@@ -795,8 +795,8 @@ msgstr ""
 msgid "isDefault"
 msgstr ""
 
-#: models/nameidformat.py:12 templates/rr/serviceprovider_detail.html:117
-#: templates/rr/serviceprovider_detail.html:123
+#: models/nameidformat.py:12 templates/rr/serviceprovider_detail.html:122
+#: templates/rr/serviceprovider_detail.html:128
 msgid "Name Identifier Format"
 msgstr ""
 
@@ -1109,13 +1109,13 @@ msgid "Password"
 msgstr ""
 
 #: models/testuser.py:19 templates/rr/contact.html:20
-#: templates/rr/serviceprovider_detail.html:312 templates/rr/spadmin.html:19
+#: templates/rr/serviceprovider_detail.html:317 templates/rr/spadmin.html:19
 #: templates/rr/testuser.html:21 templates/rr/testuser.html:53
 msgid "First name"
 msgstr ""
 
 #: models/testuser.py:20 templates/rr/contact.html:21
-#: templates/rr/serviceprovider_detail.html:313 templates/rr/spadmin.html:20
+#: templates/rr/serviceprovider_detail.html:318 templates/rr/spadmin.html:20
 #: templates/rr/testuser.html:22 templates/rr/testuser.html:54
 msgid "Last name"
 msgstr ""
@@ -1156,80 +1156,100 @@ msgstr ""
 msgid "Following icons are used to represent the status of each attribute:"
 msgstr ""
 
+#: templates/attribute_test_service.html:23
+msgid "Icon"
+msgstr ""
+
 #: templates/attribute_test_service.html:24
+msgid "Description"
+msgstr ""
+
+#: templates/attribute_test_service.html:30
 msgid "Attribute was released and it has a seemingly correct value."
 msgstr ""
 
-#: templates/attribute_test_service.html:28
+#: templates/attribute_test_service.html:34
 msgid ""
 "Attribute marked as a mandatory was not released or the attribute's value is "
 "not within the accepted value range."
 msgstr ""
 
-#: templates/attribute_test_service.html:32
+#: templates/attribute_test_service.html:38
 msgid ""
 "This attribute is an optional and doesn't have any value for you. Not all "
 "attributes are available for all users."
 msgstr ""
 
-#: templates/attribute_test_service.html:36
+#: templates/attribute_test_service.html:42
 msgid ""
 "In case the attribute values are incorrect or a required attribute was not "
 "released, please contact"
 msgstr ""
 
-#: templates/attribute_test_service.html:36
+#: templates/attribute_test_service.html:42
 msgid "Helpdesk"
 msgstr ""
 
-#: templates/attribute_test_service.html:37
+#: templates/attribute_test_service.html:43
 msgid "Authentication context"
 msgstr ""
 
-#: templates/attribute_test_service.html:51
+#: templates/attribute_test_service.html:47
+msgid "Context"
+msgstr ""
+
+#: templates/attribute_test_service.html:48
+#: templates/attribute_test_service.html:75
+#: templates/rr/serviceprovider_detail.html:73
+#: templates/rr/serviceprovider_detail.html:101
+#: templates/rr/serviceprovider_detail.html:142
+#: templates/rr/serviceprovider_detail.html:171
+msgid "Value"
+msgstr ""
+
+#: templates/attribute_test_service.html:63
 msgid "You have logged in using single-factor authentication."
 msgstr ""
 
-#: templates/attribute_test_service.html:52
+#: templates/attribute_test_service.html:64
 msgid "Login using multi-factor authentication"
 msgstr ""
 
-#: templates/attribute_test_service.html:54
+#: templates/attribute_test_service.html:66
 msgid "You have logged in using multi-factor authentication."
 msgstr ""
 
-#: templates/attribute_test_service.html:55
+#: templates/attribute_test_service.html:67
 msgid "Login using single-factor authentication"
 msgstr ""
 
-#: templates/attribute_test_service.html:57 templates/base.html:52
+#: templates/attribute_test_service.html:69 templates/base.html:52
 #: templates/base.html:99 templates/base.html:187 templates/base.html:233
 #: templates/rr/attribute_list.html:6
 msgid "Attributes"
 msgstr ""
 
-#: templates/attribute_test_service.html:62
-#: templates/rr/serviceprovider_detail.html:67
-#: templates/rr/serviceprovider_detail.html:95
-#: templates/rr/serviceprovider_detail.html:136
-#: templates/rr/serviceprovider_detail.html:165
-#: templates/rr/serviceprovider_detail.html:259
+#: templates/attribute_test_service.html:73
+#: templates/rr/serviceprovider_list.html:22
+#: templates/rr/serviceprovider_list.html:58
+#: templates/rr/serviceprovider_list.html:93
+msgid "Status"
+msgstr ""
+
+#: templates/attribute_test_service.html:74
+#: templates/rr/serviceprovider_detail.html:72
+#: templates/rr/serviceprovider_detail.html:100
+#: templates/rr/serviceprovider_detail.html:141
+#: templates/rr/serviceprovider_detail.html:170
+#: templates/rr/serviceprovider_detail.html:264
 msgid "Attribute"
 msgstr ""
 
-#: templates/attribute_test_service.html:63
-#: templates/rr/serviceprovider_detail.html:68
-#: templates/rr/serviceprovider_detail.html:96
-#: templates/rr/serviceprovider_detail.html:137
-#: templates/rr/serviceprovider_detail.html:166
-msgid "Value"
-msgstr ""
-
-#: templates/attribute_test_service.html:64
+#: templates/attribute_test_service.html:76
 msgid "Value format (regex)"
 msgstr ""
 
-#: templates/attribute_test_service.html:78
+#: templates/attribute_test_service.html:90
 msgid "Logout using Single Logout"
 msgstr ""
 
@@ -1265,7 +1285,7 @@ msgstr ""
 
 #: templates/base.html:56 templates/base.html:102 templates/base.html:191
 #: templates/base.html:236 templates/rr/certificate.html:6
-#: templates/rr/serviceprovider_detail.html:286
+#: templates/rr/serviceprovider_detail.html:291
 #: templates/rr/serviceprovider_saml_create_form.html:19
 msgid "Certificates"
 msgstr ""
@@ -1284,7 +1304,7 @@ msgid "Redirect URIs"
 msgstr ""
 
 #: templates/base.html:73 templates/base.html:208 templates/rr/contact.html:6
-#: templates/rr/serviceprovider_detail.html:307
+#: templates/rr/serviceprovider_detail.html:312
 msgid "Contacts"
 msgstr ""
 
@@ -1608,7 +1628,7 @@ msgid "Test"
 msgstr ""
 
 #: templates/rr/attribute_admin_view.html:37
-#: templates/rr/serviceprovider_detail.html:260
+#: templates/rr/serviceprovider_detail.html:265
 msgid "Reason"
 msgstr ""
 
@@ -1628,18 +1648,19 @@ msgid ""
 "still need to be validated."
 msgstr ""
 
-#: templates/rr/attribute_list.html:10
-msgid ""
-"Check the <a target=\"_blank\" href=\"https://wiki.helsinki.fi/pages/"
-"viewpage.action?pageId=226580829\">Wiki of the University of Helsinki</a> "
-"for attribute classifications."
+#: templates/rr/attribute_list.html:11
+msgid "For more information about attributes, visit the external info page:"
 msgstr ""
 
-#: templates/rr/attribute_list.html:13
+#: templates/rr/attribute_list.html:11
+msgid "instructions_url_attributes"
+msgstr "https://wiki.helsinki.fi/pages/viewpage.action?pageId=226580829"
+
+#: templates/rr/attribute_list.html:15
 msgid "Attribute list"
 msgstr ""
 
-#: templates/rr/attribute_list.html:18 templates/rr/certificate.html:56
+#: templates/rr/attribute_list.html:20 templates/rr/certificate.html:56
 #: templates/rr/contact.html:49 templates/rr/endpoint.html:51
 #: templates/rr/redirecturi.html:42
 #: templates/rr/serviceprovider_basic_form.html:15
@@ -1654,7 +1675,7 @@ msgstr ""
 msgid "Save"
 msgstr ""
 
-#: templates/rr/attribute_list.html:26
+#: templates/rr/attribute_list.html:28
 #: templates/rr/serviceprovider_basic_form.html:23
 #: templates/rr/serviceprovider_ldap_create_form.html:32
 #: templates/rr/serviceprovider_ldap_technical_form.html:34
@@ -1690,7 +1711,7 @@ msgstr ""
 msgid "List of certificates"
 msgstr ""
 
-#: templates/rr/certificate.html:21 templates/rr/email.html:32
+#: templates/rr/certificate.html:21 templates/rr/email.html:36
 #: templates/rr/spadmin.html:79
 msgid "Subject"
 msgstr ""
@@ -1819,8 +1840,8 @@ msgid "List of contacts"
 msgstr ""
 
 #: templates/rr/contact.html:19 templates/rr/endpoint.html:20
-#: templates/rr/serviceprovider_detail.html:311
-#: templates/rr/serviceprovider_detail.html:334
+#: templates/rr/serviceprovider_detail.html:316
+#: templates/rr/serviceprovider_detail.html:339
 msgid "Type"
 msgstr ""
 
@@ -1840,24 +1861,28 @@ msgstr ""
 msgid "Emails have been sent."
 msgstr ""
 
-#: templates/rr/email.html:10
+#: templates/rr/email.html:13
 msgid "Sending failed to following addresses:"
 msgstr ""
 
-#: templates/rr/email.html:27
+#: templates/rr/email.html:31
 msgid "List emails / Show message"
 msgstr ""
 
-#: templates/rr/email.html:27
+#: templates/rr/email.html:31
 msgid "Send email"
 msgstr ""
 
-#: templates/rr/email.html:36 templates/rr/metadata_management.html:23
+#: templates/rr/email.html:40 templates/rr/metadata_management.html:23
 msgid "Message"
 msgstr ""
 
-#: templates/rr/email.html:40
+#: templates/rr/email.html:44
 msgid "Email addresses"
+msgstr ""
+
+#: templates/rr/email.html:48
+msgid "Address"
 msgstr ""
 
 #: templates/rr/endpoint.html:6
@@ -1887,11 +1912,11 @@ msgstr ""
 msgid "List of endpoints"
 msgstr ""
 
-#: templates/rr/endpoint.html:32 templates/rr/serviceprovider_detail.html:345
+#: templates/rr/endpoint.html:32 templates/rr/serviceprovider_detail.html:350
 msgid "Response:"
 msgstr ""
 
-#: templates/rr/endpoint.html:33 templates/rr/serviceprovider_detail.html:346
+#: templates/rr/endpoint.html:33 templates/rr/serviceprovider_detail.html:351
 msgid "default"
 msgstr ""
 
@@ -2012,7 +2037,7 @@ msgid "Do you want to remove selected redirect URIs?"
 msgstr ""
 
 #: templates/rr/serviceprovider_basic_form.html:6
-#: templates/rr/serviceprovider_detail.html:63
+#: templates/rr/serviceprovider_detail.html:68
 msgid "Basic information"
 msgstr ""
 
@@ -2035,154 +2060,154 @@ msgid "Details"
 msgstr ""
 
 #: templates/rr/serviceprovider_detail.html:11
-msgid "Colors legend:"
+msgid "Colors legend"
 msgstr ""
 
-#: templates/rr/serviceprovider_detail.html:12
+#: templates/rr/serviceprovider_detail.html:16
 msgid "Modified since last validation"
 msgstr ""
 
-#: templates/rr/serviceprovider_detail.html:13
+#: templates/rr/serviceprovider_detail.html:19
 msgid "Removed since last validation"
 msgstr ""
 
-#: templates/rr/serviceprovider_detail.html:20
+#: templates/rr/serviceprovider_detail.html:25
 msgid ""
 "This service requires manual configuration. Detailed information should be "
 "in the admin notes."
 msgstr ""
 
-#: templates/rr/serviceprovider_detail.html:25
+#: templates/rr/serviceprovider_detail.html:30
 msgid ""
 "This service provider is currently not published to the production or the "
 "test IdPs. You may publish this SP in the Technical Attributes page."
 msgstr ""
 
-#: templates/rr/serviceprovider_detail.html:26
+#: templates/rr/serviceprovider_detail.html:31
 msgid ""
 "You may also remove this SP from the registry by using the link at the "
 "bottom of this page."
 msgstr ""
 
-#: templates/rr/serviceprovider_detail.html:32
+#: templates/rr/serviceprovider_detail.html:37
 msgid "Missing data"
 msgstr ""
 
-#: templates/rr/serviceprovider_detail.html:34
+#: templates/rr/serviceprovider_detail.html:39
 msgid ""
 "This service is marked for the production use but is missing following data:"
 msgstr ""
 
-#: templates/rr/serviceprovider_detail.html:43
+#: templates/rr/serviceprovider_detail.html:48
 msgid "Waiting for validation"
 msgstr ""
 
-#: templates/rr/serviceprovider_detail.html:44
+#: templates/rr/serviceprovider_detail.html:49
 msgid "There are changes waiting for validation by the IdP administrators."
 msgstr ""
 
-#: templates/rr/serviceprovider_detail.html:45
+#: templates/rr/serviceprovider_detail.html:50
 msgid "You will receive an email when the changes are validated."
 msgstr ""
 
-#: templates/rr/serviceprovider_detail.html:46
+#: templates/rr/serviceprovider_detail.html:51
 msgid ""
 "NB. only production systems are validated. Test servers are updated "
 "automatically every 15 minutes, using unvalidated data."
 msgstr ""
 
-#: templates/rr/serviceprovider_detail.html:51
-#: templates/rr/serviceprovider_detail.html:57
+#: templates/rr/serviceprovider_detail.html:56
+#: templates/rr/serviceprovider_detail.html:62
 msgid "Validate changes"
 msgstr ""
 
-#: templates/rr/serviceprovider_detail.html:52
+#: templates/rr/serviceprovider_detail.html:57
 msgid ""
 "This object has changed. Click the button to validate all changes listed in "
 "this page."
 msgstr ""
 
-#: templates/rr/serviceprovider_detail.html:69
-#: templates/rr/serviceprovider_detail.html:97
-#: templates/rr/serviceprovider_detail.html:138
-#: templates/rr/serviceprovider_detail.html:167
+#: templates/rr/serviceprovider_detail.html:74
+#: templates/rr/serviceprovider_detail.html:102
+#: templates/rr/serviceprovider_detail.html:143
+#: templates/rr/serviceprovider_detail.html:172
 msgid "Validated value"
 msgstr ""
 
-#: templates/rr/serviceprovider_detail.html:91
-#: templates/rr/serviceprovider_detail.html:132
-#: templates/rr/serviceprovider_detail.html:161
+#: templates/rr/serviceprovider_detail.html:96
+#: templates/rr/serviceprovider_detail.html:137
+#: templates/rr/serviceprovider_detail.html:166
 msgid "Technical attributes"
 msgstr ""
 
-#: templates/rr/serviceprovider_detail.html:187
-#: templates/rr/serviceprovider_detail.html:203
+#: templates/rr/serviceprovider_detail.html:192
+#: templates/rr/serviceprovider_detail.html:208
 msgid "Grant types"
 msgstr ""
 
-#: templates/rr/serviceprovider_detail.html:192
-#: templates/rr/serviceprovider_detail.html:207
+#: templates/rr/serviceprovider_detail.html:197
+#: templates/rr/serviceprovider_detail.html:212
 msgid "Response types"
 msgstr ""
 
-#: templates/rr/serviceprovider_detail.html:197
-#: templates/rr/serviceprovider_detail.html:211
+#: templates/rr/serviceprovider_detail.html:202
+#: templates/rr/serviceprovider_detail.html:216
 msgid "Scopes"
 msgstr ""
 
-#: templates/rr/serviceprovider_detail.html:219
+#: templates/rr/serviceprovider_detail.html:224
 msgid "OIDC redirect URIs"
 msgstr ""
 
-#: templates/rr/serviceprovider_detail.html:223
+#: templates/rr/serviceprovider_detail.html:228
 msgid "URL"
 msgstr ""
 
-#: templates/rr/serviceprovider_detail.html:236
+#: templates/rr/serviceprovider_detail.html:241
 msgid "Registry administrators"
 msgstr ""
 
-#: templates/rr/serviceprovider_detail.html:240
+#: templates/rr/serviceprovider_detail.html:245
 #: templates/rr/serviceprovider_list.html:19
 #: templates/rr/serviceprovider_list.html:55
 #: templates/rr/serviceprovider_list.html:91 templates/rr/usergroup.html:18
 msgid "Name"
 msgstr ""
 
-#: templates/rr/serviceprovider_detail.html:241
-#: templates/rr/serviceprovider_detail.html:314
+#: templates/rr/serviceprovider_detail.html:246
+#: templates/rr/serviceprovider_detail.html:319
 msgid "Email"
 msgstr ""
 
-#: templates/rr/serviceprovider_detail.html:255
+#: templates/rr/serviceprovider_detail.html:260
 msgid "Attribute requisitions"
 msgstr ""
 
-#: templates/rr/serviceprovider_detail.html:262
+#: templates/rr/serviceprovider_detail.html:267
 msgid "Userinfo"
 msgstr ""
 
-#: templates/rr/serviceprovider_detail.html:263
+#: templates/rr/serviceprovider_detail.html:268
 msgid "ID Token"
 msgstr ""
 
-#: templates/rr/serviceprovider_detail.html:330
+#: templates/rr/serviceprovider_detail.html:335
 msgid "SAML endpoints"
 msgstr ""
 
-#: templates/rr/serviceprovider_detail.html:353
+#: templates/rr/serviceprovider_detail.html:358
 msgid "LDAP user groups"
 msgstr ""
 
-#: templates/rr/serviceprovider_detail.html:357
+#: templates/rr/serviceprovider_detail.html:362
 msgid "name"
 msgstr ""
 
-#: templates/rr/serviceprovider_detail.html:370
+#: templates/rr/serviceprovider_detail.html:375
 msgid "Removing this service provider"
 msgstr ""
 
-#: templates/rr/serviceprovider_detail.html:371
+#: templates/rr/serviceprovider_detail.html:376
 msgid "Click this link to remove this service provider"
 msgstr ""
 
@@ -2195,8 +2220,14 @@ msgid "This form is used to add new LDAP connection request."
 msgstr ""
 
 #: templates/rr/serviceprovider_ldap_create_form.html:9
-msgid "More information about registering services (external page in Finnish)."
+msgid ""
+"More information about registering services can be found from the external "
+"site "
 msgstr ""
+
+#: templates/rr/serviceprovider_ldap_create_form.html:9
+msgid "instructions_url_ldap"
+msgstr "https://wiki.helsinki.fi/pages/viewpage.action?pageId=197657102"
 
 #: templates/rr/serviceprovider_ldap_create_form.html:10
 msgid ""
@@ -2287,12 +2318,6 @@ msgid ""
 "production, blue change in test service."
 msgstr ""
 
-#: templates/rr/serviceprovider_list.html:22
-#: templates/rr/serviceprovider_list.html:58
-#: templates/rr/serviceprovider_list.html:93
-msgid "Status"
-msgstr ""
-
 #: templates/rr/serviceprovider_list.html:23
 #: templates/rr/serviceprovider_list.html:59
 #: templates/rr/serviceprovider_list.html:94
@@ -2376,11 +2401,13 @@ msgstr ""
 #: templates/rr/serviceprovider_oidc_create_form.html:9
 #: templates/rr/serviceprovider_saml_create_form.html:9
 msgid ""
-"More information about configuring service providers can be found from <a "
-"href='https://wiki.helsinki.fi/display/IAMasioita/Ohjeet"
-"+Shibbolointiin'>https://wiki.helsinki.fi/display/IAMasioita/Ohjeet"
-"+Shibbolointiin</a> (in Finnish)"
+"More information about configuring and registering service providers can be "
+"found from the external site "
 msgstr ""
+
+#: templates/rr/serviceprovider_oidc_create_form.html:9
+msgid "instructions_url_oidc"
+msgstr "https://wiki.helsinki.fi/display/IAMasioita/Ohjeet+Shibbolointiin"
 
 #: templates/rr/serviceprovider_oidc_create_form.html:10
 msgid "Required attributes for the production RPs."
@@ -2498,6 +2525,10 @@ msgid ""
 "This form is used to add a new service to the University of Helsinki's "
 "single sign on system."
 msgstr ""
+
+#: templates/rr/serviceprovider_saml_create_form.html:9
+msgid "instructions_url_saml"
+msgstr "https://wiki.helsinki.fi/display/IAMasioita/Ohjeet+Shibbolointiin"
 
 #: templates/rr/serviceprovider_saml_create_form.html:10
 msgid "Required attributes for the production SPs."
@@ -2736,15 +2767,15 @@ msgstr ""
 msgid "Could not add"
 msgstr ""
 
-#: utils/saml_metadata_parser.py:418
+#: utils/saml_metadata_parser.py:419
 msgid "EntityID already exists, skipping"
 msgstr ""
 
-#: utils/saml_metadata_parser.py:421
+#: utils/saml_metadata_parser.py:422
 msgid "EntityID already exists, overwriting"
 msgstr ""
 
-#: utils/saml_metadata_parser.py:430
+#: utils/saml_metadata_parser.py:431
 msgid "EntityID does not exist, creating"
 msgstr ""
 
@@ -2752,19 +2783,19 @@ msgstr ""
 msgid "Service provider does not exist"
 msgstr ""
 
-#: views/attribute.py:100
+#: views/attribute.py:103
 msgid "Attributes added: "
 msgstr ""
 
-#: views/attribute.py:103
+#: views/attribute.py:106
 msgid "Attributes modified: "
 msgstr ""
 
-#: views/attribute.py:106
+#: views/attribute.py:109
 msgid "Attributes removed: "
 msgstr ""
 
-#: views/attribute.py:167
+#: views/attribute.py:170
 msgid "Attribute proviced does not exist"
 msgstr ""
 
@@ -2818,39 +2849,39 @@ msgstr ""
 msgid "Your user account has been deactivated."
 msgstr ""
 
-#: views/metadata.py:174
+#: views/metadata.py:183
 msgid "Git repository appears to have an invalid format."
 msgstr ""
 
-#: views/metadata.py:177
+#: views/metadata.py:185
 msgid "Repository path could not be accessed."
 msgstr ""
 
-#: views/metadata.py:180 views/metadata.py:277
+#: views/metadata.py:187 views/metadata.py:284
 msgid ""
 "Execution of git command failed. Might want to try git command locally from "
 "the command line and check that it works."
 msgstr ""
 
-#: views/metadata.py:270
+#: views/metadata.py:277
 msgid "Git repository has no origin."
 msgstr ""
 
-#: views/metadata.py:275
+#: views/metadata.py:282
 msgid "Remote repository not matching local, please fix manually."
 msgstr ""
 
-#: views/metadata.py:294
+#: views/metadata.py:300
 msgid "Pushing to remote did not work, please fix manually."
 msgstr ""
 
-#: views/metadata.py:296
+#: views/metadata.py:302
 msgid ""
 "Execution of git command failed. Might want to try git command locally  from "
 "the command line and check that it works."
 msgstr ""
 
-#: views/metadata.py:303
+#: views/metadata.py:306
 msgid "Metadata file has changed, please try again."
 msgstr ""
 

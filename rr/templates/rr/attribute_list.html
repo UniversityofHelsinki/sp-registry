@@ -8,7 +8,7 @@
 <p>{% trans "Give reasons for the attribute requisitions. Remove reason to remove requisition." %}</p>
 <p>{% trans "Attributes with green border are validated and attributes with red border still need to be validated." %}</p>
 {% if info_url %}
-  <p>{% trans 'For more information about attributes, visit the external info page:'%} <a target="_blank" rel="noopener noreferrer" href="{{ info_url }}">{{ info_url }}</a></p>
+  <p>{% trans 'For more information about attributes, visit the external info page:'%} <a target="_blank" rel="noopener noreferrer" href="{% trans "instructions_url_attributes" %}">{% trans "instructions_url_attributes" %}</a></p>
 {% endif %}
 </div>
 

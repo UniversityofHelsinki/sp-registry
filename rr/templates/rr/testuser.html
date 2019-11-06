@@ -14,7 +14,7 @@
 {% if object_list %}
 <form action="" method='POST'>
 {% csrf_token %}
-<table class="table">
+<table class="table table-sm table-responsive">
   <thead>
     <tr>
       <th scope="col">{% trans "Username" %}</th>
@@ -46,7 +46,7 @@
 </div>
 <form action="" method='POST'>
 {% csrf_token %}
-<table class="table">
+<table class="table table-sm table-responsive">
   <thead>
     <tr>
       <th scope="col">{% trans "Username" %}</th>

@@ -66,7 +66,7 @@
 {% endif %}
 
 <h2>{% trans "Basic information" %}</h2>
-<table class="table table-sm">
+<table class="table table-sm table-responsive">
   <thead>
     <tr>
       <th scope="col">{% trans "Attribute" %}</th>
@@ -94,7 +94,7 @@
 <br>
 {% if object.service_type == "saml" %}
 <h2>{% trans "Technical attributes" %}</h2>
-<table class="table table-sm">
+<table class="table table-sm table-responsive">
   <thead>
     <tr>
       <th scope="col">{% trans "Attribute" %}</th>
@@ -135,7 +135,7 @@
 
 {% elif object.service_type == "ldap" %}
 <h2>{% trans "Technical attributes" %}</h2>
-<table class="table table-sm">
+<table class="table table-sm table-responsive">
   <thead>
     <tr>
       <th scope="col">{% trans "Attribute" %}</th>
@@ -164,7 +164,7 @@
 
 {% elif object.service_type == "oidc" %}
 <h2>{% trans "Technical attributes" %}</h2>
-<table class="table table-sm">
+<table class="table table-sm table-responsive">
   <thead>
     <tr>
       <th scope="col">{% trans "Attribute" %}</th>
@@ -222,7 +222,7 @@
 <br>
 
 <h2>{% trans "OIDC redirect URIs" %}</h2>
-<table class="table table-sm">
+<table class="table table-sm table-responsive">
   <thead>
     <tr>
       <th scope="col">{% trans "URL" %}</th>
@@ -239,7 +239,7 @@
 <br>
 {% endif %}
 <h2>{% trans "Registry administrators" %}</h2>
-<table class="table table-sm">
+<table class="table table-sm table-responsive">
   <thead>
     <tr>
       <th scope="col">{% trans "Name" %}</th>
@@ -258,7 +258,7 @@
 <br>
 
 <h2>{% trans "Attribute requisitions" %}</h2>
-<table class="table table-sm">
+<table class="table table-sm table-responsive">
   <thead>
     <tr>
       <th scope="col">{% trans "Attribute" %}</th>
@@ -289,7 +289,7 @@
 <br>
 {% if object.service_type == "saml" %}
 <h2>{% trans "Certificates" %}</h2>
-<table class="table table-sm">
+<table class="table table-sm table-responsive">
   <thead>
     <tr>
       <th scope="col">{% trans "Valid until" %}</th>
@@ -310,7 +310,7 @@
 <br>
 {% endif %}
 <h2>{% trans "Contacts" %}</h2>
-<table class="table table-sm">
+<table class="table table-sm table-responsive">
   <thead>
     <tr>
       <th scope="col">{% trans "Type" %}</th>
@@ -333,7 +333,7 @@
 <br>
 {% if object.service_type == "saml" %}
 <h2>{% trans "SAML endpoints" %}</h2>
-<table class="table table-sm">
+<table class="table table-sm table-responsive">
   <thead>
     <tr>
       <th scope="col">{% trans "Type" %}</th>
@@ -356,7 +356,7 @@
 {% endif %}
 {% if object.service_type == "ldap" %}
 <h2>{% trans "LDAP user groups" %}</h2>
-<table class="table table-sm">
+<table class="table table-sm table-responsive">
   <thead>
     <tr>
       <th scope="col">{% trans "name" %}</th>

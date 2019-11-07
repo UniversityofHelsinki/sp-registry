@@ -113,10 +113,12 @@ For more information run "./manage.py <command> -h"
   * Cleans old services or personal information from the db
 * decryptclientsecret
   * Decrypt client secrets from OIDC metadata (if ecncrypted)
+* exportattributefilter
+  * Exporting SAML attribute filter
 * exportldap
   * Exports LDAP registrations data (custom format)
 * exportmetadata
-  * Exporting metadata or attribute filter
+  * Exporting SAML metadata
 * exportoidc
   * Exporting OIDC metadata in JSON format
 * importattributefilter

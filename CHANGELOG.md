@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.3.0] - 2019-09-24
+### Changes
+* Improved responsiveness and mobile use
+* Fixed xml attribute order (lxml 4.4 changes)
+* Moved static urls from templates to translation files
+* Moved attribute filter export to separate management command
+* Using stdin/stdout as defaults in export/import management commands if files are not given
+
 ## [1.2.1] - 2019-09-24
 ### Changes
 * Fix error and warning messages in metadata git management

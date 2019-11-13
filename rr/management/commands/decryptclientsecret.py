@@ -49,4 +49,4 @@ class Command(BaseCommand):
                     else:
                         error = True
             if not error:
-                output_file.write(json.dumps(data, indent=4))
+                output_file.write(json.dumps(data, indent=4, sort_keys=True))

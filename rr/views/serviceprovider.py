@@ -167,7 +167,7 @@ class BasicInformationView(DetailView):
 
     @staticmethod
     def _get_missing_oidc_data(sp, missing):
-        if RedirectUri.objects.filter(sp=sp, end_at=None):
+        if not RedirectUri.objects.filter(sp=sp, end_at=None):
             url = reverse("redirecturi-list", args=[sp.pk])
             msg = _("Redirect URI")
             missing.append("<a href='" + url + "'>" + msg + "</a>")

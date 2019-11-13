@@ -65,7 +65,7 @@ def metadata(request, pk):
         elif sp.service_type == "oidc":
             metadata = oidc_metadata_generator(sp=sp, validated=validated,
                                                client_secret_encryption="masked")
-            metadata = json.dumps(metadata, indent=4)
+            metadata = json.dumps(metadata, indent=4, sort_keys=True)
         else:
             raise Http404("Service provider does not exist")
 
@@ -265,7 +265,7 @@ def _write_oidc_metadata():
                                             client_secret_encryption="encrypted")
     metadata_file = join(settings.OIDC_GIT_REPOSITORIO, settings.OIDC_METADATA_FILENAME)
     with open(metadata_file, 'w') as f:
-        f.write(json.dumps(metadata, indent=4))
+        f.write(json.dumps(metadata, indent=4, sort_keys=True))
 
 
 def _get_origin(repo, warning):

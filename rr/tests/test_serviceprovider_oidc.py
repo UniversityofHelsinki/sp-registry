@@ -67,22 +67,62 @@ class ServiceProviderOIDCTechnicalTestCase(TestCase):
         response = self.client.post(reverse('oidc-technical-update', kwargs={'pk': self.user_sp.pk}),
                                     {'response_types': '1', 'grant_types': '2'})
         self.assertEqual(response.status_code, 200)
-        self.assertIn('authorization_code Grant type must be set for code Response type.', response.content.decode())
+        self.assertIn('authorization_code grant type must be set for code response type.', response.content.decode())
         response = self.client.post(reverse('oidc-technical-update', kwargs={'pk': self.user_sp.pk}),
                                     {'response_types': ['1', '2', '3'], 'grant_types': '2'})
         self.assertEqual(response.status_code, 200)
-        self.assertIn('authorization_code Grant type must be set for code Response type.', response.content.decode())
+        self.assertIn('authorization_code grant type must be set for code response type.', response.content.decode())
         response = self.client.post(reverse('oidc-technical-update', kwargs={'pk': self.user_sp.pk}),
-                                    {'response_types': ['1', '2', '3'], 'grant_types': ['1', '2']})
+                                    {'response_types': ['2'], 'grant_types': ['1']})
         self.assertEqual(response.status_code, 200)
-        self.assertNotIn('authorization_code Grant type must be set for code Response type.', response.content.decode())
+        self.assertIn('implicit grant type must be set for token response type.', response.content.decode())
+        response = self.client.post(reverse('oidc-technical-update', kwargs={'pk': self.user_sp.pk}),
+                                    {'response_types': ['3'], 'grant_types': ['1']})
+        self.assertEqual(response.status_code, 200)
+        self.assertIn('implicit grant type must be set for id_token response type.', response.content.decode())
+        response = self.client.post(reverse('oidc-technical-update', kwargs={'pk': self.user_sp.pk}),
+                                    {'response_types': ['1', '2', '3'], 'grant_types': ['1', '3']})
+        self.assertEqual(response.status_code, 200)
+        self.assertNotIn('authorization_code Grant type must be set for code response type.', response.content.decode())
+        self.assertNotIn('implicit grant type must be set for', response.content.decode())
+        response = self.client.post(reverse('oidc-technical-update', kwargs={'pk': self.user_sp.pk}),
+                                    {'response_types': ['1'], 'grant_types': ['1']})
+        self.assertEqual(response.status_code, 200)
+        self.assertNotIn('authorization_code Grant type must be set for code response type.', response.content.decode())
+        self.assertNotIn('implicit grant type must be set for', response.content.decode())
+
+    def test_sp_jwks(self):
+        jwk = '''{
+                "keys": [
+                  {
+                    "kty": "EC",
+                    "use": "sig",
+                    "crv": "P-256",
+                    "x": "f83OJ3D2xF1Bg8vub9tLe1gHMzV76e8Tus9uPHvRVEU",
+                    "y": "x_FEzRu9m36HLN_tue659LNpXW6pCyStikYjKIWI5a0",
+                    "kid": "Public key example from RFC"
+                  }
+                ]
+              }'''
+
+        self.client.force_login(self.user)
+        response = self.client.post(reverse('oidc-technical-update', kwargs={'pk': self.user_sp.pk}),
+                                    {'jwks_uri': '', 'jwks': '{}'})
+        self.assertEqual(response.status_code, 200)
+        self.assertIn('Invalid JSON keys.', response.content.decode())
+
+        self.client.force_login(self.user)
+        response = self.client.post(reverse('oidc-technical-update', kwargs={'pk': self.user_sp.pk}),
+                                    {'jwks_uri': 'https://example.org/jwks_uri', 'jwks': jwk})
+        self.assertEqual(response.status_code, 200)
+        self.assertIn('Both jwks and jwks_uri selected.', response.content.decode())
 
     def test_sp_oidc_metadata(self):
         self.client.force_login(self.user)
         RedirectUri.objects.create(sp=self.user_sp, uri='https://sp2.example.org/redirect_uri')
         self.user_sp.grant_types.add(GrantType.objects.filter(name="authorization_code").first())
+        self.user_sp.grant_types.add(GrantType.objects.filter(name="refresh_token").first())
         self.user_sp.response_types.add(ResponseType.objects.filter(name="code").first())
-        self.user_sp.response_types.add(ResponseType.objects.filter(name="id_token").first())
         self.user_sp.oidc_scopes.add(OIDCScope.objects.filter(name="profile").first())
         self.attr_eppn = Attribute.objects.create(friendlyname='eduPersonPrincipalName',
                                                   name='urn:oid:1.3.6.1.4.1.5923.1.1.1.6',
@@ -99,3 +139,28 @@ class ServiceProviderOIDCTechnicalTestCase(TestCase):
         self.user_sp.save()
         metadata = oidc_metadata_generator(sp=self.user_sp, validated=False)
         self.assertEqual(json.dumps(metadata, indent=4, sort_keys=True) + '\n', open(TESTDATA_OIDC_FILENAME).read())
+
+    def test_sp_oidc_metadata_client_secret_not_if_jwks(self):
+        self.client.force_login(self.user)
+        RedirectUri.objects.create(sp=self.user_sp, uri='https://sp2.example.org/redirect_uri')
+        self.user_sp.grant_types.add(GrantType.objects.filter(name="authorization_code").first())
+        self.user_sp.response_types.add(ResponseType.objects.filter(name="code").first())
+        self.user_sp.encrypted_client_secret = "abc"
+        self.user_sp.jwks_uri = "https://sp2.example.org/jwks_uri"
+        self.user_sp.application_type = "web"
+        self.user_sp.save()
+        metadata = oidc_metadata_generator(sp=self.user_sp, validated=False)
+        self.assertIn('jwks_uri', metadata)
+        self.assertNotIn('client_secret', metadata)
+
+    def test_sp_oidc_metadata_client_secret_not_if_native_client(self):
+        self.client.force_login(self.user)
+        RedirectUri.objects.create(sp=self.user_sp, uri='http://localhost/redirect_uri')
+        self.user_sp.grant_types.add(GrantType.objects.filter(name="authorization_code").first())
+        self.user_sp.response_types.add(ResponseType.objects.filter(name="code").first())
+        self.user_sp.encrypted_client_secret = "abc"
+        self.user_sp.jwks_uri = "https://sp2.example.org/jwks_uri"
+        self.user_sp.application_type = "native"
+        self.user_sp.save()
+        metadata = oidc_metadata_generator(sp=self.user_sp, validated=False)
+        self.assertNotIn('client_secret', metadata)

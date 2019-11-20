@@ -2,6 +2,7 @@
 Functions for generating metadata of OIDC relying parties
 """
 
+import json
 import logging
 
 from django.db.models import Q
@@ -106,7 +107,11 @@ def oidc_metadata_generator(sp, validated=True, privacypolicy=False, client_secr
     if not entity:
         return metadata
     metadata['client_id'] = entity.entity_id
-    metadata = _get_client_secret(entity, metadata, client_secret_encryption)
+    metadata = _set_client_secret(entity, metadata, client_secret_encryption)
+    if entity.jwks_uri:
+        metadata['jwks_uri'] = entity.jwks_uri
+    elif entity.jwks:
+        metadata['jwks'] = json.loads(entity.jwks)
     metadata['application_type'] = entity.application_type
     if entity.subject_identifier:
         metadata['subject_type'] = entity.subject_identifier
@@ -133,8 +138,8 @@ def oidc_metadata_generator(sp, validated=True, privacypolicy=False, client_secr
     return metadata
 
 
-def _get_client_secret(entity, metadata, client_secret_encryption):
-    if entity.encrypted_client_secret:
+def _set_client_secret(entity, metadata, client_secret_encryption):
+    if entity.encrypted_client_secret and entity.application_type != 'native' and not (entity.jwks or entity.jwks_uri):
         if client_secret_encryption == "encrypted":
             metadata['client_secret'] = entity.encrypted_client_secret
         elif client_secret_encryption == "decrypted":

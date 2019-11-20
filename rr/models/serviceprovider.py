@@ -101,6 +101,11 @@ class ServiceProvider(models.Model):
 
     encrypted_client_secret = models.TextField(blank=True, verbose_name=_('Client secret'))
 
+    jwks_uri = models.URLField(max_length=255, blank=True,
+                               verbose_name=_('URL for the JSON Web Key Set'))
+
+    jwks = models.TextField(blank=True, verbose_name=_('JSON Web Key Set'))
+
     APPLICATIONTYPES = (('web', _('web')),
                         ('native', _('native')))
     application_type = models.CharField(default='web', max_length=8, choices=APPLICATIONTYPES,

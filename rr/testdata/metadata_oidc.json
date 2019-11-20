@@ -9,15 +9,15 @@
     "client_name#en": "SP2 Example service",
     "client_secret": "******",
     "grant_types": [
-        "authorization_code"
+        "authorization_code",
+        "refresh_token"
     ],
     "policy_uri#fi": "https://example.org/privacyfi",
     "redirect_uris": [
         "https://sp2.example.org/redirect_uri"
     ],
     "response_types": [
-        "code",
-        "id_token"
+        "code"
     ],
     "scope": "openid profile"
 }

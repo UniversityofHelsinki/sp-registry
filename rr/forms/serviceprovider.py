@@ -1,3 +1,4 @@
+import json
 import re
 
 from django.core.validators import ValidationError
@@ -122,7 +123,7 @@ class SamlTechnicalInformationForm(ModelForm):
                             'administrators before coming into effect.'
                             '<div class="text-danger">Required for production use.</div>'),
             'test': _('Publish this SP to the test IdP using unvalidated data. '
-                      'Any changes might take up to 15 minutes until they are published to '
+                      'Any changes might take up to 10 minutes until they are published to '
                       'the test IdP.'),
             'saml_product': _('For administrative use e.g. for testing different SPs during IdP '
                               'updates.'),
@@ -248,7 +249,7 @@ class OidcTechnicalInformationForm(ModelForm):
     class Meta:
         model = ServiceProvider
         fields = ['entity_id', 'admin_require_manual_configuration', 'grant_types', 'response_types', 'oidc_scopes',
-                  'application_type', 'subject_identifier', 'production', 'test',
+                  'application_type', 'subject_identifier', 'jwks_uri', 'jwks', 'production', 'test',
                   'saml_product', 'autoupdate_idp_metadata']
         help_texts = {
             'entity_id': _('Client identifier of the relying party. '
@@ -256,17 +257,29 @@ class OidcTechnicalInformationForm(ModelForm):
                            '<div class="text-danger">Required for both production and test use.</div>'),
             'admin_require_manual_configuration': _('This service provider requires manual configuration. '
                                                     'Set by registry admins if necessary.'),
-            'production': _('Publish this SP to the production IdP. Only validated data is used. '
-                            'Any changes to production SPs must be validated by the IdP '
+            'grant_types': _('Grant types allowed for this RP (grant_types metadata value).'),
+            'response_types': _('Response types allowed for this RP (response_types metadata value).'),
+            'oidc_scopes': _('OIDC scopes used. "openid" scope is automatically added. You may also require '
+                             'user attributes as claims from the Attributes section.'),
+            'application_type': _('Application type. Used for validating redirect_uris.'),
+            'subject_identifier': _('Request a specific subject identifier.'),
+            'jwks_uri': _('URI for RPs JSON Web Key document (jwks_uri).'),
+            'jwks': _('RPs JSON Web Key document (jwks) passed as a parameter. Should only be used if the use of '
+                      'jwks_uri is not possible.'),
+            'production': _('Publish this RP to the production OP. Only validated data is used. '
+                            'Any changes to production RPs must be validated by the IdP '
                             'administrators before coming into effect.'
                             '<div class="text-danger">Required for production use.</div>'),
-            'test': _('Publish this SP to the test IdP using unvalidated data. '
-                      'Any changes might take up to 15 minutes until they are published to '
+            'test': _('Publish this RP to the test IdP using unvalidated data. '
+                      'Any changes might take up to 10 minutes until they are published to '
                       'the test IdP.'),
             'saml_product': _('OIDC product used by this client. For administrative use e.g. for testing '
                               'different RPs during IdP updates.'),
             'autoupdate_idp_metadata': _('Does this RP automatically update IdP metadata at least '
                                          'once a day?'),
+            'reset_client_secret': _('Resets the client secret.'),
+            'remove_client_secret': _('Removes the client secret. Secret is not used if jwks are provided for '
+                                      'client identification or application type is native.'),
         }
 
     def __init__(self, *args, **kwargs):
@@ -283,8 +296,31 @@ class OidcTechnicalInformationForm(ModelForm):
         entity_id = self.cleaned_data['entity_id']
         if ServiceProvider.objects.filter(entity_id=entity_id, end_at=None,
                                           history=None).exclude(pk=self.instance.pk):
-            raise ValidationError(_("Client ID already exists"))
+            raise ValidationError(_("Client ID already exists."))
         return entity_id
+
+    def clean_jwks(self):
+        """
+        Validate jwks
+        """
+        jwks_data = self.cleaned_data['jwks']
+        if not jwks_data:
+            return jwks_data
+        try:
+            jwks = json.loads(jwks_data)
+        except json.JSONDecodeError:
+            raise ValidationError(_("Not a valid JSON."))
+        if list(jwks.keys()) != ['keys']:
+            raise ValidationError(_("Invalid JSON keys."))
+        if len(jwks['keys']) == 0:
+            raise ValidationError(_("No keys found."))
+        for jwk in jwks['keys']:
+            if not jwk.get('kid'):
+                raise ValidationError(_("JWK missing key ID."))
+            if not ((jwk.get('kty') == 'RSA' and jwk.get('n')) or (jwk.get('kty') == 'EC' and jwk.get('x') and
+                                                                  jwk.get('y'))):
+                raise ValidationError(_("Invalid JWK."))
+        return jwks_data
 
     def clean(self):
         cleaned_data = super().clean()
@@ -292,8 +328,14 @@ class OidcTechnicalInformationForm(ModelForm):
         response_types = cleaned_data.get("response_types").values_list('name', flat=True)
         if cleaned_data.get("reset_client_secret") and cleaned_data.get("remove_client_secret"):
             self.add_error('remove_client_secret', _('Both remove and reset client secret selected.'))
+        if cleaned_data.get("jwks_uri") and cleaned_data.get("jwks"):
+            self.add_error('jwks', _('Both jwks and jwks_uri selected. Use only jwks_uri if it is supported.'))
         if 'code' in response_types and 'authorization_code' not in grant_types:
-            self.add_error('grant_types', _('authorization_code Grant type must be set for code Response type.'))
+            self.add_error('grant_types', _('authorization_code grant type must be set for code response type.'))
+        if 'token' in response_types and 'implicit' not in grant_types:
+            self.add_error('grant_types', _('implicit grant type must be set for token response type.'))
+        if 'id_token' in response_types and 'implicit' not in grant_types:
+            self.add_error('grant_types', _('implicit grant type must be set for id_token response type.'))
 
 
 class SamlServiceProviderCreateForm(ModelForm):

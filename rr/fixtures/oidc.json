@@ -35,6 +35,13 @@
         }
     },
     {
+        "model": "rr.granttype",
+        "pk": 3,
+        "fields": {
+            "name": "implicit"
+        }
+    },
+    {
         "model": "rr.oidcscope",
         "pk": 1,
         "fields": {

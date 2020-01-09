@@ -1,9 +1,10 @@
 import os
 
 from datetime import datetime, timezone
+from io import StringIO
 from lxml import etree
 
-from django.contrib.auth.models import User
+from django.core.management import call_command
 from django.test import TestCase
 
 from rr.models.attribute import Attribute
@@ -44,3 +45,8 @@ class LdapMetadataTestCase(TestCase):
         metadata = etree.tostring(metadata_tree, pretty_print=True,
                                   encoding='UTF-8')
         self.assertEqual(metadata.decode("utf-8"), self.test_metadata)
+
+    def test_exportldap_management_command(self):
+        out = StringIO()
+        call_command('exportldap', '-p', stdout=out)
+        self.assertEqual(out.getvalue(), '<?xml version="1.0" encoding="UTF-8"?>\n' + self.test_metadata)

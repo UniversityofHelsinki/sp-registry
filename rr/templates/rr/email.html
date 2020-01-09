@@ -7,7 +7,8 @@
 {% if success %}
 <p>{% trans "Emails have been sent." %}</p>
 {% if errors %}
-<table class="table table-sm table-responsive">
+<h2 id="sending-errors">{% trans "Sending errors." %}</h2>
+<table class="table table-sm table-responsive" aria-describedby="sending-errors">
   <thead>
     <tr>
       <th scope="col">{% trans "Sending failed to following addresses:" %}</th>
@@ -41,8 +42,8 @@
 <pre>{{ message }}</pre>
 {% endif %}
 {% if object_list %}
-<h2>{% trans "Email addresses" %}</h2>
-<table class="table table-sm table-responsive">
+<h2 id="address-list">{% trans "Email addresses" %}</h2>
+<table class="table table-sm table-responsive" aria-describedby="address-list">
   <thead>
     <tr>
       <th scope="col">{% trans "Address" %}</th>

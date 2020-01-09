@@ -27,8 +27,8 @@
     <dd class="col-sm-9">{{ attribute.info }}</dd>
 </dl>
 <p><a href="/admin_django/rr/attribute/{{ attribute.pk }}/change/"><button type="button" class="btn btn-primary">{% trans "Edit in Django admin view" %}</button></a></p>
-<h2>{% trans "Service Providers using the attribute" %}</h2>
-<table class="table table-sm table-responsive">
+<h2 id="service-providers">{% trans "Service Providers using the attribute" %}</h2>
+<table class="table table-sm table-responsive" aria-describedby="service-providers">
   <thead>
     <tr>
       <th scope="col">{% trans "SP" %}</th>

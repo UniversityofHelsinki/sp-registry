@@ -5,10 +5,10 @@
 {% load attribute_filters %}
 {% block content %}
 <h1>{% trans "Details" %} - <small>{{ object.display_identifier }}</small></h1>
-<table class="table table-sm">
+<table class="table table-sm" aria-describedby="color-legend">
   <thead>
     <tr>
-      <th scope="col">{% trans "Colors legend" %}</th>
+      <th scope="col" id="color-legend">{% trans "Colors legend" %}</th>
     </tr>
   </thead>
   <tbody>
@@ -28,7 +28,9 @@
 {% if not object.production and not object.test %}
 <div class="alert alert-info" role="alert">
 <p>{% trans "This service provider is currently not published to the production or the test IdPs. You may publish this SP in the Technical Attributes page." %}</p>
+{% if not object.production and not object|get_production_status %}
 <p>{% trans "You may also remove this SP from the registry by using the link at the bottom of this page." %}</p>
+{% endif %}
 </div>
 {% endif %}
 
@@ -65,8 +67,8 @@
 </div>
 {% endif %}
 
-<h2>{% trans "Basic information" %}</h2>
-<table class="table table-sm table-responsive">
+<h2 id="basic-information">{% trans "Basic information" %}</h2>
+<table class="table table-sm table-responsive" aria-describedby="basic-information">
   <thead>
     <tr>
       <th scope="col">{% trans "Attribute" %}</th>
@@ -92,9 +94,10 @@
   </tbody>
 </table>
 <br>
+
 {% if object.service_type == "saml" %}
-<h2>{% trans "Technical attributes" %}</h2>
-<table class="table table-sm table-responsive">
+<h2 id="technical-attributes-saml">{% trans "Technical attributes" %}</h2>
+<table class="table table-sm table-responsive" aria-describedby="technical-attributes-saml">
   <thead>
     <tr>
       <th scope="col">{% trans "Attribute" %}</th>
@@ -134,8 +137,8 @@
 <br>
 
 {% elif object.service_type == "ldap" %}
-<h2>{% trans "Technical attributes" %}</h2>
-<table class="table table-sm table-responsive">
+<h2 id="technical-attributes-ldap">{% trans "Technical attributes" %}</h2>
+<table class="table table-sm table-responsive" aria-describedby="technical-attributes-ldap">
   <thead>
     <tr>
       <th scope="col">{% trans "Attribute" %}</th>
@@ -163,8 +166,8 @@
 <br>
 
 {% elif object.service_type == "oidc" %}
-<h2>{% trans "Technical attributes" %}</h2>
-<table class="table table-sm table-responsive">
+<h2 id="technical-attributes-oidc">{% trans "Technical attributes" %}</h2>
+<table class="table table-sm table-responsive" aria-describedby="technical-attributes-oidc">
   <thead>
     <tr>
       <th scope="col">{% trans "Attribute" %}</th>
@@ -221,8 +224,8 @@
 </table>
 <br>
 
-<h2>{% trans "OIDC redirect URIs" %}</h2>
-<table class="table table-sm table-responsive">
+<h2 id="oidc-redirect-uris">{% trans "OIDC redirect URIs" %}</h2>
+<table class="table table-sm table-responsive" aria-describedby="oidc-redirect-uris">
   <thead>
     <tr>
       <th scope="col">{% trans "URL" %}</th>
@@ -238,8 +241,9 @@
 </table>
 <br>
 {% endif %}
-<h2>{% trans "Registry administrators" %}</h2>
-<table class="table table-sm table-responsive">
+
+<h2 id="registry-administrators">{% trans "Registry administrators" %}</h2>
+<table class="table table-sm table-responsive" aria-describedby="registry-administrators">
   <thead>
     <tr>
       <th scope="col">{% trans "Name" %}</th>
@@ -257,8 +261,8 @@
 </table>
 <br>
 
-<h2>{% trans "Attribute requisitions" %}</h2>
-<table class="table table-sm table-responsive">
+<h2 id="attribute-requisitions">{% trans "Attribute requisitions" %}</h2>
+<table class="table table-sm table-responsive" aria-describedby="attribute-requisitions">
   <thead>
     <tr>
       <th scope="col">{% trans "Attribute" %}</th>
@@ -287,9 +291,10 @@
   </tbody>
 </table>
 <br>
+
 {% if object.service_type == "saml" %}
-<h2>{% trans "Certificates" %}</h2>
-<table class="table table-sm table-responsive">
+<h2 id="saml-certificates">{% trans "Certificates" %}</h2>
+<table class="table table-sm table-responsive" aria-describedby="saml-certificates">
   <thead>
     <tr>
       <th scope="col">{% trans "Valid until" %}</th>
@@ -309,8 +314,9 @@
 </table>
 <br>
 {% endif %}
-<h2>{% trans "Contacts" %}</h2>
-<table class="table table-sm table-responsive">
+
+<h2 id="contact-list">{% trans "Contacts" %}</h2>
+<table class="table table-sm table-responsive" aria-describedby="contact-list">
   <thead>
     <tr>
       <th scope="col">{% trans "Type" %}</th>
@@ -331,9 +337,10 @@
   </tbody>
 </table>
 <br>
+
 {% if object.service_type == "saml" %}
-<h2>{% trans "SAML endpoints" %}</h2>
-<table class="table table-sm table-responsive">
+<h2 id="saml-endpoints">{% trans "SAML endpoints" %}</h2>
+<table class="table table-sm table-responsive" aria-describedby="saml-endpoints">
   <thead>
     <tr>
       <th scope="col">{% trans "Type" %}</th>
@@ -354,9 +361,10 @@
   </tbody>  
 </table>
 {% endif %}
+
 {% if object.service_type == "ldap" %}
-<h2>{% trans "LDAP user groups" %}</h2>
-<table class="table table-sm table-responsive">
+<h2 id="ldap-user-groups">{% trans "LDAP user groups" %}</h2>
+<table class="table table-sm table-responsive" aria-describedby="ldap-user-groups">
   <thead>
     <tr>
       <th scope="col">{% trans "name" %}</th>

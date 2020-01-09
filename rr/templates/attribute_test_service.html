@@ -16,8 +16,8 @@
 <h1>{% trans "Attribute test service" %}</h1>
 <p>{% trans "This service lists all attributes that can be released to service providers by the login service." %}</p>
 <p>{% trans "Some deprecated attributes may be hidden from the view if they don't contain any value for you." %}</p>
-<p>{% trans "Following icons are used to represent the status of each attribute:" %}</p>
-<table class="table table-sm">
+<p id="icon-descriptions">{% trans "Following icons are used to represent the status of each attribute:" %}</p>
+<table class="table table-sm" aria-describedby="icon-descriptions">
   <thead>
     <tr>
       <th scope="col">{% trans "Icon" %}</th>
@@ -40,8 +40,8 @@
   </tbody>
 </table>
 <p>{% trans "In case the attribute values are incorrect or a required attribute was not released, please contact" %} <a href="https://helpdesk.it.helsinki.fi/">{% trans "Helpdesk" %}.</a></p>
-<h2>{% trans "Authentication context" %}</h2>
-<table class="table table-sm">
+<h2 id="authentication-context">{% trans "Authentication context" %}</h2>
+<table class="table table-sm" aria-describedby="authentication-context">
   <thead>
     <tr>
       <th scope="col">{% trans "Context" %}</th>
@@ -66,8 +66,8 @@
 <p>{% trans "You have logged in using multi-factor authentication." %}</p>
 <p><a href="https://{{ request.META.SERVER_NAME }}/Shibboleth.sso/Login?authnContextClassRef=https://refeds.org/profile/sfa"><button type="button" class="btn btn-primary">{% trans "Login using single-factor authentication" %}</button></a></p>
 {% endif %}
-<h2>{% trans "Attributes" %}</h2>
-<table class="table table-sm">
+<h2 id="attribute-values">{% trans "Attributes" %}</h2>
+<table class="table table-sm" aria-describedby="attribute-valuies">
   <thead>
     <tr>
       <th scope="col">{% trans "Status" %}</th>

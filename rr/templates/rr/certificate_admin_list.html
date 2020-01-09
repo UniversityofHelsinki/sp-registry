@@ -5,9 +5,9 @@
 {% block content %}
 <h1>{% trans "Certificate administration" %}</h1>
 
-<h2>{% trans "Expired certificates" %}</h2>
+<h2 id="expired-certificates">{% trans "Expired certificates" %}</h2>
 {% if expired_certificates %}
-<table class="table table-sm table-responsive">
+<table class="table table-sm table-responsive" aria-describedby="expired-certificates">
   <thead>
     <tr>
       <th scope="col">{% trans "SP" %}</th>
@@ -31,9 +31,9 @@
 </table>
 {% endif %}
 
-<h2>{% trans "Weak certificates" %}</h2>
+<h2 id="weak-certificates">{% trans "Weak certificates" %}</h2>
 {% if weak_certificates %}
-<table class="table table-sm table-responsive">
+<table class="table table-sm table-responsive" aria-describedby="weak-certificates">
   <thead>
     <tr>
       <th scope="col">{% trans "SP" %}</th>

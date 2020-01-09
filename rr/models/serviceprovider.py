@@ -116,6 +116,15 @@ class ServiceProvider(models.Model):
     subject_identifier = models.CharField(blank=True, max_length=8, choices=SUBJECTIDENTIFIERS,
                                           verbose_name=_('Subject identifier'))
 
+    TOKENENDPOINTAUTHMETHODS = (('client_secret_basic', _('client_secret_basic')),
+                                ('client_secret_post', _('client_secret_post')),
+                                ('client_secret_jwt', _('client_secret_jwt')),
+                                ('private_key_jwt', _('private_key_jwt')),
+                                ('none', _('none')),
+                                )
+    token_endpoint_auth_method = models.CharField(blank=True, max_length=19, choices=TOKENENDPOINTAUTHMETHODS,
+                                                  verbose_name=_('Token endpoint authentication method'))
+
     admin_require_manual_configuration = models.BooleanField(
                 default=False,
                 verbose_name=_('This service requires manual configuration'))

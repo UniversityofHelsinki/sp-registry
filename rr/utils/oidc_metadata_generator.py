@@ -112,6 +112,8 @@ def oidc_metadata_generator(sp, validated=True, privacypolicy=False, client_secr
         metadata['jwks_uri'] = entity.jwks_uri
     elif entity.jwks:
         metadata['jwks'] = json.loads(entity.jwks)
+    if entity.token_endpoint_auth_method:
+        metadata['token_endpoint_auth_method'] = entity.token_endpoint_auth_method
     metadata['application_type'] = entity.application_type
     if entity.subject_identifier:
         metadata['subject_type'] = entity.subject_identifier

@@ -87,3 +87,5 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 MFA_AUTHENTICATION_CONTEXT = 'https://refeds.org/profile/mfa'
+
+SAML_METADATA_EXPORT_INDIVIDUAL_FILES = False

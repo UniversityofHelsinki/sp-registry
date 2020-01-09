@@ -1,4 +1,5 @@
 import os
+
 from io import StringIO
 from lxml import etree
 
@@ -9,6 +10,7 @@ from rr.models.serviceprovider import ServiceProvider
 from rr.utils.saml_metadata_parser import saml_metadata_parser
 
 TESTDATA_FILENAME = os.path.join(os.path.dirname(__file__), '../../testdata/metadata.xml')
+
 
 class ExportMetadataTest(TestCase):
     def setUp(self):

@@ -9,11 +9,11 @@
 <p>{% trans "It's recommend that you use service addresses, not personal addresses. These contacts are used if the IdP administrators have to contact you about the SP or some client request has to be forwarded to you." %}</p>
 </div>
 
-<h2>{% trans "List of contacts" %}</h2>
+<h2 id="contact-list">{% trans "List of contacts" %}</h2>
 {% if object_list %}
 <form action="" method='POST'>
 {% csrf_token %}
-<table class="table table-sm table-responsive">
+<table class="table table-sm table-responsive" aria-describedby="contact-list">
   <thead>
     <tr>
       <th scope="col">{% trans "Type" %}</th>

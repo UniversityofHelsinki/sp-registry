@@ -11,11 +11,11 @@
 <code>openssl req -new -x509 -nodes -newkey rsa:4096 -keyout sp1.test.helsinki.fi-shib.key -days 3650 -subj '/CN=sp1.test.helsinki.fi' -out sp1.test.helsinki.fi-shib.crt</code>
 </div>
 
-<h2>{% trans "List of certificates" %}</h2>
+<h2 id="certificate-list">{% trans "List of certificates" %}</h2>
 {% if object_list %}
 <form action="" method='POST'>
 {% csrf_token %}
-<table class="table table-sm table-responsive">
+<table class="table table-sm table-responsive" aria-describedby="certificate-list">
   <thead>
     <tr>
       <th scope="col">{% trans "Subject" %}</th>

@@ -214,7 +214,7 @@ def _get_last_commits(repo, n):
 def _write_medadata(repo, service_type):
     if service_type == "saml":
         _write_saml_metadata()
-        repo.index.add([settings.METADATA_FILENAME])
+        repo.git.add(A=True)
     if service_type == "oidc":
         _write_oidc_metadata()
         repo.index.add([settings.OIDC_METADATA_FILENAME])
@@ -225,13 +225,27 @@ def _write_medadata(repo, service_type):
 
 def _write_saml_metadata():
     # Generate metadata and write it to file
-    metadata = saml_metadata_generator_list(validated=True, privacypolicy=True, production=True)
-    metadata_file = join(settings.METADATA_GIT_REPOSITORIO, settings.METADATA_FILENAME)
-    with open(metadata_file, 'wb') as f:
-        f.write('<?xml version="1.0" encoding="UTF-8"?>\n'.encode('utf-8'))
-        # Hack for correcting namespace definition by removing prefix.
-        f.write(etree.tostring(metadata, pretty_print=True,
-                               encoding='UTF-8').replace(b'xmlns:xmlns', b'xmlns'))
+    if settings.SAML_METADATA_EXPORT_INDIVIDUAL_FILES:
+        metadata_list = saml_metadata_generator_list(validated=True,
+                                                     privacypolicy=True,
+                                                     production=True,
+                                                     as_list=True)
+        for metadata in metadata_list:
+            if metadata is not None and metadata.get("entityID"):
+                file_name = hashlib.sha1(metadata.get("entityID").encode()).hexdigest() + '.xml'
+                with open(os.path.join(settings.METADATA_GIT_REPOSITORIO, file_name), 'w') as f:
+                    f.write('<?xml version="1.0" encoding="UTF-8"?>\n')
+                    f.write(etree.tostring(metadata,
+                                           pretty_print=True,
+                                           encoding=str).replace('xmlns:xmlns', 'xmlns'))
+    else:
+        metadata = saml_metadata_generator_list(validated=True, privacypolicy=True, production=True)
+        metadata_file = join(settings.METADATA_GIT_REPOSITORIO, settings.METADATA_FILENAME)
+        with open(metadata_file, 'w') as f:
+            f.write('<?xml version="1.0" encoding="UTF-8"?>\n')
+            # Hack for correcting namespace definition by removing prefix.
+            f.write(etree.tostring(metadata, pretty_print=True,
+                                   encoding=str).replace('xmlns:xmlns', 'xmlns'))
 
 
 def _write_ldap_metadata():
@@ -240,18 +254,18 @@ def _write_ldap_metadata():
     files = []
     metadata_file = join(settings.LDAP_GIT_REPOSITORIO, settings.LDAP_METADATA_FILENAME)
     files.append(settings.LDAP_METADATA_FILENAME)
-    with open(metadata_file, 'wb') as f:
-        f.write('<?xml version="1.0" encoding="UTF-8"?>\n'.encode('utf-8'))
-        f.write(etree.tostring(tree, pretty_print=True, encoding='UTF-8'))
+    with open(metadata_file, 'w') as f:
+        f.write('<?xml version="1.0" encoding="UTF-8"?>\n')
+        f.write(etree.tostring(tree, pretty_print=True, encoding=str))
     # Generate separate files for all entities
     for entity in tree:
         entity_id = entity.get("ID")
         if entity_id:
             metadata_file = join(settings.LDAP_GIT_REPOSITORIO, entity_id + '.xml')
             files.append(entity_id + '.xml')
-            with open(metadata_file, 'wb') as f:
-                f.write('<?xml version="1.0" encoding="UTF-8"?>\n'.encode('utf-8'))
-                f.write(etree.tostring(entity, pretty_print=True, encoding='UTF-8'))
+            with open(metadata_file, 'w') as f:
+                f.write('<?xml version="1.0" encoding="UTF-8"?>\n')
+                f.write(etree.tostring(entity, pretty_print=True, encoding=str))
     # Remove all other xml-files from repository
     for f in glob(settings.LDAP_GIT_REPOSITORIO + '*.xml'):
         if f.replace(settings.LDAP_GIT_REPOSITORIO, '') not in files:

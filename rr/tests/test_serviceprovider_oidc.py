@@ -136,6 +136,7 @@ class ServiceProviderOIDCTechnicalTestCase(TestCase):
                                    oidc_userinfo=True)
         self.user_sp.encrypted_client_secret = "abc"
         self.user_sp.application_type = "web"
+        self.user_sp.token_endpoint_auth_method = "client_secret_post"
         self.user_sp.save()
         metadata = oidc_metadata_generator(sp=self.user_sp, validated=False)
         self.assertEqual(json.dumps(metadata, indent=4, sort_keys=True) + '\n', open(TESTDATA_OIDC_FILENAME).read())

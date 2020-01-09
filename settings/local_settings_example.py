@@ -82,3 +82,6 @@ DISABLE_METADATA_ENTITY_EXTENSIONS = False
 # from cryptography.fernet import Fernet
 # Fernet.generate_key().decode()
 OIDC_CLIENT_SECRET_KEY = 'generated fernet key'
+
+# Turn true if UI metadata export should write individual files
+SAML_METADATA_EXPORT_INDIVIDUAL_FILES = False

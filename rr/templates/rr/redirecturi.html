@@ -8,11 +8,11 @@
 <p>{% trans "The accepted redirect URIs for the service." %}</p>
 </div>
 
-<h2>{% trans "List of redirect URIs" %}</h2>
+<h2 id="redirect-uri-list">{% trans "List of redirect URIs" %}</h2>
 {% if object_list %}
 <form action="" method='POST'>
 {% csrf_token %}
-<table class="table table-sm table-responsive">
+<table class="table table-sm table-responsive" aria-describedby="redirect-uri-list">
   <thead>
     <tr>
       <th scope="col">{% trans "URI" %}</th>

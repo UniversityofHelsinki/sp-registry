@@ -15,8 +15,8 @@
 </div>
 {% endif %}
 {% if log %}
-<h2>{% trans "Previous commits" %}</h2>
-<table class="table table-sm">
+<h2 id="commit-list">{% trans "Previous commits" %}</h2>
+<table class="table table-sm" aria-describedby="commit-list">
   <thead>
     <tr>
       <th scope="col">{% trans "Time" %}</th>

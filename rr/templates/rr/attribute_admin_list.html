@@ -1,12 +1,12 @@
 {% extends "base.html" %}
 {% load i18n %}
 {% block content %}
-<h1>Attributes</h1>
+<h1 id="attributes">Attributes</h1>
 <div class="alert alert-success" role="alert">
 <p>{% trans "Listing all attributes included in this system." %}</p>
 <p>{% trans "Click attribute ID for more information." %}</p>
 </div>
-<table class="table table-sm table-responsive">
+<table class="table table-sm table-responsive" aria-describedby="attributes">
   <thead>
     <tr>
       <th scope="col">{% trans "Friendly name" %}</th>

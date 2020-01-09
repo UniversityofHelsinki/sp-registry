@@ -8,7 +8,7 @@ from django.test import TestCase
 from rr.models.attribute import Attribute
 from rr.models.nameidformat import NameIDFormat
 from rr.models.organization import Organization
-from rr.utils.saml_metadata_generator import saml_metadata_generator
+from rr.utils.saml_metadata_generator import saml_metadata_generator, saml_metadata_generator_list
 from rr.utils.saml_metadata_parser import saml_metadata_parser
 
 TESTDATA_FILENAME = os.path.join(os.path.dirname(__file__), '../testdata/metadata.xml')
@@ -70,8 +70,6 @@ class MetadataParserGenerationTestCase(TestCase):
         metadata_tree = saml_metadata_generator(sp=self.sp)
         metadata = etree.tostring(metadata_tree, pretty_print=True,
                                   encoding='UTF-8').replace(b'xmlns:xmlns', b'xmlns')
-        # for line in difflib.unified_diff(metadata.decode("utf-8").splitlines(), self.test_metadata.splitlines()):
-        #     print(line)
         self.assertEqual(metadata.decode("utf-8"), self.test_metadata)
 
 
@@ -100,6 +98,7 @@ class MetadataMinimalParserGenerationTestCase(TestCase):
         entity = etree.fromstring(self.test_metadata, parser)
         self.sp, self.errors = saml_metadata_parser(entity, overwrite=False, verbosity=2,
                                                     validate=True, disable_checks=False)
+        self.sp.production = True
         self.sp.save()
 
     def test_metadata_parser(self):
@@ -128,8 +127,12 @@ class MetadataMinimalParserGenerationTestCase(TestCase):
         metadata_tree = saml_metadata_generator(sp=self.sp)
         metadata = etree.tostring(metadata_tree, pretty_print=True,
                                   encoding='UTF-8').replace(b'xmlns:xmlns', b'xmlns')
-        # for line in difflib.unified_diff(metadata.decode("utf-8").splitlines(), self.test_metadata.splitlines()):
-        #    print(line)
+        self.assertEqual(metadata.decode("utf-8"), self.test_metadata)
+
+    def test_metadata_generation_as_list(self):
+        metadata_list = saml_metadata_generator_list(production=True)
+        metadata = etree.tostring(metadata_list[0], pretty_print=True,
+                                  encoding='UTF-8').replace(b'xmlns:xmlns', b'xmlns')
         self.assertEqual(metadata.decode("utf-8"), self.test_metadata)
 
     def test_metadata_organization_generation(self):

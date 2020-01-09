@@ -249,8 +249,8 @@ class OidcTechnicalInformationForm(ModelForm):
     class Meta:
         model = ServiceProvider
         fields = ['entity_id', 'admin_require_manual_configuration', 'grant_types', 'response_types', 'oidc_scopes',
-                  'application_type', 'subject_identifier', 'jwks_uri', 'jwks', 'production', 'test',
-                  'saml_product', 'autoupdate_idp_metadata']
+                  'application_type', 'subject_identifier', 'token_endpoint_auth_method', 'jwks_uri', 'jwks',
+                  'production', 'test', 'saml_product', 'autoupdate_idp_metadata']
         help_texts = {
             'entity_id': _('Client identifier of the relying party. '
                            'It is usually recommended to use random identifier. '
@@ -263,6 +263,7 @@ class OidcTechnicalInformationForm(ModelForm):
                              'user attributes as claims from the Attributes section.'),
             'application_type': _('Application type. Used for validating redirect_uris.'),
             'subject_identifier': _('Request a specific subject identifier.'),
+            'token_endpoint_auth_method': _('If empty, uses client_secret_basic by default.'),
             'jwks_uri': _('URI for RPs JSON Web Key document (jwks_uri).'),
             'jwks': _('RPs JSON Web Key document (jwks) passed as a parameter. Should only be used if the use of '
                       'jwks_uri is not possible.'),

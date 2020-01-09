@@ -31,7 +31,7 @@ def statistics_list(request, pk):
 
     :template:`rr/statistics.html`
     """
-    sp = get_service_provider(pk, request.user, service_type=["saml"])
+    sp = get_service_provider(pk, request.user, service_type=["oidc", "saml"])
     try:
         days = int(request.GET.get('days', 31))
     except ValueError:

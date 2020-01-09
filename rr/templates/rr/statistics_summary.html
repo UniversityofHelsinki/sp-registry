@@ -3,9 +3,9 @@
 {% load bootstrap4 %}
 {% load static %}
 {% block content %}
-<h1 class="page-header">{% trans "Login Statistics Summary" %}</h1>
+<h1 class="page-header" id="statistics-summary">{% trans "Login Statistics Summary" %}</h1>
 {% if object_list %}
-  <table class="table table-sm table-responsive">
+  <table class="table table-sm table-responsive" aria-describedby="statistics-summary">
   <thead>
     <tr>
       <th scope="col">{% trans "Service" %}</th>

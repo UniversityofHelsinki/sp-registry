@@ -9,11 +9,11 @@
 <p>{% trans "Users without a University of Helsinki login account have to requisition a local account from IdP administrators." %}</p>
 </div>
 
-<h2>{% trans "List of admins" %}</h2>
+<h2 id="admin-list">{% trans "List of admins" %}</h2>
 {% if object.admins.all %}
 <form action="" method='POST'>
 {% csrf_token %}
-<table class="table table-sm table-responsive">
+<table class="table table-sm table-responsive" aria-describedby="admin-list">
   <thead>
     <tr>
       <th scope="col">{% trans "First name" %}</th>
@@ -38,10 +38,10 @@
 {% else %}
 <p>{% trans "No admins" %}</p>
 {% endif %}
-<h2>{% trans "List of invites" %}</h2>
+<h2 id="invite-list">{% trans "List of invites" %}</h2>
 {% if object_list %}
 <form action="" method='POST'>
-<table class="table table-sm table-responsive">
+<table class="table table-sm table-responsive" aria-describedby="invite-list">
   <thead>
     <tr>
       <th scope="col">{% trans "E-Mail" %}</th>

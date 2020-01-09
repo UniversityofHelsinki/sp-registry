@@ -460,7 +460,8 @@ def saml_metadata_generator(sp, validated=True, privacypolicy=False, tree=None, 
         return entity_descriptor
 
 
-def saml_metadata_generator_list(validated=True, privacypolicy=False, production=False, test=False, include=None):
+def saml_metadata_generator_list(validated=True, privacypolicy=False, production=False, test=False, include=None,
+                                 as_list=False):
     """
     Generates metadata for list of serviceproviders.
 
@@ -469,10 +470,9 @@ def saml_metadata_generator_list(validated=True, privacypolicy=False, production
     production: include production SPs
     test: include test SPs
     include: include listed SPs
+    as_list: return metadata as list of individual metadata instead etree object
 
     return tree
-
-    Using CamelCase instead of regular underscore attribute names in element tree.
     """
     tree = etree.Element("EntitiesDescriptor", Name="urn:mace:funet.fi:helsinki.fi", nsmap={"ds": 'http://www.w3.org/2000/09/xmldsig#',
                                                                                             "mdattr": 'urn:oasis:names:tc:SAML:metadata:attribute',
@@ -482,6 +482,7 @@ def saml_metadata_generator_list(validated=True, privacypolicy=False, production
                                                                                             "xsd": 'http://www.w3.org/2001/XMLSchema',
                                                                                             "xsi": 'http://www.w3.org/2001/XMLSchema-instance',
                                                                                             })
+    metadata_list = []
     serviceproviders = ServiceProvider.objects.filter(end_at=None, service_type="saml")
     if hasattr(settings, 'DISABLE_METADATA_ENTITY_EXTENSIONS') and settings.DISABLE_METADATA_ENTITY_EXTENSIONS:
         disable_entity_extensions = True
@@ -489,5 +490,12 @@ def saml_metadata_generator_list(validated=True, privacypolicy=False, production
         disable_entity_extensions = False
     for sp in serviceproviders:
         if (production and sp.production) or (test and sp.test) or (include and sp.entity_id in include):
-            saml_metadata_generator(sp, validated, privacypolicy, tree, disable_entity_extensions)
-    return tree
+            if as_list:
+                metadata_list.append(
+                    saml_metadata_generator(sp, validated, privacypolicy, None, disable_entity_extensions))
+            else:
+                saml_metadata_generator(sp, validated, privacypolicy, tree, disable_entity_extensions)
+    if as_list:
+        return metadata_list
+    else:
+        return tree

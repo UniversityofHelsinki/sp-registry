@@ -1,6 +1,20 @@
 # Changelog
 
-## [1.3.0] - 2019-09-24
+## [1.4.0] - 2020-01-09
+### Changes
+* Added option to use individual SAML metadata files for dynamic metadata management
+* Added jwks and jwks_uri parameters for OIDC 
+* Added token_endpoint_auth_method parameter for OIDC
+* Added missing table descriptions
+* Fixed JSON sorting
+* Fixed RedirectUri warning
+* Updated requirements
+* Code and test improvements
+
+### Updating notes
+* Includes added database fields, run migrations
+
+## [1.3.0] - 2019-11-07
 ### Changes
 * Improved responsiveness and mobile use
 * Fixed xml attribute order (lxml 4.4 changes)

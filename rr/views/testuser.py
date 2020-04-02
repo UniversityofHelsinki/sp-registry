@@ -65,24 +65,36 @@ def testuser_list(request, pk):
 def _add_testuser(request, sp):
     form = TestUserForm(request.POST, sp=sp, admin=request.user)
     if form.is_valid():
-        username = form.cleaned_data['username']
-        password = hashlib.sha256(
-            form.cleaned_data['password'].encode('utf-8')).hexdigest()
         firstname = form.cleaned_data['firstname']
         lastname = form.cleaned_data['lastname']
         valid_for = form.cleaned_data['valid_for']
         userdata = form.cleaned_data['userdata']
         otherdata = form.cleaned_data['otherdata']
-        testuser = TestUser.objects.create(sp=sp, username=username, password=password,
-                                           firstname=firstname, lastname=lastname,
-                                           end_at=None)
-        testuser.valid_for.add(*valid_for)
-        testuser.valid_for.add(sp)
-        logger.info("Test user {username} added for {sp}"
-                    .format(username=username, sp=sp))
+        scope = form.cleaned_data['scope'] if form.cleaned_data['scope'] else 'example.org'
+        number_of_users = int(form.cleaned_data['number_of_users'])
+        for number in range(1, number_of_users + 1):
+            if number_of_users == 1:
+                username = form.cleaned_data['username']
+                password = hashlib.sha256(
+                    form.cleaned_data['password'].encode('utf-8')).hexdigest()
+            else:
+                username = form.cleaned_data['username'] + str(number)
+                password = hashlib.sha256(
+                    (form.cleaned_data['password'] + str(number)).encode('utf-8')).hexdigest()
+            if not TestUser.objects.filter(username=username, end_at=None).exists():
+                testuser = TestUser.objects.create(sp=sp, username=username, password=password,
+                                                   firstname=firstname, lastname=lastname,
+                                                   end_at=None)
+
+                testuser.valid_for.add(*valid_for)
+                testuser.valid_for.add(sp)
+                logger.info("Test user {username} added for {sp}"
+                            .format(username=username, sp=sp))
+                generate_user_data(testuser, userdata, otherdata, scope)
+                messages.add_message(request, messages.INFO, _('Test user added: ') + username)
+            else:
+                messages.add_message(request, messages.WARNING, _('Username already exists: ') + username)
         form = TestUserForm(sp=sp, admin=request.user)
-        generate_user_data(testuser, userdata, otherdata)
-        messages.add_message(request, messages.INFO, _('Test user added: ') + username)
     return form
 
 

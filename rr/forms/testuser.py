@@ -2,7 +2,7 @@ import re
 
 from django.db.models import Q
 from django.core.validators import ValidationError
-from django.forms import ModelForm, Form, CharField, BooleanField, PasswordInput
+from django.forms import ModelForm, Form, BooleanField, CharField, ChoiceField, PasswordInput
 from django.forms.widgets import TextInput
 from django.utils.translation import ugettext_lazy as _
 
@@ -11,12 +11,30 @@ from rr.models.serviceprovider import SPAttribute, ServiceProvider
 from rr.models.testuser import TestUser, TestUserData
 
 
+def hostname_validator(hostname):
+    if len(hostname) > 253:
+        return False
+    parts = hostname.split(".")
+    allowed = re.compile(r"(?!-)[a-z0-9-]{1,63}(?<!-)$", re.IGNORECASE)
+    return all(allowed.match(part) for part in parts)
+
+
 class TestUserForm(ModelForm):
 
     userdata = BooleanField(required=False,
                             label=_("Generate attribute data for name and username based fields."))
     otherdata = BooleanField(required=False,
                              label=_("Generate random attribute data for other fields."))
+    scope = CharField(required=False, max_length=253, label=_("Scope"),
+                      help_text=_("Scope for scoped attributes. Default is 'example.org'."))
+
+    CHOICES = ((1, _('1')),
+               (5, _('5')),
+               (10, _('10')),
+               (50, _('50')))
+    number_of_users = ChoiceField(required=False, choices=CHOICES,
+                                  label=_("Number of users"),
+                                  help_text=_("Create X users. Username and password will be appended with <number>"))
 
     class Meta:
         model = TestUser
@@ -30,8 +48,19 @@ class TestUserForm(ModelForm):
         self.fields['valid_for'].queryset = ServiceProvider.objects.filter(
             Q(end_at=None, test=True, admins=self.admin) | Q(pk=self.sp.pk)).distinct()
 
+    def clean_scope(self):
+        data = self.cleaned_data["scope"]
+        if data and not hostname_validator(data):
+            raise ValidationError(_("Scope must be a valid hostname"))
+        return data
+
     def clean(self):
         cleaned_data = super().clean()
+        number_of_users = cleaned_data.get("number_of_users")
+        try:
+            int(number_of_users)
+        except ValueError:
+            raise ValidationError(_("Number of users must be integer"))
         username = cleaned_data.get("username")
         if TestUser.objects.filter(username=username, end_at=None).exists():
             raise ValidationError(_("Username already exists"))

@@ -75,6 +75,7 @@ class TestUserTestCase(TestCase):
                                      'firstname': 'John',
                                      'lastname': 'Johnson',
                                      'valid_for': ['1', '3'],
+                                     'number_of_users': 1,
                                      'userdata': 'checked'})
         self.assertEqual(response.status_code, 200)
         self.assertIn('Test user added: jjohn', response.content.decode())
@@ -82,6 +83,25 @@ class TestUserTestCase(TestCase):
         test_jjohn = TestUser.objects.get(username="jjohn")
         self.assertEqual(TestUserData.objects.filter(attribute=self.attr_cn, user=test_jjohn,
                                                      value="John Johnson").count(), 1)
+        self.assertEqual(TestUserData.objects.filter(attribute=self.attr_eppn, user=test_jjohn,
+                                                     value="jjohn@example.org").count(), 1)
+
+    def test_testuser_view_create_custom_scope(self):
+        self.client.force_login(self.user)
+        response = self.client.post(reverse('testuser-list', kwargs={'pk': self.saml_sp.pk}),
+                                    {'add_testuser': 'ok',
+                                     'username': 'jjohn',
+                                     'password': 'secretword',
+                                     'firstname': 'John',
+                                     'lastname': 'Johnson',
+                                     'valid_for': ['1', '3'],
+                                     'number_of_users': 1,
+                                     'userdata': 'checked',
+                                     'scope': 'test.org'})
+        self.assertEqual(response.status_code, 200)
+        test_jjohn = TestUser.objects.get(username="jjohn")
+        self.assertEqual(TestUserData.objects.filter(attribute=self.attr_eppn, user=test_jjohn,
+                                                     value="jjohn@test.org").count(), 1)
 
     def test_testuser_view_create_dublicate(self):
         self.client.force_login(self.user)
@@ -92,10 +112,27 @@ class TestUserTestCase(TestCase):
                                      'firstname': 'John',
                                      'lastname': 'Johnson',
                                      'valid_for': ['1'],
+                                     'number_of_users': 1,
                                      'userdata': 'checked'})
         self.assertEqual(response.status_code, 200)
         self.assertIn('Username already exists', response.content.decode())
         self.assertEqual(TestUser.objects.filter(sp=self.saml_sp).count(), 1)
+
+    def test_testuser_view_create_multiple(self):
+        self.client.force_login(self.user)
+        response = self.client.post(reverse('testuser-list', kwargs={'pk': self.saml_sp.pk}),
+                                    {'add_testuser': 'ok',
+                                     'username': 'jjohn',
+                                     'password': 'secretword',
+                                     'firstname': 'John',
+                                     'lastname': 'Johnson',
+                                     'valid_for': ['1'],
+                                     'number_of_users': 5,
+                                     'userdata': 'checked'})
+        self.assertEqual(response.status_code, 200)
+        self.assertIn('Test user added: jjohn1', response.content.decode())
+        self.assertIn('Test user added: jjohn2', response.content.decode())
+        self.assertEqual(TestUser.objects.filter(sp=self.saml_sp).count(), 6)
 
     def test_testuser_view_change_data(self):
         self.client.force_login(self.user)

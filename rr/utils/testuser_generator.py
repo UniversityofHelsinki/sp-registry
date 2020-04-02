@@ -13,7 +13,7 @@ def update_test_data(testuser, attribute, value):
                                               defaults={'value': value})
 
 
-def generate_user_data(testuser, userdata=True, otherdata=True, scope="@example.org"):
+def generate_user_data(testuser, userdata=True, otherdata=True, scope="example.org"):
     attributes = SPAttribute.objects.filter(sp=testuser.sp, end_at=None)
     for attribute in attributes:
         if userdata:
@@ -29,9 +29,9 @@ def generate_user_data(testuser, userdata=True, otherdata=True, scope="@example.
                 update_test_data(testuser, attribute, testuser.username)
             elif attribute.attribute.friendlyname == "mail":
                 update_test_data(testuser, attribute,
-                                 testuser.firstname.lower() + "." + testuser.lastname.lower() + scope)
+                                 testuser.firstname.lower() + "." + testuser.lastname.lower() + "@" + scope)
             elif attribute.attribute.friendlyname == "eduPersonPrincipalName":
-                update_test_data(testuser, attribute, testuser.username + scope)
+                update_test_data(testuser, attribute, testuser.username + "@" + scope)
         if otherdata:
             if attribute.attribute.friendlyname == "funetEduPersonStudentID":
                 update_test_data(testuser, attribute, str(randint(100000, 999999)))
@@ -40,7 +40,7 @@ def generate_user_data(testuser, userdata=True, otherdata=True, scope="@example.
             elif attribute.attribute.friendlyname == "eduPersonAffiliation":
                 update_test_data(testuser, attribute, "affiliate")
             elif attribute.attribute.friendlyname == "eduPersonScopedAffiliation":
-                update_test_data(testuser, attribute, "affiliate" + scope)
+                update_test_data(testuser, attribute, "affiliate" + "@" + scope)
             elif attribute.attribute.friendlyname == "eduPersonPrimaryAffiliation":
                 update_test_data(testuser, attribute, "employee")
             elif attribute.attribute.friendlyname == "preferredLanguage":

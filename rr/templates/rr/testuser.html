@@ -29,11 +29,12 @@
       <th scope="row"><a href="{% url 'testuser-attribute-data' testuser.pk %}">{{ testuser.username }}</a></th>
       <td>{{ testuser.firstname }}</td>
       <td>{{ testuser.lastname }}</td>
-      <td><div class="checkbox"><input type="checkbox" aria-label="{%  trans "Mark for removal" %}" name="{{ testuser.pk }}" class="" id="id_user" /></div></td>
+      <td><div class="checkbox"><input type="checkbox" aria-label="{%  trans "Mark for removal" %}" name="{{ testuser.pk }}" class="local_test_user" id="id_user" /></div></td>
     </tr>
 {% endfor %}
   </tbody>
 </table>
+<p><input type="checkbox" aria-label="{%  trans "Check all local users" %}" id="checkAllLocal" /> {% trans "Check all local users" %}</p>
 <p><input class="btn btn-danger" type="submit" data-toggle="confirmation" name="remove_testuser" value="{% trans "Remove selected" %}" /></p>
 </form>
 {% else %}
@@ -61,11 +62,12 @@
       <th scope="row"><a href="{% url 'testuser-attribute-data' testuser.pk %}">{{ testuser.username }}</a></th>
       <td>{{ testuser.firstname }}</td>
       <td>{{ testuser.lastname }}</td>
-      <td><div class="checkbox"><input type="checkbox" aria-label="{%  trans "Mark for removal" %}" name="{{ testuser.pk }}" class="" id="id_user" /></div></td>
+      <td><div class="checkbox"><input type="checkbox" aria-label="{%  trans "Mark for removal" %}" name="{{ testuser.pk }}" class="external_test_user" id="id_user" /></div></td>
     </tr>
 {% endfor %}
   </tbody>
 </table>
+<p><input type="checkbox" aria-label="{%  trans "Check all external users" %}" id="checkAllExternal" /> {% trans "Check all external users" %}</p>
 <p><input class="btn btn-danger" type="submit" data-toggle="confirmation" name="remove_testuser_external" value="{% trans "Remove selected" %}" /></p>
 </form>
 {% endif %}
@@ -91,6 +93,12 @@
     container: "body",
     yesBtn: "{% trans "Confirm" %}",
     noBtn: "{% trans "Cancel" %}"
+  });
+  $("#checkAllLocal").click(function () {
+    $(".local_test_user").prop('checked', $(this).prop('checked'));
+  });
+  $("#checkAllExternal").click(function () {
+    $(".external_test_user").prop('checked', $(this).prop('checked'));
   });
   </script>
 {% endblock %}

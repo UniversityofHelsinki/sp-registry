@@ -10,6 +10,7 @@ from django.utils.translation import ugettext_lazy as _
 
 from rr.models.nameidformat import NameIDFormat
 from rr.models.serviceprovider import ServiceProvider, ldap_entity_id_from_name, random_oidc_client_id
+from rr.utils.missing_data import get_missing_sp_data
 
 
 class BasicInformationForm(ModelForm):
@@ -134,7 +135,16 @@ class SamlTechnicalInformationForm(ModelForm):
     def __init__(self, *args, **kwargs):
         self.request = kwargs.pop('request', None)
         super(SamlTechnicalInformationForm, self).__init__(*args, **kwargs)
+        # Show missing fields
+        missing = get_missing_sp_data(self.instance)
+        if missing:
+            warning = _('Following parameters are missing for production use: ')
+            self.fields['production'].help_text += '<div class="text-danger">' + str(warning) + '<br>' + str(
+                '<br>'.join(missing)) + '</div>'
         if not self.request.user.is_superuser:
+            # Disable production if missing fields
+            if missing and not self.instance.production:
+                self.fields['production'].widget.attrs['disabled'] = True
             # Limit choices to public and current values
             self.fields['nameidformat'].queryset = NameIDFormat.objects.filter(
                 Q(public=True) | Q(pk__in=self.instance.nameidformat.all()))
@@ -201,7 +211,16 @@ class LdapTechnicalInformationForm(ModelForm):
     def __init__(self, *args, **kwargs):
         self.request = kwargs.pop('request', None)
         super(LdapTechnicalInformationForm, self).__init__(*args, **kwargs)
+        # Show missing fields
+        missing = get_missing_sp_data(self.instance)
+        if missing:
+            warning = _('Following parameters are missing for production use: ')
+            self.fields['production'].help_text += '<div class="text-danger">' + str(warning) + '<br>' + str(
+                '<br>'.join(missing)) + '</div>'
         if not self.request.user.is_superuser:
+            # Disable production if missing fields
+            if missing and not self.instance.production:
+                self.fields['production'].widget.attrs['disabled'] = True
             del self.fields['admin_require_manual_configuration']
 
     def clean_server_names(self):
@@ -287,7 +306,16 @@ class OidcTechnicalInformationForm(ModelForm):
         self.request = kwargs.pop('request', None)
         super(OidcTechnicalInformationForm, self).__init__(*args, **kwargs)
         self.fields['saml_product'].label = "OIDC product"
+        # Show missing fields
+        missing = get_missing_sp_data(self.instance)
+        if missing:
+            warning = _('Following parameters are missing for production use: ')
+            self.fields['production'].help_text += '<div class="text-danger">' + str(warning) + '<br>' + str(
+                '<br>'.join(missing)) + '</div>'
         if not self.request.user.is_superuser:
+            # Disable production if missing fields
+            if missing and not self.instance.production:
+                self.fields['production'].widget.attrs['disabled'] = True
             del self.fields['admin_require_manual_configuration']
 
     def clean_entity_id(self):

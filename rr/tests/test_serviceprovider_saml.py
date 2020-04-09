@@ -45,3 +45,13 @@ class ServiceProviderSAMLTechnicalTestCase(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertNotIn('Entity Id should be URI', response.content.decode())
         self.assertIn('https://valid.entity.id', response.content.decode())
+
+    def test_sp_technical_view_production_disabled_if_missing(self):
+        self.client.force_login(self.user)
+        response = self.client.get(reverse('technical-update', kwargs={'pk': self.user_sp.pk}))
+        self.assertIn('name="production" disabled', response.content.decode())
+
+    def test_sp_technical_view_production_not_disabled_with_superuser(self):
+        self.client.force_login(self.superuser)
+        response = self.client.get(reverse('technical-update', kwargs={'pk': self.user_sp.pk}))
+        self.assertNotIn('name="production" disabled', response.content.decode())

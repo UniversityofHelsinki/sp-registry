@@ -26,6 +26,7 @@ from rr.models.redirecturi import RedirectUri
 from rr.models.serviceprovider import ServiceProvider, SPAttribute, new_ldap_entity_id_from_name
 from rr.models.testuser import update_entity_ids
 from rr.models.usergroup import UserGroup
+from rr.utils.missing_data import get_missing_sp_data
 from rr.utils.notifications import validation_notification, admin_notification_created_sp
 
 logger = logging.getLogger(__name__)
@@ -147,56 +148,6 @@ class BasicInformationView(DetailView):
             return ServiceProvider.objects.filter(admins=self.request.user,
                                                   end_at=None).order_by('entity_id')
 
-
-    @staticmethod
-    def _get_missing_saml_data(sp, missing):
-        if not sp.privacypolicy_en and not sp.privacypolicy_fi and sp.attributes:
-            url = reverse("basicinformation-update", args=[sp.pk])
-            msg = _("Privacy policy URL in English or in Finnish")
-            missing.append("<a href='" + url + "'>" + msg + "</a>")
-        if not Certificate.objects.filter(sp=sp, end_at=None):
-            url = reverse("certificate-list", args=[sp.pk])
-            msg = _("Certificate")
-            missing.append("<a href='" + url + "'>" + msg + "</a>")
-        if not Endpoint.objects.filter(sp=sp, end_at=None,
-                                       type='AssertionConsumerService'):
-            url = reverse("endpoint-list", args=[sp.pk])
-            msg = _("AssertionConsumerService endpoint")
-            missing.append("<a href='" + url + "'>" + msg + "</a>")
-        return missing
-
-    @staticmethod
-    def _get_missing_oidc_data(sp, missing):
-        if not RedirectUri.objects.filter(sp=sp, end_at=None):
-            url = reverse("redirecturi-list", args=[sp.pk])
-            msg = _("Redirect URI")
-            missing.append("<a href='" + url + "'>" + msg + "</a>")
-        return missing
-
-    def _get_missing_data(self, sp):
-        missing = []
-        if not sp.name_en and not sp.name_fi:
-            url = reverse("basicinformation-update", args=[sp.pk])
-            msg = _("Service name in English or in Finnish")
-            missing.append("<a href='" + url + "'>" + msg + "</a>")
-        if not sp.description_en and not sp.description_fi:
-            url = reverse("basicinformation-update", args=[sp.pk])
-            msg = _("Service description in English or in Finnish")
-            missing.append("<a href='" + url + "'>" + msg + "</a>")
-        if not sp.application_portfolio:
-            url = reverse("basicinformation-update", args=[sp.pk])
-            msg = _("Application portfolio URL")
-            missing.append("<a href='" + url + "'>" + msg + "</a>")
-        if not Contact.objects.filter(sp=sp, end_at=None, type="technical"):
-            url = reverse("contact-list", args=[sp.pk])
-            msg = _("Technical contact")
-            missing.append("<a href='" + url + "'>" + msg + "</a>")
-        if sp.service_type == "saml":
-            missing = self._get_missing_saml_data(sp, missing)
-        elif sp.service_type == "oidc":
-            missing = self._get_missing_oidc_data(sp, missing)
-        return missing
-
     def get_context_data(self, **kwargs):
         context = super(BasicInformationView, self).get_context_data(**kwargs)
         sp = context['object']
@@ -245,7 +196,7 @@ class BasicInformationView(DetailView):
         if history:
             context['history_object'] = history
         if sp.production:
-            context['missing'] = self._get_missing_data(sp)
+            context['missing'] = get_missing_sp_data(sp)
         if self.request.user.is_superuser and sp.modified:
             context['form'] = ServiceProviderValidationForm(
                 modified_date=sp.updated_at.strftime("%Y%m%d%H%M%S%f"))

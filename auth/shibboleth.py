@@ -2,9 +2,26 @@ import logging
 import re
 
 from django.conf import settings
-from django.contrib.auth.models import User
+from django.contrib.auth.models import Group, User
 
 logger = logging.getLogger(__name__)
+
+
+def update_groups(user, groups):
+    """
+    Set users groups based on SAML_ATTR_GROUPS parameter
+
+    user: User object
+    groups: string of group names, separated by semicolon
+    """
+    login_groups = Group.objects.filter(name__in=groups.split(';'))
+    user_groups = user.groups.all()
+    removed = list(set(user_groups) - set(login_groups))
+    added = list(set(login_groups) - set(user_groups))
+    for group in removed:
+        user.groups.remove(group)
+    for group in added:
+        user.groups.add(group)
 
 
 class ShibbolethBackend:
@@ -21,10 +38,12 @@ class ShibbolethBackend:
             settings.SAML_ATTR_LAST_NAME, '').encode('latin1').decode('utf-8', 'ignore')
         email = request.META.get(settings.SAML_ATTR_EMAIL, '')
         affiliations = request.META.get(settings.SAML_ATTR_AFFILIATION, '')
+        groups = request.META.get(settings.SAML_ATTR_GROUPS, '')
 
         if username and re.match("[^@]+@[^@]+\.[^@]+", username):
             try:
                 user = User.objects.get(username=username)
+                update_groups(user, groups)
                 if user.first_name != first_name or user.last_name != last_name:
                     user.first_name = first_name
                     user.last_name = last_name
@@ -45,10 +64,12 @@ class ShibbolethBackend:
                             is_active=active)
                 user.set_unusable_password = True
                 user.save()
+                update_groups(user, groups)
             return user
         return None
 
-    def get_user(self, user_id):
+    @staticmethod
+    def get_user(user_id):
         try:
             return User.objects.get(pk=user_id)
         except User.DoesNotExist:

@@ -1,4 +1,4 @@
-from django.contrib.auth.models import User
+from django.contrib.auth.models import Group, User
 from django.test import RequestFactory, TestCase
 from django.urls import reverse
 
@@ -15,6 +15,8 @@ class ServiceProviderListTestCase(TestCase):
         self.user_sp = ServiceProvider.objects.create(entity_id='https://sp2.example.org/sp', service_type='saml',
                                                       production=True)
         self.user_sp.admins.add(self.user)
+        self.group = Group.objects.create(name='testgroup')
+        self.admin_sp.admin_groups.add(self.group)
 
     def test_sp_view_list_denies_anonymous(self):
         response = self.client.get(reverse('serviceprovider-list'), follow=True)
@@ -30,6 +32,15 @@ class ServiceProviderListTestCase(TestCase):
         response = ServiceProviderList.as_view()(request)
         self.assertEqual(response.status_code, 200)
         self.assertTrue(self.admin_sp not in response.context_data['object_list'])
+        self.assertTrue(self.user_sp in response.context_data['object_list'])
+
+    def test_sp_view_list_normal_user_group_permissions(self):
+        self.user.groups.add(self.group)
+        request = self.factory.get(reverse('serviceprovider-list'))
+        request.user = self.user
+        response = ServiceProviderList.as_view()(request)
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(self.admin_sp in response.context_data['object_list'])
         self.assertTrue(self.user_sp in response.context_data['object_list'])
 
     def test_sp_view_list_super_user(self):

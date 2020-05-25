@@ -53,6 +53,7 @@ SAML_ATTR_FIRST_NAME = 'shib_first_name'
 SAML_ATTR_LAST_NAME = 'shib_last_name'
 SAML_ATTR_EMAIL = 'shib_mail'
 SAML_ATTR_AFFILIATION = 'shib_affiliation'
+SAML_ATTR_GROUPS = 'shib_groups'
 
 # Uncomment to redirect logout to local Shibboleth logout
 # SHIBBOLETH_LOGOUT_URL = "/Shibboleth.sso/Logout"

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-11-20 13:29+0200\n"
+"POT-Creation-Date: 2020-05-20 13:47+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -44,11 +44,11 @@ msgstr "Ei julkinen LDAP attribuutti, eikä välttämättä saatavilla LDAPista"
 msgid "Not a public OIDC attribute."
 msgstr "Ei julkinen OIDC-attribuutti"
 
-#: forms/attribute.py:82 models/serviceprovider.py:425
+#: forms/attribute.py:82 models/serviceprovider.py:435
 msgid "Release from the userinfo endpoint"
 msgstr "Julkaise userinfo kyselyssä"
 
-#: forms/attribute.py:84 models/serviceprovider.py:427
+#: forms/attribute.py:84 models/serviceprovider.py:437
 msgid "Release in the ID Token"
 msgstr "Julkaise ID tokenissa"
 
@@ -179,7 +179,7 @@ msgid "Could not find entityID"
 msgstr "entityID puuttuu"
 
 #: forms/metadata.py:47 forms/serviceprovider.py:149
-#: forms/serviceprovider.py:394
+#: forms/serviceprovider.py:395
 msgid ""
 "Entity Id should be URI, please contact IdP admins if this is not possible."
 msgstr ""
@@ -187,7 +187,7 @@ msgstr ""
 "mahdollista"
 
 #: forms/metadata.py:50 forms/serviceprovider.py:153
-#: forms/serviceprovider.py:399
+#: forms/serviceprovider.py:400
 msgid "Entity Id already exists"
 msgstr "Entity ID on jo olemassa"
 
@@ -224,8 +224,8 @@ msgid "Organization name, only changeable by the registry admins."
 msgstr ""
 "Organisaation nimi, muutettavissa vain reksiterin ylläpitäjien toimesta."
 
-#: forms/serviceprovider.py:28 forms/serviceprovider.py:355
-#: forms/serviceprovider.py:493
+#: forms/serviceprovider.py:28 forms/serviceprovider.py:356
+#: forms/serviceprovider.py:494
 msgid ""
 "Short (max 70 characters) and descriptive name for the service in Finnish."
 "<div class=\"text-danger\">Required for both production and test use.</div>"
@@ -233,8 +233,8 @@ msgstr ""
 "Lyhyt (korkeintaan 70 merkkiä) ja kuvaava nimi palvelulle suomeksi.<div "
 "class=\"text-danger\">Vaadittu tuotanto- ja testikäyttöön.</div>"
 
-#: forms/serviceprovider.py:31 forms/serviceprovider.py:358
-#: forms/serviceprovider.py:496
+#: forms/serviceprovider.py:31 forms/serviceprovider.py:359
+#: forms/serviceprovider.py:497
 msgid ""
 "Short (max 70 characters) and descriptive name for the service in English."
 "<div class=\"text-danger\">Required for both production and test use.</div>"
@@ -242,14 +242,14 @@ msgstr ""
 "Lyhyt (korkeintaan 70 merkkiä) ja kuvaava nimi palvelulle englanniksi.<div "
 "class=\"text-danger\">Vaadittu tuotanto- ja testikäyttöön.</div>"
 
-#: forms/serviceprovider.py:34 forms/serviceprovider.py:361
-#: forms/serviceprovider.py:431 forms/serviceprovider.py:499
+#: forms/serviceprovider.py:34 forms/serviceprovider.py:362
+#: forms/serviceprovider.py:432 forms/serviceprovider.py:500
 msgid ""
 "Short (max 70 characters) and descriptive name for the service in Swedish."
 msgstr "Lyhyt (korkeintaan 70 merkkiä) ja kuvaava nimi palvelulle ruotsiksi."
 
-#: forms/serviceprovider.py:36 forms/serviceprovider.py:363
-#: forms/serviceprovider.py:501
+#: forms/serviceprovider.py:36 forms/serviceprovider.py:364
+#: forms/serviceprovider.py:502
 msgid ""
 "Short (max 140 characters) description of the service in Finnish. <div class="
 "\"text-danger\">Required for both production and test use.</div>"
@@ -257,8 +257,8 @@ msgstr ""
 "Lyhyt (korkeintaan 140 merkkiä) kuvaus palvelulle suomeksi.<div class=\"text-"
 "danger\">Vaadittu tuotanto- ja testikäyttöön.</div>"
 
-#: forms/serviceprovider.py:39 forms/serviceprovider.py:366
-#: forms/serviceprovider.py:504
+#: forms/serviceprovider.py:39 forms/serviceprovider.py:367
+#: forms/serviceprovider.py:505
 msgid ""
 "Short (max 140 characters) description of the service in English. <div class="
 "\"text-danger\">Required for both production and test use.</div>"
@@ -266,8 +266,8 @@ msgstr ""
 "Lyhyt (korkeintaan 140 merkkiä) kuvaus palvelulle englanniksi.<div class="
 "\"text-danger\">Vaadittu tuotanto- ja testikäyttöön.</div>"
 
-#: forms/serviceprovider.py:42 forms/serviceprovider.py:369
-#: forms/serviceprovider.py:437 forms/serviceprovider.py:507
+#: forms/serviceprovider.py:42 forms/serviceprovider.py:370
+#: forms/serviceprovider.py:438 forms/serviceprovider.py:508
 msgid "Short (max 140 characters) description of the service in Swedish."
 msgstr "Lyhyt (korkeintaan 140 merkkiä) kuvaus palvelulle ruotsiksi."
 
@@ -281,8 +281,8 @@ msgstr ""
 "<div class=\"text-danger\">Vaadittu tuotantokäytötön, jos palvelu vaatii "
 "henkilötietoja.</div>"
 
-#: forms/serviceprovider.py:47 forms/serviceprovider.py:374
-#: forms/serviceprovider.py:512
+#: forms/serviceprovider.py:47 forms/serviceprovider.py:375
+#: forms/serviceprovider.py:513
 msgid ""
 "Link to privacy policy in English. Link must be publicly accessible. <div "
 "class=\"text-danger\">Required for production use if the service requests "
@@ -292,24 +292,24 @@ msgstr ""
 "julkinen. <div class=\"text-danger\">Vaadittu tuotantokäytötön, jos palvelu "
 "vaatii henkilötietoja.</div>"
 
-#: forms/serviceprovider.py:50 forms/serviceprovider.py:377
-#: forms/serviceprovider.py:444 forms/serviceprovider.py:515
+#: forms/serviceprovider.py:50 forms/serviceprovider.py:378
+#: forms/serviceprovider.py:445 forms/serviceprovider.py:516
 msgid "Link to privacy policy in Swedish. Link must be publicly accessible."
 msgstr ""
 "Linkki ruotsinkieliseen tietosuojaselosteeseen. Linkin täytyy olla julkinen."
 
-#: forms/serviceprovider.py:52 forms/serviceprovider.py:379
-#: forms/serviceprovider.py:446 forms/serviceprovider.py:517
+#: forms/serviceprovider.py:52 forms/serviceprovider.py:380
+#: forms/serviceprovider.py:447 forms/serviceprovider.py:518
 msgid "Used for debugging and testing services."
 msgstr "Käytetään palveluiden testaamsieen."
 
-#: forms/serviceprovider.py:53 forms/serviceprovider.py:380
-#: forms/serviceprovider.py:447 forms/serviceprovider.py:518
+#: forms/serviceprovider.py:53 forms/serviceprovider.py:381
+#: forms/serviceprovider.py:448 forms/serviceprovider.py:519
 msgid "Link to external application portfolio."
 msgstr "Linkki palvelun tietoihin sovellussalkussa."
 
-#: forms/serviceprovider.py:54 forms/serviceprovider.py:381
-#: forms/serviceprovider.py:448 forms/serviceprovider.py:519
+#: forms/serviceprovider.py:54 forms/serviceprovider.py:382
+#: forms/serviceprovider.py:449 forms/serviceprovider.py:520
 msgid "Additional notes about this service."
 msgstr "Lisätietoja palvelusta."
 
@@ -321,12 +321,12 @@ msgstr ""
 "Ylläpitoon liittyviä huomioita. Muokattavissa vain rekisterin ylläpitäjien "
 "toimesta, mutta näytetään myös palvelun ylläpitäjille."
 
-#: forms/serviceprovider.py:76 forms/serviceprovider.py:409
-#: forms/serviceprovider.py:545
+#: forms/serviceprovider.py:76 forms/serviceprovider.py:410
+#: forms/serviceprovider.py:546
 msgid "Name in English or in Finnish is required."
 msgstr "Palvelun nimi suomeksi tai englanniksi vaaditaan."
 
-#: forms/serviceprovider.py:91 forms/serviceprovider.py:352
+#: forms/serviceprovider.py:91 forms/serviceprovider.py:353
 msgid ""
 "Should be URI including scheme, hostname of your application and path e.g. "
 "https://test.helsinki.fi/sp. <div class=\"text-danger\">Required for both "
@@ -453,7 +453,7 @@ msgstr ""
 "Päivittääkö tämä palvelu IdP:n metatiedot automaattisesti vähintään kerran "
 "päivässä?"
 
-#: forms/serviceprovider.py:175 forms/serviceprovider.py:423
+#: forms/serviceprovider.py:175 forms/serviceprovider.py:424
 msgid ""
 "Does this service use the LDAPAuth proxy in order to access user and group "
 "data for authentication and access control?"
@@ -521,7 +521,7 @@ msgstr "Palvelu tallentaa pyydetyt ryhmät ja niiden jäsenteidot paikallisesti.
 msgid "Publish this service to LDAP production servers."
 msgstr "Julkaise tämä palvelu LDAP-tuotantopalvelimille."
 
-#: forms/serviceprovider.py:217 forms/serviceprovider.py:466
+#: forms/serviceprovider.py:217 forms/serviceprovider.py:467
 msgid "Invalid list of server names."
 msgstr "Virheellinen palvelimen nimi."
 
@@ -537,7 +537,7 @@ msgstr "Luo uusi palvelun salaisuus"
 msgid "Remove client secret"
 msgstr "Poista palvelun salaisuus"
 
-#: forms/serviceprovider.py:255 forms/serviceprovider.py:490
+#: forms/serviceprovider.py:255 forms/serviceprovider.py:491
 msgid ""
 "Client identifier of the relying party. It is usually recommended to use "
 "random identifier. <div class=\"text-danger\">Required for both production "
@@ -575,10 +575,14 @@ msgid "Request a specific subject identifier."
 msgstr "Pyydä tietty käyttäjän tunniste (subject identifier)."
 
 #: forms/serviceprovider.py:266
+msgid "If empty, uses client_secret_basic by default."
+msgstr ""
+
+#: forms/serviceprovider.py:267
 msgid "URI for RPs JSON Web Key document (jwks_uri)."
 msgstr "URL-osoite palvelun JSON Web Key dokumenttiin (jwks_uri)"
 
-#: forms/serviceprovider.py:267
+#: forms/serviceprovider.py:268
 msgid ""
 "RPs JSON Web Key document (jwks) passed as a parameter. Should only be used "
 "if the use of jwks_uri is not possible."
@@ -586,7 +590,7 @@ msgstr ""
 "Palvelun JSON Web Key dokumentti (jwks) arvona. jwks_uri-osoitetta tulisi "
 "käyttää tämän sijaan, jos vain mahdollista."
 
-#: forms/serviceprovider.py:269
+#: forms/serviceprovider.py:270
 msgid ""
 "Publish this RP to the production OP. Only validated data is used. Any "
 "changes to production RPs must be validated by the IdP administrators before "
@@ -598,7 +602,7 @@ msgstr ""
 "toimesta ennen niiden voimaantuloa. <div class=\"text-danger\">Vaadittu "
 "tuotantokäyttöön.</div>"
 
-#: forms/serviceprovider.py:273
+#: forms/serviceprovider.py:274
 msgid ""
 "Publish this RP to the test IdP using unvalidated data. Any changes might "
 "take up to 10 minutes until they are published to the test IdP."
@@ -606,7 +610,7 @@ msgstr ""
 "Julkaise tämä palvelu testi-IdP:lle käyttäen hyväksymättömiä tietoja. "
 "Muutokset päivitetään testi-IdP:lle 10 minuutin sisällä."
 
-#: forms/serviceprovider.py:276
+#: forms/serviceprovider.py:277
 msgid ""
 "OIDC product used by this client. For administrative use e.g. for testing "
 "different RPs during IdP updates."
@@ -614,68 +618,68 @@ msgstr ""
 "Käytetty OIDC-sovellus. Käytetään testaamaan eri ohjelmistoja ajavia "
 "palveluita IdP-päivitysten yhteydessä."
 
-#: forms/serviceprovider.py:278
+#: forms/serviceprovider.py:279
 msgid "Does this RP automatically update IdP metadata at least once a day?"
 msgstr ""
 "Päivittääkö tämä palvelu IdP:n metatiedot automaattisesti vähintään kerran "
 "päivässä?"
 
-#: forms/serviceprovider.py:280
+#: forms/serviceprovider.py:281
 msgid "Resets the client secret."
 msgstr "Luo uusi palvelun salaisuus"
 
-#: forms/serviceprovider.py:281
+#: forms/serviceprovider.py:282
 msgid ""
 "Removes the client secret. Secret is not used if jwks are provided for "
 "client identification or application type is native."
 msgstr ""
 
-#: forms/serviceprovider.py:299
+#: forms/serviceprovider.py:300
 msgid "Client ID already exists."
 msgstr "Sovelluksen tunniste on jo olemassa."
 
-#: forms/serviceprovider.py:312
+#: forms/serviceprovider.py:313
 msgid "Not a valid JSON."
 msgstr "JSONin muoto on virheellinen."
 
-#: forms/serviceprovider.py:314
+#: forms/serviceprovider.py:315
 msgid "Invalid JSON keys."
 msgstr "Väärät JSON avaimet"
 
-#: forms/serviceprovider.py:316
+#: forms/serviceprovider.py:317
 msgid "No keys found."
 msgstr "Avaimia ei löydetty"
 
-#: forms/serviceprovider.py:319
+#: forms/serviceprovider.py:320
 msgid "JWK missing key ID."
 msgstr "JWKsta puuttuu key ID"
 
-#: forms/serviceprovider.py:322
+#: forms/serviceprovider.py:323
 msgid "Invalid JWK."
 msgstr "Virheellinen JWK"
 
-#: forms/serviceprovider.py:330
+#: forms/serviceprovider.py:331
 msgid "Both remove and reset client secret selected."
 msgstr "Et voi valita sekä salaisuuden poistoa että uuden luontia."
 
-#: forms/serviceprovider.py:332
+#: forms/serviceprovider.py:333
 msgid "Both jwks and jwks_uri selected. Use only jwks_uri if it is supported."
 msgstr ""
 
-#: forms/serviceprovider.py:334
+#: forms/serviceprovider.py:335
 msgid "authorization_code grant type must be set for code response type."
 msgstr ""
 "authorization_code grant type täytyy valita, jos response type on code."
 
-#: forms/serviceprovider.py:336
+#: forms/serviceprovider.py:337
 msgid "implicit grant type must be set for token response type."
 msgstr "implicit grant type täytyy valita, jos response type on token."
 
-#: forms/serviceprovider.py:338
+#: forms/serviceprovider.py:339
 msgid "implicit grant type must be set for id_token response type."
 msgstr "implicit grant type täytyy valita, jos response type on id_token."
 
-#: forms/serviceprovider.py:371 forms/serviceprovider.py:509
+#: forms/serviceprovider.py:372 forms/serviceprovider.py:510
 msgid ""
 "Link to privacy policy in Finnish. Link must be publicly accessible. <div "
 "class=\"text-danger\">Required for production use if the service requests "
@@ -685,7 +689,7 @@ msgstr ""
 "<div class=\"text-danger\">Vaadittu tuotantokäytötön, jos palvelu vaatii "
 "henkilötietoja.</div>"
 
-#: forms/serviceprovider.py:425
+#: forms/serviceprovider.py:426
 msgid ""
 "Full server names (not IPs), one per line. Used for access control. <div "
 "class=\"text-danger\">Required for non-ldapauth.</div>"
@@ -693,7 +697,7 @@ msgstr ""
 "Täydet palvelinten nimet (DNS-nimi, ei IP), yksi per rivi. Käytetään "
 "pääsynvalvontaan. <div class=\"text-danger\">Vaadittu.</div>"
 
-#: forms/serviceprovider.py:427
+#: forms/serviceprovider.py:428
 msgid ""
 "Short (max 70 characters) and descriptive name for the service in Finnish. "
 "<div class=\"text-danger\">Required. </div>"
@@ -701,12 +705,12 @@ msgstr ""
 "Lyhyt (korkeintaan 70 merkkiä) ja kuvaava nimi palvelulle suomeksi.<div "
 "class=\"text-danger\">Vaadittu tieto.</div>"
 
-#: forms/serviceprovider.py:429
+#: forms/serviceprovider.py:430
 msgid ""
 "Short (max 70 characters) and descriptive name for the service in English."
 msgstr "Lyhyt (korkeintaan 70 merkkiä) ja kuvaava nimi palvelulle englanniksi."
 
-#: forms/serviceprovider.py:433
+#: forms/serviceprovider.py:434
 msgid ""
 "Short (max 140 characters) description of the service in Finnish. <div class="
 "\"text-danger\">Required.</div>"
@@ -714,11 +718,11 @@ msgstr ""
 "Lyhyt (korkeintaan 140 merkkiä) kuvaus palvelulle suomeksi.<div class=\"text-"
 "danger\">Vaadittu tieto.</div>"
 
-#: forms/serviceprovider.py:435
+#: forms/serviceprovider.py:436
 msgid "Short (max 140 characters) description of the service in English."
 msgstr "Lyhyt (korkeintaan 140 merkkiä) kuvaus palvelulle englanniksi."
 
-#: forms/serviceprovider.py:439
+#: forms/serviceprovider.py:440
 msgid ""
 "Link to privacy policy in Finnish. Link must be publicly accessible. <div "
 "class=\"text-danger\">Required if the service requests any personal "
@@ -728,49 +732,114 @@ msgstr ""
 "<div class=\"text-danger\">Vaadittu, jos palvelu vaatii mitään "
 "henkilötietoja.</div>"
 
-#: forms/serviceprovider.py:442
+#: forms/serviceprovider.py:443
 msgid "Link to privacy policy in English. Link must be publicly accessible."
 msgstr ""
 "Linkki englanninkieliseen tietosuojaselosteeseen. Linkin täytyy olla "
 "julkinen."
 
-#: forms/serviceprovider.py:475
+#: forms/serviceprovider.py:476
 msgid "Invalid Finnish name."
 msgstr "Virheellinen suomenkielinen nimi."
 
-#: forms/serviceprovider.py:535
+#: forms/serviceprovider.py:536
 msgid "Client ID already exists"
 msgstr "Sovelluksen tunniste on jo olemassa"
 
-#: forms/serviceprovider.py:552
+#: forms/serviceprovider.py:553
 msgid "Confirm closing"
 msgstr "Vahvista sulkeminen"
 
-#: forms/serviceprovider.py:559
+#: forms/serviceprovider.py:560
 msgid "Do not send validation email to SP admins."
 msgstr "Älä lähetä ilmoitusta tietojen hyväksymisestä palvelun ylläpitäjille."
 
-#: forms/spadmin.py:11
+#: forms/spadmin.py:14
 msgid "Email where invitation is sent"
 msgstr "Sähköpostiosoite, johon kutsu lähetetään"
 
-#: forms/spadmin.py:13
+#: forms/spadmin.py:16
 msgid "Using default template if none given."
 msgstr "Käytetään kutsun oletuspohjaa, jos muuta ei valita."
 
-#: forms/testuser.py:17
+#: forms/spadmin.py:32 models/usergroup.py:15
+msgid "Group name"
+msgstr "Ryhmän nimi"
+
+#: forms/spadmin.py:33
+msgid ""
+"6-32 characters, allowed characters are [a-z0-9-]. May not start or end with "
+"\"-\"."
+msgstr ""
+"6-32 merkkiä, sallitut merkit ovat [a-z0-9-]. Ei voi alkaa tai loppua \"-\"-merkkiin"
+
+#: forms/spadmin.py:38
+msgid "Minimum length 6 characters."
+msgstr "Vähintään 6 merkkiä."
+
+#: forms/spadmin.py:40
+msgid "Maximum length 32 characters."
+msgstr "Enintään 32 merkkiä."
+
+#: forms/spadmin.py:43
+msgid "Invalid characters in group name."
+msgstr "Virheellisiä merkkejä ryhmän nimessä."
+
+#: forms/testuser.py:25
 msgid "Generate attribute data for name and username based fields."
 msgstr "Täytä nimi- ja käyttäjänimipohjaiset attribuutit auttomaattisesti."
 
-#: forms/testuser.py:19
+#: forms/testuser.py:27
 msgid "Generate random attribute data for other fields."
 msgstr "Luo satunnaiset arvot muille kentille."
 
+#: forms/testuser.py:28
+msgid "Scope"
+msgstr ""
+
+#: forms/testuser.py:29
+msgid "Scope for scoped attributes. Default is 'example.org'."
+msgstr ""
+
+#: forms/testuser.py:31
+msgid "1"
+msgstr ""
+
+#: forms/testuser.py:32
+msgid "5"
+msgstr ""
+
+#: forms/testuser.py:33
+msgid "10"
+msgstr ""
+
+#: forms/testuser.py:34
+msgid "50"
+msgstr ""
+
+#: forms/testuser.py:36
+msgid "Number of users"
+msgstr "Käyttäjien määrä"
+
 #: forms/testuser.py:37
+msgid "Create X users. Username and password will be appended with <number>"
+msgstr ""
+"Luo X käyttäjää. Järjestysnumero lisätään käyttäjätunnuksen ja salasanan "
+"loppuun."
+
+#: forms/testuser.py:54
+msgid "Scope must be a valid hostname"
+msgstr "Scopen täytyy olla mahdollinen hostname"
+
+#: forms/testuser.py:63
+msgid "Number of users must be integer"
+msgstr "Käyttäjien määrän täytyy olla kokonaisluku"
+
+#: forms/testuser.py:66
 msgid "Username already exists"
 msgstr "Käyttäjänimi on jo olemassa"
 
-#: forms/testuser.py:88
+#: forms/testuser.py:117
 msgid "Value must be scoped"
 msgstr "Arvon täytyy olla pääteellinen"
 
@@ -844,14 +913,14 @@ msgid "Shibboelth environmental variable for the attribute"
 msgstr "Shibboleth ympäristömuuttuja attribuutille"
 
 #: models/attribute.py:34 models/certificate.py:85 models/contact.py:21
-#: models/endpoint.py:36 models/redirecturi.py:15 models/serviceprovider.py:166
-#: models/serviceprovider.py:428 models/testuser.py:23 models/usergroup.py:16
+#: models/endpoint.py:36 models/redirecturi.py:15 models/serviceprovider.py:176
+#: models/serviceprovider.py:438 models/testuser.py:23 models/usergroup.py:16
 msgid "Created at"
 msgstr "Luotu"
 
 #: models/attribute.py:35 models/certificate.py:86 models/contact.py:22
-#: models/endpoint.py:37 models/redirecturi.py:16 models/serviceprovider.py:167
-#: models/serviceprovider.py:429 models/testuser.py:24 models/usergroup.py:17
+#: models/endpoint.py:37 models/redirecturi.py:16 models/serviceprovider.py:177
+#: models/serviceprovider.py:439 models/testuser.py:24 models/usergroup.py:17
 msgid "Updated at"
 msgstr "Päivitetty"
 
@@ -865,7 +934,7 @@ msgstr "Myöntäjän cn"
 
 #: models/certificate.py:79 templates/rr/certificate.html:23
 #: templates/rr/certificate_info.html:14
-#: templates/rr/serviceprovider_detail.html:296
+#: templates/rr/serviceprovider_detail.html:301
 msgid "Valid from"
 msgstr "Voimassaolo alkaa"
 
@@ -873,19 +942,19 @@ msgstr "Voimassaolo alkaa"
 #: templates/rr/certificate_admin_list.html:14
 #: templates/rr/certificate_admin_list.html:40
 #: templates/rr/certificate_info.html:12
-#: templates/rr/serviceprovider_detail.html:295 templates/rr/spadmin.html:48
+#: templates/rr/serviceprovider_detail.html:300 templates/rr/spadmin.html:49
 msgid "Valid until"
 msgstr "Voimassaolo päättyy"
 
 #: models/certificate.py:81 templates/rr/certificate.html:24
 #: templates/rr/certificate_admin_list.html:15
 #: templates/rr/certificate_admin_list.html:41
-#: templates/rr/serviceprovider_detail.html:297
+#: templates/rr/serviceprovider_detail.html:302
 msgid "Key size"
 msgstr "Avaimen koko"
 
 #: models/certificate.py:82 templates/rr/certificate_info.html:28
-#: views/serviceprovider.py:159
+#: views/serviceprovider.py:154
 msgid "Certificate"
 msgstr "Varmenne"
 
@@ -898,14 +967,14 @@ msgid "Use for encryption"
 msgstr "Käytetään salaukseen"
 
 #: models/certificate.py:87 models/contact.py:23 models/endpoint.py:38
-#: models/redirecturi.py:17 models/serviceprovider.py:168
-#: models/serviceprovider.py:430 models/testuser.py:25 models/usergroup.py:18
+#: models/redirecturi.py:17 models/serviceprovider.py:178
+#: models/serviceprovider.py:440 models/testuser.py:25 models/usergroup.py:18
 msgid "Entry end time"
 msgstr "Päättymispäivä"
 
 #: models/certificate.py:88 models/contact.py:24 models/endpoint.py:39
-#: models/redirecturi.py:18 models/serviceprovider.py:171
-#: models/serviceprovider.py:431 models/usergroup.py:19
+#: models/redirecturi.py:18 models/serviceprovider.py:181
+#: models/serviceprovider.py:441 models/usergroup.py:19
 msgid "Validated on"
 msgstr "Hyväksytty"
 
@@ -934,7 +1003,7 @@ msgid "Last Name"
 msgstr "Sukunimi"
 
 #: models/contact.py:20 templates/rr/contact.html:22
-#: templates/rr/spadmin.html:21 templates/rr/spadmin.html:47
+#: templates/rr/spadmin.html:22 templates/rr/spadmin.html:48
 msgid "E-Mail"
 msgstr "Sähköpostiosoite"
 
@@ -979,12 +1048,12 @@ msgid "Endpoint Type"
 msgstr "Yhteysosoitteen tyyppi"
 
 #: models/endpoint.py:30 templates/rr/endpoint.html:21
-#: templates/rr/serviceprovider_detail.html:340
+#: templates/rr/serviceprovider_detail.html:347
 msgid "Binding"
 msgstr "Muoto"
 
 #: models/endpoint.py:31 templates/rr/endpoint.html:22
-#: templates/rr/serviceprovider_detail.html:341
+#: templates/rr/serviceprovider_detail.html:348
 msgid "Location"
 msgstr "Osoite"
 
@@ -993,7 +1062,7 @@ msgid "ResponseLocation"
 msgstr "Vastausosoite"
 
 #: models/endpoint.py:34 templates/rr/endpoint.html:23
-#: templates/rr/serviceprovider_detail.html:342
+#: templates/rr/serviceprovider_detail.html:349
 msgid "Index"
 msgstr "Järjestys"
 
@@ -1001,8 +1070,8 @@ msgstr "Järjestys"
 msgid "isDefault"
 msgstr "Oletus"
 
-#: models/nameidformat.py:12 templates/rr/serviceprovider_detail.html:122
-#: templates/rr/serviceprovider_detail.html:128
+#: models/nameidformat.py:12 templates/rr/serviceprovider_detail.html:125
+#: templates/rr/serviceprovider_detail.html:131
 msgid "Name Identifier Format"
 msgstr ""
 
@@ -1058,7 +1127,7 @@ msgstr "Organisaation URL (englanti)"
 msgid "Organization URL (Swedish)"
 msgstr "Organisaation URL (ruotsi)"
 
-#: models/redirecturi.py:14 views/serviceprovider.py:172
+#: models/redirecturi.py:14 views/serviceprovider.py:167
 msgid "Redirect URI"
 msgstr "Paluuosoite (Redirect URI)"
 
@@ -1115,7 +1184,7 @@ msgstr "Tietosuojaseloste URL (ruotsi)"
 msgid "Service Login Page URL"
 msgstr "Palvelun kirjautumisosoite"
 
-#: models/serviceprovider.py:79 views/serviceprovider.py:188
+#: models/serviceprovider.py:79 views/serviceprovider.py:183
 msgid "Application portfolio URL"
 msgstr "Palvelun tiedot Sovellussalkussa (URL)"
 
@@ -1196,101 +1265,125 @@ msgstr ""
 msgid "Subject identifier"
 msgstr ""
 
+#: models/serviceprovider.py:119
+msgid "client_secret_basic"
+msgstr "client_secret_basic"
+
+#: models/serviceprovider.py:120
+msgid "client_secret_post"
+msgstr "client_secret_post"
+
 #: models/serviceprovider.py:121
+msgid "client_secret_jwt"
+msgstr "client_secret_jwt"
+
+#: models/serviceprovider.py:122
+msgid "private_key_jwt"
+msgstr ""
+
+#: models/serviceprovider.py:123
+msgid "none"
+msgstr ""
+
+#: models/serviceprovider.py:126
+msgid "Token endpoint authentication method"
+msgstr "Tunniste-yhteysosoitteen kirjautumismetodi"
+
+#: models/serviceprovider.py:130
 msgid "This service requires manual configuration"
 msgstr "Palvelu vaatii käsin tehtyjä muutoksia"
 
-#: models/serviceprovider.py:124
+#: models/serviceprovider.py:133
 msgid "Publish to production servers"
 msgstr "Julkaise tuotantopalvelimille"
 
-#: models/serviceprovider.py:125
+#: models/serviceprovider.py:134
 msgid "Publish to test servers"
 msgstr "Julkaise testipalvelimille"
 
-#: models/serviceprovider.py:128
+#: models/serviceprovider.py:137
 msgid "SAML product this service is using"
 msgstr "Palvelun käyttämä SAML-tuote"
 
-#: models/serviceprovider.py:131
+#: models/serviceprovider.py:140
 msgid "SP updates IdP metadata automatically"
 msgstr "SP päivittää IdP-metatiedot automaattisesti"
 
-#: models/serviceprovider.py:135
+#: models/serviceprovider.py:144
 msgid "Does this service use the LDAPAuth proxy?"
 msgstr "Käyttääkö tämä palvelu LDAPAuthia?"
 
-#: models/serviceprovider.py:137
+#: models/serviceprovider.py:146
 msgid "Server names (not IPs), one per line"
 msgstr "Palvelimien nimet (DNS-nimet, ei IPt), yksi per rivi"
 
-#: models/serviceprovider.py:138
+#: models/serviceprovider.py:147
 msgid "Internet"
 msgstr ""
 
-#: models/serviceprovider.py:139
+#: models/serviceprovider.py:148
 msgid "University of Helsinki users"
 msgstr "Helsingin yliopiston käyttäjät"
 
-#: models/serviceprovider.py:140
+#: models/serviceprovider.py:149
 msgid "Restricted user group"
 msgstr "Rajattu käyttäjäryhmä"
 
-#: models/serviceprovider.py:142
+#: models/serviceprovider.py:151
 msgid "Target group for the service"
 msgstr "Palvelun kohderyhmä"
 
-#: models/serviceprovider.py:144
+#: models/serviceprovider.py:153
 msgid "Does the service use a service account?"
 msgstr "Käyttääkö palvelu palvelutunnusta?"
 
-#: models/serviceprovider.py:146
+#: models/serviceprovider.py:155
 msgid ""
 "Email address and phone number for delivering the service account credentials"
 msgstr ""
 "Sähköpostiosoite ja puhelinnumero palvelutunnuksen toimittamista varten"
 
-#: models/serviceprovider.py:148
+#: models/serviceprovider.py:157
 msgid "Service requires access to all LDAP groups"
 msgstr "Palvelu tarvitsee pääsyn kaikkin LDAP-ryhmiin"
 
-#: models/serviceprovider.py:150
+#: models/serviceprovider.py:159
 msgid "Service stores a local copy of users and their information"
 msgstr "Palvelu tallentaa paikallisesti käyttäjät ja heidän tietojaan"
 
-#: models/serviceprovider.py:153
+#: models/serviceprovider.py:162
 msgid "Service stores a local copy of user passwords"
 msgstr "Palvelu tallentaa paikallisesti käyttäjien salasanat"
 
-#: models/serviceprovider.py:155
+#: models/serviceprovider.py:164
 msgid "How is this service storing the saved passwords and why?"
 msgstr "Kuinka palvelu tallentaa käyttäjien salasanat ja miksi?"
 
-#: models/serviceprovider.py:157
+#: models/serviceprovider.py:166
 msgid "Service stores a local copy of groups and group members"
 msgstr "Palvleu tallentaa paikallisesti kopion ryhmistä ja ryhmien jäsenistä"
 
-#: models/serviceprovider.py:164
+#: models/serviceprovider.py:174
 msgid "Modified"
 msgstr "Muokattu"
 
-#: models/serviceprovider.py:165
+#: models/serviceprovider.py:175
 msgid "History key"
 msgstr "Historia-avain"
 
-#: models/serviceprovider.py:170
+#: models/serviceprovider.py:180
 msgid "Updated by"
 msgstr "Päivittäjä"
 
-#: models/serviceprovider.py:367
+#: models/serviceprovider.py:377
 msgid "Invalid decryption key, could not show the client secret."
 msgstr "Virheellinen salausavain, ei voida näyttää palvelun salaisuutta."
 
-#: models/serviceprovider.py:423
+#: models/serviceprovider.py:433
 msgid "Reason for the attribute requisition"
 msgstr "Syy tietojen pyytämiseen"
 
-#: models/spadmin.py:60 templates/rr/spadmin.html:49
+#: models/spadmin.py:60 templates/rr/spadmin.html:50
 msgid "Creator"
 msgstr "Luoja"
 
@@ -1324,14 +1417,14 @@ msgid "Password"
 msgstr "Salasana"
 
 #: models/testuser.py:19 templates/rr/contact.html:20
-#: templates/rr/serviceprovider_detail.html:317 templates/rr/spadmin.html:19
-#: templates/rr/testuser.html:21 templates/rr/testuser.html:53
+#: templates/rr/serviceprovider_detail.html:323 templates/rr/spadmin.html:20
+#: templates/rr/testuser.html:21 templates/rr/testuser.html:54
 msgid "First name"
 msgstr "Etunimi"
 
 #: models/testuser.py:20 templates/rr/contact.html:21
-#: templates/rr/serviceprovider_detail.html:318 templates/rr/spadmin.html:20
-#: templates/rr/testuser.html:22 templates/rr/testuser.html:54
+#: templates/rr/serviceprovider_detail.html:324 templates/rr/spadmin.html:21
+#: templates/rr/testuser.html:22 templates/rr/testuser.html:55
 msgid "Last name"
 msgstr "Sukunimi"
 
@@ -1342,10 +1435,6 @@ msgstr "Hyväksytty valittuihin palveluihin"
 #: models/testuser.py:43
 msgid "Attribute value"
 msgstr "Attribuutin arvo"
-
-#: models/usergroup.py:15
-msgid "Group name"
-msgstr "Ryhmän nimi"
 
 #: templates/attribute_test_service.html:10
 msgid "Attribute Test Service"
@@ -1425,10 +1514,10 @@ msgstr "Konteksti"
 
 #: templates/attribute_test_service.html:48
 #: templates/attribute_test_service.html:75
-#: templates/rr/serviceprovider_detail.html:73
-#: templates/rr/serviceprovider_detail.html:101
-#: templates/rr/serviceprovider_detail.html:142
-#: templates/rr/serviceprovider_detail.html:171
+#: templates/rr/serviceprovider_detail.html:75
+#: templates/rr/serviceprovider_detail.html:104
+#: templates/rr/serviceprovider_detail.html:145
+#: templates/rr/serviceprovider_detail.html:174
 msgid "Value"
 msgstr "Arvo"
 
@@ -1462,11 +1551,11 @@ msgid "Status"
 msgstr "Status"
 
 #: templates/attribute_test_service.html:74
-#: templates/rr/serviceprovider_detail.html:72
-#: templates/rr/serviceprovider_detail.html:100
-#: templates/rr/serviceprovider_detail.html:141
-#: templates/rr/serviceprovider_detail.html:170
-#: templates/rr/serviceprovider_detail.html:264
+#: templates/rr/serviceprovider_detail.html:74
+#: templates/rr/serviceprovider_detail.html:103
+#: templates/rr/serviceprovider_detail.html:144
+#: templates/rr/serviceprovider_detail.html:173
+#: templates/rr/serviceprovider_detail.html:268
 msgid "Attribute"
 msgstr "Attribuutti"
 
@@ -1510,7 +1599,7 @@ msgstr "Tekniset tiedot"
 
 #: templates/base.html:56 templates/base.html:102 templates/base.html:191
 #: templates/base.html:236 templates/rr/certificate.html:6
-#: templates/rr/serviceprovider_detail.html:291
+#: templates/rr/serviceprovider_detail.html:296
 #: templates/rr/serviceprovider_saml_create_form.html:19
 msgid "Certificates"
 msgstr "Varmenteet"
@@ -1529,7 +1618,7 @@ msgid "Redirect URIs"
 msgstr "Paluuosoite"
 
 #: templates/base.html:73 templates/base.html:208 templates/rr/contact.html:6
-#: templates/rr/serviceprovider_detail.html:312
+#: templates/rr/serviceprovider_detail.html:318
 msgid "Contacts"
 msgstr "Yhteystiedot"
 
@@ -1863,7 +1952,7 @@ msgid "Test"
 msgstr "Testi"
 
 #: templates/rr/attribute_admin_view.html:37
-#: templates/rr/serviceprovider_detail.html:265
+#: templates/rr/serviceprovider_detail.html:269
 msgid "Reason"
 msgstr "Syy"
 
@@ -1908,7 +1997,7 @@ msgstr "Attribuuttilista"
 #: templates/rr/serviceprovider_oidc_technical_form.html:16
 #: templates/rr/serviceprovider_saml_create_form.html:30
 #: templates/rr/serviceprovider_saml_technical_form.html:15
-#: templates/rr/testuser.html:78 templates/rr/testuser_attribute_data.html:29
+#: templates/rr/testuser.html:80 templates/rr/testuser_attribute_data.html:29
 #: templates/rr/usergroup.html:42
 msgid "Save"
 msgstr "Tallenna"
@@ -1958,8 +2047,8 @@ msgstr ""
 msgid "List of certificates"
 msgstr "Lista varmenteista."
 
-#: templates/rr/certificate.html:21 templates/rr/email.html:36
-#: templates/rr/spadmin.html:79
+#: templates/rr/certificate.html:21 templates/rr/email.html:37
+#: templates/rr/spadmin.html:80
 msgid "Subject"
 msgstr "Otsikko"
 
@@ -1975,25 +2064,25 @@ msgstr "Salaus"
 
 #: templates/rr/certificate.html:27 templates/rr/contact.html:23
 #: templates/rr/endpoint.html:24 templates/rr/redirecturi.html:19
-#: templates/rr/spadmin.html:22 templates/rr/spadmin.html:50
-#: templates/rr/testuser.html:23 templates/rr/testuser.html:55
-#: templates/rr/usergroup.html:19
+#: templates/rr/spadmin.html:23 templates/rr/spadmin.html:51
+#: templates/rr/spadmin.html:105 templates/rr/testuser.html:23
+#: templates/rr/testuser.html:56 templates/rr/usergroup.html:19
 msgid "Remove"
 msgstr "Poista"
 
 #: templates/rr/certificate.html:39 templates/rr/contact.html:33
 #: templates/rr/endpoint.html:34 templates/rr/redirecturi.html:26
-#: templates/rr/spadmin.html:31 templates/rr/spadmin.html:60
-#: templates/rr/testuser.html:32 templates/rr/testuser.html:64
-#: templates/rr/usergroup.html:26
+#: templates/rr/spadmin.html:32 templates/rr/spadmin.html:61
+#: templates/rr/spadmin.html:112 templates/rr/testuser.html:32
+#: templates/rr/testuser.html:65 templates/rr/usergroup.html:26
 msgid "Mark for removal"
 msgstr "Merkitse poistettavaksi"
 
 #: templates/rr/certificate.html:44 templates/rr/contact.html:38
 #: templates/rr/endpoint.html:39 templates/rr/redirecturi.html:31
-#: templates/rr/spadmin.html:36 templates/rr/spadmin.html:65
-#: templates/rr/testuser.html:37 templates/rr/testuser.html:69
-#: templates/rr/usergroup.html:31
+#: templates/rr/spadmin.html:37 templates/rr/spadmin.html:66
+#: templates/rr/spadmin.html:117 templates/rr/testuser.html:38
+#: templates/rr/testuser.html:71 templates/rr/usergroup.html:31
 msgid "Remove selected"
 msgstr "Poista valitut"
 
@@ -2011,7 +2100,7 @@ msgstr "Palvelulla ei voi olla yli kahta varmennetta"
 
 #: templates/rr/certificate.html:67 templates/rr/contact.html:58
 #: templates/rr/endpoint.html:60 templates/rr/redirecturi.html:51
-#: templates/rr/spadmin.html:101 templates/rr/testuser.html:88
+#: templates/rr/spadmin.html:138 templates/rr/testuser.html:90
 #: templates/rr/usergroup.html:51
 msgid "Confirm removal"
 msgstr "Vahvista poisto"
@@ -2022,14 +2111,14 @@ msgstr "Haluatko poistaa valitut varmenteet?"
 
 #: templates/rr/certificate.html:71 templates/rr/contact.html:62
 #: templates/rr/endpoint.html:64 templates/rr/redirecturi.html:55
-#: templates/rr/spadmin.html:105 templates/rr/testuser.html:92
+#: templates/rr/spadmin.html:142 templates/rr/testuser.html:94
 #: templates/rr/usergroup.html:55
 msgid "Confirm"
 msgstr "Vahvista"
 
 #: templates/rr/certificate.html:72 templates/rr/contact.html:63
 #: templates/rr/endpoint.html:65 templates/rr/redirecturi.html:56
-#: templates/rr/spadmin.html:106 templates/rr/testuser.html:93
+#: templates/rr/spadmin.html:143 templates/rr/testuser.html:95
 #: templates/rr/usergroup.html:56
 msgid "Cancel"
 msgstr "Peru"
@@ -2090,8 +2179,8 @@ msgid "List of contacts"
 msgstr "Lista yhteystiedoista"
 
 #: templates/rr/contact.html:19 templates/rr/endpoint.html:20
-#: templates/rr/serviceprovider_detail.html:316
-#: templates/rr/serviceprovider_detail.html:339
+#: templates/rr/serviceprovider_detail.html:322
+#: templates/rr/serviceprovider_detail.html:346
 msgid "Type"
 msgstr "Tyyppi"
 
@@ -2111,27 +2200,31 @@ msgstr "Haluatko poistaa valitut yhteystiedot?"
 msgid "Emails have been sent."
 msgstr "Sähköpostit on lähetetty."
 
-#: templates/rr/email.html:13
+#: templates/rr/email.html:10
+msgid "Sending errors."
+msgstr ""
+
+#: templates/rr/email.html:14
 msgid "Sending failed to following addresses:"
 msgstr "Lähetys epäonnistui seuraaviin osoitteisiin:"
 
-#: templates/rr/email.html:31
+#: templates/rr/email.html:32
 msgid "List emails / Show message"
 msgstr "Listaa sähköpostiosoitteet / Näytä viesti"
 
-#: templates/rr/email.html:31
+#: templates/rr/email.html:32
 msgid "Send email"
 msgstr "Lähetä sähköpostit"
 
-#: templates/rr/email.html:40 templates/rr/metadata_management.html:23
+#: templates/rr/email.html:41 templates/rr/metadata_management.html:23
 msgid "Message"
 msgstr "Viesti"
 
-#: templates/rr/email.html:44
+#: templates/rr/email.html:45
 msgid "Email addresses"
 msgstr "Sähköpostiosoitteet"
 
-#: templates/rr/email.html:48
+#: templates/rr/email.html:49
 msgid "Address"
 msgstr "Osoite"
 
@@ -2170,11 +2263,11 @@ msgstr ""
 msgid "List of endpoints"
 msgstr "Yhteysosoitteiden lista"
 
-#: templates/rr/endpoint.html:32 templates/rr/serviceprovider_detail.html:350
+#: templates/rr/endpoint.html:32 templates/rr/serviceprovider_detail.html:357
 msgid "Response:"
 msgstr "Vastausosoite:"
 
-#: templates/rr/endpoint.html:33 templates/rr/serviceprovider_detail.html:351
+#: templates/rr/endpoint.html:33 templates/rr/serviceprovider_detail.html:358
 msgid "default"
 msgstr "oletus"
 
@@ -2295,7 +2388,7 @@ msgid "Do you want to remove selected redirect URIs?"
 msgstr "Haluatko poistaa valitut paluuosoitteet?"
 
 #: templates/rr/serviceprovider_basic_form.html:6
-#: templates/rr/serviceprovider_detail.html:68
+#: templates/rr/serviceprovider_detail.html:70
 msgid "Basic information"
 msgstr "Perustiedot"
 
@@ -2346,38 +2439,38 @@ msgstr ""
 "Tätä palvelua ei ole tällä hetkellä julkaistu tuotanto- tai testi-IdP:lle. "
 "Voit julkaista palvelun Tekniset tiedot-sivulla."
 
-#: templates/rr/serviceprovider_detail.html:31
+#: templates/rr/serviceprovider_detail.html:32
 msgid ""
 "You may also remove this SP from the registry by using the link at the "
 "bottom of this page."
 msgstr ""
 "Voit poistaa tämän palvelun rekisteristä sivun alareunassa olevalla linkillä."
 
-#: templates/rr/serviceprovider_detail.html:37
+#: templates/rr/serviceprovider_detail.html:39
 msgid "Missing data"
 msgstr "Puuttuvat tiedot"
 
-#: templates/rr/serviceprovider_detail.html:39
+#: templates/rr/serviceprovider_detail.html:41
 msgid ""
 "This service is marked for the production use but is missing following data:"
 msgstr ""
 "Tämä palvelu on merkitty tuotantoon, mutta siitä puuttuu seuraavat tiedot:"
 
-#: templates/rr/serviceprovider_detail.html:48
+#: templates/rr/serviceprovider_detail.html:50
 msgid "Waiting for validation"
 msgstr "Odottaa hyväksymistä"
 
-#: templates/rr/serviceprovider_detail.html:49
+#: templates/rr/serviceprovider_detail.html:51
 msgid "There are changes waiting for validation by the IdP administrators."
 msgstr ""
 "Palveluun on tehty muutoksia, jotka odottavat rekisterin ylläpitäjien "
 "hyväksymistä."
 
-#: templates/rr/serviceprovider_detail.html:50
+#: templates/rr/serviceprovider_detail.html:52
 msgid "You will receive an email when the changes are validated."
 msgstr "Saat sähköpostin, kun muutokset on hyväksytty."
 
-#: templates/rr/serviceprovider_detail.html:51
+#: templates/rr/serviceprovider_detail.html:53
 msgid ""
 "NB. only production systems are validated. Test servers are updated "
 "automatically every 15 minutes, using unvalidated data."
@@ -2386,99 +2479,99 @@ msgstr ""
 "tiedot päivitetään testi-IdP:lle automaattisesti 15 minuutin välein, "
 "käyttäen hyväksymätömiä tietoja."
 
-#: templates/rr/serviceprovider_detail.html:56
-#: templates/rr/serviceprovider_detail.html:62
+#: templates/rr/serviceprovider_detail.html:58
+#: templates/rr/serviceprovider_detail.html:64
 msgid "Validate changes"
 msgstr "Hyväksy muutokset"
 
-#: templates/rr/serviceprovider_detail.html:57
+#: templates/rr/serviceprovider_detail.html:59
 msgid ""
 "This object has changed. Click the button to validate all changes listed in "
 "this page."
 msgstr ""
 "Tämän palvelun tietoja on muutettu. Tarkasta ne uudelleen ennen hyväksymistä."
 
-#: templates/rr/serviceprovider_detail.html:74
-#: templates/rr/serviceprovider_detail.html:102
-#: templates/rr/serviceprovider_detail.html:143
-#: templates/rr/serviceprovider_detail.html:172
+#: templates/rr/serviceprovider_detail.html:76
+#: templates/rr/serviceprovider_detail.html:105
+#: templates/rr/serviceprovider_detail.html:146
+#: templates/rr/serviceprovider_detail.html:175
 msgid "Validated value"
 msgstr "Hyväksytty arvo"
 
-#: templates/rr/serviceprovider_detail.html:96
-#: templates/rr/serviceprovider_detail.html:137
-#: templates/rr/serviceprovider_detail.html:166
+#: templates/rr/serviceprovider_detail.html:99
+#: templates/rr/serviceprovider_detail.html:140
+#: templates/rr/serviceprovider_detail.html:169
 msgid "Technical attributes"
 msgstr "Tekniset tiedot"
 
-#: templates/rr/serviceprovider_detail.html:192
-#: templates/rr/serviceprovider_detail.html:208
+#: templates/rr/serviceprovider_detail.html:195
+#: templates/rr/serviceprovider_detail.html:211
 msgid "Grant types"
 msgstr ""
 
-#: templates/rr/serviceprovider_detail.html:197
-#: templates/rr/serviceprovider_detail.html:212
+#: templates/rr/serviceprovider_detail.html:200
+#: templates/rr/serviceprovider_detail.html:215
 msgid "Response types"
 msgstr ""
 
-#: templates/rr/serviceprovider_detail.html:202
-#: templates/rr/serviceprovider_detail.html:216
+#: templates/rr/serviceprovider_detail.html:205
+#: templates/rr/serviceprovider_detail.html:219
 msgid "Scopes"
 msgstr ""
 
-#: templates/rr/serviceprovider_detail.html:224
+#: templates/rr/serviceprovider_detail.html:227
 msgid "OIDC redirect URIs"
 msgstr "OIDC paluuosoitteet"
 
-#: templates/rr/serviceprovider_detail.html:228
+#: templates/rr/serviceprovider_detail.html:231
 msgid "URL"
 msgstr ""
 
-#: templates/rr/serviceprovider_detail.html:241
+#: templates/rr/serviceprovider_detail.html:245
 msgid "Registry administrators"
 msgstr "Palvelun ylläpitäjät"
 
-#: templates/rr/serviceprovider_detail.html:245
+#: templates/rr/serviceprovider_detail.html:249
 #: templates/rr/serviceprovider_list.html:19
 #: templates/rr/serviceprovider_list.html:55
 #: templates/rr/serviceprovider_list.html:91 templates/rr/usergroup.html:18
 msgid "Name"
 msgstr "Nimi"
 
-#: templates/rr/serviceprovider_detail.html:246
-#: templates/rr/serviceprovider_detail.html:319
+#: templates/rr/serviceprovider_detail.html:250
+#: templates/rr/serviceprovider_detail.html:325
 msgid "Email"
 msgstr "Sähköposti"
 
-#: templates/rr/serviceprovider_detail.html:260
+#: templates/rr/serviceprovider_detail.html:264
 msgid "Attribute requisitions"
 msgstr "Attribuuttien luovutspyynnöt"
 
-#: templates/rr/serviceprovider_detail.html:267
+#: templates/rr/serviceprovider_detail.html:271
 msgid "Userinfo"
 msgstr "Käyttäjätiedot"
 
-#: templates/rr/serviceprovider_detail.html:268
+#: templates/rr/serviceprovider_detail.html:272
 msgid "ID Token"
 msgstr ""
 
-#: templates/rr/serviceprovider_detail.html:335
+#: templates/rr/serviceprovider_detail.html:342
 msgid "SAML endpoints"
 msgstr "SAML yhteysosoitteet"
 
-#: templates/rr/serviceprovider_detail.html:358
+#: templates/rr/serviceprovider_detail.html:366
 msgid "LDAP user groups"
 msgstr "LDAP käyttäjäryhmät"
 
-#: templates/rr/serviceprovider_detail.html:362
+#: templates/rr/serviceprovider_detail.html:370
 msgid "name"
 msgstr "nimi"
 
-#: templates/rr/serviceprovider_detail.html:375
+#: templates/rr/serviceprovider_detail.html:383
 msgid "Removing this service provider"
 msgstr "Poista tämä palvelu"
 
-#: templates/rr/serviceprovider_detail.html:376
+#: templates/rr/serviceprovider_detail.html:384
 msgid "Click this link to remove this service provider"
 msgstr "Klikkaa linkkiä poistaaksesti tämän palvelun"
 
@@ -2511,21 +2604,21 @@ msgstr ""
 #: templates/rr/serviceprovider_ldap_create_form.html:12
 #: templates/rr/serviceprovider_oidc_create_form.html:13
 #: templates/rr/serviceprovider_saml_create_form.html:13
-#: views/serviceprovider.py:180
+#: views/serviceprovider.py:175
 msgid "Service name in English or in Finnish"
 msgstr "Palvelun nimi suomeksi tai englanniksi."
 
 #: templates/rr/serviceprovider_ldap_create_form.html:13
 #: templates/rr/serviceprovider_oidc_create_form.html:14
 #: templates/rr/serviceprovider_saml_create_form.html:14
-#: views/serviceprovider.py:184
+#: views/serviceprovider.py:179
 msgid "Service description in English or in Finnish"
 msgstr "Palvelun kuvaus suomeksi tai englanniksi."
 
 #: templates/rr/serviceprovider_ldap_create_form.html:14
 #: templates/rr/serviceprovider_oidc_create_form.html:15
 #: templates/rr/serviceprovider_saml_create_form.html:15
-#: views/serviceprovider.py:155
+#: views/serviceprovider.py:150
 msgid "Privacy policy URL in English or in Finnish"
 msgstr "Tietosuojaselosteen osoite suomeksi tai englanniksi."
 
@@ -2835,7 +2928,7 @@ msgid "Some of the attributes are defined later in different forms."
 msgstr "Osa tiedoista määritetään myöhemmin muilla lomakkeilla."
 
 #: templates/rr/serviceprovider_saml_create_form.html:20
-#: views/serviceprovider.py:164
+#: views/serviceprovider.py:159
 msgid "AssertionConsumerService endpoint"
 msgstr "AssertionConsumerService yhteysosoite"
 
@@ -2859,43 +2952,72 @@ msgstr ""
 "Käyttäjien, joilla ei ole Helsingin yliopiston käyttäjätunnusta, täytyy "
 "pyytää paikallinen käyttäjätunnus rekisterin ylläpitäjiltä."
 
-#: templates/rr/spadmin.html:12
+#: templates/rr/spadmin.html:10
+msgid ""
+"Admin groups are IAM groups. If the group has not been used in the SP-"
+"registry before, users will only get it when they log in next time."
+msgstr ""
+"Ylläpitoryhmät ovat IAM-ryhmiä. Jos ryhmä ei ole aikaisemmin ollut "
+"käytössäSP-rekisterissä, lisätään käyttäjät ryhmään vasta heidän seuraavan "
+"kerran kirjautuessa."
+
+#: templates/rr/spadmin.html:13
 msgid "List of admins"
 msgstr "Lista ylläpitäjistä"
 
-#: templates/rr/spadmin.html:39
+#: templates/rr/spadmin.html:40
 msgid "No admins"
 msgstr "Ei ylläpitäjiä"
 
-#: templates/rr/spadmin.html:41
+#: templates/rr/spadmin.html:42
 msgid "List of invites"
 msgstr "Lista kutsuista"
 
-#: templates/rr/spadmin.html:68
+#: templates/rr/spadmin.html:69
 msgid "No invites"
 msgstr "Ei kutsuja"
 
-#: templates/rr/spadmin.html:71
+#: templates/rr/spadmin.html:72
 msgid "Add admin"
 msgstr "Lisää ylläpitäjä"
 
-#: templates/rr/spadmin.html:78
+#: templates/rr/spadmin.html:79
 msgid "Example message"
 msgstr "Esimerkkiviesti"
 
-#: templates/rr/spadmin.html:83
+#: templates/rr/spadmin.html:84
 msgid "Body"
 msgstr "Viesti"
 
-#: templates/rr/spadmin.html:92
+#: templates/rr/spadmin.html:93
 msgid "Send invitation"
 msgstr "Lähetä kutsu"
 
-#: templates/rr/spadmin.html:92
+#: templates/rr/spadmin.html:93
 msgid "Show message"
 msgstr "Näytä viesti"
 
-#: templates/rr/spadmin.html:102
+#: templates/rr/spadmin.html:97
+msgid "List of admin groups"
+msgstr "Lista ylläpitoryhmistä"
+
+#: templates/rr/spadmin.html:104
+msgid "Group"
+msgstr "Ryhmän"
+
+#: templates/rr/spadmin.html:120
+msgid "No admin groups"
+msgstr "Ei ylläpitoryhmiä"
+
+#: templates/rr/spadmin.html:124
+msgid "Add admin group"
+msgstr "Lisää ylläpitoryhmä"
+
+#: templates/rr/spadmin.html:129
+msgid "Add group"
+msgstr "Lisää ryhmä"
+
+#: templates/rr/spadmin.html:139
 msgid "Do you want to remove selected admins/invites?"
 msgstr "Haluatko poistaa valitut ylläpitäjät/kutsut?"
 
@@ -2955,20 +3077,24 @@ msgstr "Lista käyttäjistä"
 msgid "Click the username to configure user attribute values."
 msgstr "Klikkaa käyttäjänimeä määrittääksesi attribuuttitiedot."
 
-#: templates/rr/testuser.html:20 templates/rr/testuser.html:52
+#: templates/rr/testuser.html:20 templates/rr/testuser.html:53
 #: templates/rr/testuser_attribute_data.html:9
 msgid "Username"
 msgstr "Käyttäjänimi"
 
-#: templates/rr/testuser.html:40
+#: templates/rr/testuser.html:37
+msgid "Check all local users"
+msgstr ""
+
+#: templates/rr/testuser.html:41
 msgid "No users"
 msgstr "Ei käyttäjiä"
 
-#: templates/rr/testuser.html:43
+#: templates/rr/testuser.html:44
 msgid "External test users available for this SP"
 msgstr "Ulkopuoliset testikäyttäjät, joita voidaan kirjautua tähän palveluun"
 
-#: templates/rr/testuser.html:45
+#: templates/rr/testuser.html:46
 msgid ""
 "These users are keyed to some other SP but have also been activated for this "
 "SP by a user who has admin rights for both SPs."
@@ -2977,11 +3103,15 @@ msgstr ""
 "myös tähän palveluun sellaisen ylläpitäjän toimesta, jolla on oikeudet "
 "molempiin palveluihin."
 
-#: templates/rr/testuser.html:73
+#: templates/rr/testuser.html:70
+msgid "Check all external users"
+msgstr ""
+
+#: templates/rr/testuser.html:75
 msgid "Add a test user"
 msgstr "Lisää testikäyttäjä"
 
-#: templates/rr/testuser.html:89
+#: templates/rr/testuser.html:91
 msgid "Do you want to remove selected test users?"
 msgstr "Haluatko poistaa valitut testikäyttäjät?"
 
@@ -3089,23 +3219,23 @@ msgstr "EntityID jo olemassa, ylikirjoitetaan"
 msgid "EntityID does not exist, creating"
 msgstr "EntityIDtä ei löytynyt, luodaan"
 
-#: utils/serviceprovider.py:24
+#: utils/serviceprovider.py:47
 msgid "Service provider does not exist"
 msgstr "Palvelua ei löytynyt"
 
-#: views/attribute.py:101
+#: views/attribute.py:100
 msgid "Attributes added: "
 msgstr "Attribuutti lisätty: "
 
-#: views/attribute.py:104
+#: views/attribute.py:103
 msgid "Attributes modified: "
 msgstr "Attribuuttia muokattu: "
 
-#: views/attribute.py:107
+#: views/attribute.py:106
 msgid "Attributes removed: "
 msgstr "Attribuutti poistettu: "
 
-#: views/attribute.py:168
+#: views/attribute.py:167
 msgid "Attribute proviced does not exist"
 msgstr "Attribuuttia ei löytynyt"
 
@@ -3169,7 +3299,7 @@ msgstr "Git repositorio vaikuttaisi olevan väärässä muodossa."
 msgid "Repository path could not be accessed."
 msgstr "Repositorion sijaintia ei voidu lukea."
 
-#: views/metadata.py:187 views/metadata.py:284
+#: views/metadata.py:187 views/metadata.py:298
 msgid ""
 "Execution of git command failed. Might want to try git command locally from "
 "the command line and check that it works."
@@ -3177,20 +3307,20 @@ msgstr ""
 "git-komennon suorittaminen epäonnistui. Kannattaa tarkastaa komentorivillä "
 "että se toimii oikein."
 
-#: views/metadata.py:277
+#: views/metadata.py:291
 msgid "Git repository has no origin."
 msgstr "Git repositoriolla ei ole lähdettä"
 
-#: views/metadata.py:282
+#: views/metadata.py:296
 msgid "Remote repository not matching local, please fix manually."
 msgstr "Ulkoinen repositorio ei vastaa paikallista, korjaa tämä käsin."
 
-#: views/metadata.py:300
+#: views/metadata.py:314
 msgid "Pushing to remote did not work, please fix manually."
 msgstr ""
 "Tietojen vienti ulkoiseen repositorioon ei toiminut, korjaa tämä käsin."
 
-#: views/metadata.py:302
+#: views/metadata.py:316
 msgid ""
 "Execution of git command failed. Might want to try git command locally  from "
 "the command line and check that it works."
@@ -3198,7 +3328,7 @@ msgstr ""
 "git-komennon suorittaminen epäonnistui. Kannattaa tarkastaa komentorivillä "
 "että se toimii oikein."
 
-#: views/metadata.py:306
+#: views/metadata.py:320
 msgid "Metadata file has changed, please try again."
 msgstr "Metatiedot ovat muuttuneet, tarkasta muutokset ja yritä uudelleen."
 
@@ -3218,20 +3348,20 @@ msgstr "Muutokset hyväksytty."
 msgid "You should not be here."
 msgstr "Sinun ei kuuluisi olla täällä."
 
-#: views/serviceprovider.py:192
+#: views/serviceprovider.py:187
 msgid "Technical contact"
 msgstr "Tekninen yhteystieto"
 
-#: views/serviceprovider.py:374 views/serviceprovider.py:428
-#: views/serviceprovider.py:485 views/serviceprovider.py:540
+#: views/serviceprovider.py:369 views/serviceprovider.py:412
+#: views/serviceprovider.py:458 views/serviceprovider.py:501
 msgid "Form successfully saved"
 msgstr "Lomake tallennettu"
 
-#: views/serviceprovider.py:583
+#: views/serviceprovider.py:529
 msgid "Client secret generated."
 msgstr "Palvelun salaisuus luotu"
 
-#: views/serviceprovider.py:586
+#: views/serviceprovider.py:532
 msgid ""
 "Unable to generate a client secret. Usually this means incorrect server "
 "configuration."
@@ -3239,19 +3369,19 @@ msgstr ""
 "Ei voitu luoda palvelun salaisuutta. Yleensä tämä merkitsee virheellisiä "
 "palvelinasetuksia."
 
-#: views/serviceprovider.py:590
+#: views/serviceprovider.py:536
 msgid "Client secret removed."
 msgstr "Palvelun salaisuus poistettu"
 
-#: views/serviceprovider.py:601
+#: views/serviceprovider.py:547
 msgid "Service deleted."
 msgstr "Palvelu poistettu."
 
-#: views/serviceprovider.py:628
+#: views/serviceprovider.py:570
 msgid "Service removal is not allowed for production services."
 msgstr "Tuotantopalvelun poisto ei ole sallittua."
 
-#: views/spadmin.py:80
+#: views/spadmin.py:79
 msgid ""
 "Template is missing activation link. Please include {{ activation_link }} to "
 "message."
@@ -3259,63 +3389,75 @@ msgstr ""
 "Viestipohjasta puuttuu aktivointilinkki. Lisää {{ activation_link }} "
 "viestiin."
 
-#: views/spadmin.py:153
+#: views/spadmin.py:149
+msgid "Admin group added: "
+msgstr "Ylläpitoryhmä lisätty: "
+
+#: views/spadmin.py:161
+msgid "Admin group removed: "
+msgstr "Ylläpitoryhmä poistettu: "
+
+#: views/spadmin.py:188
 msgid "Invite sent to "
 msgstr "Kutsu lähetetty osoitteeseen "
 
-#: views/spadmin.py:157
+#: views/spadmin.py:192
 msgid "Could not send email."
 msgstr "Ei voitu lähettää sähköpostia."
 
-#: views/spadmin.py:162
+#: views/spadmin.py:197
 msgid "Invalid header found, could not send email."
 msgstr "Virheellinen otsikko löydetty, ei voitu lähettää sähköpostia."
 
-#: views/spadmin.py:177
+#: views/spadmin.py:212
 msgid "Invite removed for email "
 msgstr "Kutsu poistettu sähköpostiosoitteelta "
 
-#: views/spadmin.py:181
+#: views/spadmin.py:216
 msgid "Invite already used or removed"
 msgstr "Kutsu on jo käytetty tai poistettu "
 
-#: views/spadmin.py:192
+#: views/spadmin.py:227
 msgid "Admin removed: "
 msgstr "Ylläpitäjä poistettu: "
 
-#: views/spadmin.py:221
+#: views/spadmin.py:250
 msgid "Activation key does not match"
 msgstr "Aktivointiavain ei vastaa"
 
-#: views/testuser.py:85
+#: views/testuser.py:94
 msgid "Test user added: "
 msgstr "Testikäyttäjä lisätty: "
 
-#: views/testuser.py:99
-msgid "Test user removed: "
-msgstr "Testikäyttäjä poistettu"
+#: views/testuser.py:96
+msgid "Username already exists: "
+msgstr "Käyttäjänimi on jo olemassa: "
 
-#: views/testuser.py:112
+#: views/testuser.py:111
+msgid "Test user removed: "
+msgstr "Testikäyttäjä poistettu: "
+
+#: views/testuser.py:124
 msgid "External test user removed: "
 msgstr "Ulkopuolinen testikäyttäjä poistettu: "
 
-#: views/testuser.py:147 views/testuser.py:151
+#: views/testuser.py:159 views/testuser.py:163
 msgid "User provided does not exist"
 msgstr "Käyttäjää ei ole olemassa"
 
-#: views/testuser.py:161
+#: views/testuser.py:173
 msgid "Name based data reset for test user: "
 msgstr "Nimipohjaiset arvot palautettu testikäyttäjälle: "
 
-#: views/testuser.py:166
+#: views/testuser.py:178
 msgid "User data reset for test user: "
 msgstr "Testikäyttäjän arvot palautettu: "
 
-#: views/testuser.py:192
+#: views/testuser.py:204
 msgid "Test user attributes updated: "
 msgstr "Testikäyttäjän arvot päivitetty: "
 
-#: views/testuser.py:214
+#: views/testuser.py:226
 msgid "User info updated: "
 msgstr "Käyttäjätiedot päivitetty: "
 

@@ -28,6 +28,7 @@ from rr.models.testuser import update_entity_ids
 from rr.models.usergroup import UserGroup
 from rr.utils.missing_data import get_missing_sp_data
 from rr.utils.notifications import validation_notification, admin_notification_created_sp
+from rr.utils.serviceprovider import create_sp_history_copy, get_service_provider_queryset
 
 logger = logging.getLogger(__name__)
 
@@ -52,32 +53,31 @@ class ServiceProviderList(ListView):
     def get_queryset(self):
         if not settings.ACTIVATE_SAML:
             return ServiceProvider.objects.none()
-        if self.request.user and self.request.user.is_superuser:
-            return ServiceProvider.objects.filter(
-                end_at=None, service_type="saml").order_by('-modified', '-production', '-test', 'entity_id')
+        providers = get_service_provider_queryset(user=self.request.user, service_type='saml')
+        if self.request.user.is_superuser:
+            return providers.order_by('-modified', '-production', '-test', 'entity_id')
         else:
-            return ServiceProvider.objects.filter(admins=self.request.user, end_at=None,
-                                                  service_type="saml").order_by('entity_id')
+            return providers
 
     def get_context_data(self, **kwargs):
         context = super(ServiceProviderList, self).get_context_data(**kwargs)
         if not settings.ACTIVATE_LDAP:
             context['ldap_providers'] = ServiceProvider.objects.none()
-        elif self.request.user.is_superuser:
-            context['ldap_providers'] = ServiceProvider.objects.filter(
-                end_at=None, service_type="ldap").order_by('-modified', '-production', 'entity_id')
         else:
-            context['ldap_providers'] = ServiceProvider.objects.filter(
-                admins=self.request.user, end_at=None, service_type="ldap").order_by('entity_id')
+            providers = get_service_provider_queryset(user=self.request.user, service_type='ldap')
+            if self.request.user.is_superuser:
+                context['ldap_providers'] = providers.order_by('-modified', '-production', 'entity_id')
+            else:
+                context['ldap_providers'] = providers
 
         if not settings.ACTIVATE_OIDC:
             context['oidc_providers'] = ServiceProvider.objects.none()
-        elif self.request.user.is_superuser:
-            context['oidc_providers'] = ServiceProvider.objects.filter(
-                end_at=None, service_type="oidc").order_by('-modified', '-production', 'entity_id')
         else:
-            context['oidc_providers'] = ServiceProvider.objects.filter(
-                admins=self.request.user, end_at=None, service_type="oidc").order_by('entity_id')
+            providers = get_service_provider_queryset(user=self.request.user, service_type='oidc')
+            if self.request.user.is_superuser:
+                context['oidc_providers'] = providers.order_by('-modified', '-production', 'entity_id')
+            else:
+                context['oidc_providers'] = providers
 
         context['activate_saml'] = settings.ACTIVATE_SAML
         context['activate_ldap'] = settings.ACTIVATE_LDAP
@@ -142,11 +142,7 @@ class BasicInformationView(DetailView):
             return render(request, "error.html", {'error_message': error_message})
 
     def get_queryset(self):
-        if self.request.user.is_superuser:
-            return ServiceProvider.objects.all().order_by('entity_id')
-        else:
-            return ServiceProvider.objects.filter(admins=self.request.user,
-                                                  end_at=None).order_by('entity_id')
+        return get_service_provider_queryset(user=self.request.user)
 
     def get_context_data(self, **kwargs):
         context = super(BasicInformationView, self).get_context_data(**kwargs)
@@ -326,11 +322,7 @@ class BasicInformationUpdate(SuccessMessageMixin, UpdateView):
     template_name_suffix = '_basic_form'
 
     def get_queryset(self):
-        if self.request.user.is_superuser:
-            return ServiceProvider.objects.filter(end_at=None).order_by('entity_id')
-        else:
-            return ServiceProvider.objects.filter(admins=self.request.user,
-                                                  end_at=None).order_by('entity_id')
+        return get_service_provider_queryset(user=self.request.user)
 
     def get_form_kwargs(self):
         kwargs = super(BasicInformationUpdate, self).get_form_kwargs()
@@ -342,14 +334,7 @@ class BasicInformationUpdate(SuccessMessageMixin, UpdateView):
             sp = ServiceProvider.objects.get(pk=form.instance.pk)
             # create a history copy if modifying validated SP
             if sp.validated:
-                admins = sp.admins.all()
-                nameidformat = sp.nameidformat.all()
-                sp.history = sp.pk
-                sp.pk = None
-                sp.end_at = timezone.now()
-                sp.save()
-                sp.admins.set(admins)
-                sp.nameidformat.set(nameidformat)
+                sp = create_sp_history_copy(sp)
             redirect_url = super().form_valid(form)
             self.object.updated_by = self.request.user
             self.object.validated = None
@@ -380,11 +365,7 @@ class SamlTechnicalInformationUpdate(SuccessMessageMixin, UpdateView):
     template_name_suffix = '_saml_technical_form'
 
     def get_queryset(self):
-        if self.request.user.is_superuser:
-            return ServiceProvider.objects.filter(end_at=None, service_type="saml").order_by('entity_id')
-        else:
-            return ServiceProvider.objects.filter(admins=self.request.user, service_type="saml",
-                                                  end_at=None).order_by('entity_id')
+        return get_service_provider_queryset(user=self.request.user, service_type='saml')
 
     def get_form_kwargs(self):
         kwargs = super(SamlTechnicalInformationUpdate, self).get_form_kwargs()
@@ -396,14 +377,7 @@ class SamlTechnicalInformationUpdate(SuccessMessageMixin, UpdateView):
             sp = ServiceProvider.objects.get(pk=form.instance.pk)
             # create a history copy if modifying validated SP
             if sp.validated:
-                admins = sp.admins.all()
-                nameidformat = sp.nameidformat.all()
-                sp.history = sp.pk
-                sp.pk = None
-                sp.end_at = timezone.now()
-                sp.save()
-                sp.admins.set(admins)
-                sp.nameidformat.set(nameidformat)
+                sp = create_sp_history_copy(sp)
             redirect_url = super().form_valid(form)
             self.object.updated_by = self.request.user
             self.object.validated = None
@@ -437,12 +411,7 @@ class LdapTechnicalInformationUpdate(SuccessMessageMixin, UpdateView):
     template_name_suffix = '_ldap_technical_form'
 
     def get_queryset(self):
-        if self.request.user.is_superuser:
-            return ServiceProvider.objects.filter(end_at=None,
-                                                  service_type="ldap").order_by('entity_id')
-        else:
-            return ServiceProvider.objects.filter(admins=self.request.user, service_type="ldap",
-                                                  end_at=None).order_by('entity_id')
+        return get_service_provider_queryset(user=self.request.user, service_type='ldap')
 
     def get_form_kwargs(self):
         kwargs = super(LdapTechnicalInformationUpdate, self).get_form_kwargs()
@@ -454,14 +423,7 @@ class LdapTechnicalInformationUpdate(SuccessMessageMixin, UpdateView):
             sp = ServiceProvider.objects.get(pk=form.instance.pk)
             # create a history copy if modifying validated SP
             if sp.validated:
-                admins = sp.admins.all()
-                nameidformat = sp.nameidformat.all()
-                sp.history = sp.pk
-                sp.pk = None
-                sp.end_at = timezone.now()
-                sp.save()
-                sp.admins.set(admins)
-                sp.nameidformat.set(nameidformat)
+                sp = create_sp_history_copy(sp)
             redirect_url = super().form_valid(form)
             self.object.updated_by = self.request.user
             self.object.validated = None
@@ -492,11 +454,7 @@ class OidcTechnicalInformationUpdate(SuccessMessageMixin, UpdateView):
     template_name_suffix = '_oidc_technical_form'
 
     def get_queryset(self):
-        if self.request.user.is_superuser:
-            return ServiceProvider.objects.filter(end_at=None, service_type="oidc").order_by('entity_id')
-        else:
-            return ServiceProvider.objects.filter(admins=self.request.user, service_type="oidc",
-                                                  end_at=None).order_by('entity_id')
+        return get_service_provider_queryset(user=self.request.user, service_type='oidc')
 
     def get_form_kwargs(self):
         kwargs = super(OidcTechnicalInformationUpdate, self).get_form_kwargs()
@@ -509,18 +467,7 @@ class OidcTechnicalInformationUpdate(SuccessMessageMixin, UpdateView):
             sp = ServiceProvider.objects.get(pk=form.instance.pk)
             # create a history copy if modifying validated SP
             if sp.validated:
-                admins = sp.admins.all()
-                grant_types = sp.grant_types.all()
-                response_types = sp.response_types.all()
-                oidc_scopes = sp.oidc_scopes.all()
-                sp.history = sp.pk
-                sp.pk = None
-                sp.end_at = timezone.now()
-                sp.save()
-                sp.admins.set(admins)
-                sp.grant_types.set(grant_types)
-                sp.response_types.set(response_types)
-                sp.oidc_scopes.set(oidc_scopes)
+                sp = create_sp_history_copy(sp)
             redirect_url = super().form_valid(form)
             self.object.updated_by = self.request.user
             self.object.validated = None
@@ -552,11 +499,7 @@ class ServiceProviderDelete(SuccessMessageMixin, DeleteView):
     success_message = _("Service deleted.")
 
     def get_queryset(self):
-        if self.request.user.is_superuser:
-            return ServiceProvider.objects.filter(end_at=None).order_by('entity_id')
-        else:
-            return ServiceProvider.objects.filter(admins=self.request.user,
-                                                  end_at=None).order_by('entity_id')
+        return get_service_provider_queryset(user=self.request.user)
 
     def delete(self, request, *args, **kwargs):
         """

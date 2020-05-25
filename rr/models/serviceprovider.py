@@ -6,7 +6,7 @@ import logging
 from cryptography.fernet import Fernet, InvalidToken
 
 from django.conf import settings
-from django.contrib.auth.models import User
+from django.contrib.auth.models import Group, User
 from django.core.validators import MaxLengthValidator
 from django.db import models
 from django.utils.translation import ugettext_lazy as _, get_language
@@ -168,6 +168,7 @@ class ServiceProvider(models.Model):
     # Attributes are linked through SPAttribute model to include reason and validation information
     attributes = models.ManyToManyField(Attribute, through='SPAttribute')
     admins = models.ManyToManyField(User, blank=True, related_name="admins")
+    admin_groups = models.ManyToManyField(Group, blank=True, related_name="admin_groups")
 
     # Meta
     modified = models.BooleanField(default=True, verbose_name=_('Modified'))

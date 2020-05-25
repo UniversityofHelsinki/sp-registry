@@ -5,7 +5,7 @@ from smtplib import SMTPException
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.models import User
+from django.contrib.auth.models import Group, User
 from django.core.mail import send_mail
 from django.core.mail.message import BadHeaderError
 from django.http import HttpResponseRedirect
@@ -16,9 +16,8 @@ from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils.translation import ugettext as _
 
-from rr.forms.spadmin import SPAdminForm
+from rr.forms.spadmin import SPAdminForm, SPAdminGroupForm
 from rr.models.email import Template
-from rr.models.serviceprovider import ServiceProvider
 from rr.models.spadmin import Keystore
 from rr.utils.serviceprovider import get_service_provider
 
@@ -107,6 +106,7 @@ def admin_list(request, pk):
     """
     sp = get_service_provider(pk, request.user)
     form = SPAdminForm(superuser=request.user.is_superuser)
+    admin_group_form = SPAdminGroupForm()
     subject = None
     message = None
     error = None
@@ -121,13 +121,47 @@ def admin_list(request, pk):
             remove_self = _remove_admins(request, sp)
             if remove_self:
                 return HttpResponseRedirect(reverse('serviceprovider-list'))
+        elif "add_admin_group" in request.POST:
+            admin_group_form = _add_admin_group(request, sp)
+        elif "remove_admin_groups" in request.POST:
+            remove_self = _remove_admin_groups(request, sp)
+            if remove_self:
+                return HttpResponseRedirect(reverse('serviceprovider-list'))
     invites = Keystore.objects.filter(sp=sp)
     return render(request, "rr/spadmin.html", {'object_list': invites,
                                                'form': form,
+                                               'admin_group_form': admin_group_form,
                                                'object': sp,
                                                'subject': subject,
                                                'message': message,
                                                'error': error})
+
+
+def _add_admin_group(request, sp):
+    form = SPAdminGroupForm(request.POST)
+    if form.is_valid():
+        group_name = form.cleaned_data['group']
+        group, created = Group.objects.get_or_create(name=group_name)
+        sp.admin_groups.add(group)
+        logger.info("Admin group {group} added to {sp} by {user}".format(group=group.name, sp=sp, user=request.user))
+        messages.add_message(request, messages.INFO,
+                             _('Admin group added: ') + group.name)
+    return form
+
+
+def _remove_admin_groups(request, sp):
+    removed_self = False
+    for key, value in request.POST.dict().items():
+        if value == "on":
+            group = Group.objects.get(pk=key)
+            logger.info("Admin group {group} removed from {sp} by {user}"
+                        .format(group=group.name, sp=sp, user=request.user))
+            messages.add_message(request, messages.INFO,
+                                 _('Admin group removed: ') + group.name)
+            sp.admin_groups.remove(group)
+            if not get_service_provider(sp.pk, request.user, service_type=None, raise_404=False):
+                removed_self = True
+    return removed_self
 
 
 def _create_invite(request, sp, send):
@@ -191,13 +225,7 @@ def _remove_admins(request, sp):
             messages.add_message(request, messages.INFO,
                                  _('Admin removed: ') + admin.username)
             sp.admins.remove(admin)
-            try:
-                if request.user.is_superuser:
-                    sp = ServiceProvider.objects.get(pk=sp.pk, end_at=None)
-                else:
-                    sp = ServiceProvider.objects.get(pk=sp.pk, admins=request.user,
-                                                     end_at=None)
-            except ServiceProvider.DoesNotExist:
+            if not get_service_provider(sp.pk, request.user, service_type=None, raise_404=False):
                 removed_self = True
     return removed_self
 

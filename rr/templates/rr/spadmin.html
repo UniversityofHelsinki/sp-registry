@@ -7,6 +7,7 @@
 <div class="alert alert-success" role="alert">
 <p>{% trans "Users who can manage this service provider. You can send invites through email." %}</p>
 <p>{% trans "Users without a University of Helsinki login account have to requisition a local account from IdP administrators." %}</p>
+<p>{% trans "Admin groups are IAM groups. If the group has not been used in the SP-registry before, users will only get it when they log in next time." %}</p>
 </div>
 
 <h2 id="admin-list">{% trans "List of admins" %}</h2>
@@ -90,6 +91,42 @@
     {% bootstrap_form form layout='horizontal' %}
     {% buttons %}
     <p><button type="submit" name="add_invite" class="btn btn-primary">{% trans "Send invitation" %}</button> <button type="submit" name="show_message" class="btn btn-info">{% trans "Show message" %}</button></p>
+    {% endbuttons %}
+</form>
+{% endif %}
+<h2 id="admin-group-list">{% trans "List of admin groups" %}</h2>
+{% if object.admin_groups.all %}
+<form action="" method='POST'>
+{% csrf_token %}
+<table class="table table-sm table-responsive" aria-describedby="admin-group-list">
+  <thead>
+    <tr>
+      <th scope="col">{% trans "Group" %}</th>
+      <th scope="col">{% trans "Remove" %}</th>
+    </tr>
+  </thead>
+  <tbody>
+{% for group in object.admin_groups.all %}
+    <tr>
+      <td>{{ group.name }}</td>
+      <td><div class="checkbox"><input type="checkbox" aria-label="{%  trans "Mark for removal" %}" name="{{ group.pk }}" class="" id="id_admin_group" /></div></td>
+    </tr>
+{% endfor %}
+  </tbody>
+</table>
+<p><input class="btn btn-danger" type="submit" data-toggle="confirmation" name="remove_admin_groups" value="{% trans "Remove selected" %}" /></p>
+</form>
+{% else %}
+<p>{% trans "No admin groups" %}</p>
+{% endif %}
+
+{% if admin_group_form %}
+<h2>{% trans "Add admin group" %}</h2>
+<form action="" method="post" class="form">
+    {% csrf_token %}
+    {% bootstrap_form admin_group_form layout='horizontal' %}
+    {% buttons %}
+    <p><button type="submit" name="add_admin_group" class="btn btn-primary">{% trans "Add group" %}</button></p>
     {% endbuttons %}
 </form>
 {% endif %}

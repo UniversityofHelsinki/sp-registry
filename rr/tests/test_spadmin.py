@@ -1,4 +1,4 @@
-from django.contrib.auth.models import User
+from django.contrib.auth.models import Group, User
 from django.core import mail
 from django.test import RequestFactory, TestCase
 from django.urls import reverse
@@ -16,6 +16,8 @@ class SPAdminFormTestCase(TestCase):
         self.admin_sp = ServiceProvider.objects.create(entity_id='test:entity:1', service_type='saml')
         self.user_sp = ServiceProvider.objects.create(entity_id='https://sp2.example.org/sp', service_type='saml')
         self.user_sp.admins.add(self.user)
+        self.group = Group.objects.create(name='testgroup')
+        self.admin_sp.admin_groups.add(self.group)
 
     def test_spadmin_form_content_saml_user(self):
         form = SPAdminForm(superuser=False)
@@ -43,6 +45,12 @@ class SPAdminFormTestCase(TestCase):
         response = self.client.post(reverse('admin-list', kwargs={'pk': self.admin_sp.pk}))
         self.assertEqual(response.status_code, 404)
 
+    def test_spadmin_view_user_group(self):
+        self.user.groups.add(self.group)
+        self.client.force_login(self.user)
+        response = self.client.get(reverse('admin-list', kwargs={'pk': self.admin_sp.pk}))
+        self.assertEqual(response.status_code, 200)
+
     def test_spadmin_view_list(self):
         self.client.force_login(self.user)
         response = self.client.get(reverse('admin-list', kwargs={'pk': self.user_sp.pk}))
@@ -65,3 +73,19 @@ class SPAdminFormTestCase(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertRedirects(response, reverse('summary-view', kwargs={'pk': self.admin_sp.pk}))
         self.assertIn(self.user, self.admin_sp.admins.all())
+
+    def test_spadmin_view_add_group(self):
+        self.client.force_login(self.user)
+        response = self.client.post(reverse('admin-list', kwargs={'pk': self.user_sp.pk}),
+                                    {'add_admin_group': 'ok', 'group': 'newgroup'})
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(self.user_sp.admin_groups.all()), 1)
+        self.assertEqual(len(Group.objects.all()), 2)
+
+    def test_spadmin_view_remove_group(self):
+        self.user_sp.admin_groups.add(self.group)
+        self.client.force_login(self.user)
+        response = self.client.post(reverse('admin-list', kwargs={'pk': self.user_sp.pk}),
+                                    {'remove_admin_groups': 'ok', str(self.group.pk): 'on'})
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(self.user_sp.admin_groups.all()), 0)

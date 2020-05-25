@@ -74,6 +74,7 @@ Create a superuser with
 * Admins
   * SP admins who can access and modify this SP in the registy
   * New admins may be invited by email, invitations are valid for 30 days
+  * Permission groups management
 * Test Users
   * Custom test users for test services
 * View Metadata (SAML and OIDC only)
@@ -132,9 +133,9 @@ For more information run "./manage.py <command> -h"
 
 ## Installation
 ### Requirements
-* Django 2.2 (tested also with 1.11)
-* Python 3.5-3.6
-* MySQL/MariaDB 5.5+
+* Django 2.2
+* Python 3.5-3.8
+* MySQL 5.6+ / MariaDB 10.1+
 * Requires dev libraries for Python and MySQL/MariaDB for compiling python mysqlclient.
 
 ### Test environment

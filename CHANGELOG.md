@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.5.0] - 2020-05-25
+### Changes
+* Added option to create multiple test users at once
+* Prevent setting service to production if any required information is missing 
+* Added permissions by groups
+
+### Updating notes
+* Includes added database fields, run migrations
+
 ## [1.4.0] - 2020-01-09
 ### Changes
 * Added option to use individual SAML metadata files for dynamic metadata management

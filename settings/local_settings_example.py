@@ -28,6 +28,7 @@ ACTIVATE_SAML = True
 ACTIVATE_LDAP = True
 ACTIVATE_OIDC = True
 
+# Email backend, see https://docs.djangoproject.com/en/dev/topics/email/
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 # Email address used as send address
 SERVER_EMAIL = 'noreply@example.org'
@@ -40,7 +41,11 @@ DEFAULT_CONTACT_EMAIL = 'contact@example.org'
 # Send email to emails defined in ADMINS when changes have been made
 ADMIN_NOTIFICATION = True
 # Send email to service admins when changes have been validated
-VALIDATION_NOTIFICATION = True
+VALIDATION_NOTIFICATION_ADMINS = False
+# Send email to technical contacts when changes have been validated
+VALIDATION_NOTIFICATION_TECHNICAL_CONTACT = True
+# Send email to administrative contacts when changes have been validated
+VALIDATION_NOTIFICATION_ADMINISTRATIVE_CONTACT = True
 
 # Privacy policy url shown in login page
 PRIVACY_POLICY_URL = 'https://example.org/DataPrivacyPolicy.pdf'

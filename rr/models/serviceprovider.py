@@ -414,12 +414,16 @@ class ServiceProvider(models.Model):
 
     def save_modified(self, *args, **kwargs):
         """ Saves model and send notification if it was unmodified """
-        if self.modified and not self.production:
-            self.save()
-        else:
+        try:
+            sp = ServiceProvider.objects.get(pk=self.pk)
+        except ServiceProvider.DoesNotExist:
+            sp = None
+        if not sp or (sp.production and not sp.modified) or (sp.production != self.production):
             self.modified = True
             self.save()
             self._create_notification()
+        else:
+            self.save()
 
 
 class SPAttribute(models.Model):

@@ -199,6 +199,11 @@ rKLt+NcwtbkI6weLISJu9lFZnPMYT7LpqDWD4aMHHUWr8THO0T6mbCeQRYMlfSpU
       <RequestedAttribute FriendlyName="schacPersonalUniqueCode" Name="urn:oid:1.3.6.1.4.1.25178.1.2.14" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri"/>
     </AttributeConsumingService>
   </SPSSODescriptor>
+  <ContactPerson contactType="technical">
+    <GivenName>Tech</GivenName>
+    <SurName>Boss</SurName>
+    <EmailAddress>technical@example.org</EmailAddress>
+  </ContactPerson>
   <ContactPerson contactType="administrative">
     <GivenName>Teppo</GivenName>
     <SurName>Testeri</SurName>
@@ -276,6 +281,11 @@ def check_for_validated_metadata(context):
       <RequestedAttribute FriendlyName="mail" Name="urn:oid:0.9.2342.19200300.100.1.3" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri"/>
     </AttributeConsumingService>
   </SPSSODescriptor>
+  <ContactPerson contactType="technical">
+    <GivenName>Tech</GivenName>
+    <SurName>Boss</SurName>
+    <EmailAddress>technical@example.org</EmailAddress>
+  </ContactPerson>
   <ContactPerson contactType="administrative">
     <GivenName>Teppo</GivenName>
     <SurName>Testeri</SurName>

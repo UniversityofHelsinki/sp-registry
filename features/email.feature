@@ -1,7 +1,7 @@
 Feature: Email sending
 	Testing template based email sending for admins 
 
-Scenario: Admin invitations
+Scenario: Sending templated emails
 	Given test environment with logged in superuser exists
 	And email template exists
 	When clicking visible link with text "Emails"

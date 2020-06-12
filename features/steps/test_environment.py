@@ -3,6 +3,7 @@ from behave import given
 from django.contrib.auth.models import User
 from django.utils import timezone
 
+from rr.models.contact import Contact
 from rr.models.email import Template
 from rr.models.serviceprovider import ServiceProvider
 from rr.models.spadmin import Keystore
@@ -22,7 +23,7 @@ def create_test_environment(context):
     sp = ServiceProvider.objects.create(entity_id="https://sp.example.org/sp",
                                         service_type="saml",
                                         name_en="My program name", validated=timezone.now(),
-                                        modified=False, test=True)
+                                        modified=False, production=True)
     sp.admins.add(u)
     ServiceProvider.objects.create(entity_id="https://sp.example.com/sp",
                                    service_type="saml",
@@ -116,15 +117,17 @@ def create_test_environment_with_superuser(context):
         application_portfolio="https://portfolio.example.org/corp/",
         discovery_service_url="https://discovery.example.org/",
         sign_requests=True,
-        test=True,
+        production=True,
         validated=timezone.now(),
         modified=False)
     sp.nameidformat.add(nameidformat)
     sp.admins.add(u)
+    Contact.objects.create(sp=sp, type='technical', firstname='Tech', lastname='Boss',
+                           email="technical@example.org")
     ServiceProvider.objects.create(entity_id="https://sp.example.com/sp",
                                    service_type="saml",
                                    name_en="SP without admins",
-                                   validated=timezone.now(), modified=False)
+                                   validated=timezone.now(), modified=False, production=True)
     sp = ServiceProvider.objects.create(entity_id="ldap-3", service_type="ldap",
                                         server_names="ldap.example.com ldap3.example.com",
                                         name_en="My LDAP service",

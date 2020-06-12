@@ -70,17 +70,27 @@ def validation_notification(sp):
     """
     Sends validation message to SP admins.
     """
-    if hasattr(settings, 'VALIDATION_NOTIFICATION') and settings.VALIDATION_NOTIFICATION:
+    admin_emails = []
+    if hasattr(settings, 'VALIDATION_NOTIFICATION_ADMINS') and settings.VALIDATION_NOTIFICATION_ADMINS:
         admins = sp.admins.all()
-        admin_emails = []
         for admin in admins:
             admin_emails.append(admin.email)
-        if sp and admin_emails:
-            subject = render_to_string('email/validation_notification_subject.txt')
-            message = _render_validation_notification_message(sp)
-            try:
-                send_mail(subject, message, settings.SERVER_EMAIL, admin_emails, fail_silently=False)
-            except SMTPException:
-                logger.warning("SMTP error when sending validation notification.")
-            except BadHeaderError:
-                logger.error("Validation notification email contained invalid headers.")
+    if (hasattr(settings, 'VALIDATION_NOTIFICATION_TECHNICAL_CONTACT') and
+            settings.VALIDATION_NOTIFICATION_TECHNICAL_CONTACT):
+        contacts = sp.contact_set.filter(end_at=None, type='technical').exclude(email='')
+        for contact in contacts:
+            admin_emails.append(contact.email)
+    if (hasattr(settings, 'VALIDATION_NOTIFICATION_ADMINISTRATIVE_CONTACT') and
+            settings.VALIDATION_NOTIFICATION_ADMINISTRATIVE_CONTACT):
+        contacts = sp.contact_set.filter(end_at=None, type='administrative').exclude(email='')
+        for contact in contacts:
+            admin_emails.append(contact.email)
+    if sp and admin_emails:
+        subject = render_to_string('email/validation_notification_subject.txt')
+        message = _render_validation_notification_message(sp)
+        try:
+            send_mail(subject, message, settings.SERVER_EMAIL, admin_emails, fail_silently=False)
+        except SMTPException:
+            logger.warning("SMTP error when sending validation notification.")
+        except BadHeaderError:
+            logger.error("Validation notification email contained invalid headers.")

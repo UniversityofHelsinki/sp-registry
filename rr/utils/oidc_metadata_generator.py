@@ -107,7 +107,9 @@ def oidc_metadata_generator(sp, validated=True, privacypolicy=False, client_secr
     if not entity:
         return metadata
     metadata['client_id'] = entity.entity_id
-    metadata = _set_client_secret(entity, metadata, client_secret_encryption)
+    client_secret = _set_client_secret(entity, client_secret_encryption)
+    if client_secret:
+        metadata['client_secret'] = client_secret
     if entity.jwks_uri:
         metadata['jwks_uri'] = entity.jwks_uri
     elif entity.jwks:
@@ -140,18 +142,18 @@ def oidc_metadata_generator(sp, validated=True, privacypolicy=False, client_secr
     return metadata
 
 
-def _set_client_secret(entity, metadata, client_secret_encryption):
+def _set_client_secret(entity, client_secret_encryption):
     if entity.encrypted_client_secret and entity.application_type != 'native' and not (entity.jwks or entity.jwks_uri):
         if client_secret_encryption == "encrypted":
-            metadata['client_secret'] = entity.encrypted_client_secret
+            return entity.encrypted_client_secret
         elif client_secret_encryption == "decrypted":
             try:
-                metadata['client_secret'] = entity.get_client_secret().decode()
+                return entity.get_client_secret()
             except AttributeError:
                 return None
         else:
-            metadata['client_secret'] = "******"
-    return metadata
+            return "******"
+    return None
 
 
 def oidc_metadata_generator_list(validated=True, privacypolicy=False, production=False, test=False, include=None,

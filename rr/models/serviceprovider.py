@@ -369,7 +369,7 @@ class ServiceProvider(models.Model):
             f = get_fernet_instance()
             if f:
                 try:
-                    return f.decrypt(self.encrypted_client_secret.encode())
+                    return f.decrypt(self.encrypted_client_secret.encode()).decode()
                 except TypeError:
                     return None
                 except InvalidToken:

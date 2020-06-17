@@ -1,9 +1,18 @@
 # Changelog
 
+## [1.6.0] - 2020-06-17
+### Changes
+- Send notifications to admins only when production status or production
+service is modified
+- Setting values for defining who should receive validation messages for
+services. Options: admins, technical contact, administrative contact
+- Fix client secret decrypt decoding
+- Version updates
+
 ## [1.5.0] - 2020-05-25
 ### Changes
 * Added option to create multiple test users at once
-* Prevent setting service to production if any required information is missing 
+* Prevent setting service to production if any required information is missing
 * Added permissions by groups
 
 ### Updating notes
@@ -11,7 +20,8 @@
 
 ## [1.4.0] - 2020-01-09
 ### Changes
-* Added option to use individual SAML metadata files for dynamic metadata management
+* Added option to use individual SAML metadata files for dynamic metadata
+management
 * Added jwks and jwks_uri parameters for OIDC 
 * Added token_endpoint_auth_method parameter for OIDC
 * Added missing table descriptions
@@ -29,7 +39,8 @@
 * Fixed xml attribute order (lxml 4.4 changes)
 * Moved static urls from templates to translation files
 * Moved attribute filter export to separate management command
-* Using stdin/stdout as defaults in export/import management commands if files are not given
+* Using stdin/stdout as defaults in export/import management commands if files
+are not given
 
 ## [1.2.1] - 2019-09-24
 ### Changes

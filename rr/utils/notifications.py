@@ -60,6 +60,9 @@ def _render_validation_notification_message(sp):
     elif sp.service_type == "ldap":
         message = render_to_string('email/validation_notification_ldap.txt',
                                    {'entity_id': sp.entity_id})
+    elif sp.service_type == "oidc":
+        message = render_to_string('email/validation_notification_oidc.txt',
+                                   {'entity_id': sp.entity_id})
     else:
         message = render_to_string('email/validation_notification.txt',
                                    {'entity_id': sp.entity_id})

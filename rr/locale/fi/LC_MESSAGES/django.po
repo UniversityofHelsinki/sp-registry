@@ -361,7 +361,7 @@ msgid ""
 "assertions are encrypted by default."
 msgstr ""
 "IdP allekirjoittaa palvelulle lähetetyt attribuuttitiedot. Oletuksena Ei, "
-"koska assertiot salataan oletuksena."
+"koska vahvistukset salataan oletuksena."
 
 #: forms/serviceprovider.py:103
 msgid "IdP requires signed authentication requests from this SP."
@@ -1202,7 +1202,7 @@ msgstr "Discovery-palvelun osoite"
 
 #: models/serviceprovider.py:89
 msgid "Sign SSO assertions"
-msgstr "Allekirjoita SSO assertiot"
+msgstr "Allekirjoita SSO-vahvistukset (assertions)"
 
 #: models/serviceprovider.py:90
 msgid "Sign SSO requests"
@@ -1214,7 +1214,7 @@ msgstr "Allekirjoita SSO vastaukset"
 
 #: models/serviceprovider.py:93
 msgid "Encrypt SSO assertions"
-msgstr "Salaa SSO assertiot"
+msgstr "Salaa SSO-vahvistukset (assertions)"
 
 #: models/serviceprovider.py:94
 msgid "Require MFA authentication"
@@ -2851,7 +2851,7 @@ msgstr "SHA-1 algoritmi"
 
 #: templates/rr/serviceprovider_saml_admin_list.html:23
 msgid "Sign assertions"
-msgstr "Allekirjoita assertaatiot"
+msgstr "Allekirjoita vahvistukset (assertions)"
 
 #: templates/rr/serviceprovider_saml_admin_list.html:24
 msgid "Sign responses"
@@ -2859,7 +2859,7 @@ msgstr "Allekirjoita vastaukset"
 
 #: templates/rr/serviceprovider_saml_admin_list.html:25
 msgid "Encrypt assertions"
-msgstr "Salaa assertaatiot"
+msgstr "Salaa vahvistukset (assertions)"
 
 #: templates/rr/serviceprovider_saml_admin_list.html:53
 msgid "NameId Format settings"

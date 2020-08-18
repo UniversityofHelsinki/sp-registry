@@ -2888,8 +2888,7 @@ msgid ""
 "This list includes all service providers which have MFA forced from server "
 "side."
 msgstr ""
-"Tämä lista sisältää palvelut, joilla ei ole oletusasetukset salaus ja "
-"allekirjoituskäytännöissä."
+"Lista sisältää palvelut, joissa on palvelimelta pakotettu vahvennettu tunnistus."
 
 #: templates/rr/serviceprovider_saml_admin_list.html:96
 msgid "Force MFA"

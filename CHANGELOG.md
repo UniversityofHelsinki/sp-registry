@@ -1,13 +1,16 @@
 # Changelog
 
+## [1.6.1] - 2020-08-20
+* Finnish translation updates
+
 ## [1.6.0] - 2020-06-17
 ### Changes
-- Send notifications to admins only when production status or production
+* Send notifications to admins only when production status or production
 service is modified
-- Setting values for defining who should receive validation messages for
+* Setting values for defining who should receive validation messages for
 services. Options: admins, technical contact, administrative contact
-- Fix client secret decrypt decoding
-- Version updates
+* Fix client secret decrypt decoding
+* Version updates
 
 ## [1.5.0] - 2020-05-25
 ### Changes

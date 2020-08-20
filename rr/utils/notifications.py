@@ -77,12 +77,12 @@ def validation_notification(sp):
             admin_emails.append(admin.email)
     if (hasattr(settings, 'VALIDATION_NOTIFICATION_TECHNICAL_CONTACT') and
             settings.VALIDATION_NOTIFICATION_TECHNICAL_CONTACT):
-        contacts = sp.contact_set.filter(end_at=None, type='technical').exclude(email='')
+        contacts = sp.contacts.filter(end_at=None, type='technical').exclude(email='')
         for contact in contacts:
             admin_emails.append(contact.email)
     if (hasattr(settings, 'VALIDATION_NOTIFICATION_ADMINISTRATIVE_CONTACT') and
             settings.VALIDATION_NOTIFICATION_ADMINISTRATIVE_CONTACT):
-        contacts = sp.contact_set.filter(end_at=None, type='administrative').exclude(email='')
+        contacts = sp.contacts.filter(end_at=None, type='administrative').exclude(email='')
         for contact in contacts:
             admin_emails.append(contact.email)
     if sp and admin_emails:

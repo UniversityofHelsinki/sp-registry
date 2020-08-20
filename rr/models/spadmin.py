@@ -56,7 +56,7 @@ class Keystore(models.Model):
     """
     Stores a single invite, related to :model:`rr.ServiceProvider` and :model:`auth.User`
     """
-    sp = models.ForeignKey(ServiceProvider, on_delete=models.CASCADE)
+    sp = models.ForeignKey(ServiceProvider, related_name='keys', on_delete=models.CASCADE)
     creator = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name=_('Creator'))
     activation_key = models.CharField(max_length=40, verbose_name=_('Activation key'))
     valid_until = models.DateField(verbose_name=_('Valid until date'))

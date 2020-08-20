@@ -88,7 +88,8 @@ def certificate_list(request, pk):
 def _add_certificate(request, sp):
     form = CertificateForm(request.POST, sp=sp)
     if form.is_valid():
-        certificate = form.cleaned_data['certificate']
+        certificate = form.cleaned_data['certificate'].replace(
+            "-----BEGIN CERTIFICATE-----", "").replace("-----END CERTIFICATE-----", "").strip()
         signing = form.cleaned_data['signing']
         encryption = form.cleaned_data['encryption']
         if not signing and not encryption:

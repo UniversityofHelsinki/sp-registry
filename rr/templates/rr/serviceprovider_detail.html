@@ -106,7 +106,7 @@
     </tr>
   </thead>
   <tbody>
-{% for f in object.get_technical_fields %}
+{% for f in object.get_saml_technical_fields %}
 {% if history_object %}
     {% if f.value != history_object|get_item:f.name %}<tr class="table-warning">{% else %}<tr>{% endif %}
       <td>{{ f.label }}</td>

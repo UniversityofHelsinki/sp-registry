@@ -5,6 +5,8 @@ import logging
 
 from cryptography.fernet import Fernet, InvalidToken
 
+from datetime import timedelta
+
 from django.conf import settings
 from django.contrib.auth.models import Group, User
 from django.core.validators import MaxLengthValidator
@@ -19,6 +21,47 @@ from rr.utils.notifications import admin_notification_modified_sp
 
 logger = logging.getLogger(__name__)
 
+BASIC_INFORMATION_FIELDS = ['name_fi', 'name_en', 'name_sv', 'description_fi', 'description_en', 'description_sv',
+                            'privacypolicy_fi', 'privacypolicy_en', 'privacypolicy_sv', 'login_page_url',
+                            'application_portfolio', 'notes', 'admin_notes', 'organization']
+BASIC_LINKED_FIELDS = ['admins', 'admin_groups', 'attributes', 'contacts']
+SAML_TECHNICAL_FIELDS = ['entity_id', 'discovery_service_url', 'sign_assertions', 'sign_requests', 'sign_responses',
+                         'encrypt_assertions', 'force_mfa', 'force_sha1', 'force_nameidformat', 'production', 'test',
+                         'saml_product', 'autoupdate_idp_metadata']
+SAML_LINKED_FIELDS = ['certificates', 'endpoints', 'nameidformat']
+LDAP_TECHNICAL_FIELDS = ['uses_ldapauth', 'server_names', 'target_group', 'service_account', 'service_account_contact',
+                         'local_storage_users', 'local_storage_passwords', 'local_storage_passwords_info',
+                         'local_storage_groups', 'production', 'can_access_all_ldap_groups']
+LDAP_LINKED_FIELDS = ['usergroups']
+OIDC_TECHNICAL_FIELDS = ['entity_id', 'grant_types', 'response_types', 'application_type', 'subject_identifier',
+                         'oidc_scopes', 'token_endpoint_auth_method', 'jwks_uri', 'jwks', 'production', 'test',
+                         'saml_product', 'autoupdate_idp_metadata']
+OIDC_LINKED_FIELDS = ['grant_types', 'oidc_scopes', 'response_types', 'redirecturis']
+META_FIELDS = ['modified', 'created_at', 'updated_at', 'updated_by', 'validated']
+
+
+def get_field_names(types):
+    field_list = []
+    if 'basic' in types:
+        field_list.extend(BASIC_INFORMATION_FIELDS)
+    if 'basic_linked' in types:
+        field_list.extend(BASIC_LINKED_FIELDS)
+    if 'meta' in types:
+        field_list.extend(META_FIELDS)
+    if 'saml' in types:
+        field_list.extend(SAML_TECHNICAL_FIELDS)
+    if 'saml_linked' in types:
+        field_list.extend(SAML_LINKED_FIELDS)
+    if 'ldap' in types:
+        field_list.extend(LDAP_TECHNICAL_FIELDS)
+    if 'ldap_linked' in types:
+        field_list.extend(LDAP_LINKED_FIELDS)
+    if 'oidc' in types:
+        field_list.extend(OIDC_TECHNICAL_FIELDS)
+    if 'oidc_linked' in types:
+        field_list.extend(OIDC_LINKED_FIELDS)
+    return field_list
+
 
 def get_fernet_instance():
     """Initializes Fernet instance for client secret encryption."""
@@ -31,6 +74,21 @@ def get_fernet_instance():
             logger.error("Invalid OIDC_CLIENT_SECRET_KEY.")
             f = None
     return f
+
+
+def server_names_validator(server_names, error):
+    """
+    Validates server names list
+
+    error: Raised error class
+    """
+    server_names_list = server_names.splitlines()
+    pattern = re.compile("^(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\-]*[a-zA-Z0-9])\.)*"
+                         "([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9\-]*[A-Za-z0-9])$")
+    for server_name in server_names_list:
+        if not pattern.match(server_name):
+            raise error(_("Invalid list of server names."))
+    return server_names
 
 
 class ServiceProvider(models.Model):
@@ -225,22 +283,23 @@ class ServiceProvider(models.Model):
     def __str__(self):
         return self.entity_id
 
-    def get_all_fields(self):
-        """Returns a list of all field names on the instance."""
+    def _get_fields(self, types):
+        """Returns a list of technical information field names on the instance."""
         fields = []
         for f in self._meta.fields:
-            fname = f.name
-            # resolve choices, with get_xyz_display() function
-            get_choice = 'get_'+fname+'_display'
+            field_name = f.name
+            # resolve picklists/choices, with get_xyz_display() function
+            get_choice = 'get_' + field_name + '_display'
             if hasattr(self, get_choice):
                 value = getattr(self, get_choice)()
             else:
                 try:
-                    value = getattr(self, fname)
+                    value = getattr(self, field_name)
                 except AttributeError:
                     value = None
-            # only display fields with values and skip some fields entirely
-            if f.editable and f.name not in ('id', 'end_at', 'history', 'validated', 'modified'):
+            # Skip fields in list
+            field_list = get_field_names(types)
+            if f.editable and f.name in field_list:
                 fields.append(
                   {
                    'label': f.verbose_name,
@@ -252,116 +311,19 @@ class ServiceProvider(models.Model):
 
     def get_basic_fields(self):
         """Returns a list of basic information field names on the instance."""
-        fields = []
-        for f in self._meta.fields:
-            fname = f.name
-            # resolve choices, with get_xyz_display() function
-            get_choice = 'get_'+fname+'_display'
-            if hasattr(self, get_choice):
-                value = getattr(self, get_choice)()
-            else:
-                try:
-                    value = getattr(self, fname)
-                except AttributeError:
-                    value = None
-            # only display fields with values and skip some fields entirely
-            if f.editable and f.name in ('name_fi', 'name_en',
-                                         'name_sv', 'description_fi', 'description_en', 'description_sv',
-                                         'privacypolicy_fi', 'privacypolicy_en', 'privacypolicy_sv',
-                                         'login_page_url', 'application_portfolio', 'notes', 'admin_notes', 'organization'):
-                fields.append(
-                  {
-                   'label': f.verbose_name,
-                   'name': f.name,
-                   'value': value,
-                  }
-                )
-        return fields
+        return self._get_fields(types=['basic'])
 
-    def get_technical_fields(self):
+    def get_saml_technical_fields(self):
         """Returns a list of SAML technical information field names on the instance."""
-        fields = []
-        for f in self._meta.fields:
-
-            fname = f.name
-            # resolve picklists/choices, with get_xyz_display() function
-            get_choice = 'get_'+fname+'_display'
-            if hasattr(self, get_choice):
-                value = getattr(self, get_choice)()
-            else:
-                try:
-                    value = getattr(self, fname)
-                except AttributeError:
-                    value = None
-            # Skip fields in list
-            if f.editable and f.name in ('entity_id', 'discovery_service_url',
-                                         'sign_assertions', 'sign_requests', 'sign_responses', 'encrypt_assertions',
-                                         'force_mfa', 'force_sha1', 'force_nameidformat',
-                                         'production', 'test', 'saml_product', 'autoupdate_idp_metadata'):
-                fields.append(
-                  {
-                   'label': f.verbose_name,
-                   'name': f.name,
-                   'value': value,
-                  }
-                )
-        return fields
+        return self._get_fields(types=['saml'])
 
     def get_ldap_technical_fields(self):
         """Returns a list of LDAP technical information field names on the instance."""
-        fields = []
-        for f in self._meta.fields:
-
-            fname = f.name
-            # resolve picklists/choices, with get_xyz_display() function
-            get_choice = 'get_'+fname+'_display'
-            if hasattr(self, get_choice):
-                value = getattr(self, get_choice)()
-            else:
-                try:
-                    value = getattr(self, fname)
-                except AttributeError:
-                    value = None
-            # Skip fields in list
-            if f.editable and f.name in ('uses_ldapauth', 'server_names', 'target_group', 'service_account', 'service_account_contact',
-                                         'local_storage_users', 'local_storage_passwords', 'local_storage_passwords_info',
-                                         'local_storage_groups', 'production', 'can_access_all_ldap_groups'):
-                fields.append(
-                  {
-                   'label': f.verbose_name,
-                   'name': f.name,
-                   'value': value,
-                  }
-                )
-        return fields
+        return self._get_fields(types=['ldap'])
 
     def get_oidc_technical_fields(self):
         """Returns a list of OIDC technical information field names on the instance."""
-        fields = []
-        for f in self._meta.fields:
-
-            fname = f.name
-            # resolve picklists/choices, with get_xyz_display() function
-            get_choice = 'get_'+fname+'_display'
-            if hasattr(self, get_choice):
-                value = getattr(self, get_choice)()
-            else:
-                try:
-                    value = getattr(self, fname)
-                except AttributeError:
-                    value = None
-            # Skip fields in list
-            if f.editable and f.name in ('entity_id', 'grant_types', 'response_types', 'application_type',
-                                         'subject_identifier', 'oidc_scopes',
-                                         'production', 'test', 'saml_product', 'autoupdate_idp_metadata'):
-                fields.append(
-                  {
-                   'label': f.verbose_name,
-                   'name': f.name,
-                   'value': value,
-                  }
-                )
-        return fields
+        return self._get_fields(types=['oidc'])
 
     def get_client_secret(self):
         """Returns decrypted client secret in text."""
@@ -446,6 +408,19 @@ class SPAttribute(models.Model):
 
     class Meta:
         ordering = ["attribute__friendlyname"]
+
+    @property
+    def status(self):
+        if self.end_at and not self.validated or self.end_at and self.validated > self.end_at:
+            return _('removed')
+        elif self.end_at:
+            return _('pending removal')
+        elif not self.validated:
+            return _('pending validation')
+        elif self.updated_at > self.validated + timedelta(minutes=1):
+            return _('update pending validation')
+        else:
+            return _('validated')
 
 
 def ldap_entity_id_from_name(horribleunicodestring):

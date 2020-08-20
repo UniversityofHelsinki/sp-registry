@@ -1,6 +1,16 @@
 # Changelog
 
+## [1.7.0] - 2020-08-20
+### Changes
+* Added REST API
+* Refactoring
+
+### Updating notes
+* Requires additional packages, install according to requirements
+* Includes related name changes and new packages using database, run migrations
+
 ## [1.6.1] - 2020-08-20
+### Changes
 * Finnish translation updates
 
 ## [1.6.0] - 2020-06-17

@@ -10,6 +10,7 @@ from django.utils.translation import ugettext_lazy as _
 
 from rr.models.nameidformat import NameIDFormat
 from rr.models.serviceprovider import ServiceProvider, ldap_entity_id_from_name, random_oidc_client_id
+from rr.models.serviceprovider import server_names_validator
 from rr.utils.missing_data import get_missing_sp_data
 
 
@@ -228,12 +229,7 @@ class LdapTechnicalInformationForm(ModelForm):
         Check server names format
         """
         server_names = self.cleaned_data['server_names']
-        server_names_list = server_names.splitlines()
-        pattern = re.compile("^(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\-]*[a-zA-Z0-9])\.)*"
-                             "([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9\-]*[A-Za-z0-9])$")
-        for server_name in server_names_list:
-            if not pattern.match(server_name):
-                raise ValidationError(_("Invalid list of server names."))
+        server_names_validator(server_names, ValidationError)
         return server_names
 
     def clean_service_account_contact(self):

@@ -124,6 +124,12 @@
           <a class="nav-link" href="/admin_django/">{% trans "Database Admin" %}</a>
         </li>
 {% endif %}
+{% if user.is_authenticated %}
+        <div class="dropdown-divider"></div>
+        <li class="nav-item">
+          <a class="nav-link {% if request.path|slice:":11" == "/authtoken/" %}active{% endif %}" href="{% url 'auth-token' %}">{% trans "API" %}</a>
+        </li>
+{% endif %}
       </ul>
       <ul class="navbar-nav ml-auto">
       <div class="dropdown-divider"></div>
@@ -259,6 +265,10 @@
           <a class="nav-link" href="/admin_django/">{% trans "Database Admin" %}</a>
         </li>
 {% endif %}
+        <div class="dropdown-divider"></div>
+        <li class="nav-item">
+          <a class="nav-link {% if request.path|slice:":11" == "/authtoken/" %}active{% endif %}" href="{% url 'auth-token' %}">{% trans "API" %}</a>
+        </li>
         </ul>
       </nav>
 {% endif %}

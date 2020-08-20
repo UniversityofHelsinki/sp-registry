@@ -6,9 +6,8 @@ metadata to production.
 
 ## Project structure
 * ansible : Ansible files for test environment installation
-* auth : Shibboleth authentication backend for Django
+* auth : Login templates and Shibboleth authentication backend for Django
 * features : Tests using behave
-* log : log directory
 * requirements : requirements files for development and production
 * rr : main SP Resource Registry program
   * fixtures : json fixtures for models
@@ -17,6 +16,7 @@ metadata to production.
   * management : command line tools
   * migrations : database migration history
   * models : database models
+  * serializers: serializer for API
   * static : static files
   * templates : templates
   * templatetags : template functions
@@ -24,15 +24,17 @@ metadata to production.
   * tests : unit tests
   * utils : generic functions, i.e. metadata generation and parsing
   * views : views
+  * views_api : views for API
 * settings : settings for development and production
 
 ## Documentation
 Project uses Django admin docs for development documentation:
-https://docs.djangoproject.com/en/1.11/ref/contrib/admin/admindocs/
+https://docs.djangoproject.com/en/2.2/ref/contrib/admin/admindocs/
 
 ## Usage
 ### Users
-Users log with SSO. Staff and faculty will get automatic activation, you will have to activate others through Django admin backend.
+Users log with SSO. Staff and faculty affiliations will get automatic activation, you will have to activate others
+through Django admin backend.
 
 You may add local accounts with Django admin backend
 
@@ -42,9 +44,11 @@ Create a superuser with
 ### Menu structure
 #### If you have logged in
 * Service Providers
-  * Lists all user's services, everything for site admins
+  * Lists all user's services / all services for site admins
   * Click the entityID for more information
-  * Anyone who has access to site, may create a new SP
+  * Anyone who has access to site, can create a new service provider
+* API
+  * Allows creating, resetting and removing API key.
 
 #### If you have selected a service
 * Summary
@@ -131,10 +135,16 @@ For more information run "./manage.py <command> -h"
 * nslookup
   * Checks that service URLs exist
 
+### API
+Almost everything is also available through REST API, using Token or Session authentication. Users can manage their
+API tokens with browser UI.
+
+API documentation is available in path swagger/ for authenticated users.
+
 ## Installation
 ### Requirements
 * Django 2.2
-* Python 3.5-3.8
+* Python 3.6-3.8
 * MySQL 5.6+ / MariaDB 10.1+
 * Requires dev libraries for Python and MySQL/MariaDB for compiling python mysqlclient.
 
@@ -144,21 +154,22 @@ Vagrantfile with Ansible provisioning is provided for test environment.
 Usage:
 1. Install vagrant (https://www.vagrantup.com/)
 1. run command "vagrant up" (and wait for it to set up )
-1. Open https://localhost:8443/ in browser (browser compains about security risk as self-signed certificate is used)
+1. Open https://localhost:8443/ in browser (browser complains about security risk as self-signed certificate is used)
 1. Use local login with user admin, password RandomPass12
 
 Shibboleth and attribute test service are not yet included.
 
 ### Installation
 
-Tested on 16.04 LTS
+Example on 18.04 LTS
 
-1. Install apt requirements: "sudo apt install python3.5 python3.5-venv python3.5-dev mariadb-server python-mysqldb libmariadb-client-lgpl-dev libmysqlclient-dev libapache2-mod-wsgi-py3"
+1. Install apt requirements: "sudo apt install python3 python3-venv python3-dev python3-pip mariadb-server
+python-mysqldb libmariadbclient-dev libapache2-mod-wsgi-py3"
 1. Clone source from git
-1. Set up Python virtual environment "pyvenv3.5 /path/to/venv" and activate it "source /path/to/venv/bin/activate"
+1. Set up Python virtual environment "python3 -m venv /path/to/venv" and activate it "source /path/to/venv/bin/activate"
 1. Install requirements "pip install -r requirements/[production|development].txt"
-1. Set up database (Mysql)
-1. Copy settings/local_settings_example.py to settings/local_settings.py and modify
+1. Set up database (MariaDB)
+1. Copy settings/local_settings_example.py to settings/local_settings.py and modify as necessary
 1. Modify manage.py to point django config file to production or development
 1. Run db migrations: "./manage.py migrate"
 1. Collect static files "./manage.py collectstatic"
@@ -212,7 +223,8 @@ SSLOptions +StdEnvVars
 ## Attribute test service
 Attribute test service lists all user's attributes and validates them against the optional regex filters.
 
-Attributes shown in the test service, validation regex and Shibboleth environment variable names are defined in Attribute model objects.
+Attributes shown in the test service, validation regex and Shibboleth environment variable names are defined in
+Attribute model objects.
 Non public attributes are only listed if user has some value in the attribute.
 
 This service can be made available in different Apache virtual host by pointing it to the wsgi_attributetest.py.
@@ -225,7 +237,7 @@ It should also have it's own Shibboleth ApplicationOverride, with all the attrib
 
 For behaviour testing with browser automation:
 ./manage.py behave --settings=settings.development
-Behaviour tests have better coverage but usually take 3-4 minutes to run.
+Behaviour tests usually take 3-4 minutes to run.
 
 ### Requirements
 Splinter is required for browser automation tests.
@@ -239,4 +251,3 @@ that IdP can use SQL database for user and attribute queries.
 * Users are checked from the TestUsers table
 * Access to specific service is checked from the TestUser valid_for table
 * Attributes are checked from the TestUserData table
-

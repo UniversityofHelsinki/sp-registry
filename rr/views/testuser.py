@@ -115,7 +115,6 @@ def _remove_external_testusers(request, sp):
     for key, value in request.POST.dict().items():
         if value == "on":
             testuser = TestUser.objects.get(pk=key)
-            print(testuser)
             if sp in testuser.valid_for.all() and testuser.sp != sp:
                 testuser.valid_for.remove(sp)
                 logger.info("External test user {username} removed from {sp}"

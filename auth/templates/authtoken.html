@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load bootstrap4 %}
+{% load static %}
+{% block content %}
+<h1>{% trans "API" %}</h1>
+  <p>{% trans "API keys may be used to access SP-registry REST API." %}</p>
+  <p><a href="/swagger">{% trans "Show API schema." %}</a></p>
+  {% if token %}
+    <p><button class="btn btn-outline-dark" type="button" data-toggle="collapse" data-target="#show_token" aria-expanded="false" aria-controls="show_token" name="Show token">{% trans "Show API key" %}</button></p>
+  	<div class="collapse alert alert-info" id="show_token" role="alert">
+      <p>{% trans "API key is:" %}</p>
+      <p>{{ token }}</p>
+      <p>{% trans "Include in the Authorization HTTP header, i.e." %} "Authorization: Token {{ token }}"</p>
+	  </div>
+  {% else %}
+    <p>{% trans "You do not currently have an API key." %}</p>
+  {% endif %}
+  <form action="" method="post" class="form">
+    {% csrf_token %}
+    {% buttons %}
+    {% if token %}
+      <p><button type="submit" value="Reset token" name="token_reset" class="btn btn-primary">{% trans "Reset key" %}</button>
+      <button type="submit" value="Remove token" name="token_remove" class="btn btn-primary">{% trans "Remove key" %}</button></p>
+    {% else %}
+      <p><button type="submit" value="Create token" name="token_create" class="btn btn-primary">{% trans "Create key" %}</button></p>
+    {% endif %}
+    {% endbuttons %}
+  </form>
+{% endblock %}

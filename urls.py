@@ -1,8 +1,15 @@
+from django.conf import settings
 from django.conf.urls import url, include
+from django.urls import path, re_path
 from django.contrib import admin
 from django.contrib.auth.views import LogoutView, LoginView
 from django.contrib.auth.decorators import login_required
 
+from drf_yasg.views import get_schema_view
+from drf_yasg import openapi
+
+from auth.views.authtoken import authtoken
+from rr.routers import router
 from rr.views.serviceprovider import SamlServiceProviderCreate, BasicInformationUpdate
 from rr.views.serviceprovider import BasicInformationView, ServiceProviderDelete
 from rr.views.serviceprovider import ServiceProviderList, SamlTechnicalInformationUpdate
@@ -23,6 +30,17 @@ from rr.views.usergroup import usergroup_list
 from rr.views.email import email_list
 from rr.views.statistics import statistics_list, statistics_summary_list
 
+schema_view = get_schema_view(
+    openapi.Info(
+        title='SP Registry API',
+        default_version='1.0',
+        description='REST API for modifying service provider information.',
+        contact=openapi.Contact(
+            name="Technical contact",
+            email=settings.DEFAULT_CONTACT_EMAIL)
+    )
+)
+
 # Overwrite default status handlers
 handler400 = 'rr.views.handlers.bad_request'
 handler403 = 'rr.views.handlers.permission_denied'
@@ -30,9 +48,13 @@ handler404 = 'rr.views.handlers.page_not_found'
 handler500 = 'rr.views.handlers.server_error'
 
 urlpatterns = [
+    path('api/v1/', include(router.urls)),
+    re_path(r'^swagger(?P<format>\.json|\.yaml)$', schema_view.without_ui(cache_timeout=0), name='schema-json'),
+    re_path(r'^swagger/$', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
     url(r'^admin_django/doc/', include('django.contrib.admindocs.urls')),
     url(r'^admin_django/', admin.site.urls),
     url(r'^$', login_required(ServiceProviderList.as_view()), name='front-page'),
+    url(r'^authtoken/$', authtoken, name='auth-token'),
     url(r'^login/$', LoginView.as_view(), name='login'),
     url(r'^login/shibboleth/$', ShibbolethLoginView.as_view(), name='shibboleth-login'),
     url(r'^logout/$', logout_redirect, name='logout'),

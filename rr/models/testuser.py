@@ -12,7 +12,7 @@ class TestUser(models.Model):
     SAML specific. Used to save test users so that external test IdP may
     read them.
     """
-    sp = models.ForeignKey(ServiceProvider, on_delete=models.CASCADE)
+    sp = models.ForeignKey(ServiceProvider, related_name='testusers', on_delete=models.CASCADE)
     username = models.CharField(max_length=50, verbose_name=_('Login name'))
     password = models.CharField(max_length=64, verbose_name=_('Password'))
     firstname = models.CharField(blank=True, max_length=255,
@@ -37,8 +37,8 @@ class TestUserData(models.Model):
     TestUSer and Attribute models for easier access with external test
     IdP.
     """
-    attribute = models.ForeignKey(Attribute, on_delete=models.CASCADE)
-    user = models.ForeignKey(TestUser, on_delete=models.CASCADE)
+    attribute = models.ForeignKey(Attribute, related_name='attributes', on_delete=models.CASCADE)
+    user = models.ForeignKey(TestUser, related_name='attributes', on_delete=models.CASCADE)
     value = models.CharField(blank=True, null=True, max_length=511,
                              verbose_name=_('Attribute value'))
     username = models.CharField(max_length=50, verbose_name=_('Login name'))

@@ -4,6 +4,10 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 """
 from django.utils.translation import ugettext_lazy as _
 
+import os
+
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.admindocs',
@@ -13,6 +17,10 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'bootstrap4',
+    'rest_framework',
+    'rest_framework.authtoken',
+    'drf_yasg',
+    'django_filters',
     'rr',
 ]
 
@@ -27,12 +35,36 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.TokenAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+    ),
+    'TEST_REQUEST_DEFAULT_FORMAT': 'json',
+    'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema',
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
+    'PAGE_SIZE': 100,
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',
+    ),
+    'DEFAULT_THROTTLE_CLASSES': [
+        'rest_framework.throttling.AnonRateThrottle',
+        'rest_framework.throttling.UserRateThrottle'
+    ],
+    'DEFAULT_THROTTLE_RATES': {
+        'anon': '5/min',
+        'user': '100/min'
+    }
+}
+
 ROOT_URLCONF = 'urls'
+
+LOCALE_PATHS = [os.path.join(BASE_DIR, 'rr/locale'), os.path.join(BASE_DIR, 'auth/locale')]
 
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': ['rr/templates'],
+        'DIRS': [os.path.join(BASE_DIR, 'rr/templates'), os.path.join(BASE_DIR, 'auth/templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

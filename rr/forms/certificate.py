@@ -1,10 +1,8 @@
-from cryptography.hazmat.primitives.serialization import Encoding
-
 from django.forms import Form, Textarea, ValidationError
 from django.forms.fields import CharField, BooleanField
 from django.utils.translation import ugettext_lazy as _
 
-from rr.models.certificate import Certificate, load_certificate
+from rr.models.certificate import certificate_validator
 
 
 class CertificateForm(Form):
@@ -29,17 +27,8 @@ class CertificateForm(Form):
 
     def clean(self):
         cleaned_data = super().clean()
-        certificate = cleaned_data.get("certificate").strip()
-        cert = load_certificate(certificate)
-        if not cert:
-            raise ValidationError(_("Unable to load certificate"))
+        certificate = cleaned_data.get("certificate").replace(
+            "-----BEGIN CERTIFICATE-----", "").replace("-----END CERTIFICATE-----", "").strip()
         signing = cleaned_data.get("signing")
         encryption = cleaned_data.get("encryption")
-        if not signing and not encryption:
-            signing = True
-            encryption = True
-        if Certificate.objects.filter(
-                sp=self.sp, certificate=cert.public_bytes(Encoding.PEM).decode("utf-8").replace(
-                "-----BEGIN CERTIFICATE-----\n", "").replace("-----END CERTIFICATE-----\n", ""),
-                signing=signing, encryption=encryption, end_at=None).exists():
-            raise ValidationError(_("Certificate already exists"))
+        certificate_validator(self.sp, certificate, signing, encryption, ValidationError)

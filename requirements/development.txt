@@ -2,10 +2,10 @@
 -r common.txt
 behave~=1.2
 behave-django~=1.4
-coverage~=5.1
+coverage~=5.2
 factory-boy~=2.12
 Faker~=3.0
-parse~=1.15
+parse~=1.16
 parse-type~=0.5
 selenium~=3.141
 splinter~=0.13

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-07-08 12:30+0300\n"
+"POT-Creation-Date: 2021-02-16 10:32+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -44,11 +44,11 @@ msgstr "Ei julkinen LDAP-attribuutti, eikä välttämättä saatavilla LDAPista.
 msgid "Not a public OIDC attribute."
 msgstr "Ei julkinen OIDC-attribuutti."
 
-#: forms/attribute.py:82 models/serviceprovider.py:401
+#: forms/attribute.py:81 models/serviceprovider.py:401
 msgid "Release from the userinfo endpoint"
 msgstr "Julkaise userinfo-kyselyssä"
 
-#: forms/attribute.py:84 models/serviceprovider.py:403
+#: forms/attribute.py:83 models/serviceprovider.py:403
 msgid "Release in the ID Token"
 msgstr "Julkaise ID-tokenissa"
 
@@ -408,9 +408,9 @@ msgstr ""
 
 #: forms/serviceprovider.py:142 forms/serviceprovider.py:218
 #: forms/serviceprovider.py:308 serializers/serviceprovider.py:265
-#: serializers/serviceprovider.py:441 serializers/serviceprovider.py:629
+#: serializers/serviceprovider.py:441 serializers/serviceprovider.py:597
 msgid "Following parameters are missing for production use: "
-msgstr ""
+msgstr "Seuraavat tuotantokäytössä vaaditut määritykset puuttuvat:"
 
 #: forms/serviceprovider.py:186 forms/serviceprovider.py:448
 msgid ""
@@ -443,8 +443,8 @@ msgid ""
 "phone number by space."
 msgstr ""
 "Sähköposti ja puhelinnumero, joihin palvelutunnuksen tiedot toimitetaan. "
-"Käytä etu.suku@helsinki.fi-osoitetta ja saman henkilön matkapuhelinnumeroa ei-"
-"kansainvälisessä muodossa, eli 0-alkuisena. Erota sähköpostiosoite ja "
+"Käytä etu.suku@helsinki.fi-osoitetta ja saman henkilön matkapuhelinnumeroa "
+"ei-kansainvälisessä muodossa, eli 0-alkuisena. Erota sähköpostiosoite ja "
 "puhelinnumero toisistaan välilyönnillä."
 
 #: forms/serviceprovider.py:197
@@ -510,8 +510,8 @@ msgstr ""
 #: forms/serviceprovider.py:276
 msgid "Response types allowed for this RP (response_types metadata value)."
 msgstr ""
-"Vastaustyypit, jotka ovat sallittuja palvelulle (metadata-"
-"arvo response_types)"
+"Vastaustyypit, jotka ovat sallittuja palvelulle (metadata-arvo "
+"response_types)"
 
 #: forms/serviceprovider.py:277
 msgid ""
@@ -531,7 +531,7 @@ msgstr "Pyydä tietty käyttäjän tunniste (subject identifier)."
 
 #: forms/serviceprovider.py:281
 msgid "If empty, uses client_secret_basic by default."
-msgstr ""
+msgstr "Jos tyhjä, käytetään oletuksena client_secret_basic."
 
 #: forms/serviceprovider.py:282
 msgid "URI for RPs JSON Web Key document (jwks_uri)."
@@ -588,6 +588,8 @@ msgid ""
 "Removes the client secret. Secret is not used if jwks are provided for "
 "client identification or application type is native."
 msgstr ""
+"Poistaa jaetun salaisuuden. Jaettua salaisuutta ei käytetä julkisen avaimen "
+"menetelmää käytettäessä tai jos sovellusken tyyppi on 'native'."
 
 #: forms/serviceprovider.py:324
 msgid "Client ID already exists."
@@ -619,7 +621,7 @@ msgstr "Et voi valita sekä salaisuuden poistoa että uuden luontia."
 
 #: forms/serviceprovider.py:357
 msgid "Both jwks and jwks_uri selected. Use only jwks_uri if it is supported."
-msgstr ""
+msgstr "Sekä jwks että jwks_uri on valittuna. Käytä vain jwks_uri:a, jos palvelu tukee sitä."
 
 #: forms/serviceprovider.py:359
 msgid "authorization_code grant type must be set for code response type."
@@ -803,7 +805,7 @@ msgstr "Käyttäjänimi on jo olemassa"
 msgid "Value must be scoped"
 msgstr "Arvon täytyy olla päätteellinen"
 
-#: forms/usergroup.py:20 serializers/serviceprovider.py:618
+#: forms/usergroup.py:20 serializers/serviceprovider.py:586
 #: serializers/usergroup.py:19
 msgid "Group already added"
 msgstr "Ryhmä on jo lisätty"
@@ -1479,20 +1481,7 @@ msgstr "Attribuutin arvo"
 msgid "Only letters, numbers and a dot allowed."
 msgstr ""
 
-#: serializers/serviceprovider.py:540 templates/handlers/403.html:5
-#: templates/handlers/403_blank.html:5
-msgid "Permission denied"
-msgstr "Pääsy evätty"
-
-#: serializers/serviceprovider.py:547
-msgid "Could not generate a client secret."
-msgstr "Ei voitu luoda client secrettiä."
-
-#: serializers/serviceprovider.py:552
-msgid "Must set either reset_secret or remove_secret."
-msgstr "Joko reset_secret tai remove_secret täytyy valita"
-
-#: serializers/serviceprovider.py:625
+#: serializers/serviceprovider.py:593
 msgid "Finnish name is required."
 msgstr "Palvelun nimi suomeksi vaaditaan."
 
@@ -1774,6 +1763,10 @@ msgstr "Emme ymmärrä teitä, yritättekö hakkeroida meitä?"
 msgid "Return to previous page"
 msgstr "Palaa edelliselle sivulle"
 
+#: templates/handlers/403.html:5 templates/handlers/403_blank.html:5
+msgid "Permission denied"
+msgstr "Pääsy evätty"
+
 #: templates/handlers/403.html:6 templates/handlers/403_blank.html:6
 msgid "You have insufficient user rights to access this page."
 msgstr "Käyttoikeutesi eivät riitä pyydettyyn toimintoon."
@@ -1786,8 +1779,7 @@ msgstr "Sivua ei löydy"
 msgid ""
 "The page you are looking for does not exist or you have insufficient "
 "permissions for it."
-msgstr ""
-"Sivua ei löydy tai käyttöoikeutenne eivät riitä sen näyttämiseen."
+msgstr "Sivua ei löydy tai käyttöoikeutenne eivät riitä sen näyttämiseen."
 
 #: templates/handlers/500.html:5 templates/handlers/500_blank.html:5
 msgid "Internal error"
@@ -2201,8 +2193,8 @@ msgid ""
 "the request results in error."
 msgstr ""
 "Yhteysosoitteet ovat osoitteita, johon SP vastaanottaa viestejä IdP:ltä. "
-"Kaikki IdP:lle lähetetyt pyynnöt sisältävät paluuosoitteen. Osoitteen "
-"täytyy löytyä yhteysosoitteiden listasta, muutoin pyyntö palauttaa virheen. "
+"Kaikki IdP:lle lähetetyt pyynnöt sisältävät paluuosoitteen. Osoitteen täytyy "
+"löytyä yhteysosoitteiden listasta, muutoin pyyntö palauttaa virheen. "
 "Yhteysosoitteen muoto on koko URL, sisältäen protokollan ja polun."
 
 #: templates/rr/endpoint.html:9
@@ -2442,8 +2434,8 @@ msgid ""
 "automatically every 15 minutes, using unvalidated data."
 msgstr ""
 "Huom. vain tuotantojärjestelmien muutokset hyväksytään. Testipalveluiden "
-"tiedot päivitetään testi-IdP:lle automaattisesti 15 minuutin välein "
-"käyttäen hyväksymättömiä tietoja."
+"tiedot päivitetään testi-IdP:lle automaattisesti 15 minuutin välein käyttäen "
+"hyväksymättömiä tietoja."
 
 #: templates/rr/serviceprovider_detail.html:58
 #: templates/rr/serviceprovider_detail.html:64
@@ -2854,7 +2846,8 @@ msgid ""
 "This list includes all service providers which have MFA forced from server "
 "side."
 msgstr ""
-"Lista sisältää palvelut, joissa on palvelimelta pakotettu vahvennettu tunnistus."
+"Lista sisältää palvelut, joissa on palvelimelta pakotettu vahvennettu "
+"tunnistus."
 
 #: templates/rr/serviceprovider_saml_admin_list.html:96
 msgid "Force MFA"
@@ -2922,9 +2915,9 @@ msgid ""
 "Admin groups are IAM groups. If the group has not been used in the SP-"
 "registry before, users will only get it when they log in next time."
 msgstr ""
-"Ylläpitoryhmät ovat IAM-ryhmiä. Jos ryhmä ei ole aikaisemmin ollut "
-"käytössä SP-rekisterissä, lisätään käyttäjät ryhmään vasta heidän seuraavan "
-"kerran kirjautuessa."
+"Ylläpitoryhmät ovat IAM-ryhmiä. Jos ryhmä ei ole aikaisemmin ollut käytössä "
+"SP-rekisterissä, lisätään käyttäjät ryhmään vasta heidän seuraavan kerran "
+"kirjautuessa."
 
 #: templates/rr/spadmin.html:13
 msgid "List of admins"
@@ -3205,7 +3198,7 @@ msgid "Attributes removed: "
 msgstr "Attribuutti poistettu: "
 
 #: views/attribute.py:167
-msgid "Attribute proviced does not exist"
+msgid "Attribute provided does not exist"
 msgstr "Attribuuttia ei löytynyt"
 
 #: views/attribute_test_service.py:28
@@ -3348,7 +3341,7 @@ msgstr "Tuotantopalvelun poisto ei ole sallittua."
 
 #: views/spadmin.py:79
 msgid ""
-"Template is missing activation link. Please include {{ activation_link }} to "
+"Template is missing activation link. Please include {{ activation_link }} to "
 "message."
 msgstr ""
 "Viestipohjasta puuttuu aktivointilinkki. Lisää {{ activation_link }} "
@@ -3433,6 +3426,3 @@ msgstr "Käyttäjäryhmä lisätty."
 #: views/usergroup.py:75
 msgid "User group removed."
 msgstr "Käyttäjäryhmä poistettu."
-
-#~ msgid "Auth token"
-#~ msgstr "API-tunniste"

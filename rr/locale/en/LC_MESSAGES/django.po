@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-07-08 12:30+0300\n"
+"POT-Creation-Date: 2021-02-16 10:32+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -41,11 +41,11 @@ msgstr ""
 msgid "Not a public OIDC attribute."
 msgstr ""
 
-#: forms/attribute.py:82 models/serviceprovider.py:401
+#: forms/attribute.py:81 models/serviceprovider.py:401
 msgid "Release from the userinfo endpoint"
 msgstr ""
 
-#: forms/attribute.py:84 models/serviceprovider.py:403
+#: forms/attribute.py:83 models/serviceprovider.py:403
 msgid "Release in the ID Token"
 msgstr ""
 
@@ -344,7 +344,7 @@ msgstr ""
 
 #: forms/serviceprovider.py:142 forms/serviceprovider.py:218
 #: forms/serviceprovider.py:308 serializers/serviceprovider.py:265
-#: serializers/serviceprovider.py:441 serializers/serviceprovider.py:629
+#: serializers/serviceprovider.py:441 serializers/serviceprovider.py:597
 msgid "Following parameters are missing for production use: "
 msgstr ""
 
@@ -687,7 +687,7 @@ msgstr ""
 msgid "Value must be scoped"
 msgstr ""
 
-#: forms/usergroup.py:20 serializers/serviceprovider.py:618
+#: forms/usergroup.py:20 serializers/serviceprovider.py:586
 #: serializers/usergroup.py:19
 msgid "Group already added"
 msgstr ""
@@ -1360,20 +1360,7 @@ msgstr ""
 msgid "Only letters, numbers and a dot allowed."
 msgstr ""
 
-#: serializers/serviceprovider.py:540 templates/handlers/403.html:5
-#: templates/handlers/403_blank.html:5
-msgid "Permission denied"
-msgstr ""
-
-#: serializers/serviceprovider.py:547
-msgid "Could not generate a client secret."
-msgstr ""
-
-#: serializers/serviceprovider.py:552
-msgid "Must set either reset_secret or remove_secret."
-msgstr ""
-
-#: serializers/serviceprovider.py:625
+#: serializers/serviceprovider.py:593
 msgid "Finnish name is required."
 msgstr ""
 
@@ -1643,6 +1630,10 @@ msgstr ""
 #: templates/handlers/404.html:7 templates/handlers/404_blank.html:7
 #: templates/handlers/500.html:7 templates/handlers/500_blank.html:7
 msgid "Return to previous page"
+msgstr ""
+
+#: templates/handlers/403.html:5 templates/handlers/403_blank.html:5
+msgid "Permission denied"
 msgstr ""
 
 #: templates/handlers/403.html:6 templates/handlers/403_blank.html:6
@@ -3005,7 +2996,7 @@ msgid "Attributes removed: "
 msgstr ""
 
 #: views/attribute.py:167
-msgid "Attribute proviced does not exist"
+msgid "Attribute provided does not exist"
 msgstr ""
 
 #: views/attribute_test_service.py:28
@@ -3139,7 +3130,7 @@ msgstr ""
 
 #: views/spadmin.py:79
 msgid ""
-"Template is missing activation link. Please include {{ activation_link }} to "
+"Template is missing activation link. Please include {{ activation_link }} to "
 "message."
 msgstr ""
 

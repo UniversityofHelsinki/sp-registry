@@ -63,8 +63,7 @@ class AttributeForm(Form):
             if self.sp.service_type == "oidc":
                 self.fields['extra_userinfo_' + field.friendlyname].initial = attribute.oidc_userinfo
                 self.fields['extra_id_token_' + field.friendlyname].initial = attribute.oidc_id_token
-            else:
-                self.fields[field.friendlyname].widget = TextInput(attrs={'placeholder': ''})
+            self.fields[field.friendlyname].widget = TextInput(attrs={'placeholder': ''})
 
     def __init__(self, *args, **kwargs):
         self.sp = kwargs.pop('sp')

@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.8.0] - 2021-02-16
+### Changes
+* Requirements version updates
+* Translation updates
+* Removed placeholder texts in attribute selection for clarity
+
 ## [1.7.0] - 2020-08-20
 ### Changes
 * Added REST API

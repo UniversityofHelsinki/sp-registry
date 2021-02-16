@@ -77,7 +77,7 @@ def create_invite_email(request, key, template):
                  'valid_until': key.valid_until.strftime("%d.%m.%Y")})
     if get_activation_link(request, key) not in message:
         error = _("Template is missing activation link. "
-                  "Please include {{ activation_link }} to message.")
+                  "Please include {{ activation_link }} to message.")
     else:
         error = None
     return subject, message, error

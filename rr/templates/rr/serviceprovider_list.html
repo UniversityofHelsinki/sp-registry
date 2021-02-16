@@ -9,7 +9,7 @@
 </div>
 {% if activate_saml %}
 <h2 id="saml-providers">{% trans "SAML Providers" %}</h2>
-<p><a href="{% url 'saml-serviceprovider-add' %}"><button type="button" class="btn btn-primary btn-lg btn-block">{% trans "Add a new SAML service provider" %}</button></a></p>
+<p><a href="{% url 'saml-serviceprovider-add' %}"><button type="button" class="btn btn-primary btn-lg btn-block">{% trans "Add a new SAML service provider" %}</button></a></p>
 {% if object_list %}
   {% if user.is_superuser %}<p><button type="button" class="btn btn-warning" name="collapsesaml" data-toggle="collapse" data-target=".collapsesaml">{% trans "Show all SAML providers" %}</button></p>{% endif %}
 <table class="table table-sm table-responsive" aria-describedby="saml-providers">
@@ -35,7 +35,7 @@
     </tr>
 {% empty %}
     <tr>
-      <th scope="row">{% trans "You do not have access to any service providers." %}</th>
+      <th scope="row">{% trans "You do not have access to any service providers." %}</th>
       <td></td>
       <td></td>
     </tr>
@@ -46,7 +46,7 @@
 {% endif %}
 {% if activate_saml %}
 <h2 id="oidc-providers">{% trans "OIDC Providers" %}</h2>
-<p><a href="{% url 'oidc-serviceprovider-add' %}"><button type="button" class="btn btn-primary btn-lg btn-block">{% trans "Add a new OIDC relying party" %}</button></a></p>
+<p><a href="{% url 'oidc-serviceprovider-add' %}"><button type="button" class="btn btn-primary btn-lg btn-block">{% trans "Add a new OIDC relying party" %}</button></a></p>
 {% if oidc_providers %}
 {% if user.is_superuser %}<p><button type="button" class="btn btn-warning" name="collapseoidc" data-toggle="collapse" data-target=".collapseoidc">{% trans "Show all OIDC providers" %}</button></p>{% endif %}
 <table class="table table-sm table-responsive" aria-describedby="oidc-providers">
@@ -70,7 +70,7 @@
     </tr>
 {% empty %}
     <tr>
-      <th scope="row">{% trans "You do not have access to any service providers." %}</th>
+      <th scope="row">{% trans "You do not have access to any service providers." %}</th>
       <td></td>
       <td></td>
     </tr>
@@ -81,7 +81,7 @@
 {% endif %}
 {% if activate_ldap %}
 <h2 id="ldap-providers">{% trans "LDAP Providers" %}</h2>
-<p><a href="{% url 'ldap-serviceprovider-add' %}"><button type="button" class="btn btn-primary btn-lg btn-block">{% trans "Add a new LDAP connection" %}</button></a></p>
+<p><a href="{% url 'ldap-serviceprovider-add' %}"><button type="button" class="btn btn-primary btn-lg btn-block">{% trans "Add a new LDAP connection" %}</button></a></p>
 {% if ldap_providers %}
 {% if user.is_superuser %}<p><button type="button" name="collapseldap" class="btn btn-warning" data-toggle="collapse" data-target=".collapseldap">{% trans "Show all LDAP providers" %}</button></p>{% endif %}
 <table class="table table-sm table-responsive" aria-describedby="ldap-providers">
@@ -105,7 +105,7 @@
     </tr>
 {% empty %}
     <tr>
-      <th scope="row">{% trans "You do not have access to any service providers." %}</th>
+      <th scope="row">{% trans "You do not have access to any service providers." %}</th>
       <td></td>
       <td></td>
     </tr>

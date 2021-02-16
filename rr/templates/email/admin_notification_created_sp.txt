@@ -7,7 +7,7 @@ Entity id:
 {{ sp.entity_id }}
 
 Name:
-{{ sp.name }}
+{{ sp.name }}
 
 Description:
 {{ sp.description }}

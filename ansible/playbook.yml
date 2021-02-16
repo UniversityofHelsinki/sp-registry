@@ -18,7 +18,7 @@
     spregistry_fernet_key: "yRHPoU0Cbq4fwffY8RdKCqpdSkTEdXfVJbeasSNeVQ8="
 
   tasks:
-  - name: sp-registry | Install required packages
+  - name: sp-registry | Install required packages
     apt:
       name: "{{ packages }}"
     vars:

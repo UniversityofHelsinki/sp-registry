@@ -77,6 +77,13 @@ METADATA_FILENAME = 'metadata.xml'
 LDAP_METADATA_FILENAME = 'ldap-metadata.xml'
 OIDC_METADATA_FILENAME = 'oidc-metadata.json'
 
+# Use generic privacy statement URL if organization ID matches and there is no privacy
+# statement for the service.
+GENERIC_PRIVACY_STATEMENT_ORGANIZATION_ID = 1
+GENERIC_PRIVACY_STATEMENT_URL_FI = 'https://www.helsinki.fi/fi/tutustu-meihin/tietosuoja'
+GENERIC_PRIVACY_STATEMENT_URL_EN = 'https://www.helsinki.fi/en/about-us/data-protection'
+GENERIC_PRIVACY_STATEMENT_URL_SV = 'https://www.helsinki.fi/sv/om-oss/dataskydd'
+
 # Path to static files for collection
 STATIC_ROOT = '/path/to/rr/static/'
 

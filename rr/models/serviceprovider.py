@@ -250,12 +250,12 @@ class ServiceProvider(models.Model):
         else:
             return None
 
-    def name(self):
-        """Returns name in current language, or in priority order
-           en->fi->sv if current is not available"""
-        if get_language() == "fi" and self.name_fi:
+    def name(self, lang=get_language()):
+        """Returns name in given language (defaulting current language),
+           or in priority order en->fi->sv if current is not available"""
+        if lang == "fi" and self.name_fi:
             return self.name_fi
-        elif get_language() == "sv" and self.name_sv:
+        elif lang == "sv" and self.name_sv:
             return self.name_sv
         else:
             if self.name_en:
@@ -265,12 +265,12 @@ class ServiceProvider(models.Model):
             else:
                 return self.name_sv
 
-    def description(self):
-        """Returns description in current language, or in priority order
-           en->fi->sv if current is not available"""
-        if get_language() == "fi" and self.description_fi:
+    def description(self, lang=get_language()):
+        """Returns description in given language (defaulting current language),
+           or in priority order en->fi->sv if current is not available"""
+        if lang == "fi" and self.description_fi:
             return self.description_fi
-        elif get_language() == "sv" and self.description_sv:
+        elif lang == "sv" and self.description_sv:
             return self.description_sv
         else:
             if self.description_en:
@@ -279,6 +279,28 @@ class ServiceProvider(models.Model):
                 return self.description_fi
             else:
                 return self.description_sv
+
+    def privacypolicy(self, lang=get_language()):
+        """Returns privacy policy url in given language (defaulting current language),
+           or in priority order en->fi->sv if current is not available"""
+        if lang == "fi" and self.privacypolicy_fi:
+            return self.privacypolicy_fi
+        elif lang == "sv" and self.privacypolicy_sv:
+            return self.privacypolicy_sv
+        else:
+            if self.privacypolicy_en:
+                return self.privacypolicy_en
+            elif self.privacypolicy_fi:
+                return self.privacypolicy_fi
+            elif self.privacypolicy_sv:
+                return self.privacypolicy_sv
+        if (hasattr(settings, 'GENERIC_PRIVACY_STATEMENT_ORGANIZATION_ID') and
+                hasattr(settings, 'GENERIC_PRIVACY_STATEMENT_URL_' + lang.upper()) and
+                self.organization and
+                self.organization.id == settings.GENERIC_PRIVACY_STATEMENT_ORGANIZATION_ID):
+            return getattr(settings, 'GENERIC_PRIVACY_STATEMENT_URL_' + lang.upper())
+        else:
+            return ""
 
     def __str__(self):
         return self.entity_id

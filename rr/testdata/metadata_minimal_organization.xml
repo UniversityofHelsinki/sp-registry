@@ -1,5 +1,12 @@
 <EntityDescriptor xmlns:ds="http://www.w3.org/2000/09/xmldsig#" xmlns:mdattr="urn:oasis:names:tc:SAML:metadata:attribute" xmlns:mdui="urn:oasis:names:tc:SAML:metadata:ui" xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" xmlns="urn:oasis:names:tc:SAML:2.0:metadata" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" entityID="https://sp.example.org/sp">
   <SPSSODescriptor protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol">
+    <Extensions>
+      <mdui:UIInfo>
+        <mdui:PrivacyStatementURL xml:lang="fi">https://www.helsinki.fi/fi/tutustu-meihin/tietosuoja</mdui:PrivacyStatementURL>
+        <mdui:PrivacyStatementURL xml:lang="en">https://www.helsinki.fi/en/about-us/data-protection</mdui:PrivacyStatementURL>
+        <mdui:PrivacyStatementURL xml:lang="sv">https://www.helsinki.fi/sv/om-oss/dataskydd</mdui:PrivacyStatementURL>
+      </mdui:UIInfo>
+    </Extensions>
     <KeyDescriptor>
       <ds:KeyInfo>
         <ds:X509Data>
@@ -40,7 +47,11 @@ rKLt+NcwtbkI6weLISJu9lFZnPMYT7LpqDWD4aMHHUWr8THO0T6mbCeQRYMlfSpU
   <Organization>
     <OrganizationName xml:lang="fi">Testiorganisaatio</OrganizationName>
     <OrganizationName xml:lang="en">Test Organization</OrganizationName>
+    <OrganizationName xml:lang="sv">Test Organization</OrganizationName>
+    <OrganizationDisplayName xml:lang="fi">Descriptiontest</OrganizationDisplayName>
     <OrganizationDisplayName xml:lang="en">Descriptiontest</OrganizationDisplayName>
+    <OrganizationDisplayName xml:lang="sv">Descriptiontest</OrganizationDisplayName>
+    <OrganizationURL xml:lang="fi">https://example.org/</OrganizationURL>
     <OrganizationURL xml:lang="en">https://example.org/</OrganizationURL>
     <OrganizationURL xml:lang="sv">https://example.org/sv</OrganizationURL>
   </Organization>

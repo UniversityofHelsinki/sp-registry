@@ -41,59 +41,25 @@ def metadata_spssodescriptor_extensions(element, sp, privacypolicy):
                          nsmap={"init": 'urn:oasis:names:tc:SAML:profiles:SSO:request-init'})
 
     ui_info = etree.SubElement(extensions, "{urn:oasis:names:tc:SAML:metadata:ui}UIInfo")
-    if sp.name_fi:
-        display_name_fi = etree.SubElement(ui_info, "{urn:oasis:names:tc:SAML:metadata:ui}DisplayName")
-        display_name_fi.attrib['{http://www.w3.org/XML/1998/namespace}lang'] = "fi"
-        display_name_fi.text = sp.name_fi
-    if sp.name_en:
-        display_name_en = etree.SubElement(ui_info, "{urn:oasis:names:tc:SAML:metadata:ui}DisplayName")
-        display_name_en.attrib['{http://www.w3.org/XML/1998/namespace}lang'] = "en"
-        display_name_en.text = sp.name_en
-    if sp.name_sv:
-        display_name_sv = etree.SubElement(ui_info, "{urn:oasis:names:tc:SAML:metadata:ui}DisplayName")
-        display_name_sv.attrib['{http://www.w3.org/XML/1998/namespace}lang'] = "sv"
-        display_name_sv.text = sp.name_sv
 
-    if sp.description_fi:
-        description_fi = etree.SubElement(ui_info, "{urn:oasis:names:tc:SAML:metadata:ui}Description")
-        description_fi.attrib['{http://www.w3.org/XML/1998/namespace}lang'] = "fi"
-        description_fi.text = sp.description_fi
-    if sp.description_en:
-        description_en = etree.SubElement(ui_info, "{urn:oasis:names:tc:SAML:metadata:ui}Description")
-        description_en.attrib['{http://www.w3.org/XML/1998/namespace}lang'] = "en"
-        description_en.text = sp.description_en
-    if sp.description_sv:
-        description_sv = etree.SubElement(ui_info, "{urn:oasis:names:tc:SAML:metadata:ui}Description")
-        description_sv.attrib['{http://www.w3.org/XML/1998/namespace}lang'] = "sv"
-        description_sv.text = sp.description_sv
+    for lang in ['fi', 'en', 'sv']:
+        if sp.name(lang):
+            display_name = etree.SubElement(ui_info, "{urn:oasis:names:tc:SAML:metadata:ui}DisplayName")
+            display_name.attrib['{http://www.w3.org/XML/1998/namespace}lang'] = lang
+            display_name.text = sp.name(lang)
 
-    if sp.privacypolicy_fi:
-        privacy_statement_url_fi = etree.SubElement(ui_info, "{urn:oasis:names:tc:SAML:metadata:ui}PrivacyStatementURL")
-        privacy_statement_url_fi.attrib['{http://www.w3.org/XML/1998/namespace}lang'] = "fi"
-        privacy_statement_url_fi.text = sp.privacypolicy_fi
-    else:
-        if sp.organization and sp.organization.name_fi == "Helsingin yliopisto" and privacypolicy:
-            privacy_statement_url_fi = etree.SubElement(ui_info, "{urn:oasis:names:tc:SAML:metadata:ui}PrivacyStatementURL")
-            privacy_statement_url_fi.attrib['{http://www.w3.org/XML/1998/namespace}lang'] = "fi"
-            privacy_statement_url_fi.text = "https://www.helsinki.fi/fi/yliopisto/tietosuojaselosteet-0"
-    if sp.privacypolicy_en:
-        privacy_statement_url_en = etree.SubElement(ui_info, "{urn:oasis:names:tc:SAML:metadata:ui}PrivacyStatementURL")
-        privacy_statement_url_en.attrib['{http://www.w3.org/XML/1998/namespace}lang'] = "en"
-        privacy_statement_url_en.text = sp.privacypolicy_en
-    else:
-        if sp.organization and sp.organization.name_fi == "Helsingin yliopisto" and privacypolicy:
-            privacy_statement_url_en = etree.SubElement(ui_info, "{urn:oasis:names:tc:SAML:metadata:ui}PrivacyStatementURL")
-            privacy_statement_url_en.attrib['{http://www.w3.org/XML/1998/namespace}lang'] = "en"
-            privacy_statement_url_en.text = "https://www.helsinki.fi/fi/yliopisto/tietosuojaselosteet-0"
-    if sp.privacypolicy_sv:
-        privacy_statement_url_sv = etree.SubElement(ui_info, "{urn:oasis:names:tc:SAML:metadata:ui}PrivacyStatementURL")
-        privacy_statement_url_sv.attrib['{http://www.w3.org/XML/1998/namespace}lang'] = "sv"
-        privacy_statement_url_sv.text = sp.privacypolicy_sv
-    else:
-        if sp.organization and sp.organization.name_fi == "Helsingin yliopisto" and privacypolicy:
-            privacy_statement_url_sv = etree.SubElement(ui_info, "{urn:oasis:names:tc:SAML:metadata:ui}PrivacyStatementURL")
-            privacy_statement_url_sv.attrib['{http://www.w3.org/XML/1998/namespace}lang'] = "sv"
-            privacy_statement_url_sv.text = "https://www.helsinki.fi/fi/yliopisto/tietosuojaselosteet-0"
+    for lang in ['fi', 'en', 'sv']:
+        if sp.description(lang):
+            description = etree.SubElement(ui_info, "{urn:oasis:names:tc:SAML:metadata:ui}Description")
+            description.attrib['{http://www.w3.org/XML/1998/namespace}lang'] = lang
+            description.text = sp.description(lang)
+
+    for lang in ['fi', 'en', 'sv']:
+        if sp.privacypolicy(lang):
+            privacy_statement_url = etree.SubElement(ui_info, "{urn:oasis:names:tc:SAML:metadata:ui}PrivacyStatementURL")
+            privacy_statement_url.attrib['{http://www.w3.org/XML/1998/namespace}lang'] = lang
+            privacy_statement_url.text = sp.privacypolicy(lang)
+
     if len(ui_info) == 0:
         extensions.remove(ui_info)
     if len(extensions) == 0:
@@ -246,31 +212,17 @@ def metadata_attributeconsumingservice_meta(element, sp):
     element: etree.Element object for previous level (AttributeConsumingService)
     sp: ServiceProvider object
     """
-    if sp.name_fi:
-        display_name_fi = etree.SubElement(element, "ServiceName")
-        display_name_fi.attrib['{http://www.w3.org/XML/1998/namespace}lang'] = "fi"
-        display_name_fi.text = sp.name_fi
-    if sp.name_en:
-        display_name_en = etree.SubElement(element, "ServiceName")
-        display_name_en.attrib['{http://www.w3.org/XML/1998/namespace}lang'] = "en"
-        display_name_en.text = sp.name_en
-    if sp.name_sv:
-        display_name_sv = etree.SubElement(element, "ServiceName")
-        display_name_sv.attrib['{http://www.w3.org/XML/1998/namespace}lang'] = "sv"
-        display_name_sv.text = sp.name_sv
+    for lang in ['fi', 'en', 'sv']:
+        if sp.name(lang):
+            display_name = etree.SubElement(element, "ServiceName")
+            display_name.attrib['{http://www.w3.org/XML/1998/namespace}lang'] = lang
+            display_name.text = sp.name(lang)
 
-    if sp.description_fi:
-        description_fi = etree.SubElement(element, "ServiceDescription")
-        description_fi.attrib['{http://www.w3.org/XML/1998/namespace}lang'] = "fi"
-        description_fi.text = sp.description_fi
-    if sp.description_en:
-        description_en = etree.SubElement(element, "ServiceDescription")
-        description_en.attrib['{http://www.w3.org/XML/1998/namespace}lang'] = "en"
-        description_en.text = sp.description_en
-    if sp.description_sv:
-        description_sv = etree.SubElement(element, "ServiceDescription")
-        description_sv.attrib['{http://www.w3.org/XML/1998/namespace}lang'] = "sv"
-        description_sv.text = sp.description_sv
+    for lang in ['fi', 'en', 'sv']:
+        if sp.description(lang):
+            description = etree.SubElement(element, "ServiceDescription")
+            description.attrib['{http://www.w3.org/XML/1998/namespace}lang'] = lang
+            description.text = sp.description(lang)
 
 
 def metadata_attributeconsumingservice(element, sp, history, validation_date):
@@ -335,44 +287,23 @@ def metadata_organization(element, sp):
         organization = sp.organization
         organization_element = etree.SubElement(element, "Organization")
 
-        if organization.name_fi:
-            display_name_fi = etree.SubElement(organization_element, "OrganizationName")
-            display_name_fi.attrib['{http://www.w3.org/XML/1998/namespace}lang'] = "fi"
-            display_name_fi.text = organization.name_fi
-        if organization.name_en:
-            display_name_en = etree.SubElement(organization_element, "OrganizationName")
-            display_name_en.attrib['{http://www.w3.org/XML/1998/namespace}lang'] = "en"
-            display_name_en.text = organization.name_en
-        if organization.name_sv:
-            display_name_sv = etree.SubElement(organization_element, "OrganizationName")
-            display_name_sv.attrib['{http://www.w3.org/XML/1998/namespace}lang'] = "sv"
-            display_name_sv.text = organization.name_sv
+        for lang in ['fi', 'en', 'sv']:
+            if organization.name(lang):
+                display_name = etree.SubElement(organization_element, "OrganizationName")
+                display_name.attrib['{http://www.w3.org/XML/1998/namespace}lang'] = lang
+                display_name.text = organization.name(lang)
 
-        if organization.description_fi:
-            description_fi = etree.SubElement(organization_element, "OrganizationDisplayName")
-            description_fi.attrib['{http://www.w3.org/XML/1998/namespace}lang'] = "fi"
-            description_fi.text = organization.description_fi
-        if organization.description_en:
-            description_en = etree.SubElement(organization_element, "OrganizationDisplayName")
-            description_en.attrib['{http://www.w3.org/XML/1998/namespace}lang'] = "en"
-            description_en.text = organization.description_en
-        if organization.description_sv:
-            description_sv = etree.SubElement(organization_element, "OrganizationDisplayName")
-            description_sv.attrib['{http://www.w3.org/XML/1998/namespace}lang'] = "sv"
-            description_sv.text = organization.description_sv
+        for lang in ['fi', 'en', 'sv']:
+            if organization.description(lang):
+                description = etree.SubElement(organization_element, "OrganizationDisplayName")
+                description.attrib['{http://www.w3.org/XML/1998/namespace}lang'] = lang
+                description.text = organization.description(lang)
 
-        if organization.url_fi:
-            organization_url_fi = etree.SubElement(organization_element, "OrganizationURL")
-            organization_url_fi.attrib['{http://www.w3.org/XML/1998/namespace}lang'] = "fi"
-            organization_url_fi.text = organization.url_fi
-        if organization.url_en:
-            organization_url_en = etree.SubElement(organization_element, "OrganizationURL")
-            organization_url_en.attrib['{http://www.w3.org/XML/1998/namespace}lang'] = "en"
-            organization_url_en.text = organization.url_en
-        if organization.url_sv:
-            organization_url_sv = etree.SubElement(organization_element, "OrganizationURL")
-            organization_url_sv.attrib['{http://www.w3.org/XML/1998/namespace}lang'] = "sv"
-            organization_url_sv.text = organization.url_sv
+        for lang in ['fi', 'en', 'sv']:
+            if organization.url(lang):
+                organization_url = etree.SubElement(organization_element, "OrganizationURL")
+                organization_url.attrib['{http://www.w3.org/XML/1998/namespace}lang'] = lang
+                organization_url.text = organization.url(lang)
 
 
 def metadata_spssodescriptor(element, sp, history, validation_date, privacypolicy=False):

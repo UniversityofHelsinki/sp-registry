@@ -38,10 +38,12 @@ class Organization(models.Model):
             else:
                 return self.name_sv
 
-    def name(self):
-        if get_language() == "fi" and self.name_fi:
+    def name(self, lang=get_language()):
+        """Returns name in given language (defaulting current language),
+           or in priority order en->fi->sv if current is not available"""
+        if lang == "fi" and self.name_fi:
             return self.name_fi
-        elif get_language() == "sv" and self.name_sv:
+        elif lang == "sv" and self.name_sv:
             return self.name_sv
         else:
             if self.name_en:
@@ -51,10 +53,12 @@ class Organization(models.Model):
             else:
                 return self.name_sv
 
-    def description(self):
-        if get_language() == "fi" and self.description_fi:
+    def description(self, lang=get_language()):
+        """Returns description in given language (defaulting current language),
+           or in priority order en->fi->sv if current is not available"""
+        if lang == "fi" and self.description_fi:
             return self.description_fi
-        elif get_language() == "sv" and self.description_sv:
+        elif lang == "sv" and self.description_sv:
             return self.description_sv
         else:
             if self.description_en:
@@ -64,10 +68,12 @@ class Organization(models.Model):
             else:
                 return self.description_sv
 
-    def url(self):
-        if get_language() == "fi" and self.url_fi:
+    def url(self, lang=get_language()):
+        """Returns url in given language (defaulting current language),
+           or in priority order en->fi->sv if current is not available"""
+        if lang == "fi" and self.url_fi:
             return self.url_fi
-        elif get_language() == "sv" and self.url_sv:
+        elif lang == "sv" and self.url_sv:
             return self.url_sv
         else:
             if self.url_en:

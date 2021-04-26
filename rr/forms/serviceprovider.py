@@ -238,8 +238,12 @@ class LdapTechnicalInformationForm(ModelForm):
         """
         service_account_contact = self.cleaned_data['service_account_contact']
         pattern = re.compile("^($|[-a-z.]+@helsinki.fi 0[0-9]+)", re.I)
-        if not pattern.match(service_account_contact):
+        if not self.request.user.is_superuser and not pattern.match(service_account_contact):
             raise ValidationError(_("Invalid service account contact."))
+        if self.request.user.is_superuser:
+            pattern = re.compile("^($|[-a-z.]+@[-a-z.]+ 0[0-9]+)", re.I)
+            if not pattern.match(service_account_contact):
+                raise ValidationError(_("Invalid service account contact."))
         return service_account_contact
 
     def clean(self):

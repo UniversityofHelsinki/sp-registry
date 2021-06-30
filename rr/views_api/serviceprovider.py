@@ -39,7 +39,7 @@ class SPAttributeViewSet(CustomModelViewSet):
     serializer_class = SPAttributeSerializer
     filter_backends = [filters.SearchFilter,
                        DjangoFilterBackend]
-    search_fields = ['reason', 'sp', 'attribute']
+    search_fields = ['reason', 'sp__entity_id', 'attribute__friendlyname']
     filterset_fields = ['sp', 'attribute']
 
     def perform_destroy(self, instance):

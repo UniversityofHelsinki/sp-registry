@@ -10,6 +10,7 @@ class Statistics(models.Model):
     sp = models.ForeignKey(ServiceProvider, related_name='statistics', on_delete=models.CASCADE)
 
     logins = models.IntegerField(verbose_name=_('Number of logins'))
+    users = models.IntegerField(null=True, verbose_name=_('Number of unique users'))
     date = models.DateField(verbose_name=_('Login date'))
 
     class Meta:

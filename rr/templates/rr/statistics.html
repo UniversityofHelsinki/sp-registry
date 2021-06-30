@@ -18,6 +18,7 @@
     <tr>
       <th scope="col">{% trans "Date" %}</th>
       <th scope="col">{% trans "Number of logins" %}</th>
+      <th scope="col">{% trans "Unique users" %}</th>
     </tr>
   </thead>
   <tbody>
@@ -25,6 +26,7 @@
     <tr>
       <th scope="row">{{ stats.date }}</th>
       <td>{{ stats.logins }}</td>
+      <td>{{ stats.users }}</td>
     </tr>
 {% endfor %}
   </tbody>
@@ -44,7 +46,13 @@
         labels: [{% for i in object_list %}"{{ i.date|date:"Y-m-d" }}",{% endfor %}],
         datasets: [{
           label: '{% trans "Number of logins" %}',
-          data: [{% for i in object_list %}{{ i.logins }},{% endfor %}]
+          data: [{% for i in object_list %}{{ i.logins }},{% endfor %}],
+          borderColor: '#28a745',
+        },
+        {
+          label: '{% trans "Unique users" %}',
+          data: [{% for i in object_list %}{% if i.users %}{{ i.users }}{% else %}0{% endif %},{% endfor %}],
+          borderColor: '#007bff',
         }]
       },
       options: {

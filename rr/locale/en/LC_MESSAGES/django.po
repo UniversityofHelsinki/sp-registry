@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-02-16 10:32+0200\n"
+"POT-Creation-Date: 2021-06-08 13:47+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -41,11 +41,11 @@ msgstr ""
 msgid "Not a public OIDC attribute."
 msgstr ""
 
-#: forms/attribute.py:81 models/serviceprovider.py:401
+#: forms/attribute.py:81 models/serviceprovider.py:423
 msgid "Release from the userinfo endpoint"
 msgstr ""
 
-#: forms/attribute.py:83 models/serviceprovider.py:403
+#: forms/attribute.py:83 models/serviceprovider.py:425
 msgid "Release in the ID Token"
 msgstr ""
 
@@ -148,13 +148,13 @@ msgid "Could not find entityID"
 msgstr ""
 
 #: forms/metadata.py:47 forms/serviceprovider.py:160
-#: forms/serviceprovider.py:419 serializers/serviceprovider.py:260
+#: forms/serviceprovider.py:423 serializers/serviceprovider.py:260
 msgid ""
 "Entity Id should be URI, please contact IdP admins if this is not possible."
 msgstr ""
 
 #: forms/metadata.py:50 forms/serviceprovider.py:164
-#: forms/serviceprovider.py:424
+#: forms/serviceprovider.py:428
 msgid "Entity Id already exists"
 msgstr ""
 
@@ -166,42 +166,42 @@ msgstr ""
 msgid "Organization name, only changeable by the registry admins."
 msgstr ""
 
-#: forms/serviceprovider.py:30 forms/serviceprovider.py:380
-#: forms/serviceprovider.py:518
+#: forms/serviceprovider.py:30 forms/serviceprovider.py:384
+#: forms/serviceprovider.py:522
 msgid ""
 "Short (max 70 characters) and descriptive name for the service in Finnish."
 "<div class=\"text-danger\">Required for both production and test use.</div>"
 msgstr ""
 
-#: forms/serviceprovider.py:33 forms/serviceprovider.py:383
-#: forms/serviceprovider.py:521
+#: forms/serviceprovider.py:33 forms/serviceprovider.py:387
+#: forms/serviceprovider.py:525
 msgid ""
 "Short (max 70 characters) and descriptive name for the service in English."
 "<div class=\"text-danger\">Required for both production and test use.</div>"
 msgstr ""
 
-#: forms/serviceprovider.py:36 forms/serviceprovider.py:386
-#: forms/serviceprovider.py:456 forms/serviceprovider.py:524
+#: forms/serviceprovider.py:36 forms/serviceprovider.py:390
+#: forms/serviceprovider.py:460 forms/serviceprovider.py:528
 msgid ""
 "Short (max 70 characters) and descriptive name for the service in Swedish."
 msgstr ""
 
-#: forms/serviceprovider.py:38 forms/serviceprovider.py:388
-#: forms/serviceprovider.py:526
+#: forms/serviceprovider.py:38 forms/serviceprovider.py:392
+#: forms/serviceprovider.py:530
 msgid ""
 "Short (max 140 characters) description of the service in Finnish. <div class="
 "\"text-danger\">Required for both production and test use.</div>"
 msgstr ""
 
-#: forms/serviceprovider.py:41 forms/serviceprovider.py:391
-#: forms/serviceprovider.py:529
+#: forms/serviceprovider.py:41 forms/serviceprovider.py:395
+#: forms/serviceprovider.py:533
 msgid ""
 "Short (max 140 characters) description of the service in English. <div class="
 "\"text-danger\">Required for both production and test use.</div>"
 msgstr ""
 
-#: forms/serviceprovider.py:44 forms/serviceprovider.py:394
-#: forms/serviceprovider.py:462 forms/serviceprovider.py:532
+#: forms/serviceprovider.py:44 forms/serviceprovider.py:398
+#: forms/serviceprovider.py:466 forms/serviceprovider.py:536
 msgid "Short (max 140 characters) description of the service in Swedish."
 msgstr ""
 
@@ -212,31 +212,31 @@ msgid ""
 "any personal information.</div>"
 msgstr ""
 
-#: forms/serviceprovider.py:49 forms/serviceprovider.py:399
-#: forms/serviceprovider.py:537
+#: forms/serviceprovider.py:49 forms/serviceprovider.py:403
+#: forms/serviceprovider.py:541
 msgid ""
 "Link to privacy policy in English. Link must be publicly accessible. <div "
 "class=\"text-danger\">Required for production use if the service requests "
 "any personal information.</div>"
 msgstr ""
 
-#: forms/serviceprovider.py:52 forms/serviceprovider.py:402
-#: forms/serviceprovider.py:469 forms/serviceprovider.py:540
+#: forms/serviceprovider.py:52 forms/serviceprovider.py:406
+#: forms/serviceprovider.py:473 forms/serviceprovider.py:544
 msgid "Link to privacy policy in Swedish. Link must be publicly accessible."
 msgstr ""
 
-#: forms/serviceprovider.py:54 forms/serviceprovider.py:404
-#: forms/serviceprovider.py:471 forms/serviceprovider.py:542
+#: forms/serviceprovider.py:54 forms/serviceprovider.py:408
+#: forms/serviceprovider.py:475 forms/serviceprovider.py:546
 msgid "Used for debugging and testing services."
 msgstr ""
 
-#: forms/serviceprovider.py:55 forms/serviceprovider.py:405
-#: forms/serviceprovider.py:472 forms/serviceprovider.py:543
+#: forms/serviceprovider.py:55 forms/serviceprovider.py:409
+#: forms/serviceprovider.py:476 forms/serviceprovider.py:547
 msgid "Link to external application portfolio."
 msgstr ""
 
-#: forms/serviceprovider.py:56 forms/serviceprovider.py:406
-#: forms/serviceprovider.py:473 forms/serviceprovider.py:544
+#: forms/serviceprovider.py:56 forms/serviceprovider.py:410
+#: forms/serviceprovider.py:477 forms/serviceprovider.py:548
 msgid "Additional notes about this service."
 msgstr ""
 
@@ -246,13 +246,13 @@ msgid ""
 "in summary to SP admins."
 msgstr ""
 
-#: forms/serviceprovider.py:78 forms/serviceprovider.py:434
-#: forms/serviceprovider.py:570 serializers/serviceprovider.py:258
+#: forms/serviceprovider.py:78 forms/serviceprovider.py:438
+#: forms/serviceprovider.py:574 serializers/serviceprovider.py:258
 #: serializers/serviceprovider.py:437
 msgid "Name in English or in Finnish is required."
 msgstr ""
 
-#: forms/serviceprovider.py:93 forms/serviceprovider.py:377
+#: forms/serviceprovider.py:93 forms/serviceprovider.py:381
 msgid ""
 "Should be URI including scheme, hostname of your application and path e.g. "
 "https://test.helsinki.fi/sp. <div class=\"text-danger\">Required for both "
@@ -313,7 +313,7 @@ msgid ""
 msgstr ""
 
 #: forms/serviceprovider.py:121 forms/serviceprovider.py:207
-#: forms/serviceprovider.py:273
+#: forms/serviceprovider.py:277
 msgid ""
 "This service provider requires manual configuration. Set by registry admins "
 "if necessary."
@@ -343,12 +343,12 @@ msgid "Does this SP automatically update IdP metadata at least once a day?"
 msgstr ""
 
 #: forms/serviceprovider.py:142 forms/serviceprovider.py:218
-#: forms/serviceprovider.py:308 serializers/serviceprovider.py:265
+#: forms/serviceprovider.py:312 serializers/serviceprovider.py:265
 #: serializers/serviceprovider.py:441 serializers/serviceprovider.py:597
 msgid "Following parameters are missing for production use: "
 msgstr ""
 
-#: forms/serviceprovider.py:186 forms/serviceprovider.py:448
+#: forms/serviceprovider.py:186 forms/serviceprovider.py:452
 msgid ""
 "Does this service use the LDAPAuth proxy in order to access user and group "
 "data for authentication and access control?"
@@ -403,62 +403,62 @@ msgstr ""
 msgid "Publish this service to LDAP production servers."
 msgstr ""
 
-#: forms/serviceprovider.py:242
+#: forms/serviceprovider.py:242 forms/serviceprovider.py:246
 msgid "Invalid service account contact."
 msgstr ""
 
-#: forms/serviceprovider.py:261
+#: forms/serviceprovider.py:265
 msgid "Reset client secret"
 msgstr ""
 
-#: forms/serviceprovider.py:262
+#: forms/serviceprovider.py:266
 msgid "Remove client secret"
 msgstr ""
 
-#: forms/serviceprovider.py:270 forms/serviceprovider.py:515
+#: forms/serviceprovider.py:274 forms/serviceprovider.py:519
 msgid ""
 "Client identifier of the relying party. It is usually recommended to use "
 "random identifier. <div class=\"text-danger\">Required for both production "
 "and test use.</div>"
 msgstr ""
 
-#: forms/serviceprovider.py:275
+#: forms/serviceprovider.py:279
 msgid "Grant types allowed for this RP (grant_types metadata value)."
 msgstr ""
 
-#: forms/serviceprovider.py:276
+#: forms/serviceprovider.py:280
 msgid "Response types allowed for this RP (response_types metadata value)."
 msgstr ""
 
-#: forms/serviceprovider.py:277
+#: forms/serviceprovider.py:281
 msgid ""
 "OIDC scopes used. \"openid\" scope is automatically added. You may also "
 "require user attributes as claims from the Attributes section."
 msgstr ""
 
-#: forms/serviceprovider.py:279
+#: forms/serviceprovider.py:283
 msgid "Application type. Used for validating redirect_uris."
 msgstr ""
 
-#: forms/serviceprovider.py:280
+#: forms/serviceprovider.py:284
 msgid "Request a specific subject identifier."
 msgstr ""
 
-#: forms/serviceprovider.py:281
+#: forms/serviceprovider.py:285
 msgid "If empty, uses client_secret_basic by default."
 msgstr ""
 
-#: forms/serviceprovider.py:282
+#: forms/serviceprovider.py:286
 msgid "URI for RPs JSON Web Key document (jwks_uri)."
 msgstr ""
 
-#: forms/serviceprovider.py:283
+#: forms/serviceprovider.py:287
 msgid ""
 "RPs JSON Web Key document (jwks) passed as a parameter. Should only be used "
 "if the use of jwks_uri is not possible."
 msgstr ""
 
-#: forms/serviceprovider.py:285
+#: forms/serviceprovider.py:289
 msgid ""
 "Publish this RP to the production OP. Only validated data is used. Any "
 "changes to production RPs must be validated by the IdP administrators before "
@@ -466,138 +466,138 @@ msgid ""
 "div>"
 msgstr ""
 
-#: forms/serviceprovider.py:289
+#: forms/serviceprovider.py:293
 msgid ""
 "Publish this RP to the test IdP using unvalidated data. Any changes might "
 "take up to 10 minutes until they are published to the test IdP."
 msgstr ""
 
-#: forms/serviceprovider.py:292
+#: forms/serviceprovider.py:296
 msgid ""
 "OIDC product used by this client. For administrative use e.g. for testing "
 "different RPs during IdP updates."
 msgstr ""
 
-#: forms/serviceprovider.py:294
+#: forms/serviceprovider.py:298
 msgid "Does this RP automatically update IdP metadata at least once a day?"
 msgstr ""
 
-#: forms/serviceprovider.py:296
+#: forms/serviceprovider.py:300
 msgid "Resets the client secret."
 msgstr ""
 
-#: forms/serviceprovider.py:297
+#: forms/serviceprovider.py:301
 msgid ""
 "Removes the client secret. Secret is not used if jwks are provided for "
 "client identification or application type is native."
 msgstr ""
 
-#: forms/serviceprovider.py:324
+#: forms/serviceprovider.py:328
 msgid "Client ID already exists."
 msgstr ""
 
-#: forms/serviceprovider.py:337
+#: forms/serviceprovider.py:341
 msgid "Not a valid JSON."
 msgstr ""
 
-#: forms/serviceprovider.py:339
+#: forms/serviceprovider.py:343
 msgid "Invalid JSON keys."
 msgstr ""
 
-#: forms/serviceprovider.py:341
+#: forms/serviceprovider.py:345
 msgid "No keys found."
 msgstr ""
 
-#: forms/serviceprovider.py:344
+#: forms/serviceprovider.py:348
 msgid "JWK missing key ID."
 msgstr ""
 
-#: forms/serviceprovider.py:347
+#: forms/serviceprovider.py:351
 msgid "Invalid JWK."
 msgstr ""
 
-#: forms/serviceprovider.py:355
+#: forms/serviceprovider.py:359
 msgid "Both remove and reset client secret selected."
 msgstr ""
 
-#: forms/serviceprovider.py:357
+#: forms/serviceprovider.py:361
 msgid "Both jwks and jwks_uri selected. Use only jwks_uri if it is supported."
 msgstr ""
 
-#: forms/serviceprovider.py:359
+#: forms/serviceprovider.py:363
 msgid "authorization_code grant type must be set for code response type."
 msgstr ""
 
-#: forms/serviceprovider.py:361
+#: forms/serviceprovider.py:365
 msgid "implicit grant type must be set for token response type."
 msgstr ""
 
-#: forms/serviceprovider.py:363
+#: forms/serviceprovider.py:367
 msgid "implicit grant type must be set for id_token response type."
 msgstr ""
 
-#: forms/serviceprovider.py:396 forms/serviceprovider.py:534
+#: forms/serviceprovider.py:400 forms/serviceprovider.py:538
 msgid ""
 "Link to privacy policy in Finnish. Link must be publicly accessible. <div "
 "class=\"text-danger\">Required for production use if the service requests "
 "any personal information.</div>"
 msgstr ""
 
-#: forms/serviceprovider.py:450
+#: forms/serviceprovider.py:454
 msgid ""
 "Full server names (not IPs), one per line. Used for access control. <div "
 "class=\"text-danger\">Required for non-ldapauth.</div>"
 msgstr ""
 
-#: forms/serviceprovider.py:452
+#: forms/serviceprovider.py:456
 msgid ""
 "Short (max 70 characters) and descriptive name for the service in Finnish. "
 "<div class=\"text-danger\">Required. </div>"
 msgstr ""
 
-#: forms/serviceprovider.py:454
+#: forms/serviceprovider.py:458
 msgid ""
 "Short (max 70 characters) and descriptive name for the service in English."
 msgstr ""
 
-#: forms/serviceprovider.py:458
+#: forms/serviceprovider.py:462
 msgid ""
 "Short (max 140 characters) description of the service in Finnish. <div class="
 "\"text-danger\">Required.</div>"
 msgstr ""
 
-#: forms/serviceprovider.py:460
+#: forms/serviceprovider.py:464
 msgid "Short (max 140 characters) description of the service in English."
 msgstr ""
 
-#: forms/serviceprovider.py:464
+#: forms/serviceprovider.py:468
 msgid ""
 "Link to privacy policy in Finnish. Link must be publicly accessible. <div "
 "class=\"text-danger\">Required if the service requests any personal "
 "information.</div>"
 msgstr ""
 
-#: forms/serviceprovider.py:467
+#: forms/serviceprovider.py:471
 msgid "Link to privacy policy in English. Link must be publicly accessible."
 msgstr ""
 
-#: forms/serviceprovider.py:491 models/serviceprovider.py:90
+#: forms/serviceprovider.py:495 models/serviceprovider.py:90
 msgid "Invalid list of server names."
 msgstr ""
 
-#: forms/serviceprovider.py:500
+#: forms/serviceprovider.py:504
 msgid "Invalid Finnish name."
 msgstr ""
 
-#: forms/serviceprovider.py:560
+#: forms/serviceprovider.py:564
 msgid "Client ID already exists"
 msgstr ""
 
-#: forms/serviceprovider.py:577
+#: forms/serviceprovider.py:581
 msgid "Confirm closing"
 msgstr ""
 
-#: forms/serviceprovider.py:584
+#: forms/serviceprovider.py:588
 msgid "Do not send validation email to SP admins."
 msgstr ""
 
@@ -759,13 +759,13 @@ msgstr ""
 
 #: models/attribute.py:34 models/certificate.py:103 models/contact.py:23
 #: models/endpoint.py:57 models/redirecturi.py:38 models/serviceprovider.py:234
-#: models/serviceprovider.py:404 models/testuser.py:23 models/usergroup.py:18
+#: models/serviceprovider.py:426 models/testuser.py:23 models/usergroup.py:18
 msgid "Created at"
 msgstr ""
 
 #: models/attribute.py:35 models/certificate.py:104 models/contact.py:24
 #: models/endpoint.py:58 models/redirecturi.py:39 models/serviceprovider.py:235
-#: models/serviceprovider.py:405 models/testuser.py:24 models/usergroup.py:19
+#: models/serviceprovider.py:427 models/testuser.py:24 models/usergroup.py:19
 msgid "Updated at"
 msgstr ""
 
@@ -821,42 +821,42 @@ msgstr ""
 
 #: models/certificate.py:105 models/contact.py:25 models/endpoint.py:59
 #: models/redirecturi.py:40 models/serviceprovider.py:236
-#: models/serviceprovider.py:406 models/testuser.py:25 models/usergroup.py:20
+#: models/serviceprovider.py:428 models/testuser.py:25 models/usergroup.py:20
 msgid "Entry end time"
 msgstr ""
 
 #: models/certificate.py:106 models/contact.py:26 models/endpoint.py:60
 #: models/redirecturi.py:41 models/serviceprovider.py:239
-#: models/serviceprovider.py:407 models/usergroup.py:21
+#: models/serviceprovider.py:429 models/usergroup.py:21
 msgid "Validated on"
 msgstr ""
 
 #: models/certificate.py:116 models/contact.py:34 models/endpoint.py:68
-#: models/redirecturi.py:49 models/serviceprovider.py:415
+#: models/redirecturi.py:49 models/serviceprovider.py:437
 #: models/usergroup.py:29
 msgid "removed"
 msgstr ""
 
 #: models/certificate.py:118 models/contact.py:36 models/endpoint.py:70
-#: models/redirecturi.py:51 models/serviceprovider.py:417
+#: models/redirecturi.py:51 models/serviceprovider.py:439
 #: models/usergroup.py:31
 msgid "pending removal"
 msgstr ""
 
 #: models/certificate.py:120 models/contact.py:38 models/endpoint.py:72
-#: models/redirecturi.py:53 models/serviceprovider.py:419
+#: models/redirecturi.py:53 models/serviceprovider.py:441
 #: models/usergroup.py:33
 msgid "pending validation"
 msgstr ""
 
 #: models/certificate.py:122 models/contact.py:40 models/endpoint.py:74
-#: models/redirecturi.py:55 models/serviceprovider.py:421
+#: models/redirecturi.py:55 models/serviceprovider.py:443
 #: models/usergroup.py:35
 msgid "update pending validation"
 msgstr ""
 
 #: models/certificate.py:124 models/contact.py:42 models/endpoint.py:76
-#: models/redirecturi.py:57 models/serviceprovider.py:423
+#: models/redirecturi.py:57 models/serviceprovider.py:445
 #: models/usergroup.py:37
 msgid "validated"
 msgstr ""
@@ -1295,11 +1295,11 @@ msgstr ""
 msgid "Updated by"
 msgstr ""
 
-#: models/serviceprovider.py:339
+#: models/serviceprovider.py:361
 msgid "Invalid decryption key, could not show the client secret."
 msgstr ""
 
-#: models/serviceprovider.py:399
+#: models/serviceprovider.py:421
 msgid "Reason for the attribute requisition"
 msgstr ""
 
@@ -1320,11 +1320,15 @@ msgid "Email address"
 msgstr ""
 
 #: models/statistics.py:12 templates/rr/statistics.html:20
-#: templates/rr/statistics.html:46
+#: templates/rr/statistics.html:48
 msgid "Number of logins"
 msgstr ""
 
 #: models/statistics.py:13
+msgid "Number of unique users"
+msgstr ""
+
+#: models/statistics.py:14
 msgid "Login date"
 msgstr ""
 
@@ -2811,7 +2815,11 @@ msgstr ""
 msgid "Date"
 msgstr ""
 
-#: templates/rr/statistics.html:33 templates/rr/statistics_summary.html:31
+#: templates/rr/statistics.html:21 templates/rr/statistics.html:53
+msgid "Unique users"
+msgstr ""
+
+#: templates/rr/statistics.html:35 templates/rr/statistics_summary.html:31
 msgid "No statistics"
 msgstr ""
 

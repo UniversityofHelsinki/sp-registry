@@ -47,7 +47,7 @@ class Command(BaseCommand):
             date_end = (date.today() + timedelta(days=1)).strftime("%Y-%m-%d") + " 00:00:00"
         else:
             date_end = (date.today()).strftime("%Y-%m-%d") + " 00:00:00"
-        cursor.execute("""SELECT relyingpartyid, DATE(requestTime), count(*) FROM idp_log
+        cursor.execute("""SELECT relyingpartyid, DATE(requestTime), count(*), count(distinct principalName) FROM idp_log
                           WHERE requestTime >= %s and requestTime < %s GROUP BY relyingpartyid,
                           DATE(requestTime);""", (date_start, date_end))
         serviceproviders = ServiceProvider.objects.filter(end_at=None)
@@ -64,14 +64,15 @@ class Command(BaseCommand):
                 obj = Statistics.objects.get(sp=sp, date=row[1])
                 if obj.logins != row[2]:
                     obj.logins = row[2]
+                    obj.users = row[3]
                     obj.save()
                     status = "UPDATED"
                 else:
                     status = "EXISTS"
             except Statistics.DoesNotExist:
-                Statistics.objects.create(sp=sp, date=row[1], logins=row[2])
+                Statistics.objects.create(sp=sp, date=row[1], logins=row[2], users=row[3])
                 status = "CREATED"
         else:
             status = "UNKNOWN SP"
         if verbose:
-            self.stdout.write("%s: %s: %s: %s" % (status, row[0], row[1], row[2]))
+            self.stdout.write("%s;%s;%s;%s;%s" % (status, row[0], row[1], row[2], row[3]))

@@ -62,7 +62,7 @@ class Command(BaseCommand):
         if sp:
             try:
                 obj = Statistics.objects.get(sp=sp, date=row[1])
-                if obj.logins != row[2]:
+                if obj.logins != row[2] or obj.users != row[3]:
                     obj.logins = row[2]
                     obj.users = row[3]
                     obj.save()

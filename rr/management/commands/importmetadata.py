@@ -30,8 +30,9 @@ class Command(BaseCommand):
         files = options['files']
         if files:
             for filename in files:
-                parser = etree.XMLParser(ns_clean=True, remove_comments=True,
-                                         remove_blank_text=True)
+                parser = etree.XMLParser(
+                    ns_clean=True, remove_comments=True, remove_blank_text=True, resolve_entities=False,
+                    no_network=True)
                 tree = etree.parse(filename, parser)
                 if not tree:
                     print("File does not exist: " + filename)

@@ -14,7 +14,8 @@ from rr.models.serviceprovider import ServiceProvider, SPAttribute
 
 
 def attributefilter_parser(filename, validate):
-    parser = etree.XMLParser(ns_clean=True, remove_comments=True, remove_blank_text=True)
+    parser = etree.XMLParser(
+        ns_clean=True, remove_comments=True, remove_blank_text=True, resolve_entities=False, no_network=True)
     tree = etree.parse(filename, parser)
     root = tree.getroot()
     for a in root:

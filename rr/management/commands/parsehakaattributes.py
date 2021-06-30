@@ -15,7 +15,8 @@ def haka_attribute_parser(filename):
     """
     Using CamelCase instead of regular underscore attribute names in element tree.
     """
-    parser = etree.XMLParser(ns_clean=True, remove_comments=True, remove_blank_text=True)
+    parser = etree.XMLParser(
+        ns_clean=True, remove_comments=True, remove_blank_text=True, resolve_entities=False, no_network=True)
     tree = etree.parse(filename, parser)
     root = tree.getroot()
     attribute_filter_policy_group = etree.Element("AttributeFilterPolicyGroup",

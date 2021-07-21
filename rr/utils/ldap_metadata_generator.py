@@ -80,6 +80,11 @@ def ldap_metadata_generator(sp, validated=True, tree=None):
         for server in servers:
             etree.SubElement(servers_element, "Server", name=server)
     etree.SubElement(entity, "TargetGroup", value=provider.target_group)
+    if provider.contacts:
+        contacts_element = etree.SubElement(entity, "Contacts")
+        contacts = Contact.objects.filter(sp=provider, end_at=None)
+        for contact in contacts:
+            etree.SubElement(contacts_element, "Contact", email=contact.email, contacttype=contact.type)
     if provider.service_account:
         etree.SubElement(entity, "ServiceAccount", contact=provider.service_account_contact, value="true")
     else:

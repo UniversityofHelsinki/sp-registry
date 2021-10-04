@@ -1,7 +1,7 @@
 Feature: Accesscontrol
-	Testing accesscontrol with normal and superuser 
+	Testing access control with regular user
 
-Scenario: Access pages with normal user, you should not ahve access for SP number 2
+Scenario: Access pages with normal user, you should not have access for SP number 2
 	Given test environment with logged in user exists
 	Then the result page will include text "https://sp.example.org/sp"
 	Then the result page will not include text "https://sp.example.com/sp"
@@ -83,54 +83,3 @@ Scenario: Access pages with normal user, you should not ahve access for SP numbe
 	Then the result page will include text "Permission denied"
 	When I visit the "/admin_django/"
 	Then the result page will include text "but are not authorized to access this page"
-
-	
-Scenario: Access pages with superuser
-	Given test environment with logged in superuser exists
-	Then the result page will include text "https://sp.example.org/sp"
-	Then the result page will include text "https://sp.example.com/sp"
-	When I visit the "/summary/1"
-	Then the result page will include text "https://sp.example.org/sp"
-	When I visit the "/summary/2"
-	Then the result page will include text "https://sp.example.com/sp"
-	When I visit the "/serviceprovider/1"
-	Then the result page will include text "https://sp.example.org/sp"
-	When I visit the "/serviceprovider/2"
-	Then the result page will include text "https://sp.example.com/sp"
-	When I visit the "/technical/1"
-	Then the result page will include text "https://sp.example.org/sp"
-	When I visit the "/technical/2"
-	Then the result page will include text "https://sp.example.com/sp"
-	When I visit the "/attribute/1"
-	Then the result page will include text "https://sp.example.org/sp"
-	When I visit the "/attribute/2"
-	Then the result page will include text "https://sp.example.com/sp"
-	When I visit the "/certificate/1"
-	Then the result page will include text "https://sp.example.org/sp"
-	When I visit the "/certificate/2"
-	Then the result page will include text "https://sp.example.com/sp"
-	When I visit the "/endpoint/1"
-	Then the result page will include text "https://sp.example.org/sp"
-	When I visit the "/endpoint/2"
-	Then the result page will include text "https://sp.example.com/sp"
-	When I visit the "/contact/1"
-	Then the result page will include text "https://sp.example.org/sp"
-	When I visit the "/contact/2"
-	Then the result page will include text "https://sp.example.com/sp"
-	When I visit the "/admin/1"
-	Then the result page will include text "https://sp.example.org/sp"
-	When I visit the "/admin/2"
-	Then the result page will include text "https://sp.example.com/sp"
-	When I visit the "/metadata/1"
-	Then the result page will include text "https://sp.example.org/sp"
-	When I visit the "/metadata/2"
-	Then the result page will include text "https://sp.example.com/sp"
-	When I visit the "/attribute/list/"
-	Then the result page will include text "Listing all attributes included in this system."
-	When I visit the "/certificate/list/"
-	Then the result page will include text "Certificate administration"
-	When I visit the "/saml_admin_list/"
-	Then the result page will include text "Special configurations"
-	When I visit the "/admin_django/"
-	Then the result page will include text "Site administration"
-	

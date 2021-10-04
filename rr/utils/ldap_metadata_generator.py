@@ -6,6 +6,7 @@ import logging
 from lxml import etree
 from django.db.models import Q
 
+from rr.models.contact import Contact
 from rr.models.serviceprovider import SPAttribute, ServiceProvider
 from rr.models.usergroup import UserGroup
 from rr.utils.metadata_generator_common import get_entity
@@ -80,9 +81,9 @@ def ldap_metadata_generator(sp, validated=True, tree=None):
         for server in servers:
             etree.SubElement(servers_element, "Server", name=server)
     etree.SubElement(entity, "TargetGroup", value=provider.target_group)
-    if provider.contacts:
+    contacts = Contact.objects.filter(sp=provider, end_at=None)
+    if contacts:
         contacts_element = etree.SubElement(entity, "Contacts")
-        contacts = Contact.objects.filter(sp=provider, end_at=None)
         for contact in contacts:
             etree.SubElement(contacts_element, "Contact", email=contact.email, contacttype=contact.type)
     if provider.service_account:

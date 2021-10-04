@@ -8,6 +8,7 @@ from django.core.management import call_command
 from django.test import TestCase
 
 from rr.models.attribute import Attribute
+from rr.models.contact import Contact
 from rr.models.serviceprovider import ServiceProvider, SPAttribute
 from rr.models.usergroup import UserGroup
 from rr.utils.ldap_metadata_generator import ldap_metadata_generator_list
@@ -35,6 +36,7 @@ class LdapMetadataTestCase(TestCase):
                                              nameformat='urn:uri',
                                              public_ldap=True)
         UserGroup.objects.create(sp=self.sp, name='grp-gamma', validated=validation_time)
+        Contact.objects.create(sp=self.sp, email="contact@example.org", type="support")
         SPAttribute.objects.create(sp=self.sp, attribute=attr_cn, validated=validation_time)
         SPAttribute.objects.create(sp=self.sp, attribute=attr_mail, validated=validation_time)
         self.test_metadata = open(TESTDATA_FILENAME).read()

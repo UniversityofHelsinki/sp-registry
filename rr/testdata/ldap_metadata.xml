@@ -5,6 +5,9 @@
       <Server name="ldaptest-2.example.org"/>
     </Servers>
     <TargetGroup value="restricted"/>
+    <Contacts>
+      <Contact email="contact@example.org" contacttype="support"/>
+    </Contacts>
     <ServiceAccount contact="service.user@example.org +358501234567" value="true"/>
     <LocalStorageUsers value="false"/>
     <LocalStorageGroups value="false"/>

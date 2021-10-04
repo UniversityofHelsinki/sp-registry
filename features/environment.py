@@ -1,10 +1,13 @@
 """
 behave environment module for testing behave-django
 """
-from splinter import Browser
-from django.conf import settings
 import os
 import re
+
+from splinter import Browser
+
+from django.conf import settings
+from django.core.management import call_command
 
 
 def before_all(context):
@@ -14,6 +17,7 @@ def before_all(context):
 def before_feature(context, feature):
     if feature.name == 'Fixture loading':
         context.fixtures = ['behave-fixtures.json']
+    call_command('flush', verbosity=0, interactive=False)
 
 
 def before_scenario(context, scenario):

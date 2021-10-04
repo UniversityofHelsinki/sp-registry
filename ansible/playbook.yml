@@ -21,6 +21,7 @@
   - name: sp-registry | Install required packages
     apt:
       name: "{{ packages }}"
+      update_cache: yes
     vars:
       packages:
       - apache2
@@ -28,13 +29,21 @@
       - python3-venv
       - python3-dev
       - python3-pip
-      - python-setuptools
-      - python-pexpect
+      - python3-setuptools
+      - python3-pexpect
       - mariadb-server
-      - python-mysqldb
+      - python3-mysqldb
+      - python3-pymysql
       - libmariadbclient-dev
       - libapache2-mod-wsgi-py3
       - gettext
+      - acl
+
+#  - name: sp-registry | Install global pip modules
+#    become: true
+#    pip:
+#      name: pymysql
+#      state: present
 
   - name: sp-registry | Enable apache2 ssl module
     apache2_module:
@@ -44,6 +53,7 @@
   - name: sp-registry | Create database
     mysql_db:
       name: "{{ spregistry_db_name }}"
+      login_unix_socket: /var/run/mysqld/mysqld.sock
       state: present
 
   - name: sp-registry | Create database user
@@ -51,6 +61,7 @@
       name: "{{ spregistry_db_user }}"
       password: "{{ spregistry_db_pw }}"
       priv: '{{ spregistry_db_name }}.*:ALL,GRANT'
+      login_unix_socket: /var/run/mysqld/mysqld.sock
       state: present
 
   - name: sp-registry | Create user for sp-registry
@@ -223,7 +234,8 @@
 
   - name: sp-registry | Load fixtures, nameidformat
     django_manage:
-      command: "loaddata {{ spregistry_install_dir }}/sp-registry/rr/fixtures/nameidformat.json"
+      command: loaddata
+      fixtures: "{{ spregistry_install_dir }}/sp-registry/rr/fixtures/nameidformat.json"
       app_path: "{{ spregistry_install_dir }}/sp-registry"
       virtualenv: "{{ spregistry_install_dir }}/venv"
     become_user: "{{ spregistry_install_user }}"
@@ -241,7 +253,8 @@
 
   - name: sp-registry | Load fixtures, attributes
     django_manage:
-      command: "loaddata {{ spregistry_install_dir }}/sp-registry/rr/fixtures/attribute.json"
+      command: loaddata
+      fixtures: "{{ spregistry_install_dir }}/sp-registry/rr/fixtures/attribute.json"
       app_path: "{{ spregistry_install_dir }}/sp-registry"
       virtualenv: "{{ spregistry_install_dir }}/venv"
     become_user: "{{ spregistry_install_user }}"
@@ -259,7 +272,8 @@
 
   - name: sp-registry | Load fixtures, OIDC
     django_manage:
-      command: "loaddata {{ spregistry_install_dir }}/sp-registry/rr/fixtures/oidc.json"
+      command: loaddata
+      fixtures: "{{ spregistry_install_dir }}/sp-registry/rr/fixtures/oidc.json"
       app_path: "{{ spregistry_install_dir }}/sp-registry"
       virtualenv: "{{ spregistry_install_dir }}/venv"
     become_user: "{{ spregistry_install_user }}"

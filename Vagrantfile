@@ -8,15 +8,14 @@ class VagrantPlugins::ProviderVirtualBox::Action::Network
 end
 
 Vagrant.configure("2") do |config|
-  config.vm.box = "ubuntu/bionic64"
+  config.vm.box = "generic/ubuntu2004"
 
   config.vm.network "forwarded_port", guest: 443, host:8443
-#  config.vm.network "private_network", :name => 'vboxnet0', :ip => '192.168.56.151'
 
-  config.vm.provision "shell", inline: "which python || sudo apt -y install python"
+  config.vm.provision "shell", inline: "which python3 || sudo apt -y install python3"
 
   config.vm.provision "ansible" do |ansible|
-    ansible.verbose = "v"
+    ansible.extra_vars = { ansible_python_interpreter:"/usr/bin/python3" }
     ansible.playbook = "ansible/playbook.yml"
 
     roles_file = 'ansible/requirements.yml'

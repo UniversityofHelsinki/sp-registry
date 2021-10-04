@@ -152,8 +152,8 @@ API documentation is available in path swagger/ for authenticated users.
 Vagrantfile with Ansible provisioning is provided for test environment.
 
 Usage:
-1. Install vagrant (https://www.vagrantup.com/)
-1. run command "vagrant up" (and wait for it to set up )
+1. Install vagrant (https://www.vagrantup.com/) and set up Provider like VirtualBox
+1. Run command "vagrant up" (and wait for it to set up)
 1. Open https://localhost:8443/ in browser (browser complains about security risk as self-signed certificate is used)
 1. Use local login with user admin, password RandomPass12
 

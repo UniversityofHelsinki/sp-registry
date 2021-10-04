@@ -1,5 +1,16 @@
 # Changelog
 
+## [1.9.0] - 2021-10-04
+### Changes
+* Requirements version updates, including Django 3.2
+* Added support for unique user statistics
+* Added templates for SSO errors
+* Added contacts to LDAP metadata
+* Updated dev/test vagrant box to Ubuntu 20.04
+* Refactored logging configuration
+* Refactored UIInfo generation, use customized privacy URL if not given
+* Various smaller fixes and updates
+
 ## [1.8.0] - 2021-02-16
 ### Changes
 * Requirements version updates

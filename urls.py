@@ -29,6 +29,7 @@ from rr.views.testuser import testuser_list, testuser_attribute_data
 from rr.views.usergroup import usergroup_list
 from rr.views.email import email_list
 from rr.views.statistics import statistics_list, statistics_summary_list
+from rr.views.sp_errors import sp_error
 
 schema_view = get_schema_view(
     openapi.Info(
@@ -108,6 +109,7 @@ urlpatterns = [
     url(r'^usergroup/(?P<pk>[0-9]+)/$', usergroup_list, name='usergroup-list'),
     url(r'^invite/$', activate_key, name='invite-activate'),
     url(r'^invite/(?P<invite_key>[\w+\s-]+)/$', activate_key, name='invite-activate-key'),
+    url(r'^error/$', sp_error, name='error'),
     url('^', include('django.contrib.auth.urls')),
     url(r'^i18n/', include('django.conf.urls.i18n')),
 ]

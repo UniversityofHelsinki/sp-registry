@@ -1,0 +1,18 @@
+{% extends "blank_error_base.html" %}
+{% load i18n %}
+
+{% block content %}
+  <h1>{% trans "Could not log in" %}</h1>
+  <p>{% trans "Single sign-on process returned an error." %}</p>
+  <p>{% trans "Please try again using your browser's incognito-mode." %}
+     {% trans "If the problem persists, contact the application administrator directly or through IT Helpdesk." %}</p>
+  <p><b>{% trans "Please include the following information in your message:" %}</b></p>
+  <uL>
+    <li>Time: {{ error_time }}</li>
+    <li>Type: {{ error_type }}</li>
+    <li>Message: {{ error_text }}</li>
+    <li>Status: {{ error_status }}</li>
+    <li>Sub-status: {{ error_status2 }}</li>
+  </uL>
+  <p><a href="/">Return to front page.</a></p>
+{% endblock %}

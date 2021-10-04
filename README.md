@@ -186,6 +186,8 @@ Program uses following attributes:
 
 Attributes are mapped in local_settings.py
 
+Redirect Shibboleth SP errors to /error/
+
 ### Apache & WSGI
 Example of Apache WSGI configuration
 ```

@@ -1,0 +1,8 @@
+{% extends "blank_error_base.html" %}
+{% load i18n %}
+
+{% block content %}
+  <h1>{% trans "Could not log in" %}</h1>
+  <p>{% trans "Your identity provider does not support multi-factor authentication." %}</p>
+  <p><a href="/">Return to front page.</a></p>
+{% endblock %}

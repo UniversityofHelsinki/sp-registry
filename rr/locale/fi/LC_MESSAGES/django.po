@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-06-08 13:47+0300\n"
+"POT-Creation-Date: 2021-09-24 13:45+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1753,6 +1753,34 @@ msgstr "Virhe"
 #: templates/error.html:5
 msgid "An error occurred"
 msgstr "Virhe"
+
+#: templates/error/mfa.html:5 templates/error/sp.html:5
+msgid "Could not log in"
+msgstr "Palveluun kirjautuminen ei onnistunut"
+
+#: templates/error/mfa.html:6
+msgid "Your identity provider does not support multi-factor authentication."
+msgstr "Käyttämänne identiteetintarjoaja ei tue monivaiheista tunnistautumista."
+
+#: templates/error/sp.html:6
+msgid "Single sign-on process returned an error."
+msgstr "Kertakirjautumisessa tapahtui virhe."
+
+#: templates/error/sp.html:7
+msgid "Please try again using your browser's incognito-mode."
+msgstr "Yritä uudelleen selaimen yksityisyys-tilassa."
+
+#: templates/error/sp.html:8
+msgid ""
+"If the problem persists, contact the application administrator directly or "
+"through IT Helpdesk."
+msgstr ""
+"Jos ongelma jatkuu, ota yhteyttä palvelun ylläpitäjään joko suoraan tai "
+"IT Helpdeskin kautta."
+
+#: templates/error/sp.html:9
+msgid "Please include the following information in your message:"
+msgstr "Sisällytä yhteydenottoon seuraavat tiedot:"
 
 #: templates/handlers/400.html:5 templates/handlers/400_blank.html:5
 msgid "Bad request"

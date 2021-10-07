@@ -67,13 +67,12 @@
 <p><a href="https://{{ request.META.SERVER_NAME }}/Shibboleth.sso/Login?authnContextClassRef=https://refeds.org/profile/sfa"><button type="button" class="btn btn-primary">{% trans "Login using single-factor authentication" %}</button></a></p>
 {% endif %}
 <h2 id="attribute-values">{% trans "Attributes" %}</h2>
-<table class="table table-sm" aria-describedby="attribute-valuies">
+<table class="table table-sm" aria-describedby="attribute-values">
   <thead>
     <tr>
       <th scope="col">{% trans "Status" %}</th>
       <th scope="col">{% trans "Attribute" %}</th>
       <th scope="col">{% trans "Value" %}</th>
-      <th scope="col">{% trans "Value format (regex)" %}</th>
     </tr>
   </thead>
   <tbody>
@@ -81,8 +80,7 @@
     {% if object.icon == "invalid" %}<tr class="table-danger">{% else %}<tr>{% endif %}
       {% if object.icon == "valid" %}<td class="text-success">&#10004;{% elif object.icon == "invalid" %}<td class="text-danger">&#10006;{% elif object.icon == "optional" %}<td class="text-info">&#128712;{% endif %}</td>
       <td>{{ object.friendlyname }}<Br><small>{{ object.name }}</small></td>
-      <td>{{ object.value|safe }}</td>
-      <td>{{ object.regex }}</td>
+      <td>{{ object.value|safe }}{% if object.icon == "invalid" and object.regex %}<Br><span class="text-danger">{% trans "Value format (regex)" %}: {{ object.regex }}</span>{% endif %}</td>
     </tr>
 {% endfor %}
   </tbody>

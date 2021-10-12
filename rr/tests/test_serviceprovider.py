@@ -147,11 +147,9 @@ class ServiceProviderBasicInformationTestCase(TestCase):
     def test_sp_basic_information_admin_field_visiblity(self):
         self.client.force_login(self.user)
         response = self.client.get(reverse('basicinformation-update', kwargs={'pk': self.user_sp.pk}))
-        self.assertNotIn('organization', response.content.decode())
         self.assertNotIn('admin_notes', response.content.decode())
         self.client.force_login(self.superuser)
         response = self.client.get(reverse('basicinformation-update', kwargs={'pk': self.user_sp.pk}))
-        self.assertIn('organization', response.content.decode())
         self.assertIn('admin_notes', response.content.decode())
 
     def test_sp_basic_information_name_required(self):

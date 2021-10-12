@@ -24,6 +24,12 @@ class Organization(models.Model):
                              verbose_name=_('Organization URL (English)'))
     url_sv = models.URLField(max_length=255, blank=True,
                              verbose_name=_('Organization URL (Swedish)'))
+    privacypolicy_fi = models.URLField(max_length=255, blank=True,
+                                       verbose_name=_('Privacy Policy URL (Finnish)'))
+    privacypolicy_en = models.URLField(max_length=255, blank=True,
+                                       verbose_name=_('Privacy Policy URL (English)'))
+    privacypolicy_sv = models.URLField(max_length=255, blank=True,
+                                       verbose_name=_('Privacy Policy URL (Swedish)'))
 
     def __str__(self):
         if get_language() == "fi" and self.name_fi:
@@ -82,3 +88,20 @@ class Organization(models.Model):
                 return self.url_fi
             else:
                 return self.url_sv
+
+    def privacypolicy(self, lang=get_language()):
+        """Returns privacy policy url in given language (defaulting current
+           language), or in priority order en->fi->sv if current is not
+           available"""
+        if lang == "fi" and self.privacypolicy_fi:
+            return self.privacypolicy_fi
+        elif lang == "sv" and self.privacypolicy_sv:
+            return self.privacypolicy_sv
+        else:
+            if self.privacypolicy_en:
+                return self.privacypolicy_en
+            elif self.privacypolicy_fi:
+                return self.privacypolicy_fi
+            elif self.privacypolicy_sv:
+                return self.privacypolicy_sv
+        return ""

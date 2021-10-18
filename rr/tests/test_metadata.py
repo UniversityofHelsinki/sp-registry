@@ -140,8 +140,12 @@ class MetadataMinimalParserGenerationTestCase(TestCase):
                                                    name_en="Test Organization",
                                                    description_en="Descriptiontest",
                                                    url_sv="https://example.org/sv",
-                                                   url_en="https://example.org/")
+                                                   url_en="https://example.org/",
+                                                   privacypolicy_fi="https://www.example.org/tietosuoja",
+                                                   privacypolicy_en="https://www.example.org/data-protection",
+                                                   privacypolicy_sv="https://www.example.org/dataskydd")
         self.sp.organization = organization
+        self.sp.privacypolicy_org = True
         self.sp.save()
         metadata_tree = saml_metadata_generator(sp=self.sp)
         metadata = etree.tostring(metadata_tree, pretty_print=True,

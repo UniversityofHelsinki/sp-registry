@@ -2,9 +2,9 @@
   <SPSSODescriptor protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol">
     <Extensions>
       <mdui:UIInfo>
-        <mdui:PrivacyStatementURL xml:lang="fi">https://www.helsinki.fi/fi/tutustu-meihin/tietosuoja</mdui:PrivacyStatementURL>
-        <mdui:PrivacyStatementURL xml:lang="en">https://www.helsinki.fi/en/about-us/data-protection</mdui:PrivacyStatementURL>
-        <mdui:PrivacyStatementURL xml:lang="sv">https://www.helsinki.fi/sv/om-oss/dataskydd</mdui:PrivacyStatementURL>
+        <mdui:PrivacyStatementURL xml:lang="fi">https://www.example.org/tietosuoja</mdui:PrivacyStatementURL>
+        <mdui:PrivacyStatementURL xml:lang="en">https://www.example.org/data-protection</mdui:PrivacyStatementURL>
+        <mdui:PrivacyStatementURL xml:lang="sv">https://www.example.org/dataskydd</mdui:PrivacyStatementURL>
       </mdui:UIInfo>
     </Extensions>
     <KeyDescriptor>

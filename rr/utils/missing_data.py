@@ -18,11 +18,16 @@ def _format_missing_message(links, msg, url=None):
         return msg
 
 
-def _get_missing_saml_data(sp, missing, links):
-    if not sp.privacypolicy_en and not sp.privacypolicy_fi and sp.attributes:
+def _get_missing_privacy_data(sp, missing, links):
+    if (not sp.privacypolicy_org and not sp.privacypolicy_en and not sp.privacypolicy_fi and
+            sp.attributes):
         msg = _("Privacy policy URL in English or in Finnish")
         url = reverse("basicinformation-update", args=[sp.pk])
         missing.append(_format_missing_message(links, msg, url))
+    return missing
+
+
+def _get_missing_saml_data(sp, missing, links):
     if not Certificate.objects.filter(sp=sp, end_at=None):
         msg = _("Certificate")
         url = reverse("certificate-list", args=[sp.pk])
@@ -68,7 +73,9 @@ def get_missing_sp_data(sp, links=True):
         url = reverse("contact-list", args=[sp.pk])
         missing.append(_format_missing_message(links, msg, url))
     if sp.service_type == "saml":
+        missing = _get_missing_privacy_data(sp, missing, links)
         missing = _get_missing_saml_data(sp, missing, links)
     elif sp.service_type == "oidc":
+        missing = _get_missing_privacy_data(sp, missing, links)
         missing = _get_missing_oidc_data(sp, missing, links)
     return missing

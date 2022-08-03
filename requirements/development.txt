@@ -1,8 +1,8 @@
 # Requirements for develepment/testing environment
 -r common.txt
 behave-django~=1.4
-coverage~=6.0
+coverage~=6.4
 factory-boy~=3.2
-Faker~=8.14
-selenium~=3.141
-splinter~=0.15
+Faker~=13.15
+selenium~=4.3
+splinter~=0.18

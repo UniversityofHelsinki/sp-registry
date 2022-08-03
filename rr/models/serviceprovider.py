@@ -22,8 +22,8 @@ from rr.utils.notifications import admin_notification_modified_sp
 logger = logging.getLogger(__name__)
 
 BASIC_INFORMATION_FIELDS = ['name_fi', 'name_en', 'name_sv', 'description_fi', 'description_en', 'description_sv',
-                            'privacypolicy_fi', 'privacypolicy_en', 'privacypolicy_sv', 'login_page_url',
-                            'application_portfolio', 'notes', 'admin_notes', 'organization']
+                            'privacypolicy_org', 'privacypolicy_fi', 'privacypolicy_en', 'privacypolicy_sv',
+                            'login_page_url', 'application_portfolio', 'notes', 'admin_notes', 'organization']
 BASIC_LINKED_FIELDS = ['admins', 'admin_groups', 'attributes', 'contacts']
 SAML_TECHNICAL_FIELDS = ['entity_id', 'discovery_service_url', 'sign_assertions', 'sign_requests', 'sign_responses',
                          'encrypt_assertions', 'force_mfa', 'force_sha1', 'force_nameidformat', 'production', 'test',
@@ -124,6 +124,7 @@ class ServiceProvider(models.Model):
     description_sv = models.CharField(max_length=140, blank=True,
                                       verbose_name=_('Service Description (Swedish)'),
                                       validators=[MaxLengthValidator(140)])
+    privacypolicy_org = models.BooleanField(default=False, verbose_name=_('Privacy Policy URLs from Organization'))
     privacypolicy_fi = models.URLField(max_length=255, blank=True,
                                        verbose_name=_('Privacy Policy URL (Finnish)'))
     privacypolicy_en = models.URLField(max_length=255, blank=True,
@@ -294,13 +295,9 @@ class ServiceProvider(models.Model):
                 return self.privacypolicy_fi
             elif self.privacypolicy_sv:
                 return self.privacypolicy_sv
-        if (hasattr(settings, 'GENERIC_PRIVACY_STATEMENT_ORGANIZATION_ID') and
-                hasattr(settings, 'GENERIC_PRIVACY_STATEMENT_URL_' + lang.upper()) and
-                self.organization and
-                self.organization.id == settings.GENERIC_PRIVACY_STATEMENT_ORGANIZATION_ID):
-            return getattr(settings, 'GENERIC_PRIVACY_STATEMENT_URL_' + lang.upper())
-        else:
-            return ""
+        if self.privacypolicy_org:
+            return self.organization.privacypolicy(lang=lang)
+        return ""
 
     def __str__(self):
         return self.entity_id

@@ -22,11 +22,11 @@ class BasicInformationForm(ModelForm):
     class Meta:
         model = ServiceProvider
         fields = ['organization', 'name_fi', 'name_en', 'name_sv', 'description_fi',
-                  'description_en', 'description_sv', 'privacypolicy_fi', 'privacypolicy_en',
-                  'privacypolicy_sv', 'login_page_url', 'application_portfolio', 'notes',
-                  'admin_notes']
+                  'description_en', 'description_sv', 'privacypolicy_org', 'privacypolicy_fi',
+                  'privacypolicy_en', 'privacypolicy_sv', 'login_page_url',
+                  'application_portfolio', 'notes', 'admin_notes']
         help_texts = {
-            'organization': _('Organization name, only changeable by the registry admins.'),
+            'organization': _('Organization who is responsible for the data given to the service.'),
             'name_fi': _('Short (max 70 characters) and descriptive name for the service '
                          'in Finnish.<div class="text-danger">'
                          'Required for both production and test use.</div>'),
@@ -43,12 +43,14 @@ class BasicInformationForm(ModelForm):
                                 'Required for both production and test use.</div>'),
             'description_sv': _('Short (max 140 characters) description of the service '
                                 'in Swedish.'),
-            'privacypolicy_fi': _('Link to privacy policy in Finnish. Link must be publicly'
-                                  'accessible. <div class="text-danger">Required for production '
-                                  'use if the service requests any personal information.</div>'),
+            'privacypolicy_org': _('Get privacy policy URLs from the organization if such are '
+                                   'set. <div class="text-danger">This or privacy policy URLs '
+                                   'below are required for production use, if service requests '
+                                   'any user information.</div>'),
+            'privacypolicy_fi': _('Link to privacy policy in Finnish. Link must be publicly '
+                                  'accessible.'),
             'privacypolicy_en': _('Link to privacy policy in English. Link must be publicly '
-                                  'accessible. <div class="text-danger">Required for production '
-                                  'use if the service requests any personal information.</div>'),
+                                  'accessible.'),
             'privacypolicy_sv': _('Link to privacy policy in Swedish. Link must be publicly '
                                   'accessible.'),
             'login_page_url': _('Used for debugging and testing services.'),
@@ -66,7 +68,6 @@ class BasicInformationForm(ModelForm):
         super(BasicInformationForm, self).__init__(*args, **kwargs)
         if not self.request.user.is_superuser:
             del self.fields['admin_notes']
-            del self.fields['organization']
 
     def clean(self):
         """
@@ -76,6 +77,14 @@ class BasicInformationForm(ModelForm):
         name_fi = self.cleaned_data['name_fi']
         if not name_en and not name_fi:
             raise ValidationError(_("Name in English or in Finnish is required."))
+        organization = self.cleaned_data['organization']
+        privacypolicy_org = self.cleaned_data['privacypolicy_org']
+        if privacypolicy_org:
+            if not organization:
+                raise ValidationError(_("Select organization to use privacy policy URLs from organization."))
+            if not organization.privacypolicy():
+                raise ValidationError(_("Selected organization does not have privacy policy URLs defined. "
+                                        "You cannot user privacy policy URLs from organization."))
 
 
 class SamlTechnicalInformationForm(ModelForm):

@@ -33,6 +33,7 @@ class Command(BaseCommand):
             user = settings.STATISTICS_DATABASE_USER
             password = settings.STATISTICS_DATABASE_PASSWORD
             database = settings.STATISTICS_DATABASE_NAME
+            table = settings.STATISTICS_DATABASE_TABLE
         except AttributeError:
             self.stderr.write("Missing database settings")
             exit(1)
@@ -47,9 +48,9 @@ class Command(BaseCommand):
             date_end = (date.today() + timedelta(days=1)).strftime("%Y-%m-%d") + " 00:00:00"
         else:
             date_end = (date.today()).strftime("%Y-%m-%d") + " 00:00:00"
-        cursor.execute("""SELECT relyingpartyid, DATE(requestTime), count(*), count(distinct principalName) FROM idp_log
+        cursor.execute("""SELECT relyingpartyid, DATE(requestTime), count(*), count(distinct principalName) FROM %s
                           WHERE requestTime >= %s and requestTime < %s GROUP BY relyingpartyid,
-                          DATE(requestTime);""", (date_start, date_end))
+                          DATE(requestTime);""", (table, date_start, date_end))
         serviceproviders = ServiceProvider.objects.filter(end_at=None)
         while True:
             row = cursor.fetchone()

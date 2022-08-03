@@ -10,7 +10,7 @@ def iumpl(context, url):
 
 @when(u'clicking link with text "{text}"')
 def click_link(context, text):
-    context.browser.click_link_by_text(text)
+    context.browser.find_by_text(text).click()
 
 
 @when(u'clicking visible link with text "{text}"')

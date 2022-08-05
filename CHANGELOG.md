@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.10.0] - 2022-08-05
+### Changes
+* Requirements version updates
+* Removed support for Python 3.6
+* Added privacy policy URLs for organizations
+* Added optional group where members have read access to every service
+* Changed link to friendlyName in attribute admin list
+* Changed attribute test to show validation regex only if value is not valid
+
+### Updating notes
+* Includes added database fields, run migrations
+
 ## [1.9.0] - 2021-10-04
 ### Changes
 * Requirements version updates, including Django 3.2

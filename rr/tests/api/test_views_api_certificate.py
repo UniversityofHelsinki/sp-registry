@@ -1,4 +1,5 @@
-from django.contrib.auth.models import User
+from django.test import override_settings
+from django.contrib.auth.models import Group, User
 from rest_framework import status
 from rest_framework.test import APIRequestFactory
 
@@ -98,6 +99,13 @@ rKLt+NcwtbkI6weLISJu9lFZnPMYT7LpqDWD4aMHHUWr8THO0T6mbCeQRYMlfSpU
     def test_certificate_access_object_with_normal_user_without_permission(self):
         response = self._test_access(user=self.user, pk=self.superuser_object.pk)
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+    @override_settings(READ_ALL_GROUP="read_all")
+    def test_certificate_access_object_with_read_all_permission(self):
+        group = Group.objects.create(name="read_all")
+        group.user_set.add(self.user)
+        response = self._test_access(user=self.user, pk=self.superuser_object.pk)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_certificate_access_object_with_superuser(self):
         response = self._test_access(user=self.user, pk=self.object.pk)

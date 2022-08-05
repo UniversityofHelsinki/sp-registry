@@ -1,5 +1,5 @@
 from django.contrib.auth.models import Group, User
-from django.test import RequestFactory, TestCase
+from django.test import override_settings, RequestFactory, TestCase
 from django.urls import reverse
 
 from rr.models.serviceprovider import ServiceProvider
@@ -32,6 +32,17 @@ class ServiceProviderListTestCase(TestCase):
         response = ServiceProviderList.as_view()(request)
         self.assertEqual(response.status_code, 200)
         self.assertTrue(self.admin_sp not in response.context_data['object_list'])
+        self.assertTrue(self.user_sp in response.context_data['object_list'])
+
+    @override_settings(READ_ALL_GROUP="read_all")
+    def test_sp_view_list_read_all__user(self):
+        group = Group.objects.create(name="read_all")
+        group.user_set.add(self.user)
+        request = self.factory.get(reverse('serviceprovider-list'))
+        request.user = self.user
+        response = ServiceProviderList.as_view()(request)
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(self.admin_sp in response.context_data['object_list'])
         self.assertTrue(self.user_sp in response.context_data['object_list'])
 
     def test_sp_view_list_normal_user_group_permissions(self):
@@ -136,6 +147,16 @@ class ServiceProviderBasicInformationTestCase(TestCase):
         self.client.force_login(self.user)
         response = self.client.get(reverse('basicinformation-update', kwargs={'pk': self.admin_sp.pk}))
         self.assertEqual(response.status_code, 404)
+        response = self.client.post(reverse('basicinformation-update', kwargs={'pk': self.admin_sp.pk}))
+        self.assertEqual(response.status_code, 404)
+
+    @override_settings(READ_ALL_GROUP="read_all")
+    def test_sp_basic_information_view_allows_get_from_read_all_user(self):
+        group = Group.objects.create(name="read_all")
+        group.user_set.add(self.user)
+        self.client.force_login(self.user)
+        response = self.client.get(reverse('basicinformation-update', kwargs={'pk': self.admin_sp.pk}))
+        self.assertEqual(response.status_code, 200)
         response = self.client.post(reverse('basicinformation-update', kwargs={'pk': self.admin_sp.pk}))
         self.assertEqual(response.status_code, 404)
 

@@ -53,7 +53,7 @@ class ServiceProviderList(ListView):
     def get_queryset(self):
         if not settings.ACTIVATE_SAML:
             return ServiceProvider.objects.none()
-        providers = get_service_provider_queryset(user=self.request.user, service_type='saml')
+        providers = get_service_provider_queryset(request=self.request, service_type='saml')
         if self.request.user.is_superuser:
             return providers.order_by('-modified', '-production', '-test', 'entity_id')
         else:
@@ -64,7 +64,7 @@ class ServiceProviderList(ListView):
         if not settings.ACTIVATE_LDAP:
             context['ldap_providers'] = ServiceProvider.objects.none()
         else:
-            providers = get_service_provider_queryset(user=self.request.user, service_type='ldap')
+            providers = get_service_provider_queryset(request=self.request, service_type='ldap')
             if self.request.user.is_superuser:
                 context['ldap_providers'] = providers.order_by('-modified', '-production', 'entity_id')
             else:
@@ -73,7 +73,7 @@ class ServiceProviderList(ListView):
         if not settings.ACTIVATE_OIDC:
             context['oidc_providers'] = ServiceProvider.objects.none()
         else:
-            providers = get_service_provider_queryset(user=self.request.user, service_type='oidc')
+            providers = get_service_provider_queryset(request=self.request, service_type='oidc')
             if self.request.user.is_superuser:
                 context['oidc_providers'] = providers.order_by('-modified', '-production', 'entity_id')
             else:
@@ -142,7 +142,7 @@ class BasicInformationView(DetailView):
             return render(request, "error.html", {'error_message': error_message})
 
     def get_queryset(self):
-        return get_service_provider_queryset(user=self.request.user)
+        return get_service_provider_queryset(request=self.request)
 
     def get_context_data(self, **kwargs):
         context = super(BasicInformationView, self).get_context_data(**kwargs)
@@ -322,7 +322,7 @@ class BasicInformationUpdate(SuccessMessageMixin, UpdateView):
     template_name_suffix = '_basic_form'
 
     def get_queryset(self):
-        return get_service_provider_queryset(user=self.request.user)
+        return get_service_provider_queryset(request=self.request)
 
     def get_form_kwargs(self):
         kwargs = super(BasicInformationUpdate, self).get_form_kwargs()
@@ -365,7 +365,7 @@ class SamlTechnicalInformationUpdate(SuccessMessageMixin, UpdateView):
     template_name_suffix = '_saml_technical_form'
 
     def get_queryset(self):
-        return get_service_provider_queryset(user=self.request.user, service_type='saml')
+        return get_service_provider_queryset(request=self.request, service_type='saml')
 
     def get_form_kwargs(self):
         kwargs = super(SamlTechnicalInformationUpdate, self).get_form_kwargs()
@@ -412,7 +412,7 @@ class LdapTechnicalInformationUpdate(SuccessMessageMixin, UpdateView):
     template_name_suffix = '_ldap_technical_form'
 
     def get_queryset(self):
-        return get_service_provider_queryset(user=self.request.user, service_type='ldap')
+        return get_service_provider_queryset(request=self.request, service_type='ldap')
 
     def get_form_kwargs(self):
         kwargs = super(LdapTechnicalInformationUpdate, self).get_form_kwargs()
@@ -455,7 +455,7 @@ class OidcTechnicalInformationUpdate(SuccessMessageMixin, UpdateView):
     template_name_suffix = '_oidc_technical_form'
 
     def get_queryset(self):
-        return get_service_provider_queryset(user=self.request.user, service_type='oidc')
+        return get_service_provider_queryset(request=self.request, service_type='oidc')
 
     def get_form_kwargs(self):
         kwargs = super(OidcTechnicalInformationUpdate, self).get_form_kwargs()
@@ -500,7 +500,7 @@ class ServiceProviderDelete(SuccessMessageMixin, DeleteView):
     success_message = _("Service deleted.")
 
     def get_queryset(self):
-        return get_service_provider_queryset(user=self.request.user)
+        return get_service_provider_queryset(request=self.request)
 
     def delete(self, request, *args, **kwargs):
         """

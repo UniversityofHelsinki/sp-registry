@@ -48,6 +48,9 @@ VALIDATION_NOTIFICATION_TECHNICAL_CONTACT = True
 # Send email to administrative contacts when changes have been validated
 VALIDATION_NOTIFICATION_ADMINISTRATIVE_CONTACT = True
 
+# Group name for the group where all members have read access to all services.
+#READ_ALL_GROUP = "READ_ALL"
+
 # Privacy policy url shown in login page
 PRIVACY_POLICY_URL = 'https://example.org/DataPrivacyPolicy.pdf'
 # Path to save test screenshots

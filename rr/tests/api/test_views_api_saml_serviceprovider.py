@@ -1,4 +1,5 @@
 from django.contrib.auth.models import User, Group
+from django.test import override_settings
 from rest_framework import status
 from rest_framework.test import APIRequestFactory
 
@@ -37,6 +38,14 @@ class ServiceTestCase(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(response.data['results']), 1)
 
+    @override_settings(READ_ALL_GROUP="read_all")
+    def test_service_provider_access_list_with_read_all_user(self):
+        group = Group.objects.create(name="read_all")
+        group.user_set.add(self.user)
+        response = self._test_list(user=self.user)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(response.data['results']), 2)
+
     def test_service_provider_access_list_with_superuser(self):
         response = self._test_list(user=self.superuser)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -51,6 +60,13 @@ class ServiceTestCase(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         for key in self.data:
             self.assertEqual(response.data[key], self.data[key])
+
+    @override_settings(READ_ALL_GROUP="read_all")
+    def test_service_provider_access_object_with_read_all_user(self):
+        group = Group.objects.create(name="read_all")
+        group.user_set.add(self.user)
+        response = self._test_access(user=self.user, pk=self.super_user_object.pk)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_service_provider_access_object_with_normal_user_without_permission(self):
         response = self._test_access(user=self.user, pk=self.super_user_object.pk)
@@ -69,6 +85,13 @@ class ServiceTestCase(APITestCase):
             self.assertEqual(response.data[key], self.update_data[key])
 
     def test_service_provider_update_with_normal_user_without_permission(self):
+        response = self._test_update(user=self.user, data=self.update_data, pk=self.super_user_object.pk)
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+    @override_settings(READ_ALL_GROUP="read_all")
+    def test_service_provider_update_with_read_all_user(self):
+        group = Group.objects.create(name="read_all")
+        group.user_set.add(self.user)
         response = self._test_update(user=self.user, data=self.update_data, pk=self.super_user_object.pk)
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 

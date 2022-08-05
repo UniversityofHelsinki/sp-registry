@@ -1,5 +1,6 @@
 import logging
 
+from django.conf import settings
 from django.db.models import Q
 from django.http.response import Http404
 from django.utils import timezone
@@ -52,16 +53,20 @@ def get_service_provider(pk, user, service_type=None, raise_404=True):
     return sp
 
 
-def get_service_provider_queryset(user, service_type=None):
+def get_service_provider_queryset(request, service_type=None):
     """
     Get service provider queryset if user has permissions
 
-    user: current user
+    request: request
     service_type: limit to type if given
 
     return: service provider queryset
     """
-    if user.is_superuser:
+    user = request.user
+    read_all_group = settings.READ_ALL_GROUP if hasattr(settings, 'READ_ALL_GROUP') else None
+
+    if user.is_superuser or (
+            request.method == "GET" and read_all_group and user.groups.filter(name=read_all_group).exists()):
         if service_type:
             return ServiceProvider.objects.filter(end_at=None, service_type=service_type).order_by('entity_id')
         else:

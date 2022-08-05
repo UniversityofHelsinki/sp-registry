@@ -93,7 +93,7 @@ class SamlServiceProviderViewSet(viewsets.ModelViewSet):
         """
         Restricts the returned information to services
         """
-        return get_service_provider_queryset(user=self.request.user, service_type='saml')
+        return get_service_provider_queryset(request=self.request, service_type='saml')
 
     def perform_destroy(self, instance):
         instance.end_at = timezone.now()
@@ -130,7 +130,7 @@ class OidcServiceProviderViewSet(viewsets.ModelViewSet):
         """
         Restricts the returned information to services
         """
-        return get_service_provider_queryset(user=self.request.user, service_type='oidc')
+        return get_service_provider_queryset(request=self.request, service_type='oidc')
 
     def perform_destroy(self, instance):
         instance.end_at = timezone.now()
@@ -167,7 +167,7 @@ class LdapServiceProviderViewSet(viewsets.ModelViewSet):
         """
         Restricts the returned information to services
         """
-        return get_service_provider_queryset(user=self.request.user, service_type='ldap')
+        return get_service_provider_queryset(request=self.request, service_type='ldap')
 
     def perform_destroy(self, instance):
         instance.end_at = timezone.now()

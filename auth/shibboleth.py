@@ -7,14 +7,36 @@ from django.contrib.auth.models import Group, User
 logger = logging.getLogger(__name__)
 
 
+def get_activation(affiliations, groups):
+    """
+    Get default active status based on users affiliations and groups
+
+    affiliations: list of affiliations
+    groups: list of group names
+    """
+    if hasattr(settings, 'AUTO_ACTIVATE_AFFILIATIONS') and isinstance(settings.AUTO_ACTIVATE_AFFILIATIONS, list):
+        auto_activate_affiliations = settings.AUTO_ACTIVATE_AFFILIATIONS
+    else:
+        auto_activate_affiliations = []
+    if hasattr(settings, 'AUTO_ACTIVATE_GROUPS') and isinstance(settings.AUTO_ACTIVATE_GROUPS, list):
+        auto_activate_groups = settings.AUTO_ACTIVATE_GROUPS
+    else:
+        auto_activate_groups = []
+    if any(ele in auto_activate_affiliations for ele in affiliations):
+        return True
+    elif any(ele in auto_activate_groups for ele in groups):
+        return True
+    return False
+
+
 def update_groups(user, groups):
     """
     Set users groups based on SAML_ATTR_GROUPS parameter
 
     user: User object
-    groups: string of group names, separated by semicolon
+    groups: list of group names
     """
-    login_groups = Group.objects.filter(name__in=groups.split(';'))
+    login_groups = Group.objects.filter(name__in=groups)
     user_groups = user.groups.all()
     removed = list(set(user_groups) - set(login_groups))
     added = list(set(login_groups) - set(user_groups))
@@ -37,13 +59,16 @@ class ShibbolethBackend:
         last_name = request.META.get(
             settings.SAML_ATTR_LAST_NAME, '').encode('latin1').decode('utf-8', 'ignore')
         email = request.META.get(settings.SAML_ATTR_EMAIL, '')
-        affiliations = request.META.get(settings.SAML_ATTR_AFFILIATION, '')
-        groups = request.META.get(settings.SAML_ATTR_GROUPS, '')
-
+        affiliations = request.META.get(settings.SAML_ATTR_AFFILIATION, '').split(';')
+        groups = request.META.get(settings.SAML_ATTR_GROUPS, '').split(';')
         if username and re.match("[^@]+@[^@]+\.[^@]+", username):
             try:
                 user = User.objects.get(username=username)
                 update_groups(user, groups)
+                if not user.is_active and get_activation(affiliations, groups):
+                    user.is_active = True
+                    logger.debug("Activated user %s", username)
+                    user.save()
                 if user.first_name != first_name or user.last_name != last_name:
                     user.first_name = first_name
                     user.last_name = last_name
@@ -52,10 +77,7 @@ class ShibbolethBackend:
             except User.DoesNotExist:
                 # Create a new user with unusable password
                 logger.info("Created a new user: %s", username)
-                if "faculty" in affiliations or "staff" in affiliations:
-                    active = True
-                else:
-                    active = False
+                active = get_activation(affiliations, groups)
                 user = User(username=username,
                             password=User.objects.make_random_password(),
                             first_name=first_name,

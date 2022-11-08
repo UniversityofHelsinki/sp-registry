@@ -356,7 +356,7 @@ class OidcTechnicalInformationForm(ModelForm):
             if not jwk.get('kid'):
                 raise ValidationError(_("JWK missing key ID."))
             if not ((jwk.get('kty') == 'RSA' and jwk.get('n')) or (jwk.get('kty') == 'EC' and jwk.get('x') and
-                                                                  jwk.get('y'))):
+                                                                   jwk.get('y'))):
                 raise ValidationError(_("Invalid JWK."))
         return jwks_data
 

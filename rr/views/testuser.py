@@ -3,6 +3,7 @@ import logging
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.db.models import Q
 from django.http.response import Http404
 from django.shortcuts import render
 from django.utils import timezone
@@ -155,11 +156,11 @@ def testuser_attribute_data(request, pk):
     try:
         testuser = TestUser.objects.get(pk=pk, end_at=None)
     except TestUser.DoesNotExist:
-        raise Http404(_("User provided does not exist"))
-    if not request.user.is_superuser and not ServiceProvider.objects.filter(pk=testuser.sp.pk,
-                                                                            admins=request.user,
-                                                                            end_at=None).first():
-        raise Http404(_("User provided does not exist"))
+        raise Http404(_("Test user does not exist or you don't have permission to view it"))
+    if (not request.user.is_superuser and not ServiceProvider.objects.filter(
+            (Q(admins=request.user) | Q(admin_groups__in=request.user.groups.all())),
+            pk=testuser.sp.pk, end_at=None).distinct().last()):
+        raise Http404(_("Test user does not exist or you don't have permission to view it"))
     form = TestUserDataForm(user=testuser)
     user_update_form = TestUserUpdateForm(instance=testuser, sp=testuser.sp, admin=request.user)
     if request.method == "POST":

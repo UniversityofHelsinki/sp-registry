@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-10-12 15:07+0300\n"
+"POT-Creation-Date: 2023-01-11 13:41+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -189,15 +189,15 @@ msgstr ""
 #: forms/serviceprovider.py:38 forms/serviceprovider.py:401
 #: forms/serviceprovider.py:539
 msgid ""
-"Short (max 140 characters) description of the service in Finnish. <div class="
-"\"text-danger\">Required for both production and test use.</div>"
+"Short (max 140 characters) description of the service in Finnish. <div "
+"class=\"text-danger\">Required for both production and test use.</div>"
 msgstr ""
 
 #: forms/serviceprovider.py:41 forms/serviceprovider.py:404
 #: forms/serviceprovider.py:542
 msgid ""
-"Short (max 140 characters) description of the service in English. <div class="
-"\"text-danger\">Required for both production and test use.</div>"
+"Short (max 140 characters) description of the service in English. <div "
+"class=\"text-danger\">Required for both production and test use.</div>"
 msgstr ""
 
 #: forms/serviceprovider.py:44 forms/serviceprovider.py:407
@@ -207,8 +207,8 @@ msgstr ""
 
 #: forms/serviceprovider.py:46
 msgid ""
-"Get privacy policy URLs from the organization if such are set. <div class="
-"\"text-danger\">This or privacy policy URLs below are required for "
+"Get privacy policy URLs from the organization if such are set. <div "
+"class=\"text-danger\">This or privacy policy URLs below are required for "
 "production use, if service requests any user information.</div>"
 msgstr ""
 
@@ -278,8 +278,8 @@ msgstr ""
 #: forms/serviceprovider.py:109
 msgid ""
 "Support for name identifier formats. Check <a href=\"https://wiki.shibboleth."
-"net/confluence/display/CONCEPT/NameIdentifiers\" target=\"_blank"
-"\">Shibboleth wiki</a> for more information."
+"net/confluence/display/CONCEPT/NameIdentifiers\" "
+"target=\"_blank\">Shibboleth wiki</a> for more information."
 msgstr ""
 
 #: forms/serviceprovider.py:112
@@ -579,8 +579,8 @@ msgstr ""
 
 #: forms/serviceprovider.py:471
 msgid ""
-"Short (max 140 characters) description of the service in Finnish. <div class="
-"\"text-danger\">Required.</div>"
+"Short (max 140 characters) description of the service in Finnish. <div "
+"class=\"text-danger\">Required.</div>"
 msgstr ""
 
 #: forms/serviceprovider.py:473
@@ -1742,7 +1742,7 @@ msgid "Public attribute for OIDC."
 msgstr ""
 
 #: templates/rr/attribute_admin_list.html:32
-#: templates/rr/attribute_admin_view.html:52
+#: templates/rr/attribute_admin_view.html:54
 msgid "No attributes"
 msgstr ""
 
@@ -1827,6 +1827,10 @@ msgid "Reason"
 msgstr ""
 
 #: templates/rr/attribute_admin_view.html:38
+msgid "Contact"
+msgstr ""
+
+#: templates/rr/attribute_admin_view.html:39
 msgid "Validated"
 msgstr ""
 
@@ -3030,7 +3034,7 @@ msgstr ""
 msgid "EntityID does not exist, creating"
 msgstr ""
 
-#: utils/serviceprovider.py:49
+#: utils/serviceprovider.py:50
 msgid "Service provider does not exist"
 msgstr ""
 
@@ -3221,39 +3225,39 @@ msgstr ""
 msgid "Activation key does not match"
 msgstr ""
 
-#: views/testuser.py:94
+#: views/testuser.py:95
 msgid "Test user added: "
 msgstr ""
 
-#: views/testuser.py:96
+#: views/testuser.py:97
 msgid "Username already exists: "
 msgstr ""
 
-#: views/testuser.py:111
+#: views/testuser.py:112
 msgid "Test user removed: "
 msgstr ""
 
-#: views/testuser.py:123
+#: views/testuser.py:124
 msgid "External test user removed: "
 msgstr ""
 
-#: views/testuser.py:158 views/testuser.py:162
-msgid "User provided does not exist"
+#: views/testuser.py:159 views/testuser.py:163
+msgid "Test user does not exist or you don't have permission to view it"
 msgstr ""
 
-#: views/testuser.py:172
+#: views/testuser.py:173
 msgid "Name based data reset for test user: "
 msgstr ""
 
-#: views/testuser.py:177
+#: views/testuser.py:178
 msgid "User data reset for test user: "
 msgstr ""
 
-#: views/testuser.py:203
+#: views/testuser.py:204
 msgid "Test user attributes updated: "
 msgstr ""
 
-#: views/testuser.py:225
+#: views/testuser.py:226
 msgid "User info updated: "
 msgstr ""
 

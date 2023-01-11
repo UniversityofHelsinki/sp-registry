@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-10-12 15:07+0300\n"
+"POT-Creation-Date: 2023-01-11 13:41+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -202,8 +202,8 @@ msgstr "Lyhyt (korkeintaan 70 merkkiä) ja kuvaava nimi palvelulle ruotsiksi."
 #: forms/serviceprovider.py:38 forms/serviceprovider.py:401
 #: forms/serviceprovider.py:539
 msgid ""
-"Short (max 140 characters) description of the service in Finnish. <div class="
-"\"text-danger\">Required for both production and test use.</div>"
+"Short (max 140 characters) description of the service in Finnish. <div "
+"class=\"text-danger\">Required for both production and test use.</div>"
 msgstr ""
 "Lyhyt (korkeintaan 140 merkkiä) kuvaus palvelulle suomeksi.<div class=\"text-"
 "danger\">Vaadittu tuotanto- ja testikäyttöön.</div>"
@@ -211,11 +211,11 @@ msgstr ""
 #: forms/serviceprovider.py:41 forms/serviceprovider.py:404
 #: forms/serviceprovider.py:542
 msgid ""
-"Short (max 140 characters) description of the service in English. <div class="
-"\"text-danger\">Required for both production and test use.</div>"
+"Short (max 140 characters) description of the service in English. <div "
+"class=\"text-danger\">Required for both production and test use.</div>"
 msgstr ""
-"Lyhyt (korkeintaan 140 merkkiä) kuvaus palvelulle englanniksi.<div class="
-"\"text-danger\">Vaadittu tuotanto- ja testikäyttöön.</div>"
+"Lyhyt (korkeintaan 140 merkkiä) kuvaus palvelulle englanniksi.<div "
+"class=\"text-danger\">Vaadittu tuotanto- ja testikäyttöön.</div>"
 
 #: forms/serviceprovider.py:44 forms/serviceprovider.py:407
 #: forms/serviceprovider.py:475 forms/serviceprovider.py:545
@@ -224,8 +224,8 @@ msgstr "Lyhyt (korkeintaan 140 merkkiä) kuvaus palvelulle ruotsiksi."
 
 #: forms/serviceprovider.py:46
 msgid ""
-"Get privacy policy URLs from the organization if such are set. <div class="
-"\"text-danger\">This or privacy policy URLs below are required for "
+"Get privacy policy URLs from the organization if such are set. <div "
+"class=\"text-danger\">This or privacy policy URLs below are required for "
 "production use, if service requests any user information.</div>"
 msgstr ""
 "Linkki englanninkieliseen tietosuojaselosteeseen. Linkin täytyy olla "
@@ -289,8 +289,8 @@ msgid ""
 "Selected organization does not have privacy policy URLs defined. You cannot "
 "user privacy policy URLs from organization."
 msgstr ""
-"Valitulla organisaatiolla ei ole tietosuojaselosteita määritettynä, joten "
-"et voi käyttää organisaation tietosuojaselosteita."
+"Valitulla organisaatiolla ei ole tietosuojaselosteita määritettynä, joten et "
+"voi käyttää organisaation tietosuojaselosteita."
 
 #: forms/serviceprovider.py:102 forms/serviceprovider.py:390
 msgid ""
@@ -314,12 +314,12 @@ msgstr ""
 #: forms/serviceprovider.py:109
 msgid ""
 "Support for name identifier formats. Check <a href=\"https://wiki.shibboleth."
-"net/confluence/display/CONCEPT/NameIdentifiers\" target=\"_blank"
-"\">Shibboleth wiki</a> for more information."
+"net/confluence/display/CONCEPT/NameIdentifiers\" "
+"target=\"_blank\">Shibboleth wiki</a> for more information."
 msgstr ""
 "Tuetut name identifier -muodot. Katso lisätietoja <a href=\"https://wiki."
-"shibboleth.net/confluence/display/CONCEPT/NameIdentifiers\" target=\"_blank"
-"\">Shibboleth-wikistä</a>."
+"shibboleth.net/confluence/display/CONCEPT/NameIdentifiers\" "
+"target=\"_blank\">Shibboleth-wikistä</a>."
 
 #: forms/serviceprovider.py:112
 msgid ""
@@ -694,8 +694,8 @@ msgstr "Lyhyt (korkeintaan 70 merkkiä) ja kuvaava nimi palvelulle englanniksi."
 
 #: forms/serviceprovider.py:471
 msgid ""
-"Short (max 140 characters) description of the service in Finnish. <div class="
-"\"text-danger\">Required.</div>"
+"Short (max 140 characters) description of the service in Finnish. <div "
+"class=\"text-danger\">Required.</div>"
 msgstr ""
 "Lyhyt (korkeintaan 140 merkkiä) kuvaus palvelulle suomeksi.<div class=\"text-"
 "danger\">Vaadittu tieto.</div>"
@@ -1883,7 +1883,7 @@ msgid "Public attribute for OIDC."
 msgstr "Julkinen attribuutti OIDC-palveluille."
 
 #: templates/rr/attribute_admin_list.html:32
-#: templates/rr/attribute_admin_view.html:52
+#: templates/rr/attribute_admin_view.html:54
 msgid "No attributes"
 msgstr "Ei attribuuttia"
 
@@ -1968,6 +1968,10 @@ msgid "Reason"
 msgstr "Syy"
 
 #: templates/rr/attribute_admin_view.html:38
+msgid "Contact"
+msgstr "Yhteystieto"
+
+#: templates/rr/attribute_admin_view.html:39
 msgid "Validated"
 msgstr "Hyväksytty"
 
@@ -3242,7 +3246,7 @@ msgstr "EntityID jo olemassa, ylikirjoitetaan"
 msgid "EntityID does not exist, creating"
 msgstr "EntityID:tä ei löytynyt, luodaan"
 
-#: utils/serviceprovider.py:49
+#: utils/serviceprovider.py:50
 msgid "Service provider does not exist"
 msgstr "Palvelua ei löytynyt"
 
@@ -3444,39 +3448,39 @@ msgstr "Ylläpitäjä poistettu: "
 msgid "Activation key does not match"
 msgstr "Aktivointiavain ei vastaa"
 
-#: views/testuser.py:94
+#: views/testuser.py:95
 msgid "Test user added: "
 msgstr "Testikäyttäjä lisätty: "
 
-#: views/testuser.py:96
+#: views/testuser.py:97
 msgid "Username already exists: "
 msgstr "Käyttäjänimi on jo olemassa: "
 
-#: views/testuser.py:111
+#: views/testuser.py:112
 msgid "Test user removed: "
 msgstr "Testikäyttäjä poistettu: "
 
-#: views/testuser.py:123
+#: views/testuser.py:124
 msgid "External test user removed: "
 msgstr "Ulkopuolinen testikäyttäjä poistettu: "
 
-#: views/testuser.py:158 views/testuser.py:162
-msgid "User provided does not exist"
-msgstr "Käyttäjää ei ole olemassa"
+#: views/testuser.py:159 views/testuser.py:163
+msgid "Test user does not exist or you don't have permission to view it"
+msgstr "Testikäyttäjää ei löydy tai käyttöoikeutenne eivät riitä sen näyttämiseen."
 
-#: views/testuser.py:172
+#: views/testuser.py:173
 msgid "Name based data reset for test user: "
 msgstr "Nimipohjaiset arvot palautettu testikäyttäjälle: "
 
-#: views/testuser.py:177
+#: views/testuser.py:178
 msgid "User data reset for test user: "
 msgstr "Testikäyttäjän arvot palautettu: "
 
-#: views/testuser.py:203
+#: views/testuser.py:204
 msgid "Test user attributes updated: "
 msgstr "Testikäyttäjän arvot päivitetty: "
 
-#: views/testuser.py:225
+#: views/testuser.py:226
 msgid "User info updated: "
 msgstr "Käyttäjätiedot päivitetty: "
 
@@ -3487,19 +3491,3 @@ msgstr "Käyttäjäryhmä lisätty."
 #: views/usergroup.py:75
 msgid "User group removed."
 msgstr "Käyttäjäryhmä poistettu."
-
-#~ msgid "Selected organization does not have privacy policy URLs defined."
-#~ msgstr "Valitulla organisaatiolla ei ole tietosuojaselosteita määritettynä."
-
-#~ msgid "Organization name, only changeable by the registry admins."
-#~ msgstr ""
-#~ "Organisaation nimi, muutettavissa vain rekisterin ylläpitäjien toimesta."
-
-#~ msgid ""
-#~ "Link to privacy policy in Finnish. Link must be publiclyaccessible. <div "
-#~ "class=\"text-danger\">Required for production use if the service requests "
-#~ "any personal information.</div>"
-#~ msgstr ""
-#~ "Linkki suomenkieliseen tietosuojaselosteeseen. Linkin täytyy olla "
-#~ "julkinen. <div class=\"text-danger\">Vaadittu tuotantokäyttöön, jos "
-#~ "palvelu vaatii henkilötietoja.</div>"

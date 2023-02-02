@@ -3,6 +3,6 @@
 behave-django~=1.4
 coverage~=6.5
 factory-boy~=3.2
-Faker~=15.3
-selenium~=4.6
-splinter~=0.18
+Faker~=16.6
+selenium~=4.8
+splinter~=0.19

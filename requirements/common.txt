@@ -1,8 +1,8 @@
 # Common requirements
 coreapi~=2.3
-cryptography~=38.0
-Django~=3.2.16
-django-bootstrap4~=22.2
+cryptography~=39.0
+Django~=3.2.17
+django-bootstrap4~=22.3
 django-filter~=22.1
 djangorestframework~=3.14
 docutils~=0.19

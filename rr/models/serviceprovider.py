@@ -381,16 +381,17 @@ class ServiceProvider(models.Model):
             history = ServiceProvider.objects.filter(
                 history=service.pk).exclude(validated=None).last()
             if history and history.production and service.production:
-                in_production.append(service.entity_id)
+                in_production.append(service.name() + " (" + service.entity_id + ")")
             elif history and history.production and not service.production:
-                remove_production.append(service.entity_id)
+                remove_production.append(service.name() + " (" + service.entity_id + ")")
             elif service.production and service.validated:
-                in_production.append(service.entity_id)
+                in_production.append(service.name() + " (" + service.entity_id + ")")
             elif service.production:
-                add_production.append(service.entity_id)
+                add_production.append(service.name() + " (" + service.entity_id + ")")
             if service.test:
-                in_test.append(service.entity_id)
-        admin_notification_modified_sp(self.entity_id, in_production, add_production,
+                in_test.append(service.name() + " (" + service.entity_id + ")")
+        modified_sp = self.name() + " (" + self.entity_id + ")"
+        admin_notification_modified_sp(modified_sp, in_production, add_production,
                                        remove_production, in_test)
 
     def save_modified(self, *args, **kwargs):

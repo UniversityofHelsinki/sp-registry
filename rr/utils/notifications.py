@@ -88,6 +88,8 @@ def validation_notification(sp):
         contacts = sp.contacts.filter(end_at=None, type='administrative').exclude(email='')
         for contact in contacts:
             admin_emails.append(contact.email)
+    # Remove duplicates emails
+    admin_emails = list(set(admin_emails))
     if sp and admin_emails:
         subject = render_to_string('email/validation_notification_subject.txt')
         message = _render_validation_notification_message(sp)

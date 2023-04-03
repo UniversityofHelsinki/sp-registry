@@ -41,6 +41,8 @@ ADMINS = [('IDP Admins', 'idp-admins@example.org')]
 DEFAULT_CONTACT_EMAIL = 'contact@example.org'
 # Send email to emails defined in ADMINS when changes have been made
 ADMIN_NOTIFICATION = True
+# Include changed test services to notification mail
+ADMIN_NOTIFICATION_INCLUDE_TEST_SERVICES = False
 # Send email to service admins when changes have been validated
 VALIDATION_NOTIFICATION_ADMINS = False
 # Send email to technical contacts when changes have been validated

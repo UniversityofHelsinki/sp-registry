@@ -20,6 +20,9 @@ def admin_notification_modified_sp(modified_sp, in_production, add_production, r
     """
     if (modified_sp and hasattr(settings, 'ADMINS') and settings.ADMINS and
             hasattr(settings, 'ADMIN_NOTIFICATION') and settings.ADMIN_NOTIFICATION):
+        if (not hasattr(settings, 'ADMIN_NOTIFICATION_INCLUDE_TEST_SERVICES') or
+                not settings.ADMIN_NOTIFICATION_INCLUDE_TEST_SERVICES):
+            in_test = None
         subject = render_to_string('email/admin_notification_modified_sp_subject.txt')
         message = render_to_string('email/admin_notification_modified_sp.txt',
                                    {'modified_sp': modified_sp,

@@ -1,7 +1,7 @@
 from datetime import timedelta
 
 from django.db import models
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 from rr.models.serviceprovider import ServiceProvider
 
@@ -22,7 +22,7 @@ def redirecturi_validator(sp, uri, error):
         raise error(_("URIs must not contain fragments"))
     if sp.application_type == "native" and uri.startswith("http") and not uri.startswith("http://localhost"):
         raise error(
-            _("Native applications must use custom URI schemes or http: scheme with " "localhost as the hostname.")
+            _("Native applications must use custom URI schemes or http: scheme with localhost as the hostname.")
         )
 
 

@@ -11,7 +11,7 @@ from django.forms import (
     PasswordInput,
 )
 from django.forms.widgets import TextInput
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 from rr.models.attribute import Attribute
 from rr.models.serviceprovider import ServiceProvider, SPAttribute

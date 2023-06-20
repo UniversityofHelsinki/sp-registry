@@ -3,7 +3,7 @@ Missing data checks
 """
 
 from django.urls.base import reverse
-from django.utils.translation import ugettext as _
+from django.utils.translation import gettext as _
 
 from rr.models.certificate import Certificate
 from rr.models.contact import Contact

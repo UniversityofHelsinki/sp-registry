@@ -6,7 +6,7 @@ from django.db.models import Q
 from django.forms import BooleanField, Form, ModelForm
 from django.forms.fields import CharField
 from django.forms.widgets import CheckboxInput, HiddenInput, Textarea
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 from rr.models.nameidformat import NameIDFormat
 from rr.models.serviceprovider import (
@@ -54,7 +54,7 @@ class BasicInformationForm(ModelForm):
                 'in English.<div class="text-danger">'
                 "Required for both production and test use.</div>"
             ),
-            "name_sv": _("Short (max 70 characters) and descriptive name for the service " "in Swedish."),
+            "name_sv": _("Short (max 70 characters) and descriptive name for the service in Swedish."),
             "description_fi": _(
                 "Short (max 140 characters) description of the service "
                 'in Finnish. <div class="text-danger">'
@@ -65,16 +65,16 @@ class BasicInformationForm(ModelForm):
                 'in English. <div class="text-danger">'
                 "Required for both production and test use.</div>"
             ),
-            "description_sv": _("Short (max 140 characters) description of the service " "in Swedish."),
+            "description_sv": _("Short (max 140 characters) description of the service in Swedish."),
             "privacypolicy_org": _(
                 "Get privacy policy URLs from the organization if such are "
                 'set. <div class="text-danger">This or privacy policy URLs '
                 "below are required for production use, if service requests "
                 "any user information.</div>"
             ),
-            "privacypolicy_fi": _("Link to privacy policy in Finnish. Link must be publicly " "accessible."),
-            "privacypolicy_en": _("Link to privacy policy in English. Link must be publicly " "accessible."),
-            "privacypolicy_sv": _("Link to privacy policy in Swedish. Link must be publicly " "accessible."),
+            "privacypolicy_fi": _("Link to privacy policy in Finnish. Link must be publicly accessible."),
+            "privacypolicy_en": _("Link to privacy policy in English. Link must be publicly accessible."),
+            "privacypolicy_sv": _("Link to privacy policy in Swedish. Link must be publicly accessible."),
             "login_page_url": _("Used for debugging and testing services."),
             "application_portfolio": _("Link to external application portfolio."),
             "notes": _("Additional notes about this service."),
@@ -160,7 +160,7 @@ class SamlTechnicalInformationForm(ModelForm):
                 "because assertions are encrypted by default."
             ),
             "sign_requests": _("IdP requires signed authentication requests from this SP."),
-            "sign_responses": _("IdP signs responses sent to SP. Defaults to True and should not " "be changed."),
+            "sign_responses": _("IdP signs responses sent to SP. Defaults to True and should not be changed."),
             "encrypt_assertions": _(
                 "IdP encrypts attribute assertions sent to SP. Defaults to "
                 "True. Do not change unless you are using a SP that does "
@@ -183,7 +183,7 @@ class SamlTechnicalInformationForm(ModelForm):
                 "required."
             ),
             "admin_require_manual_configuration": _(
-                "This service provider requires manual configuration. " "Set by registry admins if necessary."
+                "This service provider requires manual configuration. Set by registry admins if necessary."
             ),
             "production": _(
                 "Publish this SP to the production IdP. Only validated data is used. "
@@ -196,8 +196,8 @@ class SamlTechnicalInformationForm(ModelForm):
                 "Any changes might take up to 10 minutes until they are published to "
                 "the test IdP."
             ),
-            "saml_product": _("For administrative use e.g. for testing different SPs during IdP " "updates."),
-            "autoupdate_idp_metadata": _("Does this SP automatically update IdP metadata at least " "once a day?"),
+            "saml_product": _("For administrative use e.g. for testing different SPs during IdP updates."),
+            "autoupdate_idp_metadata": _("Does this SP automatically update IdP metadata at least once a day?"),
         }
 
     def __init__(self, *args, **kwargs):
@@ -226,7 +226,7 @@ class SamlTechnicalInformationForm(ModelForm):
         """
         entity_id = self.cleaned_data["entity_id"]
         if not self.request.user.is_superuser and "entity_id" in self.changed_data and ":" not in entity_id:
-            raise ValidationError(_("Entity Id should be URI, please contact IdP admins if " "this is not possible."))
+            raise ValidationError(_("Entity Id should be URI, please contact IdP admins if this is not possible."))
         if ServiceProvider.objects.filter(entity_id=entity_id, end_at=None, history=None).exclude(pk=self.instance.pk):
             raise ValidationError(_("Entity Id already exists"))
         return entity_id
@@ -264,7 +264,7 @@ class LdapTechnicalInformationForm(ModelForm):
                 "Does this service use the LDAPAuth proxy in order to access "
                 "user and group data for authentication and access control?"
             ),
-            "server_names": _("Full server names (not IPs), separated by space. User for access " "control."),
+            "server_names": _("Full server names (not IPs), separated by space. User for access control."),
             "target_group": _("What is the target group (users) of this service?"),
             "service_account": _("Separate service account is used for LDAP queries (recommended way)."),
             "service_account_contact": _(
@@ -282,11 +282,11 @@ class LdapTechnicalInformationForm(ModelForm):
             ),
             "local_storage_passwords": _("Service stores user passwords locally."),
             "local_storage_passwords_info": _(
-                "Why is this service storing user passwords " "locally and how? This is not generally a good " "idea."
+                "Why is this service storing user passwords locally and how? This is not generally a good idea."
             ),
-            "local_storage_groups": _("Service stores requested groups and their member lists " "locally."),
+            "local_storage_groups": _("Service stores requested groups and their member lists locally."),
             "admin_require_manual_configuration": _(
-                "This service provider requires manual configuration. " "Set by registry admins if necessary."
+                "This service provider requires manual configuration. Set by registry admins if necessary."
             ),
             "production": _("Publish this service to LDAP production servers."),
         }
@@ -374,7 +374,7 @@ class OidcTechnicalInformationForm(ModelForm):
                 '<div class="text-danger">Required for both production and test use.</div>'
             ),
             "admin_require_manual_configuration": _(
-                "This service provider requires manual configuration. " "Set by registry admins if necessary."
+                "This service provider requires manual configuration. Set by registry admins if necessary."
             ),
             "grant_types": _("Grant types allowed for this RP (grant_types metadata value)."),
             "response_types": _("Response types allowed for this RP (response_types metadata value)."),
@@ -405,7 +405,7 @@ class OidcTechnicalInformationForm(ModelForm):
                 "OIDC product used by this client. For administrative use e.g. for testing "
                 "different RPs during IdP updates."
             ),
-            "autoupdate_idp_metadata": _("Does this RP automatically update IdP metadata at least " "once a day?"),
+            "autoupdate_idp_metadata": _("Does this RP automatically update IdP metadata at least once a day?"),
             "reset_client_secret": _("Resets the client secret."),
             "remove_client_secret": _(
                 "Removes the client secret. Secret is not used if jwks are provided for "
@@ -518,7 +518,7 @@ class SamlServiceProviderCreateForm(ModelForm):
                 'in English.<div class="text-danger">'
                 "Required for both production and test use.</div>"
             ),
-            "name_sv": _("Short (max 70 characters) and descriptive name for the service " "in Swedish."),
+            "name_sv": _("Short (max 70 characters) and descriptive name for the service in Swedish."),
             "description_fi": _(
                 "Short (max 140 characters) description of the service "
                 'in Finnish. <div class="text-danger">'
@@ -529,7 +529,7 @@ class SamlServiceProviderCreateForm(ModelForm):
                 'in English. <div class="text-danger">'
                 "Required for both production and test use.</div>"
             ),
-            "description_sv": _("Short (max 140 characters) description of the service " "in Swedish."),
+            "description_sv": _("Short (max 140 characters) description of the service in Swedish."),
             "privacypolicy_fi": _(
                 "Link to privacy policy in Finnish. Link must be publicly "
                 'accessible. <div class="text-danger">Required for production '
@@ -540,7 +540,7 @@ class SamlServiceProviderCreateForm(ModelForm):
                 'accessible. <div class="text-danger">Required for production '
                 "use if the service requests any personal information.</div>"
             ),
-            "privacypolicy_sv": _("Link to privacy policy in Swedish. Link must be publicly " "accessible."),
+            "privacypolicy_sv": _("Link to privacy policy in Swedish. Link must be publicly accessible."),
             "login_page_url": _("Used for debugging and testing services."),
             "application_portfolio": _("Link to external application portfolio."),
             "notes": _("Additional notes about this service."),
@@ -556,7 +556,7 @@ class SamlServiceProviderCreateForm(ModelForm):
         """
         entity_id = self.cleaned_data["entity_id"]
         if not self.request.user.is_superuser and "entity_id" in self.changed_data and ":" not in entity_id:
-            raise ValidationError(_("Entity Id should be URI, please contact IdP admins if " "this is not possible."))
+            raise ValidationError(_("Entity Id should be URI, please contact IdP admins if this is not possible."))
 
         if ServiceProvider.objects.filter(entity_id=entity_id, end_at=None, history=None).exclude(pk=self.instance.pk):
             raise ValidationError(_("Entity Id already exists"))
@@ -608,21 +608,21 @@ class LdapServiceProviderCreateForm(ModelForm):
                 "Short (max 70 characters) and descriptive name for the service in "
                 'Finnish. <div class="text-danger">Required. </div>'
             ),
-            "name_en": _("Short (max 70 characters) and descriptive name for the service in " "English."),
-            "name_sv": _("Short (max 70 characters) and descriptive name for the service in " "Swedish."),
+            "name_en": _("Short (max 70 characters) and descriptive name for the service in English."),
+            "name_sv": _("Short (max 70 characters) and descriptive name for the service in Swedish."),
             "description_fi": _(
                 "Short (max 140 characters) description of the service in "
                 'Finnish. <div class="text-danger">Required.</div>'
             ),
-            "description_en": _("Short (max 140 characters) description of the service in " "English."),
-            "description_sv": _("Short (max 140 characters) description of the service in " "Swedish."),
+            "description_en": _("Short (max 140 characters) description of the service in English."),
+            "description_sv": _("Short (max 140 characters) description of the service in Swedish."),
             "privacypolicy_fi": _(
                 "Link to privacy policy in Finnish. Link must be publicly "
                 'accessible. <div class="text-danger">Required if the '
                 "service requests any personal information.</div>"
             ),
-            "privacypolicy_en": _("Link to privacy policy in English. Link must be publicly " "accessible."),
-            "privacypolicy_sv": _("Link to privacy policy in Swedish. Link must be publicly " "accessible."),
+            "privacypolicy_en": _("Link to privacy policy in English. Link must be publicly accessible."),
+            "privacypolicy_sv": _("Link to privacy policy in Swedish. Link must be publicly accessible."),
             "login_page_url": _("Used for debugging and testing services."),
             "application_portfolio": _("Link to external application portfolio."),
             "notes": _("Additional notes about this service."),
@@ -696,7 +696,7 @@ class OidcServiceProviderCreateForm(ModelForm):
                 'in English.<div class="text-danger">'
                 "Required for both production and test use.</div>"
             ),
-            "name_sv": _("Short (max 70 characters) and descriptive name for the service " "in Swedish."),
+            "name_sv": _("Short (max 70 characters) and descriptive name for the service in Swedish."),
             "description_fi": _(
                 "Short (max 140 characters) description of the service "
                 'in Finnish. <div class="text-danger">'
@@ -707,7 +707,7 @@ class OidcServiceProviderCreateForm(ModelForm):
                 'in English. <div class="text-danger">'
                 "Required for both production and test use.</div>"
             ),
-            "description_sv": _("Short (max 140 characters) description of the service " "in Swedish."),
+            "description_sv": _("Short (max 140 characters) description of the service in Swedish."),
             "privacypolicy_fi": _(
                 "Link to privacy policy in Finnish. Link must be publicly "
                 'accessible. <div class="text-danger">Required for production '
@@ -718,7 +718,7 @@ class OidcServiceProviderCreateForm(ModelForm):
                 'accessible. <div class="text-danger">Required for production '
                 "use if the service requests any personal information.</div>"
             ),
-            "privacypolicy_sv": _("Link to privacy policy in Swedish. Link must be publicly " "accessible."),
+            "privacypolicy_sv": _("Link to privacy policy in Swedish. Link must be publicly accessible."),
             "login_page_url": _("Used for debugging and testing services."),
             "application_portfolio": _("Link to external application portfolio."),
             "notes": _("Additional notes about this service."),
@@ -762,7 +762,7 @@ class ServiceProviderValidationForm(Form):
     Form for validation service provider.
     """
 
-    no_email = BooleanField(required=False, help_text=_("Do not send validation email to SP " "admins."))
+    no_email = BooleanField(required=False, help_text=_("Do not send validation email to SP admins."))
     modified_date = CharField()
 
     def __init__(self, *args, **kwargs):

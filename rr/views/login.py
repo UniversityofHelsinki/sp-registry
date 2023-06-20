@@ -7,7 +7,7 @@ from django.dispatch import receiver
 from django.http.response import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls.base import reverse
-from django.utils.translation import ugettext as _
+from django.utils.translation import gettext as _
 from django.views import View
 
 from auth.shibboleth import ShibbolethBackend

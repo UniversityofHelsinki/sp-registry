@@ -7,7 +7,7 @@ from django.core.exceptions import PermissionDenied
 from django.core.mail import send_mail
 from django.db.models.functions import Lower
 from django.shortcuts import render
-from django.utils.translation import ugettext as _
+from django.utils.translation import gettext as _
 
 from rr.forms.email import EmailSelectForm
 from rr.models.contact import Contact

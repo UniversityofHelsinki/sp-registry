@@ -1,6 +1,6 @@
 from django.forms import Form, Textarea, ValidationError
 from django.forms.fields import BooleanField, CharField
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 from rr.models.certificate import certificate_validator
 
@@ -13,7 +13,7 @@ class CertificateForm(Form):
 
     certificate = CharField(
         widget=Textarea,
-        help_text=_("Certificate in PEM format, WITHOUT -----BEGIN CERTIFICATE----- and " "-----END CERTIFICATE-----"),
+        help_text=_("Certificate in PEM format, WITHOUT -----BEGIN CERTIFICATE----- and -----END CERTIFICATE-----"),
     )
     signing = BooleanField(
         required=False,

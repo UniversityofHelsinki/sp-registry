@@ -1,7 +1,7 @@
 from django.db.models import Q
 from django.forms import BooleanField, CharField, Form
 from django.forms.widgets import TextInput
-from django.utils.translation import ugettext as _
+from django.utils.translation import gettext as _
 
 from rr.models.attribute import Attribute
 from rr.models.serviceprovider import SPAttribute

@@ -41,7 +41,7 @@ class Command(BaseCommand):
         validated = not options["unvalidated"]
         privacypolicy = options["privacypolicy"]
         if not production and not test and not include:
-            self.stderr.write("Give production, test or included client IDs as command line " "arguments")
+            self.stderr.write("Give production, test or included client IDs as command line arguments")
         # Create XML containing selected EntityDescriptors
         if metadata_output:
             metadata = oidc_metadata_generator_list(

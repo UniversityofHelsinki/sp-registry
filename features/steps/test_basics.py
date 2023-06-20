@@ -1,6 +1,8 @@
 from behave import then, when
 from django.core import mail
 
+from rr.models.serviceprovider import ServiceProvider
+
 
 @when('I visit the "{url}"')
 def iumpl(context, url):
@@ -29,6 +31,11 @@ def click_object_by_text(context, text):
 @when('clicking object with name "{text}"')
 def click_object_by_name(context, text):
     context.browser.find_by_name(text).first.click()
+
+
+@when('clicking object with value "{text}"')
+def click_object_by_value(context, text):
+    context.browser.find_by_value(text).first.click()
 
 
 @then('the result page will include text "{text}"')
@@ -82,6 +89,16 @@ def check_mail_subject_negative(context, number, text):
 def check_mail_body(context, number, text):
     message_number = int(number)
     assert text in mail.outbox[message_number].body
+
+
+@then('number of service providers is "{number}" and number of deleted is "{end_at}"')
+def number_of_service_providers(context, number, end_at):
+    providers = ServiceProvider.objects.filter(end_at=None).count()
+    deleted = ServiceProvider.objects.filter(end_at__isnull=False).count()
+    print(providers)
+    print(deleted)
+    assert int(number) == providers
+    assert int(end_at) == deleted
 
 
 @then('mailbox size should be "{number}"')

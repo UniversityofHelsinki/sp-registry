@@ -7,7 +7,7 @@ from cryptography.hazmat.primitives.serialization import Encoding
 from cryptography.x509 import oid
 from django.db import models
 from django.utils import timezone
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 from rr.models.serviceprovider import ServiceProvider
 

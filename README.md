@@ -142,9 +142,9 @@ API tokens with browser UI.
 API documentation is available in path swagger/ for authenticated users.
 
 ### Requirements
-* Django 3.2
-* Python 3.7-3.9
-* MySQL 5.6+ / MariaDB 10.1+
+* Django 4.2
+* Python 3.8-3.11
+* MySQL 8+ / MariaDB 10.4+
 * Requires dev libraries for Python and MySQL/MariaDB for compiling Python mysqlclient.
 
 ## Development

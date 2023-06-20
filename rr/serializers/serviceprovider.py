@@ -3,7 +3,7 @@ import re
 
 from django.contrib.auth.models import Group, User
 from django.utils import timezone
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 from rest_framework import serializers
 from rest_framework.validators import UniqueTogetherValidator
 
@@ -251,7 +251,7 @@ class SamlServiceProviderSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError(_("Name in English or in Finnish is required."))
         if "entity_id" in data and not user.is_superuser and ":" not in data["entity_id"]:
             raise serializers.ValidationError(
-                _("Entity Id should be URI, please contact IdP admins if " "this is not possible.")
+                _("Entity Id should be URI, please contact IdP admins if this is not possible.")
             )
         if "production" in data and data["production"] and not user.is_superuser:
             missing = get_missing_sp_data(self.instance)

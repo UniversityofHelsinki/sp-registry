@@ -13,7 +13,7 @@ from django.template.context import Context
 from django.template.engine import Engine
 from django.template.loader import render_to_string
 from django.urls import reverse
-from django.utils.translation import ugettext as _
+from django.utils.translation import gettext as _
 
 from rr.forms.spadmin import SPAdminForm, SPAdminGroupForm
 from rr.models.email import Template
@@ -86,7 +86,7 @@ def create_invite_email(request, key, template):
             },
         )
     if get_activation_link(request, key) not in message:
-        error = _("Template is missing activation link. " "Please include {{ activation_link }} to message.")
+        error = _("Template is missing activation link. Please include {{ activation_link }} to message.")
     else:
         error = None
     return subject, message, error

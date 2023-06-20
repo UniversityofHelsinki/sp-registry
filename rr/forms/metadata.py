@@ -2,7 +2,7 @@ from django.core.exceptions import ValidationError
 from django.core.validators import URLValidator
 from django.forms import Form, HiddenInput, Textarea
 from django.forms.fields import BooleanField, CharField
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 from lxml import etree
 
 from rr.models.serviceprovider import ServiceProvider
@@ -43,7 +43,7 @@ class MetadataForm(Form):
                 url_validator(entity_id)
             except ValidationError:
                 raise ValidationError(
-                    _("Entity Id should be URI, please contact IdP admins if " "this is not possible.")
+                    _("Entity Id should be URI, please contact IdP admins if this is not possible.")
                 )
         if ServiceProvider.objects.filter(entity_id=entity_id, end_at=None, history=None):
             raise ValidationError(_("Entity Id already exists"))

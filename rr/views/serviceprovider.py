@@ -9,7 +9,7 @@ from django.http.response import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls.base import reverse, reverse_lazy
 from django.utils import timezone
-from django.utils.translation import ugettext as _
+from django.utils.translation import gettext as _
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
 from django.views.generic.list import ListView
@@ -537,25 +537,27 @@ class ServiceProviderDelete(SuccessMessageMixin, DeleteView):
     def get_queryset(self):
         return get_service_provider_queryset(request=self.request)
 
-    def delete(self, request, *args, **kwargs):
+    def form_valid(self, form):
         """
-        Update regular delete function to set end_at null instead.
+        Set end_at null instead of deletion
         """
-        self.object = self.get_object()
         success_url = self.get_success_url()
+        obj = self.get_object()
         allow_delete = True
-        if self.object.production:
+        if obj.production:
             allow_delete = False
-        if not self.object.validated:
-            history = ServiceProvider.objects.filter(history=self.object.pk).exclude(validated=None).last()
+        if not obj.validated:
+            history = ServiceProvider.objects.filter(history=obj.pk).exclude(validated=None).last()
             if history and history.production:
                 allow_delete = False
         if allow_delete:
-            self.object.end_at = timezone.now()
-            self.object.save()
-            messages.add_message(request, messages.INFO, self.success_message)
+            obj.end_at = timezone.now()
+            obj.save()
+            messages.add_message(self.request, messages.INFO, self.success_message)
         else:
-            messages.add_message(request, messages.ERROR, _("Service removal is not allowed for production services."))
+            messages.add_message(
+                self.request, messages.ERROR, _("Service removal is not allowed for production services.")
+            )
             success_url = reverse_lazy("summary-view", kwargs={"pk": self.object.pk})
         return HttpResponseRedirect(success_url)
 

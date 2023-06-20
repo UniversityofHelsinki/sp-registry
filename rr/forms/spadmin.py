@@ -2,7 +2,7 @@ import re
 
 from django.core.validators import ValidationError
 from django.forms import CharField, EmailField, Form, ModelChoiceField
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 from rr.models.email import Template
 

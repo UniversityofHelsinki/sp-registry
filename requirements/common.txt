@@ -1,13 +1,13 @@
 # Common requirements
-coreapi~=2.3
-cryptography~=39.0
-Django~=3.2.17
-django-bootstrap4~=22.3
-django-filter~=22.1
-djangorestframework~=3.14
-docutils~=0.19
-drf-yasg~=1.21
-GitPython~=3.1
-lxml~=4.9
-mysqlclient~=2.1
-python-dateutil~=2.8
+coreapi==2.3.3
+cryptography==41.0.1
+Django==4.2.2
+django-bootstrap4==23.1
+django-filter==23.2
+djangorestframework==3.14
+docutils==0.20.1
+drf-yasg==1.21.5
+GitPython==3.1.31
+lxml==4.9.2
+mysqlclient==2.1.1
+python-dateutil==2.8.2

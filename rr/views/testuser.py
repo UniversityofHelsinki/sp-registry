@@ -7,7 +7,7 @@ from django.db.models import Q
 from django.http.response import Http404
 from django.shortcuts import render
 from django.utils import timezone
-from django.utils.translation import ugettext as _
+from django.utils.translation import gettext as _
 
 from rr.forms.testuser import TestUserDataForm, TestUserForm, TestUserUpdateForm
 from rr.models.attribute import Attribute

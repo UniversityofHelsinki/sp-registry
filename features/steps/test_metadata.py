@@ -1,18 +1,19 @@
-from behave import when, then
 from io import StringIO
 
+from behave import then, when
 from django.core.management import call_command
 
 
-@when(u'loading test metadata')
+@when("loading test metadata")
 def load_test_metadata(context):
     out = StringIO()
-    call_command('importmetadata', '-i', 'rr/testdata/metadata.xml', '-a', stdout=out)
+    call_command("importmetadata", "-i", "rr/testdata/metadata.xml", "-a", stdout=out)
 
 
-@then(u'the page will have same metadata')
+@then("the page will have same metadata")
 def check_for_text(context):
-    assert context.browser.is_text_present("""<EntityDescriptor xmlns:ds="http://www.w3.org/2000/09/xmldsig#" xmlns:mdattr="urn:oasis:names:tc:SAML:metadata:attribute" xmlns:mdui="urn:oasis:names:tc:SAML:metadata:ui" xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" xmlns="urn:oasis:names:tc:SAML:2.0:metadata" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" entityID="https://sp.example.org/sp">
+    assert context.browser.is_text_present(
+        """<EntityDescriptor xmlns:ds="http://www.w3.org/2000/09/xmldsig#" xmlns:mdattr="urn:oasis:names:tc:SAML:metadata:attribute" xmlns:mdui="urn:oasis:names:tc:SAML:metadata:ui" xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" xmlns="urn:oasis:names:tc:SAML:2.0:metadata" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" entityID="https://sp.example.org/sp">
   <SPSSODescriptor AuthnRequestsSigned="true" protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol">
     <Extensions>
       <mdui:UIInfo>
@@ -85,12 +86,14 @@ rKLt+NcwtbkI6weLISJu9lFZnPMYT7LpqDWD4aMHHUWr8THO0T6mbCeQRYMlfSpU
     <SurName>Doe</SurName>
     <EmailAddress>jane.doe@example.org</EmailAddress>
   </ContactPerson>
-</EntityDescriptor>""")
+</EntityDescriptor>"""
+    )
 
 
-@then(u'the page will have default metadata')
+@then("the page will have default metadata")
 def check_for_default_metadata(context):
-    assert context.browser.is_text_present("""<EntityDescriptor xmlns:ds="http://www.w3.org/2000/09/xmldsig#" xmlns:mdattr="urn:oasis:names:tc:SAML:metadata:attribute" xmlns:mdui="urn:oasis:names:tc:SAML:metadata:ui" xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" xmlns="urn:oasis:names:tc:SAML:2.0:metadata" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" entityID="https://sp.example.org/sp">
+    assert context.browser.is_text_present(
+        """<EntityDescriptor xmlns:ds="http://www.w3.org/2000/09/xmldsig#" xmlns:mdattr="urn:oasis:names:tc:SAML:metadata:attribute" xmlns:mdui="urn:oasis:names:tc:SAML:metadata:ui" xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" xmlns="urn:oasis:names:tc:SAML:2.0:metadata" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" entityID="https://sp.example.org/sp">
   <SPSSODescriptor AuthnRequestsSigned="true" protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol">
     <Extensions>
       <idpdisc:DiscoveryResponse xmlns:idpdisc="urn:oasis:names:tc:SAML:profiles:SSO:idp-discovery-protocol" Binding="urn:oasis:names:tc:SAML:profiles:SSO:idp-discovery-protocol" Location="https://discovery.example.org/" index="1"/>
@@ -128,12 +131,14 @@ def check_for_default_metadata(context):
     <OrganizationURL xml:lang="en">https://corp.example.org/en/</OrganizationURL>
     <OrganizationURL xml:lang="sv">https://corp.example.org/sv/</OrganizationURL>
   </Organization>
-</EntityDescriptor>""")
+</EntityDescriptor>"""
+    )
 
 
-@then(u'the page will have metadata 1')
+@then("the page will have metadata 1")
 def check_for_unvalidated_metadata(context):
-    assert context.browser.is_text_present("""<EntityDescriptor xmlns:ds="http://www.w3.org/2000/09/xmldsig#" xmlns:mdattr="urn:oasis:names:tc:SAML:metadata:attribute" xmlns:mdui="urn:oasis:names:tc:SAML:metadata:ui" xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" xmlns="urn:oasis:names:tc:SAML:2.0:metadata" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" entityID="https://sp.example.org/sp">
+    assert context.browser.is_text_present(
+        """<EntityDescriptor xmlns:ds="http://www.w3.org/2000/09/xmldsig#" xmlns:mdattr="urn:oasis:names:tc:SAML:metadata:attribute" xmlns:mdui="urn:oasis:names:tc:SAML:metadata:ui" xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" xmlns="urn:oasis:names:tc:SAML:2.0:metadata" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" entityID="https://sp.example.org/sp">
   <SPSSODescriptor AuthnRequestsSigned="true" protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol">
     <Extensions>
       <idpdisc:DiscoveryResponse xmlns:idpdisc="urn:oasis:names:tc:SAML:profiles:SSO:idp-discovery-protocol" Binding="urn:oasis:names:tc:SAML:profiles:SSO:idp-discovery-protocol" Location="https://discovery.example.org/" index="1"/>
@@ -220,12 +225,14 @@ rKLt+NcwtbkI6weLISJu9lFZnPMYT7LpqDWD4aMHHUWr8THO0T6mbCeQRYMlfSpU
     <OrganizationURL xml:lang="en">https://corp.example.org/en/</OrganizationURL>
     <OrganizationURL xml:lang="sv">https://corp.example.org/sv/</OrganizationURL>
   </Organization>
-</EntityDescriptor>""")
+</EntityDescriptor>"""
+    )
 
 
-@then(u'the page will have metadata 2')
+@then("the page will have metadata 2")
 def check_for_validated_metadata(context):
-    assert context.browser.is_text_present("""<EntityDescriptor xmlns:ds="http://www.w3.org/2000/09/xmldsig#" xmlns:mdattr="urn:oasis:names:tc:SAML:metadata:attribute" xmlns:mdui="urn:oasis:names:tc:SAML:metadata:ui" xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" xmlns="urn:oasis:names:tc:SAML:2.0:metadata" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" entityID="https://sp.example.org/sp">
+    assert context.browser.is_text_present(
+        """<EntityDescriptor xmlns:ds="http://www.w3.org/2000/09/xmldsig#" xmlns:mdattr="urn:oasis:names:tc:SAML:metadata:attribute" xmlns:mdui="urn:oasis:names:tc:SAML:metadata:ui" xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" xmlns="urn:oasis:names:tc:SAML:2.0:metadata" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" entityID="https://sp.example.org/sp">
   <Extensions>
     <mdattr:EntityAttributes>
       <saml:Attribute Name="http://shibboleth.net/ns/profiles/saml2/sso/browser/signResponses" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri">
@@ -302,4 +309,5 @@ def check_for_validated_metadata(context):
     <OrganizationURL xml:lang="en">https://corp.example.org/en/</OrganizationURL>
     <OrganizationURL xml:lang="sv">https://corp.example.org/sv/</OrganizationURL>
   </Organization>
-</EntityDescriptor>""")
+</EntityDescriptor>"""
+    )

@@ -6,31 +6,30 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('rr', '0009_auto_20180104_0806'),
+        ("rr", "0009_auto_20180104_0806"),
     ]
 
     operations = [
         migrations.RemoveField(
-            model_name='attribute',
-            name='oid',
+            model_name="attribute",
+            name="oid",
         ),
         migrations.AddField(
-            model_name='attribute',
-            name='attributeid',
-            field=models.CharField(default='', max_length=255, verbose_name='Attribute ID'),
+            model_name="attribute",
+            name="attributeid",
+            field=models.CharField(default="", max_length=255, verbose_name="Attribute ID"),
             preserve_default=False,
         ),
         migrations.AddField(
-            model_name='attribute',
-            name='friendlyname',
-            field=models.CharField(default='', max_length=255, verbose_name='Attribute FriendlyName'),
+            model_name="attribute",
+            name="friendlyname",
+            field=models.CharField(default="", max_length=255, verbose_name="Attribute FriendlyName"),
             preserve_default=False,
         ),
         migrations.AlterField(
-            model_name='attribute',
-            name='name',
-            field=models.CharField(max_length=255, verbose_name='Attribute OID'),
+            model_name="attribute",
+            name="name",
+            field=models.CharField(max_length=255, verbose_name="Attribute OID"),
         ),
     ]

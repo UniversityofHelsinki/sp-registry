@@ -4,12 +4,11 @@ Functions for genereating metadata of service providers
 import logging
 
 from cryptography.hazmat.primitives.serialization import Encoding
-from lxml import etree
-
 from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.utils import timezone
 from django.utils.translation import ugettext as _
+from lxml import etree
 
 from rr.models.attribute import Attribute
 from rr.models.certificate import Certificate, load_certificate
@@ -96,20 +95,28 @@ def metadata_parser_entityattributes(sp, element):
     element: lxml element which is parsed
     """
     for child in element:
-        if etree.QName(child.tag).localname == "Attribute" and  etree.QName(child[0].tag).localname == "AttributeValue":
-            if (child.get("Name") == "http://shibboleth.net/ns/profiles/defaultAuthenticationMethods" and
-                    child[0].text == settings.MFA_AUTHENTICATION_CONTEXT):
+        if etree.QName(child.tag).localname == "Attribute" and etree.QName(child[0].tag).localname == "AttributeValue":
+            if (
+                child.get("Name") == "http://shibboleth.net/ns/profiles/defaultAuthenticationMethods"
+                and child[0].text == settings.MFA_AUTHENTICATION_CONTEXT
+            ):
                 sp.force_mfa = True
             if child.get("Name") == "http://shibboleth.net/ns/profiles/nameIDFormatPrecedence":
                 sp.force_nameidformat = True
-            if (child.get("Name") == "http://shibboleth.net/ns/profiles/saml2/sso/browser/signResponses" and
-                    child[0].text == "false"):
+            if (
+                child.get("Name") == "http://shibboleth.net/ns/profiles/saml2/sso/browser/signResponses"
+                and child[0].text == "false"
+            ):
                 sp.sign_responses = False
-            if (child.get("Name") == "http://shibboleth.net/ns/profiles/saml2/sso/browser/encryptAssertions" and
-                    child[0].text == "false"):
+            if (
+                child.get("Name") == "http://shibboleth.net/ns/profiles/saml2/sso/browser/encryptAssertions"
+                and child[0].text == "false"
+            ):
                 sp.encrypt_assertions = False
-            if (child.get("Name") == "http://shibboleth.net/ns/profiles/securityConfiguration" and
-                    child[0].text == "shibboleth.SecurityConfiguration.SHA1"):
+            if (
+                child.get("Name") == "http://shibboleth.net/ns/profiles/securityConfiguration"
+                and child[0].text == "shibboleth.SecurityConfiguration.SHA1"
+            ):
                 sp.force_sha1 = True
 
 
@@ -146,17 +153,17 @@ def metadata_parser_keydescriptor(sp, element, validate, errors):
         encryption = True
     for child in element.iter(tag="{*}X509Certificate"):
         cert = load_certificate(child.text.strip())
-        certificate = cert.public_bytes(Encoding.PEM).decode("utf-8").replace(
-            "-----BEGIN CERTIFICATE-----\n", "").replace("-----END CERTIFICATE-----\n", "")
-        if (not Certificate.objects.filter(certificate=certificate,
-                                           sp=sp,
-                                           signing=signing,
-                                           encryption=encryption) and not
-                Certificate.objects.add_certificate(certificate=certificate,
-                                                    sp=sp,
-                                                    signing=signing,
-                                                    encryption=encryption,
-                                                    validate=validate)):
+        certificate = (
+            cert.public_bytes(Encoding.PEM)
+            .decode("utf-8")
+            .replace("-----BEGIN CERTIFICATE-----\n", "")
+            .replace("-----END CERTIFICATE-----\n", "")
+        )
+        if not Certificate.objects.filter(
+            certificate=certificate, sp=sp, signing=signing, encryption=encryption
+        ) and not Certificate.objects.add_certificate(
+            certificate=certificate, sp=sp, signing=signing, encryption=encryption, validate=validate
+        ):
             errors.append(sp.entity_id + " : " + _("Could not add certificate"))
 
 
@@ -172,8 +179,7 @@ def metadata_parser_nameidformat(sp, element, errors):
         nameid = NameIDFormat.objects.get(nameidformat=element.text)
         sp.nameidformat.add(nameid)
     except NameIDFormat.DoesNotExist:
-        errors.append(
-            sp.entity_id + " : " + _("Unsupported nameid-format") + " : " + str(element.text))
+        errors.append(sp.entity_id + " : " + _("Unsupported nameid-format") + " : " + str(element.text))
 
 
 def metadata_parser_servicetype(sp, element, validate, errors, servicetype, disable_checks):
@@ -189,7 +195,7 @@ def metadata_parser_servicetype(sp, element, validate, errors, servicetype, disa
     """
     binding = element.get("Binding")
     location = element.get("Location")
-    response_location = element.get("ResponseLocation", '')
+    response_location = element.get("ResponseLocation", "")
     default = element.get("isDefault")
     index = _parse_index(element)
     if default and default.lower() == "true" and index:
@@ -198,36 +204,56 @@ def metadata_parser_servicetype(sp, element, validate, errors, servicetype, disa
         is_default = False
     if not disable_checks and binding not in [i[0] for i in Endpoint.BINDINGCHOICES]:
         errors.append(
-            sp.entity_id + " : " +
-            _("Unsupported binding, please contact IdP admins if you really need this") +
-            " : " + binding)
+            sp.entity_id
+            + " : "
+            + _("Unsupported binding, please contact IdP admins if you really need this")
+            + " : "
+            + binding
+        )
     else:
-        if ((Endpoint.objects.filter(
-                sp=sp, type=servicetype, binding=binding, location=location, end_at=None).exists()) or
-                (index and Endpoint.objects.filter(
-                    sp=sp, type=servicetype, binding=binding, index=index, end_at=None).exists()) or
-                (is_default and Endpoint.objects.filter(
-                    sp=sp, type=servicetype, binding=binding, is_default=True, end_at=None).exists())):
+        if (
+            (
+                Endpoint.objects.filter(
+                    sp=sp, type=servicetype, binding=binding, location=location, end_at=None
+                ).exists()
+            )
+            or (
+                index
+                and Endpoint.objects.filter(
+                    sp=sp, type=servicetype, binding=binding, index=index, end_at=None
+                ).exists()
+            )
+            or (
+                is_default
+                and Endpoint.objects.filter(
+                    sp=sp, type=servicetype, binding=binding, is_default=True, end_at=None
+                ).exists()
+            )
+        ):
             return
         try:
             if validate:
-                Endpoint.objects.create(sp=sp,
-                                        type=servicetype,
-                                        binding=binding,
-                                        location=location,
-                                        response_location=response_location,
-                                        index=index,
-                                        is_default=is_default,
-                                        validated=timezone.now())
+                Endpoint.objects.create(
+                    sp=sp,
+                    type=servicetype,
+                    binding=binding,
+                    location=location,
+                    response_location=response_location,
+                    index=index,
+                    is_default=is_default,
+                    validated=timezone.now(),
+                )
             else:
-                Endpoint.objects.create(sp=sp,
-                                        type=servicetype,
-                                        binding=binding,
-                                        location=location,
-                                        response_location=response_location,
-                                        index=index,
-                                        is_default=is_default,
-                                        validated=None)
+                Endpoint.objects.create(
+                    sp=sp,
+                    type=servicetype,
+                    binding=binding,
+                    location=location,
+                    response_location=response_location,
+                    index=index,
+                    is_default=is_default,
+                    validated=None,
+                )
         except ValidationError:
             errors.append(sp.entity_id + " : " + _("Could not add") + " : " + servicetype)
 
@@ -284,17 +310,14 @@ def _parse_attribute(sp, element, validate, errors):
                         sp=sp,
                         attribute=attribute,
                         reason="initial dump, please give the real reason",
-                        validated=timezone.now())
+                        validated=timezone.now(),
+                    )
                 else:
                     SPAttribute.objects.create(
-                        sp=sp,
-                        attribute=attribute,
-                        reason="initial dump, please give the real reason",
-                        validated=None)
+                        sp=sp, attribute=attribute, reason="initial dump, please give the real reason", validated=None
+                    )
         else:
-            errors.append(
-                sp.entity_id + " : " +
-                _("Could not add attribute") + " : " + friendly_name + ", " + name)
+            errors.append(sp.entity_id + " : " + _("Could not add attribute") + " : " + friendly_name + ", " + name)
     return errors
 
 
@@ -319,11 +342,9 @@ def metadata_parser_ssodescriptor(sp, element, validate, errors, disable_checks)
             metadata_parser_keydescriptor(sp, child, validate, errors)
         if etree.QName(child.tag).localname == "NameIDFormat":
             metadata_parser_nameidformat(sp, child, errors)
-        for servicetype in ["ArtifactResolutionService", "SingleLogoutService",
-                            "AssertionConsumerService"]:
+        for servicetype in ["ArtifactResolutionService", "SingleLogoutService", "AssertionConsumerService"]:
             if etree.QName(child.tag).localname == servicetype:
-                metadata_parser_servicetype(sp, child, validate, errors, servicetype,
-                                            disable_checks)
+                metadata_parser_servicetype(sp, child, validate, errors, servicetype, disable_checks)
         if etree.QName(child.tag).localname == "AttributeConsumingService":
             metadata_parser_attributeconsumingservice(sp, child, validate, errors)
 
@@ -339,22 +360,25 @@ def metadata_parser_contact(sp, element, validate):
     contact_type = element.get("contactType")
     if contact_type == "technical" or contact_type == "administrative" or contact_type == "support":
         first_name, last_name, email = _parse_contact_info(element)
-        if not Contact.objects.filter(sp=sp, type=contact_type, firstname=first_name,
-                                      lastname=last_name, email=email).exists() and email:
+        if (
+            not Contact.objects.filter(
+                sp=sp, type=contact_type, firstname=first_name, lastname=last_name, email=email
+            ).exists()
+            and email
+        ):
             if validate:
-                Contact.objects.create(sp=sp,
-                                       type=contact_type,
-                                       firstname=first_name,
-                                       lastname=last_name,
-                                       email=email,
-                                       validated=timezone.now())
+                Contact.objects.create(
+                    sp=sp,
+                    type=contact_type,
+                    firstname=first_name,
+                    lastname=last_name,
+                    email=email,
+                    validated=timezone.now(),
+                )
             else:
-                Contact.objects.create(sp=sp,
-                                       type=contact_type,
-                                       firstname=first_name,
-                                       lastname=last_name,
-                                       email=email,
-                                       validated=None)
+                Contact.objects.create(
+                    sp=sp, type=contact_type, firstname=first_name, lastname=last_name, email=email, validated=None
+                )
 
 
 def _parse_contact_info(element):
@@ -422,11 +446,13 @@ def _get_sp(entity_id, errors, validate, overwrite, verbosity):
                 errors.append(entity_id + " : " + _("EntityID already exists, overwriting"))
     except ServiceProvider.DoesNotExist:
         if validate:
-            sp = ServiceProvider.objects.create(entity_id=entity_id, service_type="saml",
-                                                validated=timezone.now(), modified=False)
+            sp = ServiceProvider.objects.create(
+                entity_id=entity_id, service_type="saml", validated=timezone.now(), modified=False
+            )
         else:
-            sp = ServiceProvider.objects.create(entity_id=entity_id, service_type="saml",
-                                                validated=None, modified=True)
+            sp = ServiceProvider.objects.create(
+                entity_id=entity_id, service_type="saml", validated=None, modified=True
+            )
         if verbosity > 2:
             errors.append(entity_id + " : " + _("EntityID does not exist, creating"))
     return sp, errors

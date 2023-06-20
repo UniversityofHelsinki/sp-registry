@@ -3,12 +3,12 @@
 {% load static %}
 {% load bootstrap4 %}
 {% block content %}
-<h1>{% trans "Technical information" %} - <small>{{ object.display_identifier }}</small></h1>
-<div class="alert alert-success" role="alert">
-<p>{% trans "Techical attributes for your service provider." %}</p>
-</div>
+  <h1>{% trans "Technical information" %} - <small>{{ object.display_identifier }}</small></h1>
+  <div class="alert alert-success" role="alert">
+    <p>{% trans "Techical attributes for your service provider." %}</p>
+  </div>
 
-<form action="" method="post" class="form">
+  <form action="" method="post" class="form">
     {% csrf_token %}
     {% bootstrap_form_errors form type='non_fields' %}
     {% bootstrap_field form.uses_ldapauth layout='horizontal' %}
@@ -23,31 +23,31 @@
     {% bootstrap_field form.local_storage_groups layout='horizontal' %}
     {% bootstrap_field form.production layout='horizontal' %}
     {% buttons %}
-    <p><button type="submit" class="btn btn-primary">{% trans "Save" %}</button></p>
+      <p><button type="submit" class="btn btn-primary">{% trans "Save" %}</button></p>
     {% endbuttons %}
-</form>
+  </form>
 {% endblock %}
 {% block javascript %}
-<script src="{% static "js/jquery.are-you-sure.js" %}"></script>
-<script>
-$(function() {
-    $('form').areYouSure( {'message':'{% trans "You have modified the form without saving it." %}'} );
-})
-$(function() {
-  if (!$(".hideCheck1").is(':checked')) {
-	$(".hidden1").hide();
-  }
-  if (!$(".hideCheck2").is(':checked')) {
-	$(".hidden2").hide();
-  }
-  $("input[type=checkbox]").change(function() {
-	var hidden = $(".hidden" + $(this).attr("class").replace("hideCheck", ""));
-    if ($(this).is(':checked')) {
-      hidden.show();
-    } else {
-      hidden.hide();
-    }
-  });
-});
-</script>
+  <script src="{% static "js/jquery.are-you-sure.js" %}"></script>
+  <script>
+      $(function() {
+          $('form').areYouSure( {'message':'{% trans "You have modified the form without saving it." %}'} );
+      })
+      $(function() {
+          if (!$(".hideCheck1").is(':checked')) {
+              $(".hidden1").hide();
+          }
+          if (!$(".hideCheck2").is(':checked')) {
+              $(".hidden2").hide();
+          }
+          $("input[type=checkbox]").change(function() {
+              var hidden = $(".hidden" + $(this).attr("class").replace("hideCheck", ""));
+              if ($(this).is(':checked')) {
+                  hidden.show();
+              } else {
+                  hidden.hide();
+              }
+          });
+      });
+  </script>
 {% endblock %}

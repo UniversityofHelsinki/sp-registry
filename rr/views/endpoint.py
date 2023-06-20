@@ -45,31 +45,30 @@ def endpoint_list(request, pk):
         elif "remove_endpoint" in request.POST:
             _remove_endpoints(request, sp)
     endpoints = Endpoint.objects.filter(sp=sp, end_at=None)
-    return render(request, "rr/endpoint.html", {'object_list': endpoints,
-                                                'form': form,
-                                                'object': sp})
+    return render(request, "rr/endpoint.html", {"object_list": endpoints, "form": form, "object": sp})
 
 
 def _add_endpoint(request, sp):
     form = EndpointForm(request.POST, sp=sp)
     if form.is_valid():
-        contact_type = form.cleaned_data['type']
-        binding = form.cleaned_data['binding']
-        location = form.cleaned_data['location']
-        response_location = form.cleaned_data['response_location']
-        index = form.cleaned_data['index']
-        is_default = form.cleaned_data['is_default']
-        Endpoint.objects.create(sp=sp,
-                                type=contact_type,
-                                binding=binding,
-                                location=location,
-                                response_location=response_location,
-                                index=index,
-                                is_default=is_default)
+        contact_type = form.cleaned_data["type"]
+        binding = form.cleaned_data["binding"]
+        location = form.cleaned_data["location"]
+        response_location = form.cleaned_data["response_location"]
+        index = form.cleaned_data["index"]
+        is_default = form.cleaned_data["is_default"]
+        Endpoint.objects.create(
+            sp=sp,
+            type=contact_type,
+            binding=binding,
+            location=location,
+            response_location=response_location,
+            index=index,
+            is_default=is_default,
+        )
         sp.save_modified()
-        logger.info("Endpoint added for {sp} by {user}"
-                    .format(sp=sp, user=request.user))
-        messages.add_message(request, messages.INFO, _('Endpoint added.'))
+        logger.info("Endpoint added for {sp} by {user}".format(sp=sp, user=request.user))
+        messages.add_message(request, messages.INFO, _("Endpoint added."))
         form = EndpointForm(sp=sp)
     return form
 
@@ -82,6 +81,5 @@ def _remove_endpoints(request, sp):
                 endpoint.end_at = timezone.now()
                 endpoint.save()
                 sp.save_modified()
-                logger.info("Endpoint removed from {sp} by {user}"
-                            .format(sp=sp, user=request.user))
-                messages.add_message(request, messages.INFO, _('Endpoint removed.'))
+                logger.info("Endpoint removed from {sp} by {user}".format(sp=sp, user=request.user))
+                messages.add_message(request, messages.INFO, _("Endpoint removed."))

@@ -2,31 +2,31 @@
 {% load i18n %}
 {% load bootstrap4 %}
 {% block content %}
-<h1>{% trans "Test user" %}</h1>
-<div class="alert alert-success" role="alert">
-<p>{% trans "Listing all attributes requested by this service provider." %}</p>
-</div>
-<h2>{% trans "Username" %}: {{ testuser }}</h2>
-<form action="" method="post" class="form">
+  <h1>{% trans "Test user" %}</h1>
+  <div class="alert alert-success" role="alert">
+    <p>{% trans "Listing all attributes requested by this service provider." %}</p>
+  </div>
+  <h2>{% trans "Username" %}: {{ testuser }}</h2>
+  <form action="" method="post" class="form">
     {% csrf_token %}
     {% bootstrap_form user_update_form layout='horizontal' %}
     {% buttons %}
-    <p><button type="submit" name="update_user" class="btn btn-primary">{% trans "Update" %}</button></p>
+      <p><button type="submit" name="update_user" class="btn btn-primary">{% trans "Update" %}</button></p>
     {% endbuttons %}
-</form>
-<h2>{% trans "Attribute values" %}</h2>
-<div class="alert alert-info" role="alert">
-<p>{% trans "Multiple values can be separated by semicolon. If you don't find the attribute here, please check that the attribute is enabled for this SP in the Attributes page." %}</p>
-</div>
-<form action="" method='POST'>
-{% csrf_token %}
-<p><input class="btn btn-primary" type="submit" name="reset_userdata" value="{% trans "Reset name based data" %}" /> <input class="btn btn-primary" type="submit" name="reset_otherdata" value="{% trans "Reset other data with random values" %}" /></p>
-</form>
-<form action="" method="post" class="form">
+  </form>
+  <h2>{% trans "Attribute values" %}</h2>
+  <div class="alert alert-info" role="alert">
+    <p>{% trans "Multiple values can be separated by semicolon. If you don't find the attribute here, please check that the attribute is enabled for this SP in the Attributes page." %}</p>
+  </div>
+  <form action="" method='POST'>
+    {% csrf_token %}
+    <p><input class="btn btn-primary" type="submit" name="reset_userdata" value="{% trans "Reset name based data" %}" /> <input class="btn btn-primary" type="submit" name="reset_otherdata" value="{% trans "Reset other data with random values" %}" /></p>
+  </form>
+  <form action="" method="post" class="form">
     {% csrf_token %}
     {% bootstrap_form form layout='horizontal' %}
     {% buttons %}
-    <p><button type="submit" name="save_data" class="btn btn-primary">{% trans "Save" %}</button></p>
+      <p><button type="submit" name="save_data" class="btn btn-primary">{% trans "Save" %}</button></p>
     {% endbuttons %}
-</form>
+  </form>
 {% endblock %}

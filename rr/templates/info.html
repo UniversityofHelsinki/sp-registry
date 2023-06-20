@@ -2,12 +2,12 @@
 {% load i18n %}
 
 {% block content %}
-   <h1>{% trans "For your information" %}</h1>
-   {% if info_message %}
-     <p>{{ info_message }}</p>
-   {% endif %}
-   {% if contact %}
-     <p>Please contact {{ contact }} for more information.</p>
-   {% endif %}
-   <p><a href="/">Return to front page.</a></p>
+  <h1>{% trans "For your information" %}</h1>
+  {% if info_message %}
+    <p>{{ info_message }}</p>
+  {% endif %}
+  {% if contact %}
+    <p>Please contact {{ contact }} for more information.</p>
+  {% endif %}
+  <p><a href="/">Return to front page.</a></p>
 {% endblock %}

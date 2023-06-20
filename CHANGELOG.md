@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.11.0] - 2022-11-08
+### Changes
+* Requirements version updates
+* Add automatic account activation by group
+* Add contacts to attribute admin view
+
 ## [1.10.0] - 2022-08-05
 ### Changes
 * Requirements version updates

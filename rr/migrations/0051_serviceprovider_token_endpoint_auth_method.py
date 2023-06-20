@@ -4,15 +4,25 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('rr', '0050_serviceprocider_add_jwks_and_jwks_uri'),
+        ("rr", "0050_serviceprocider_add_jwks_and_jwks_uri"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='serviceprovider',
-            name='token_endpoint_auth_method',
-            field=models.CharField(blank=True, choices=[('client_secret_basic', 'client_secret_basic'), ('client_secret_post', 'client_secret_post'), ('client_secret_jwt', 'client_secret_jwt'), ('private_key_jwt', 'private_key_jwt'), ('none', 'none')], max_length=19, verbose_name='Token endpoint authentication method'),
+            model_name="serviceprovider",
+            name="token_endpoint_auth_method",
+            field=models.CharField(
+                blank=True,
+                choices=[
+                    ("client_secret_basic", "client_secret_basic"),
+                    ("client_secret_post", "client_secret_post"),
+                    ("client_secret_jwt", "client_secret_jwt"),
+                    ("private_key_jwt", "private_key_jwt"),
+                    ("none", "none"),
+                ],
+                max_length=19,
+                verbose_name="Token endpoint authentication method",
+            ),
         ),
     ]

@@ -6,34 +6,33 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('rr', '0020_auto_20180122_1334'),
+        ("rr", "0020_auto_20180122_1334"),
     ]
 
     operations = [
         migrations.RemoveField(
-            model_name='serviceprovider',
-            name='encyrpt_attribute_assertions',
+            model_name="serviceprovider",
+            name="encyrpt_attribute_assertions",
         ),
         migrations.AddField(
-            model_name='serviceprovider',
-            name='encyrpt_assertions',
-            field=models.BooleanField(default=True, verbose_name='Encrypt SSO assertions'),
+            model_name="serviceprovider",
+            name="encyrpt_assertions",
+            field=models.BooleanField(default=True, verbose_name="Encrypt SSO assertions"),
         ),
         migrations.AddField(
-            model_name='serviceprovider',
-            name='sign_assertions',
-            field=models.BooleanField(default=True, verbose_name='Sign SSO response messages'),
+            model_name="serviceprovider",
+            name="sign_assertions",
+            field=models.BooleanField(default=True, verbose_name="Sign SSO response messages"),
         ),
         migrations.AddField(
-            model_name='serviceprovider',
-            name='sign_requests',
-            field=models.BooleanField(default=False, verbose_name='Sign SSO request message'),
+            model_name="serviceprovider",
+            name="sign_requests",
+            field=models.BooleanField(default=False, verbose_name="Sign SSO request message"),
         ),
         migrations.AddField(
-            model_name='serviceprovider',
-            name='sign_responses',
-            field=models.BooleanField(default=False, verbose_name='Sign SSO assertions within a message'),
+            model_name="serviceprovider",
+            name="sign_responses",
+            field=models.BooleanField(default=False, verbose_name="Sign SSO assertions within a message"),
         ),
     ]

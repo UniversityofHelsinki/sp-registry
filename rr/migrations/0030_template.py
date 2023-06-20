@@ -6,18 +6,17 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('rr', '0029_auto_20180220_0816'),
+        ("rr", "0029_auto_20180220_0816"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='Template',
+            name="Template",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('title', models.CharField(blank=True, max_length=78, null=True, verbose_name='Message title')),
-                ('body', models.TextField(blank=True, null=True, verbose_name='Message body')),
+                ("id", models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name="ID")),
+                ("title", models.CharField(blank=True, max_length=78, null=True, verbose_name="Message title")),
+                ("body", models.TextField(blank=True, null=True, verbose_name="Message body")),
             ],
         ),
     ]

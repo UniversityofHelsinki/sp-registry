@@ -2,9 +2,7 @@ from .common import *
 
 DEBUG = True
 
-INSTALLED_APPS += (
-    'behave_django',
-)
+INSTALLED_APPS += ("behave_django",)
 
 SESSION_COOKIE_SECURE = False
 CSRF_COOKIE_SECURE = False

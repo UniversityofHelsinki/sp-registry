@@ -7,10 +7,10 @@ from rr.models.redirecturi import RedirectUri, redirecturi_validator
 class RedirectUriForm(ModelForm):
     class Meta:
         model = RedirectUri
-        fields = ['uri']
+        fields = ["uri"]
 
     def __init__(self, *args, **kwargs):
-        self.sp = kwargs.pop('sp', None)
+        self.sp = kwargs.pop("sp", None)
         super(RedirectUriForm, self).__init__(*args, **kwargs)
 
     def clean(self):

@@ -6,25 +6,24 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('rr', '0015_keystore'),
+        ("rr", "0015_keystore"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='certificate',
-            name='validated',
-            field=models.DateTimeField(blank=True, null=True, verbose_name='Validated on'),
+            model_name="certificate",
+            name="validated",
+            field=models.DateTimeField(blank=True, null=True, verbose_name="Validated on"),
         ),
         migrations.AddField(
-            model_name='contact',
-            name='validated',
-            field=models.DateTimeField(blank=True, null=True, verbose_name='Validated on'),
+            model_name="contact",
+            name="validated",
+            field=models.DateTimeField(blank=True, null=True, verbose_name="Validated on"),
         ),
         migrations.AddField(
-            model_name='endpoint',
-            name='validated',
-            field=models.DateTimeField(blank=True, null=True, verbose_name='Validated on'),
+            model_name="endpoint",
+            name="validated",
+            field=models.DateTimeField(blank=True, null=True, verbose_name="Validated on"),
         ),
     ]

@@ -14,6 +14,7 @@ class KeystoreManager(models.Manager):
     """
     Manager for Keystore
     """
+
     def create_key(self, sp, creator, email):
         """
         Creates invitation key for a SP
@@ -24,11 +25,12 @@ class KeystoreManager(models.Manager):
         """
         import hashlib
         import random
+
         from dateutil.relativedelta import relativedelta
+
         date = timezone.now() + relativedelta(months=1)
-        activation_key = hashlib.sha1(str(random.random()).encode('utf-8')).hexdigest()
-        key = self.create(sp=sp, creator=creator, activation_key=activation_key, email=email,
-                          valid_until=date)
+        activation_key = hashlib.sha1(str(random.random()).encode("utf-8")).hexdigest()
+        key = self.create(sp=sp, creator=creator, activation_key=activation_key, email=email, valid_until=date)
         return key
 
     def activate_key(self, user, key):
@@ -45,8 +47,7 @@ class KeystoreManager(models.Manager):
             keystore.delete()
             return False
         keystore.sp.admins.add(user)
-        logger.info("Invite for for {sp} was activated by {user}".format(sp=keystore.sp,
-                                                                         user=user))
+        logger.info("Invite for for {sp} was activated by {user}".format(sp=keystore.sp, user=user))
         sp = keystore.sp.pk
         keystore.delete()
         return sp
@@ -56,10 +57,11 @@ class Keystore(models.Model):
     """
     Stores a single invite, related to :model:`rr.ServiceProvider` and :model:`auth.User`
     """
-    sp = models.ForeignKey(ServiceProvider, related_name='keys', on_delete=models.CASCADE)
-    creator = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name=_('Creator'))
-    activation_key = models.CharField(max_length=40, verbose_name=_('Activation key'))
-    valid_until = models.DateField(verbose_name=_('Valid until date'))
-    email = models.EmailField(verbose_name=_('Email address'))
+
+    sp = models.ForeignKey(ServiceProvider, related_name="keys", on_delete=models.CASCADE)
+    creator = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name=_("Creator"))
+    activation_key = models.CharField(max_length=40, verbose_name=_("Activation key"))
+    valid_until = models.DateField(verbose_name=_("Valid until date"))
+    email = models.EmailField(verbose_name=_("Email address"))
 
     objects = KeystoreManager()

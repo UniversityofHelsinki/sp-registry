@@ -3,74 +3,74 @@
 {% load bootstrap4 %}
 {% load static %}
 {% block content %}
-<h1 class="page-header" id="login-statistics">{% trans "Login Statistics" %} - <small>{{ object.display_identifier }}</small></h1>
+  <h1 class="page-header" id="login-statistics">{% trans "Login Statistics" %} - <small>{{ object.display_identifier }}</small></h1>
   <div>
     <a href="{% url 'statistics-list' object.pk %}?days=7" class="btn {% if days == 7 %}btn-success{% else %}btn-primary{% endif %}">{% trans "Week" %}</a>
     <a href="{% url 'statistics-list' object.pk %}?days=31" class="btn {% if days == 31 %}btn-success{% else %}btn-primary{% endif %}">{% trans "Month" %}</a>
     <a href="{% url 'statistics-list' object.pk %}?days=365" class="btn {% if days == 365 %}btn-success{% else %}btn-primary{% endif %}">{% trans "Year" %}</a>
     <a href="{% url 'statistics-list' object.pk %}?days=0" class="btn {% if days == 0 %}btn-success{% else %}btn-primary{% endif %}">{% trans "All" %}</a>
   </div>
-{% if object_list %}
-  <canvas id="statschart" width="75" height="50"></canvas>
-  <p><button type="button" class="btn btn-primary" name="collapsesaml" data-toggle="collapse" data-target=".collapsetable">{% trans "Show table" %}</button></p>
-  <table class="table table-sm table-responsive collapse out collapsetable" aria-describedby="login-statistics">
-  <thead>
-    <tr>
-      <th scope="col">{% trans "Date" %}</th>
-      <th scope="col">{% trans "Number of logins" %}</th>
-      <th scope="col">{% trans "Unique users" %}</th>
-    </tr>
-  </thead>
-  <tbody>
-{% for stats in object_list %}
-    <tr>
-      <th scope="row">{{ stats.date }}</th>
-      <td>{{ stats.logins }}</td>
-      <td>{{ stats.users }}</td>
-    </tr>
-{% endfor %}
-  </tbody>
-</table>
-{% else %}
-<p>{% trans "No statistics" %}</p>
-{% endif %}
+  {% if object_list %}
+    <canvas id="statschart" width="75" height="50"></canvas>
+    <p><button type="button" class="btn btn-primary" name="collapsesaml" data-toggle="collapse" data-target=".collapsetable">{% trans "Show table" %}</button></p>
+    <table class="table table-sm table-responsive collapse out collapsetable" aria-describedby="login-statistics">
+      <thead>
+      <tr>
+        <th scope="col">{% trans "Date" %}</th>
+        <th scope="col">{% trans "Number of logins" %}</th>
+        <th scope="col">{% trans "Unique users" %}</th>
+      </tr>
+      </thead>
+      <tbody>
+      {% for stats in object_list %}
+        <tr>
+          <th scope="row">{{ stats.date }}</th>
+          <td>{{ stats.logins }}</td>
+          <td>{{ stats.users }}</td>
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  {% else %}
+    <p>{% trans "No statistics" %}</p>
+  {% endif %}
 {% endblock %}
 {% block javascript %}
   <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js" integrity="sha256-4iQZ6BVL4qNKlQ27TExEhBN1HFPvAvAMbFavKKosSWQ=" crossorigin="anonymous"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.js" integrity="sha256-arMsf+3JJK2LoTGqxfnuJPFTU4hAK57MtIPdFpiHXOU=" crossorigin="anonymous"></script>
   <script type="text/javascript">
-    let a = document.getElementById('statschart').getContext('2d');
-    let myLineChart = new Chart(a, {
-      type: 'line',
-      data: {
-        labels: [{% for i in object_list %}"{{ i.date|date:"Y-m-d" }}",{% endfor %}],
-        datasets: [{
-          label: '{% trans "Number of logins" %}',
-          data: [{% for i in object_list %}{{ i.logins }},{% endfor %}],
-          borderColor: '#28a745',
-        },
-        {
-          label: '{% trans "Unique users" %}',
-          data: [{% for i in object_list %}{% if i.users %}{{ i.users }}{% else %}0{% endif %},{% endfor %}],
-          borderColor: '#007bff',
-        }]
-      },
-      options: {
-        scales: {
-          xAxes: [{
-                type: 'time',
-                time: {
-                    unit: 'week'
-                }
-          }],
-          yAxes: [{
-            ticks: {
-              beginAtZero: true
-            }
-          }]
-        }
-      }
-    });
+      let a = document.getElementById('statschart').getContext('2d');
+      let myLineChart = new Chart(a, {
+          type: 'line',
+          data: {
+              labels: [{% for i in object_list %}"{{ i.date|date:"Y-m-d" }}",{% endfor %}],
+              datasets: [{
+                  label: '{% trans "Number of logins" %}',
+                  data: [{% for i in object_list %}{{ i.logins }},{% endfor %}],
+                  borderColor: '#28a745',
+              },
+                  {
+                      label: '{% trans "Unique users" %}',
+                      data: [{% for i in object_list %}{% if i.users %}{{ i.users }}{% else %}0{% endif %},{% endfor %}],
+                      borderColor: '#007bff',
+                  }]
+          },
+          options: {
+              scales: {
+                  xAxes: [{
+                      type: 'time',
+                      time: {
+                          unit: 'week'
+                      }
+                  }],
+                  yAxes: [{
+                      ticks: {
+                          beginAtZero: true
+                      }
+                  }]
+              }
+          }
+      });
   </script>
 
 {% endblock %}

@@ -16,7 +16,7 @@ def get_item(value, arg):
     """
     if hasattr(value, str(arg)):
         return getattr(value, arg)
-    elif hasattr(value, 'has_key') and value in arg:
+    elif hasattr(value, "has_key") and value in arg:
         return value[arg]
     elif numeric_test.match(str(arg)) and len(value) > int(arg):
         return value[int(arg)]

@@ -45,27 +45,20 @@ def contact_list(request, pk):
         elif "remove_contact" in request.POST:
             _remove_contacts(request, sp)
     contacts = Contact.objects.filter(sp=sp, end_at=None)
-    return render(request, "rr/contact.html", {'object_list': contacts,
-                                               'form': form,
-                                               'object': sp})
+    return render(request, "rr/contact.html", {"object_list": contacts, "form": form, "object": sp})
 
 
 def _add_contact(request, sp):
     form = ContactForm(request.POST, sp=sp)
     if form.is_valid():
-        contact_type = form.cleaned_data['type']
-        firstname = form.cleaned_data['firstname']
-        lastname = form.cleaned_data['lastname']
-        email = form.cleaned_data['email']
-        Contact.objects.create(sp=sp,
-                               type=contact_type,
-                               firstname=firstname,
-                               lastname=lastname,
-                               email=email)
+        contact_type = form.cleaned_data["type"]
+        firstname = form.cleaned_data["firstname"]
+        lastname = form.cleaned_data["lastname"]
+        email = form.cleaned_data["email"]
+        Contact.objects.create(sp=sp, type=contact_type, firstname=firstname, lastname=lastname, email=email)
         sp.save_modified()
-        logger.info("Contact added for {sp} by {user}"
-                    .format(sp=sp, user=request.user))
-        messages.add_message(request, messages.INFO, _('Contact added.'))
+        logger.info("Contact added for {sp} by {user}".format(sp=sp, user=request.user))
+        messages.add_message(request, messages.INFO, _("Contact added."))
         form = ContactForm(sp=sp)
     return form
 
@@ -78,6 +71,5 @@ def _remove_contacts(request, sp):
                 contact.end_at = timezone.now()
                 contact.save()
                 sp.save_modified()
-                logger.info("Contact removed from {sp} by {user}"
-                            .format(sp=sp, user=request.user))
-                messages.add_message(request, messages.INFO, _('Contact removed.'))
+                logger.info("Contact removed from {sp} by {user}".format(sp=sp, user=request.user))
+                messages.add_message(request, messages.INFO, _("Contact removed."))

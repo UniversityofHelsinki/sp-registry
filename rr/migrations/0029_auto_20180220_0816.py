@@ -6,20 +6,19 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('rr', '0028_nameidformat_public'),
+        ("rr", "0028_nameidformat_public"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='serviceprovider',
-            name='sign_assertions',
-            field=models.BooleanField(default=False, verbose_name='Sign SSO assertions'),
+            model_name="serviceprovider",
+            name="sign_assertions",
+            field=models.BooleanField(default=False, verbose_name="Sign SSO assertions"),
         ),
         migrations.AlterField(
-            model_name='serviceprovider',
-            name='sign_responses',
-            field=models.BooleanField(default=True, verbose_name='Sign SSO responses'),
+            model_name="serviceprovider",
+            name="sign_responses",
+            field=models.BooleanField(default=True, verbose_name="Sign SSO responses"),
         ),
     ]

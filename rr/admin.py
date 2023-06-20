@@ -1,18 +1,18 @@
 from django.contrib import admin
+
 from rr.models.attribute import Attribute
 from rr.models.certificate import Certificate
 from rr.models.contact import Contact
 from rr.models.email import Template
 from rr.models.endpoint import Endpoint
 from rr.models.nameidformat import NameIDFormat
-from rr.models.oidc import GrantType, ResponseType, OIDCScope
+from rr.models.oidc import GrantType, OIDCScope, ResponseType
 from rr.models.organization import Organization
 from rr.models.serviceprovider import ServiceProvider, SPAttribute
 from rr.models.spadmin import Keystore
 from rr.models.statistics import Statistics
 from rr.models.testuser import TestUser, TestUserData
 from rr.models.usergroup import UserGroup
-
 
 admin.site.register(ServiceProvider)
 admin.site.register(Organization)

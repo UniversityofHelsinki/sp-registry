@@ -6,15 +6,14 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('rr', '0010_auto_20180108_1020'),
+        ("rr", "0010_auto_20180108_1020"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='spattribute',
-            name='end_at',
-            field=models.DateTimeField(blank=True, null=True, verbose_name='Entry end time'),
+            model_name="spattribute",
+            name="end_at",
+            field=models.DateTimeField(blank=True, null=True, verbose_name="Entry end time"),
         ),
     ]

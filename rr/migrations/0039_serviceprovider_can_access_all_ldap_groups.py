@@ -6,15 +6,14 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('rr', '0038_auto_20180927_1148'),
+        ("rr", "0038_auto_20180927_1148"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='serviceprovider',
-            name='can_access_all_ldap_groups',
-            field=models.BooleanField(default=False, verbose_name='Service requires access to all LDAP groups'),
+            model_name="serviceprovider",
+            name="can_access_all_ldap_groups",
+            field=models.BooleanField(default=False, verbose_name="Service requires access to all LDAP groups"),
         ),
     ]

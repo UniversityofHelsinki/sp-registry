@@ -3,60 +3,60 @@
 {% load bootstrap4 %}
 {% load static %}
 {% block content %}
-<h1>{% trans "Emails" %}</h1>
-{% if success %}
-<p>{% trans "Emails have been sent." %}</p>
-{% if errors %}
-<h2 id="sending-errors">{% trans "Sending errors." %}</h2>
-<table class="table table-sm table-responsive" aria-describedby="sending-errors">
-  <thead>
-    <tr>
-      <th scope="col">{% trans "Sending failed to following addresses:" %}</th>
-    </tr>
-  </thead>
-  <tbody>
-{% for email in errors %}
-    <tr>
-      <td>{{ email }}</td>
-    </tr>
-{% endfor %}
-  </tbody>
-</table>
-{% endif %}
-{% else %}
-{% if form %}
-<form action="" method="post" class="form">
-    {% csrf_token %}
-    {% bootstrap_form form layout='horizontal' %}
-    {% buttons %}
-    <p><button type="submit" name="show_message" class="btn btn-info">{% trans "List emails / Show message" %}</button> {% if subject and message %}<button type="submit" name="send_email" class="btn btn-warning">{% trans "Send email" %}</button> {% endif %}</p>
-    {% endbuttons %}
-</form>
-{% endif %}
-{% if subject %}
-<h2>{% trans "Subject" %}</h2>
-<pre>{{ subject }}</pre>
-{% endif %}
-{% if message %}
-<h2>{% trans "Message" %}</h2>
-<pre>{{ message }}</pre>
-{% endif %}
-{% if object_list %}
-<h2 id="address-list">{% trans "Email addresses" %}</h2>
-<table class="table table-sm table-responsive" aria-describedby="address-list">
-  <thead>
-    <tr>
-      <th scope="col">{% trans "Address" %}</th>
-    </tr>
-  </thead>
-  <tbody>
-{% for email in object_list %}
-    <tr>
-      <td>{{ email }}</td>
-    </tr>
-{% endfor %}
-  </tbody>
-</table>
-{% endif %}
-{% endif %}
+  <h1>{% trans "Emails" %}</h1>
+  {% if success %}
+    <p>{% trans "Emails have been sent." %}</p>
+    {% if errors %}
+      <h2 id="sending-errors">{% trans "Sending errors." %}</h2>
+      <table class="table table-sm table-responsive" aria-describedby="sending-errors">
+        <thead>
+        <tr>
+          <th scope="col">{% trans "Sending failed to following addresses:" %}</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for email in errors %}
+          <tr>
+            <td>{{ email }}</td>
+          </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    {% endif %}
+  {% else %}
+    {% if form %}
+      <form action="" method="post" class="form">
+        {% csrf_token %}
+        {% bootstrap_form form layout='horizontal' %}
+        {% buttons %}
+          <p><button type="submit" name="show_message" class="btn btn-info">{% trans "List emails / Show message" %}</button> {% if subject and message %}<button type="submit" name="send_email" class="btn btn-warning">{% trans "Send email" %}</button> {% endif %}</p>
+        {% endbuttons %}
+      </form>
+    {% endif %}
+    {% if subject %}
+      <h2>{% trans "Subject" %}</h2>
+      <pre>{{ subject }}</pre>
+    {% endif %}
+    {% if message %}
+      <h2>{% trans "Message" %}</h2>
+      <pre>{{ message }}</pre>
+    {% endif %}
+    {% if object_list %}
+      <h2 id="address-list">{% trans "Email addresses" %}</h2>
+      <table class="table table-sm table-responsive" aria-describedby="address-list">
+        <thead>
+        <tr>
+          <th scope="col">{% trans "Address" %}</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for email in object_list %}
+          <tr>
+            <td>{{ email }}</td>
+          </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    {% endif %}
+  {% endif %}
 {% endblock %}

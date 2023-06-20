@@ -1,12 +1,11 @@
 import logging
 
 from django.utils import timezone
-
 from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated
 
 from rr.models.testuser import TestUser, TestUserData
-from rr.serializers.testuser import TestUserSerializer, TestUserDataSerializer
+from rr.serializers.testuser import TestUserDataSerializer, TestUserSerializer
 
 logger = logging.getLogger(__name__)
 
@@ -26,6 +25,7 @@ class TestUserViewSet(viewsets.ModelViewSet):
     destroy:
     Removes the given test user.
     """
+
     queryset = TestUser.objects.all()
     permission_classes = [IsAuthenticated]
     serializer_class = TestUserSerializer
@@ -33,8 +33,11 @@ class TestUserViewSet(viewsets.ModelViewSet):
     def perform_destroy(self, instance):
         instance.end_at = timezone.now()
         instance.save()
-        logger.info("Test user {username} removed from {sp} by {user}"
-                    .format(username=instance.username, sp=instance.sp, user=self.request.user))
+        logger.info(
+            "Test user {username} removed from {sp} by {user}".format(
+                username=instance.username, sp=instance.sp, user=self.request.user
+            )
+        )
 
     def get_queryset(self):
         """
@@ -62,6 +65,7 @@ class TestUserDataViewSet(viewsets.ModelViewSet):
     destroy:
     Removes the given test user attribute.
     """
+
     queryset = TestUserData.objects.all()
     permission_classes = [IsAuthenticated]
     serializer_class = TestUserDataSerializer

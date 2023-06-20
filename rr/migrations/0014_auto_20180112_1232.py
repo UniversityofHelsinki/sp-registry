@@ -6,19 +6,18 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('rr', '0013_auto_20180112_1007'),
+        ("rr", "0013_auto_20180112_1007"),
     ]
 
     operations = [
         migrations.AlterModelOptions(
-            name='spattribute',
-            options={'ordering': ['attribute__friendlyname']},
+            name="spattribute",
+            options={"ordering": ["attribute__friendlyname"]},
         ),
         migrations.AddField(
-            model_name='serviceprovider',
-            name='modified',
-            field=models.BooleanField(default=True, verbose_name='Modified'),
+            model_name="serviceprovider",
+            name="modified",
+            field=models.BooleanField(default=True, verbose_name="Modified"),
         ),
     ]

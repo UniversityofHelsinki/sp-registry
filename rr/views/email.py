@@ -1,5 +1,4 @@
 import logging
-
 from smtplib import SMTPException
 
 from django.conf import settings
@@ -61,12 +60,18 @@ def email_list(request):
             else:
                 send = False
             form, subject, message, success, errors = _send_emails(request, form, emails, send)
-    return render(request, "rr/email.html", {'object_list': sorted(emails),
-                                             'form': form,
-                                             'subject': subject,
-                                             'message': message,
-                                             'errors': errors,
-                                             'success': success})
+    return render(
+        request,
+        "rr/email.html",
+        {
+            "object_list": sorted(emails),
+            "form": form,
+            "subject": subject,
+            "message": message,
+            "errors": errors,
+            "success": success,
+        },
+    )
 
 
 def _send_emails(request, form, emails, send):
@@ -74,7 +79,7 @@ def _send_emails(request, form, emails, send):
     message = None
     errors = []
     success = None
-    template = request.POST.get('template', None)
+    template = request.POST.get("template", None)
     if template:
         try:
             template = Template.objects.get(pk=template)
@@ -88,13 +93,10 @@ def _send_emails(request, form, emails, send):
         if send:
             for email in emails:
                 try:
-                    send_mail(subject, message, settings.SERVER_EMAIL, [email],
-                              fail_silently=False)
-                    logger.info("Sent email to {email} by {user}"
-                                .format(email=email, user=request.user))
+                    send_mail(subject, message, settings.SERVER_EMAIL, [email], fail_silently=False)
+                    logger.info("Sent email to {email} by {user}".format(email=email, user=request.user))
                 except SMTPException:
-                    logger.warning("Could not send invite to {email}"
-                                   .format(email=email))
+                    logger.warning("Could not send invite to {email}".format(email=email))
                     errors.append(email)
             form = EmailSelectForm()
             success = _("Email have been sent")
@@ -102,33 +104,32 @@ def _send_emails(request, form, emails, send):
 
 
 def _get_addresses(form, emails):
-    production_sp = form.cleaned_data['production_sp']
-    test_sp = form.cleaned_data['test_sp']
-    service_type = form.cleaned_data['service_type']
-    individual_sp = form.cleaned_data['individual_sp']
-    admin_emails = form.cleaned_data['admin_emails']
-    technical_contacts = form.cleaned_data['technical_contacts']
-    support_contacts = form.cleaned_data['support_contacts']
-    administrative_contacts = form.cleaned_data['administrative_contacts']
-    service_providers = ServiceProvider.objects.filter(end_at=None,
-                                                       service_type__in=service_type)
+    production_sp = form.cleaned_data["production_sp"]
+    test_sp = form.cleaned_data["test_sp"]
+    service_type = form.cleaned_data["service_type"]
+    individual_sp = form.cleaned_data["individual_sp"]
+    admin_emails = form.cleaned_data["admin_emails"]
+    technical_contacts = form.cleaned_data["technical_contacts"]
+    support_contacts = form.cleaned_data["support_contacts"]
+    administrative_contacts = form.cleaned_data["administrative_contacts"]
+    service_providers = ServiceProvider.objects.filter(end_at=None, service_type__in=service_type)
     for sp in service_providers:
-        if (production_sp and sp.production) or (test_sp and sp.test) \
-                or (sp in individual_sp):
-
+        if (production_sp and sp.production) or (test_sp and sp.test) or (sp in individual_sp):
             if admin_emails:
-                emails.update(sp.admins.values_list(Lower('email'), flat=True))
+                emails.update(sp.admins.values_list(Lower("email"), flat=True))
 
             if technical_contacts:
-                emails.update(Contact.objects.filter(
-                    sp=sp, type="technical", end_at=None).values_list(Lower('email'),
-                                                                      flat=True))
+                emails.update(
+                    Contact.objects.filter(sp=sp, type="technical", end_at=None).values_list(Lower("email"), flat=True)
+                )
             if administrative_contacts:
-                emails.update(Contact.objects.filter(
-                    sp=sp, type="administrative", end_at=None).values_list(Lower('email'),
-                                                                           flat=True))
+                emails.update(
+                    Contact.objects.filter(sp=sp, type="administrative", end_at=None).values_list(
+                        Lower("email"), flat=True
+                    )
+                )
             if support_contacts:
-                emails.update(Contact.objects.filter(
-                    sp=sp, type="support", end_at=None).values_list(Lower('email'),
-                                                                    flat=True))
+                emails.update(
+                    Contact.objects.filter(sp=sp, type="support", end_at=None).values_list(Lower("email"), flat=True)
+                )
     return emails

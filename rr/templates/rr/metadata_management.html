@@ -2,54 +2,54 @@
 {% load i18n %}
 {% load bootstrap4 %}
 {% block content %}
-<h1>{% trans "Metadata management" %}</h1>
-<div class="alert alert-success" role="alert">
-<p>{% trans "You may commit changes to metadata here." %}</p>
-<p>{% trans "Using production SPs with validated data." %}</p>
-</div>
-{% if warning %}
-<div class="alert alert-danger" role="alert">
-{% for message in warning %}
-<p>{{ message }}</p>
-{% endfor %}
-</div>
-{% endif %}
-{% if log %}
-<h2 id="commit-list">{% trans "Previous commits" %}</h2>
-<table class="table table-sm" aria-describedby="commit-list">
-  <thead>
-    <tr>
-      <th scope="col">{% trans "Time" %}</th>
-      <th scope="col">{% trans "Message" %}</th>
-    </tr>
-  </thead>
-  <tbody>
-{% for object in log %}
-    <tr>
-      <td>{{ object.0 }}</td>
-      <td>{{ object.1 }}</td>
-    </tr>
-{% endfor %}
-  </tbody>
-</table>
-{% endif %}
-{% if form and diff%}
-<h2>{% trans "Commit changes" %}</h2>
-<form action="" method="post" class="form">
-    {% csrf_token %}
-    {% bootstrap_form form layout='horizontal' %}
-    {% buttons %}
-    <p><button type="submit" name="export_metadata" class="btn btn-primary">{% trans "Export" %}</button></p>
-    {% endbuttons %}
-</form>
-{% endif %}
-{% if diff %}
-<h2>{% trans "Changes to previous commit" %}</h2>
-<pre><code>
+  <h1>{% trans "Metadata management" %}</h1>
+  <div class="alert alert-success" role="alert">
+    <p>{% trans "You may commit changes to metadata here." %}</p>
+    <p>{% trans "Using production SPs with validated data." %}</p>
+  </div>
+  {% if warning %}
+    <div class="alert alert-danger" role="alert">
+      {% for message in warning %}
+        <p>{{ message }}</p>
+      {% endfor %}
+    </div>
+  {% endif %}
+  {% if log %}
+    <h2 id="commit-list">{% trans "Previous commits" %}</h2>
+    <table class="table table-sm" aria-describedby="commit-list">
+      <thead>
+      <tr>
+        <th scope="col">{% trans "Time" %}</th>
+        <th scope="col">{% trans "Message" %}</th>
+      </tr>
+      </thead>
+      <tbody>
+      {% for object in log %}
+        <tr>
+          <td>{{ object.0 }}</td>
+          <td>{{ object.1 }}</td>
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  {% endif %}
+  {% if form and diff%}
+    <h2>{% trans "Commit changes" %}</h2>
+    <form action="" method="post" class="form">
+      {% csrf_token %}
+      {% bootstrap_form form layout='horizontal' %}
+      {% buttons %}
+        <p><button type="submit" name="export_metadata" class="btn btn-primary">{% trans "Export" %}</button></p>
+      {% endbuttons %}
+    </form>
+  {% endif %}
+  {% if diff %}
+    <h2>{% trans "Changes to previous commit" %}</h2>
+    <pre><code>
 {{ diff }}
 </code></pre>
-{% endif %}
-{% if not diff and not warning %}
-<p>{% trans "There are no uncommitted changes." %}
-{% endif %}
+  {% endif %}
+  {% if not diff and not warning %}
+    <p>{% trans "There are no uncommitted changes." %}
+  {% endif %}
 {% endblock %}

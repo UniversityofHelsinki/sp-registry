@@ -6,30 +6,31 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('rr', '0034_testuser_valid_for'),
+        ("rr", "0034_testuser_valid_for"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='attribute',
-            name='regex_test',
-            field=models.CharField(blank=True, max_length=255, verbose_name='Regex text for attribute validation'),
+            model_name="attribute",
+            name="regex_test",
+            field=models.CharField(blank=True, max_length=255, verbose_name="Regex text for attribute validation"),
         ),
         migrations.AddField(
-            model_name='attribute',
-            name='shib_env',
-            field=models.CharField(blank=True, max_length=255, verbose_name='Shibboelth environmental variable for the attribute'),
+            model_name="attribute",
+            name="shib_env",
+            field=models.CharField(
+                blank=True, max_length=255, verbose_name="Shibboelth environmental variable for the attribute"
+            ),
         ),
         migrations.AddField(
-            model_name='attribute',
-            name='test_service',
-            field=models.BooleanField(default=True, verbose_name='Show in Attribute test service'),
+            model_name="attribute",
+            name="test_service",
+            field=models.BooleanField(default=True, verbose_name="Show in Attribute test service"),
         ),
         migrations.AddField(
-            model_name='attribute',
-            name='test_service_required',
-            field=models.BooleanField(default=False, verbose_name='Required attribute in test service'),
+            model_name="attribute",
+            name="test_service_required",
+            field=models.BooleanField(default=False, verbose_name="Required attribute in test service"),
         ),
     ]

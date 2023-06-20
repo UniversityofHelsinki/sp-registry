@@ -10,7 +10,6 @@ from rr.models.testuser import TestUser
 
 
 class Command(BaseCommand):
-
     def handle(self, *args, **options):
         test_users = TestUser.objects.filter(end_at=None)
         for test_user in test_users:

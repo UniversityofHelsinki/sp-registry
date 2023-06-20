@@ -3,24 +3,24 @@
 {% load static %}
 {% load bootstrap4 %}
 {% block content %}
-<h1>{% trans "Basic information" %} - <small>{{ object.display_identifier }}</small></h1>
-<div class="alert alert-success" role="alert">
-<p>{% trans "Basic information for your service provider. Necessary information for production use are marked." %}</p>
-</div>
+  <h1>{% trans "Basic information" %} - <small>{{ object.display_identifier }}</small></h1>
+  <div class="alert alert-success" role="alert">
+    <p>{% trans "Basic information for your service provider. Necessary information for production use are marked." %}</p>
+  </div>
 
-<form action="" method="post" class="form">
+  <form action="" method="post" class="form">
     {% csrf_token %}
     {% bootstrap_form form layout='horizontal' %}
     {% buttons %}
-    <p><button type="submit" class="btn btn-primary">{% trans "Save" %}</button></p>
+      <p><button type="submit" class="btn btn-primary">{% trans "Save" %}</button></p>
     {% endbuttons %}
-</form>
+  </form>
 {% endblock %}
 {% block javascript %}
-<script src="{% static "js/jquery.are-you-sure.js" %}"></script>
-<script>
-$(function() {
-    $('form').areYouSure( {'message':'{% trans "You have modified the form without saving it." %}'} );
-})
-</script>
+  <script src="{% static "js/jquery.are-you-sure.js" %}"></script>
+  <script>
+      $(function() {
+          $('form').areYouSure( {'message':'{% trans "You have modified the form without saving it." %}'} );
+      })
+  </script>
 {% endblock %}

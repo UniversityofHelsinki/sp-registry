@@ -6,20 +6,19 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('rr', '0003_auto_20180102_0736'),
+        ("rr", "0003_auto_20180102_0736"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='certificate',
-            name='created',
-            field=models.DateTimeField(blank=True, null=True, verbose_name='Created at'),
+            model_name="certificate",
+            name="created",
+            field=models.DateTimeField(blank=True, null=True, verbose_name="Created at"),
         ),
         migrations.AddField(
-            model_name='certificate',
-            name='end_at',
-            field=models.DateTimeField(blank=True, null=True, verbose_name='Entry end time'),
+            model_name="certificate",
+            name="end_at",
+            field=models.DateTimeField(blank=True, null=True, verbose_name="Entry end time"),
         ),
     ]

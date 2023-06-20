@@ -6,15 +6,14 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('rr', '0022_auto_20180125_1036'),
+        ("rr", "0022_auto_20180125_1036"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='serviceprovider',
-            name='discovery_service_url',
-            field=models.URLField(blank=True, max_length=255, verbose_name='Discovery Service URL'),
+            model_name="serviceprovider",
+            name="discovery_service_url",
+            field=models.URLField(blank=True, max_length=255, verbose_name="Discovery Service URL"),
         ),
     ]

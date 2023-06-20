@@ -11,4 +11,4 @@ SHIBBOLETH_LOGOUT_URL = ""
 
 from .local_settings import *
 
-ROOT_URLCONF = 'urls_attributetest'
+ROOT_URLCONF = "urls_attributetest"

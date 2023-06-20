@@ -6,15 +6,14 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('rr', '0043_auto_20190118_0953'),
+        ("rr", "0043_auto_20190118_0953"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='serviceprovider',
-            name='uses_ldapauth',
-            field=models.BooleanField(default=False, verbose_name='Does the service use the LDAPAuth proxy?'),
+            model_name="serviceprovider",
+            name="uses_ldapauth",
+            field=models.BooleanField(default=False, verbose_name="Does the service use the LDAPAuth proxy?"),
         ),
     ]

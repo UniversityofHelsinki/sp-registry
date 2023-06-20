@@ -4,15 +4,14 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('rr', '0053_auto_20200612_1149'),
+        ("rr", "0053_auto_20200612_1149"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='statistics',
-            name='users',
-            field=models.IntegerField(null=True, verbose_name='Number of unique users'),
+            model_name="statistics",
+            name="users",
+            field=models.IntegerField(null=True, verbose_name="Number of unique users"),
         ),
     ]

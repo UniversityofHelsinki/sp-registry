@@ -3,57 +3,57 @@
 {% load bootstrap4 %}
 {% load static %}
 {% block content %}
-<h1>{% trans "User Groups" %} - <small>{{ object.display_identifier }}</small></h1>
-<div class="alert alert-success" role="alert">
-<p>{% trans "User Groups published via LDAP." %}</p>
-</div>
+  <h1>{% trans "User Groups" %} - <small>{{ object.display_identifier }}</small></h1>
+  <div class="alert alert-success" role="alert">
+    <p>{% trans "User Groups published via LDAP." %}</p>
+  </div>
 
-<h2 id="user-group-list">{% trans "List of user groups" %}</h2>
-{% if object_list %}
-<form action="" method='POST'>
-{% csrf_token %}
-<table class="table table-sm table-responsive" aria-describedby="user-group-list">
-  <thead>
-    <tr>
-      <th scope="col">{% trans "Name" %}</th>
-      <th scope="col">{% trans "Remove" %}</th>
-    </tr>
-  </thead>
-  <tbody>
-{% for usergroup in object_list %}
-    <tr>
-      <th scope="row">{{ usergroup.name }}</th>
-      <td><div class="checkbox"><input type="checkbox" aria-label="{%  trans "Mark for removal" %}" name="{{ usergroup.pk }}" class="" id="id_usergroup" /></div></td>
-    </tr>
-{% endfor %}
-  </tbody>
-</table>
-<p><input class="btn btn-danger" type="submit" data-toggle="confirmation" name="remove_usergroup" value="{% trans "Remove selected" %}" /></p>
-</form>
-{% else %}
-<p>{% trans "No user groups" %}</p>
-{% endif %}
-{% if form %}
-<h2>{% trans "Add user group" %}</h2>
-<form action="" method="post" class="form">
-    {% csrf_token %}
-    {% bootstrap_form form layout='horizontal' %}
-    {% buttons %}
-    <p><button type="submit" name="add_usergroup" class="btn btn-primary">{% trans "Save" %}</button></p>
-    {% endbuttons %}
-</form>
-{% endif %}
+  <h2 id="user-group-list">{% trans "List of user groups" %}</h2>
+  {% if object_list %}
+    <form action="" method='POST'>
+      {% csrf_token %}
+      <table class="table table-sm table-responsive" aria-describedby="user-group-list">
+        <thead>
+        <tr>
+          <th scope="col">{% trans "Name" %}</th>
+          <th scope="col">{% trans "Remove" %}</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for usergroup in object_list %}
+          <tr>
+            <th scope="row">{{ usergroup.name }}</th>
+            <td><div class="checkbox"><input type="checkbox" aria-label="{%  trans "Mark for removal" %}" name="{{ usergroup.pk }}" class="" id="id_usergroup" /></div></td>
+          </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+      <p><input class="btn btn-danger" type="submit" data-toggle="confirmation" name="remove_usergroup" value="{% trans "Remove selected" %}" /></p>
+    </form>
+  {% else %}
+    <p>{% trans "No user groups" %}</p>
+  {% endif %}
+  {% if form %}
+    <h2>{% trans "Add user group" %}</h2>
+    <form action="" method="post" class="form">
+      {% csrf_token %}
+      {% bootstrap_form form layout='horizontal' %}
+      {% buttons %}
+        <p><button type="submit" name="add_usergroup" class="btn btn-primary">{% trans "Save" %}</button></p>
+      {% endbuttons %}
+    </form>
+  {% endif %}
 {% endblock %}
 {% block javascript %}
   <script src="{% static "js/jquery.popconfirm.js" %}"></script>
   <script>
-  $("[data-toggle='confirmation']").popConfirm({
-    title: "{% trans "Confirm removal" %}",
-    content: "{% trans "Do you want to remove selected user groups?" %}",
-    placement: "bottom",
-    container: "body",
-    yesBtn: "{% trans "Confirm" %}",
-    noBtn: "{% trans "Cancel" %}"
-  });
+      $("[data-toggle='confirmation']").popConfirm({
+          title: "{% trans "Confirm removal" %}",
+          content: "{% trans "Do you want to remove selected user groups?" %}",
+          placement: "bottom",
+          container: "body",
+          yesBtn: "{% trans "Confirm" %}",
+          noBtn: "{% trans "Cancel" %}"
+      });
   </script>
 {% endblock %}

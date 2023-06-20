@@ -3,57 +3,57 @@
 {% load bootstrap4 %}
 {% load static %}
 {% block content %}
-<h1>{% trans "Redirect URIs" %} - <small>{{ object.display_identifier }}</small></h1>
-<div class="alert alert-success" role="alert">
-<p>{% trans "The accepted redirect URIs for the service." %}</p>
-</div>
+  <h1>{% trans "Redirect URIs" %} - <small>{{ object.display_identifier }}</small></h1>
+  <div class="alert alert-success" role="alert">
+    <p>{% trans "The accepted redirect URIs for the service." %}</p>
+  </div>
 
-<h2 id="redirect-uri-list">{% trans "List of redirect URIs" %}</h2>
-{% if object_list %}
-<form action="" method='POST'>
-{% csrf_token %}
-<table class="table table-sm table-responsive" aria-describedby="redirect-uri-list">
-  <thead>
-    <tr>
-      <th scope="col">{% trans "URI" %}</th>
-      <th scope="col">{% trans "Remove" %}</th>
-    </tr>
-  </thead>
-  <tbody>
-{% for uri in object_list %}
-    <tr>
-      <th scope="row">{{ uri.uri }}</th>
-      <td><div class="checkbox"><input type="checkbox" aria-label="{%  trans "Mark for removal" %}" name="{{ uri.pk }}" class="" id="id_redirecturi" /></div></td>
-    </tr>
-{% endfor %}
-  </tbody>
-</table>
-<p><input class="btn btn-danger" type="submit" data-toggle="confirmation" name="remove_redirecturi" value="{% trans "Remove selected" %}" /></p>
-</form>
-{% else %}
-<p>{% trans "No redirect URIs" %}</p>
-{% endif %}
-{% if form %}
-<h2>{% trans "Add redirect URI" %}</h2>
-<form action="" method="post" class="form">
-    {% csrf_token %}
-    {% bootstrap_form form layout='horizontal' %}
-    {% buttons %}
-    <p><button type="submit" name="add_redirecturi" class="btn btn-primary">{% trans "Save" %}</button></p>
-    {% endbuttons %}
-</form>
-{% endif %}
+  <h2 id="redirect-uri-list">{% trans "List of redirect URIs" %}</h2>
+  {% if object_list %}
+    <form action="" method='POST'>
+      {% csrf_token %}
+      <table class="table table-sm table-responsive" aria-describedby="redirect-uri-list">
+        <thead>
+        <tr>
+          <th scope="col">{% trans "URI" %}</th>
+          <th scope="col">{% trans "Remove" %}</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for uri in object_list %}
+          <tr>
+            <th scope="row">{{ uri.uri }}</th>
+            <td><div class="checkbox"><input type="checkbox" aria-label="{%  trans "Mark for removal" %}" name="{{ uri.pk }}" class="" id="id_redirecturi" /></div></td>
+          </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+      <p><input class="btn btn-danger" type="submit" data-toggle="confirmation" name="remove_redirecturi" value="{% trans "Remove selected" %}" /></p>
+    </form>
+  {% else %}
+    <p>{% trans "No redirect URIs" %}</p>
+  {% endif %}
+  {% if form %}
+    <h2>{% trans "Add redirect URI" %}</h2>
+    <form action="" method="post" class="form">
+      {% csrf_token %}
+      {% bootstrap_form form layout='horizontal' %}
+      {% buttons %}
+        <p><button type="submit" name="add_redirecturi" class="btn btn-primary">{% trans "Save" %}</button></p>
+      {% endbuttons %}
+    </form>
+  {% endif %}
 {% endblock %}
 {% block javascript %}
   <script src="{% static "js/jquery.popconfirm.js" %}"></script>
   <script>
-  $("[data-toggle='confirmation']").popConfirm({
-    title: "{% trans "Confirm removal" %}",
-    content: "{% trans "Do you want to remove selected redirect URIs?" %}",
-    placement: "bottom",
-    container: "body",
-    yesBtn: "{% trans "Confirm" %}",
-    noBtn: "{% trans "Cancel" %}"
-  });
+      $("[data-toggle='confirmation']").popConfirm({
+          title: "{% trans "Confirm removal" %}",
+          content: "{% trans "Do you want to remove selected redirect URIs?" %}",
+          placement: "bottom",
+          container: "body",
+          yesBtn: "{% trans "Confirm" %}",
+          noBtn: "{% trans "Cancel" %}"
+      });
   </script>
 {% endblock %}

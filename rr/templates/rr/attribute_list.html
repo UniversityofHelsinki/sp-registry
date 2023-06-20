@@ -3,27 +3,27 @@
 {% load bootstrap4 %}
 {% load static %}
 {% block content %}
-<h1>{% trans "Attributes" %} - <small>{{ object.display_identifier }}</small></h1>
-<div class="alert alert-success" role="alert">
-<p>{% trans "Give reasons for the attribute requisitions. Remove reason to remove requisition." %}</p>
-<p>{% trans "Attributes with green border are validated and attributes with red border still need to be validated." %}</p>
-<p>{% trans 'For more information about attributes, visit the external info page:'%} <a target="_blank" rel="noopener noreferrer" href="{% trans "instructions_url_attributes" %}">{% trans "instructions_url_attributes" %}</a></p>
-</div>
+  <h1>{% trans "Attributes" %} - <small>{{ object.display_identifier }}</small></h1>
+  <div class="alert alert-success" role="alert">
+    <p>{% trans "Give reasons for the attribute requisitions. Remove reason to remove requisition." %}</p>
+    <p>{% trans "Attributes with green border are validated and attributes with red border still need to be validated." %}</p>
+    <p>{% trans 'For more information about attributes, visit the external info page:'%} <a target="_blank" rel="noopener noreferrer" href="{% trans "instructions_url_attributes" %}">{% trans "instructions_url_attributes" %}</a></p>
+  </div>
 
-<h2>{% trans "Attribute list" %}</h2>
-<form action="" method="post" class="form">
+  <h2>{% trans "Attribute list" %}</h2>
+  <form action="" method="post" class="form">
     {% csrf_token %}
     {% bootstrap_form form layout='horizontal' %}
     {% buttons %}
-        <button type="submit" class="btn btn-primary">{% trans "Save" %}</button>
+      <button type="submit" class="btn btn-primary">{% trans "Save" %}</button>
     {% endbuttons %}
-</form>
+  </form>
 {% endblock %}
 {% block javascript %}
-<script src="{% static "js/jquery.are-you-sure.js" %}"></script>
-<script>
-$(function() {
-    $('form').areYouSure( {'message':'{% trans "You have modified the form without saving it." %}'} );
-})
-</script>
+  <script src="{% static "js/jquery.are-you-sure.js" %}"></script>
+  <script>
+      $(function() {
+          $('form').areYouSure( {'message':'{% trans "You have modified the form without saving it." %}'} );
+      })
+  </script>
 {% endblock %}

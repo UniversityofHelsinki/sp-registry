@@ -141,14 +141,18 @@ API tokens with browser UI.
 
 API documentation is available in path swagger/ for authenticated users.
 
-## Installation
 ### Requirements
 * Django 3.2
 * Python 3.7-3.9
 * MySQL 5.6+ / MariaDB 10.1+
 * Requires dev libraries for Python and MySQL/MariaDB for compiling Python mysqlclient.
 
-### Test environment
+## Development
+
+### Style guide
+Use black and isort for formatting and sorting imports.
+
+### Using Vagrant to install development environment
 Vagrantfile with Ansible provisioning is provided for test environment.
 
 Usage:
@@ -159,22 +163,42 @@ Usage:
 
 Shibboleth and attribute test service are not yet included.
 
-### Installation
+### Creating development environment
+Steps for creating development environment.
 
-Example on 18.04 LTS
+1. cmd: git clone https://github.com/UniversityofHelsinki/sp-registry.git
+2. cmd: cd sp-registry
+3. cmd: python3 -m venv venv
+4. cmd: source venv/bin/activate
+5. cmd: pip install -r requirements/development.txt
+   * Requires dev libraries for Python and MySQL/MariaDB for compiling Python mysqlclient.
+6. cmd: cp settings/local_settings_example.py settings/local_settings.py
+7. Create mysql database, test database and user
+   * create database registry;
+   * create user registry@localhost identified by 'registry';
+   * grant all privileges on registry.* to registry@localhost;
+   * grant all privileges on test_registry.* to registry@localhost;
+8. Edit settings/local_settings.py to match DB settings, unless you used the example above
+9. run tests: ./manage.py test
+10. run browser tests: ./manage.py behave --settings=settings.development
+    * Requires Firefox and geckodriver for headless tests.
+11. Apply database schema: ./manage.py migrate
+11. Compile translations: ./manage.py makemessages
+12. Create superuser: ./manage.py createsuperuser
+13. run development server: ./manage.py runserver --settings=settings.development
+    * You need to add ALLOWED_HOSTS to settings/local_settings.py unless using development settings.
 
-1. Install apt requirements: "sudo apt install python3 python3-venv python3-dev python3-pip mariadb-server
-python-mysqldb libmariadbclient-dev libapache2-mod-wsgi-py3"
-1. Clone source from git
-1. Set up Python virtual environment "python3 -m venv /path/to/venv" and activate it "source /path/to/venv/bin/activate"
-1. Install requirements "pip install -r requirements/[production|development].txt"
-1. Set up database (MariaDB)
-1. Copy settings/local_settings_example.py to settings/local_settings.py and modify as necessary
-1. Modify manage.py to point django config file to production or development
-1. Run db migrations: "./manage.py migrate"
-1. Collect static files "./manage.py collectstatic"
-1. Load fixtures: "./manage.py loaddata rr/fixtures/attribute.json rr/fixtures/nameidformat.json"
-1. Set up apache, wsgi and shibd
+### Running tests
+./manage.py test
+
+For behaviour testing with browser automation:
+./manage.py behave --settings=settings.development
+
+### Requirements
+Splinter is used for automated browser tests.
+Install Firefox and geckodriver for headless tests: https://splinter.readthedocs.io/en/latest/drivers/firefox.html
+
+## Production installation
 
 ### Shibboleth
 Program uses following attributes:
@@ -238,7 +262,7 @@ It should also have it's own Shibboleth ApplicationOverride, with all the attrib
 ./manage.py test
 
 For behaviour testing with browser automation:
-./manage.py behave --settings=settings.development
+./manage.py behave --settings=settings.test
 Behaviour tests usually take 3-4 minutes to run.
 
 ### Requirements

@@ -256,8 +256,10 @@ class LdapTechnicalInformationForm(ModelForm):
         widgets = {
             "service_account_contact": Textarea(attrs={"rows": 2}),
             "local_storage_passwords_info": Textarea(attrs={"rows": 5}),
-            "service_account": CheckboxInput(attrs={"class": "hideCheck1"}),
-            "local_storage_passwords": CheckboxInput(attrs={"class": "hideCheck2"}),
+            "service_account": CheckboxInput(attrs={"data-bs-toggle": "collapse", "href": "#serviceAccountCollapse"}),
+            "local_storage_passwords": CheckboxInput(
+                attrs={"data-bs-toggle": "collapse", "href": "#localPasswordCollapse"}
+            ),
         }
         help_texts = {
             "uses_ldapauth": _(

@@ -16,7 +16,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    "bootstrap4",
+    "django_bootstrap5",
     "rest_framework",
     "rest_framework.authtoken",
     "drf_yasg",
@@ -117,7 +117,7 @@ MFA_AUTHENTICATION_CONTEXT = "https://refeds.org/profile/mfa"
 
 SAML_METADATA_EXPORT_INDIVIDUAL_FILES = False
 
-BOOTSTRAP4 = {
+BOOTSTRAP5 = {
     "set_placeholder": False,
 }
 

@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% load i18n %}
-{% load bootstrap4 %}
+{% load django_bootstrap5 %}
 {% load static %}
 {% block content %}
   <h1>{% trans "Metadata import" %}</h1>
@@ -33,9 +33,7 @@
     <form action="" method="post" class="form">
       {% csrf_token %}
       {% bootstrap_form form layout='horizontal' %}
-      {% buttons %}
-        <p><button type="submit" name="import_metadata" class="btn btn-primary">{% trans "Import" %}</button></p>
-      {% endbuttons %}
+      {% bootstrap_button _("Import") name="import_metadata" button_type="submit" button_class="btn-primary" %}
     </form>
   {% endif %}
 {% endblock %}

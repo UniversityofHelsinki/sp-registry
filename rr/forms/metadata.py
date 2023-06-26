@@ -42,9 +42,7 @@ class MetadataForm(Form):
             try:
                 url_validator(entity_id)
             except ValidationError:
-                raise ValidationError(
-                    _("Entity Id should be URI, please contact IdP admins if this is not possible.")
-                )
+                raise ValidationError(_("Entity Id should be URI, please contact IdP admins if this is not possible."))
         if ServiceProvider.objects.filter(entity_id=entity_id, end_at=None, history=None):
             raise ValidationError(_("Entity Id already exists"))
 

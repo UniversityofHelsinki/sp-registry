@@ -23,5 +23,5 @@ def fill_endpoint_with_response_location(context, location):
 @when("removing first endpoint")
 def fill_basic_form(context):
     context.browser.check("1")
-    context.browser.find_by_name("remove_endpoint").first.click()
+    context.browser.find_by_text("Remove selected").first.click()
     context.browser.find_by_text("Confirm").first.click()

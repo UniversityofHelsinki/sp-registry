@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% load i18n %}
 {% load static %}
-{% load bootstrap4 %}
+{% load django_bootstrap5 %}
 {% block content %}
   <h1>{% trans "Technical information" %} - <small>{{ object.display_identifier }}</small></h1>
   <div class="alert alert-success" role="alert">
@@ -15,39 +15,13 @@
     {% bootstrap_field form.server_names layout='horizontal' %}
     {% bootstrap_field form.target_group layout='horizontal' %}
     {% bootstrap_field form.service_account layout='horizontal' %}
-    <div class="hidden1">{% bootstrap_field form.service_account_contact layout='horizontal' %}</div>
+    <div class="collapse" id="serviceAccountCollapse">{% bootstrap_field form.service_account_contact layout='horizontal' %}</div>
     {% bootstrap_field form.can_access_all_ldap_groups layout='horizontal' %}
     {% bootstrap_field form.local_storage_users layout='horizontal' %}
     {% bootstrap_field form.local_storage_passwords layout='horizontal' %}
-    <div class="hidden2">{% bootstrap_field form.local_storage_passwords_info layout='horizontal' %}</div>
+    <div class="collapse" id="localPasswordCollapse">{% bootstrap_field form.local_storage_passwords_info layout='horizontal' %}</div>
     {% bootstrap_field form.local_storage_groups layout='horizontal' %}
     {% bootstrap_field form.production layout='horizontal' %}
-    {% buttons %}
-      <p><button type="submit" class="btn btn-primary">{% trans "Save" %}</button></p>
-    {% endbuttons %}
+    {% bootstrap_button _("Save") button_type="submit" button_class="btn-primary" %}
   </form>
-{% endblock %}
-{% block javascript %}
-  <script src="{% static "js/jquery.are-you-sure.js" %}"></script>
-  <script>
-      $(function() {
-          $('form').areYouSure( {'message':'{% trans "You have modified the form without saving it." %}'} );
-      })
-      $(function() {
-          if (!$(".hideCheck1").is(':checked')) {
-              $(".hidden1").hide();
-          }
-          if (!$(".hideCheck2").is(':checked')) {
-              $(".hidden2").hide();
-          }
-          $("input[type=checkbox]").change(function() {
-              var hidden = $(".hidden" + $(this).attr("class").replace("hideCheck", ""));
-              if ($(this).is(':checked')) {
-                  hidden.show();
-              } else {
-                  hidden.hide();
-              }
-          });
-      });
-  </script>
 {% endblock %}

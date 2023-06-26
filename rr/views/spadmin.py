@@ -124,9 +124,9 @@ def admin_list(request, pk):
             form, subject, message, error = _create_invite(request, sp, True)
         elif "show_message" in request.POST:
             form, subject, message, error = _create_invite(request, sp, False)
-        elif "remove_invite" in request.POST:
+        elif "remove_invites" in request.POST:
             _remove_invites(request, sp)
-        elif "remove_admin" in request.POST:
+        elif "remove_admins" in request.POST:
             remove_self = _remove_admins(request, sp)
             if remove_self:
                 return HttpResponseRedirect(reverse("serviceprovider-list"))

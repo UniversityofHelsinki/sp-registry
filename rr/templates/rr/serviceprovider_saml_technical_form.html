@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% load i18n %}
 {% load static %}
-{% load bootstrap4 %}
+{% load django_bootstrap5 %}
 {% block content %}
   <h1>{% trans "Technical information" %} - <small>{{ object.display_identifier }}</small></h1>
   <div class="alert alert-success" role="alert">
@@ -11,16 +11,6 @@
   <form action="" method="post" class="form">
     {% csrf_token %}
     {% bootstrap_form form layout='horizontal' %}
-    {% buttons %}
-      <p><button type="submit" class="btn btn-primary">{% trans "Save" %}</button></p>
-    {% endbuttons %}
+    {% bootstrap_button _("Save") button_type="submit" button_class="btn-primary" %}
   </form>
-{% endblock %}
-{% block javascript %}
-  <script src="{% static "js/jquery.are-you-sure.js" %}"></script>
-  <script>
-      $(function() {
-          $('form').areYouSure( {'message':'{% trans "You have modified the form without saving it." %}'} );
-      })
-  </script>
 {% endblock %}

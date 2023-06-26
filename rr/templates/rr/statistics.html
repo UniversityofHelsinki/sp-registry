@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% load i18n %}
-{% load bootstrap4 %}
+{% load django_bootstrap5 %}
 {% load static %}
 {% block content %}
   <h1 class="page-header" id="login-statistics">{% trans "Login Statistics" %} - <small>{{ object.display_identifier }}</small></h1>
@@ -12,7 +12,7 @@
   </div>
   {% if object_list %}
     <canvas id="statschart" width="75" height="50"></canvas>
-    <p><button type="button" class="btn btn-primary" name="collapsesaml" data-toggle="collapse" data-target=".collapsetable">{% trans "Show table" %}</button></p>
+    <p><button type="button" class="btn btn-primary" name="collapsesaml" data-bs-toggle="collapse" data-bs-target=".collapsetable">{% trans "Show table" %}</button></p>
     <table class="table table-sm table-responsive collapse out collapsetable" aria-describedby="login-statistics">
       <thead>
       <tr>
@@ -72,5 +72,4 @@
           }
       });
   </script>
-
 {% endblock %}

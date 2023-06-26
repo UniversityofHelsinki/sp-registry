@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% load i18n %}
-{% load bootstrap4 %}
+{% load django_bootstrap5 %}
 {% load static %}
 {% load attribute_filters %}
 {% block content %}
@@ -60,9 +60,7 @@
       <form action="" method='POST'>
         {% csrf_token %}
         {% bootstrap_form form %}
-        {% buttons %}
-          <p><input class="btn btn-success" type="submit" name="validate_changes" value="{% trans "Validate changes" %}" /></p>
-        {% endbuttons %}
+        {% bootstrap_button _("Validate changes") name="validate_changes" button_type="submit" button_class="btn-success" %}
       </form>
     </div>
   {% endif %}

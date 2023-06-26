@@ -17,5 +17,5 @@ def fill_testuser(context):
 @when("removing external test user")
 def remove_external_testuser(context):
     context.browser.check("1")
-    context.browser.find_by_name("remove_testuser_external").first.click()
+    context.browser.find_by_text("Remove selected").last.click()
     context.browser.find_by_text("Confirm").first.click()

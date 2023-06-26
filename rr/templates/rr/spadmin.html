@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% load i18n %}
-{% load bootstrap4 %}
+{% load django_bootstrap5 %}
 {% load static %}
 {% block content %}
   <h1>{% trans "Admins" %} - <small>{{ object.display_identifier }}</small></h1>
@@ -34,7 +34,24 @@
         {% endfor %}
         </tbody>
       </table>
-      <p><input class="btn btn-danger" type="submit" data-toggle="confirmation" name="remove_admin" value="{% trans "Remove selected" %}" /></p>
+      <p><button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#confirmationAdminModal">{% trans "Remove selected" %}</button></p>
+      <div class="modal fade" id="confirmationAdminModal" tabindex="-1" aria-labelledby="confirmationAdminModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="confirmationAdminModalLabel">{% trans "Confirm removal" %}</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              {% trans "Do you want to remove selected admins?" %}
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{% trans "Cancel" %}</button>
+              <button type="submit" name="remove_admins" class="btn btn-primary">{% trans "Confirm" %}</button>
+            </div>
+          </div>
+        </div>
+      </div>
     </form>
   {% else %}
     <p>{% trans "No admins" %}</p>
@@ -63,7 +80,24 @@
         {% endfor %}
         </tbody>
       </table>
-      <p><input class="btn btn-danger" type="submit" data-toggle="confirmation" name="remove_invite" value="{% trans "Remove selected" %}" /></p>
+      <p><button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#confirmationInviteModal">{% trans "Remove selected" %}</button></p>
+      <div class="modal fade" id="confirmationInviteModal" tabindex="-1" aria-labelledby="confirmationInviteModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="confirmationAdminInviteLabel">{% trans "Confirm removal" %}</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              {% trans "Do you want to remove selected invites?" %}
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{% trans "Cancel" %}</button>
+              <button type="submit" name="remove_invites" class="btn btn-primary">{% trans "Confirm" %}</button>
+            </div>
+          </div>
+        </div>
+      </div>
     </form>
   {% else %}
     <p>{% trans "No invites" %}</p>
@@ -89,9 +123,8 @@
     <form action="" method="post" class="form">
       {% csrf_token %}
       {% bootstrap_form form layout='horizontal' %}
-      {% buttons %}
-        <p><button type="submit" name="add_invite" class="btn btn-primary">{% trans "Send invitation" %}</button> <button type="submit" name="show_message" class="btn btn-info">{% trans "Show message" %}</button></p>
-      {% endbuttons %}
+      {% bootstrap_button _("Send invitation") name="add_invite" button_type="submit" button_class="btn-primary" %}
+      {% bootstrap_button _("Show message") name="show_message" button_type="submit" button_class="btn-info" %}
     </form>
   {% endif %}
   <h2 id="admin-group-list">{% trans "List of admin groups" %}</h2>
@@ -114,7 +147,24 @@
         {% endfor %}
         </tbody>
       </table>
-      <p><input class="btn btn-danger" type="submit" data-toggle="confirmation" name="remove_admin_groups" value="{% trans "Remove selected" %}" /></p>
+      <p><button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#confirmationAdminGroupModal">{% trans "Remove selected" %}</button></p>
+      <div class="modal fade" id="confirmationAdminGroupModal" tabindex="-1" aria-labelledby="confirmationAdminGroupModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="confirmationAdminModalGroupLabel">{% trans "Confirm removal" %}</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              {% trans "Do you want to remove selected admin groups?" %}
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{% trans "Cancel" %}</button>
+              <button type="submit" name="remove_admin_groups" class="btn btn-primary">{% trans "Confirm" %}</button>
+            </div>
+          </div>
+        </div>
+      </div>
     </form>
   {% else %}
     <p>{% trans "No admin groups" %}</p>
@@ -125,22 +175,7 @@
     <form action="" method="post" class="form">
       {% csrf_token %}
       {% bootstrap_form admin_group_form layout='horizontal' %}
-      {% buttons %}
-        <p><button type="submit" name="add_admin_group" class="btn btn-primary">{% trans "Add group" %}</button></p>
-      {% endbuttons %}
+      {% bootstrap_button _("Add group") name="add_admin_group" button_type="submit" button_class="btn-primary" %}
     </form>
   {% endif %}
-{% endblock %}
-{% block javascript %}
-  <script src="{% static "js/jquery.popconfirm.js" %}"></script>
-  <script>
-      $("[data-toggle='confirmation']").popConfirm({
-          title: "{% trans "Confirm removal" %}",
-          content: "{% trans "Do you want to remove selected admins/invites?" %}",
-          placement: "bottom",
-          container: "body",
-          yesBtn: "{% trans "Confirm" %}",
-          noBtn: "{% trans "Cancel" %}"
-      });
-  </script>
 {% endblock %}

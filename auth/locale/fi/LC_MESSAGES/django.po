@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-01-11 13:40+0200\n"
+"POT-Creation-Date: 2023-06-26 15:34+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -113,10 +113,8 @@ msgstr ""
 "tarkoitukseen."
 
 #: auth/templates/registration/logout.html:5
-#, fuzzy
-#| msgid "University of Helsinki"
 msgid "University of Helsinki - Service Provider Registry"
-msgstr "Helsingin yliopisto"
+msgstr "Helsingin yliopisto - SP-rekisteri"
 
 #: auth/templates/registration/logout.html:6
 msgid "You have logged out"
@@ -127,21 +125,21 @@ msgid "Login"
 msgstr "Kirjaudu sisään"
 
 #: auth/templates/registration/password_reset_complete.html:5
-#: auth/templates/registration/password_reset_confirm.html:7
+#: auth/templates/registration/password_reset_confirm.html:6
 #: auth/templates/registration/password_reset_done.html:5
-#: auth/templates/registration/password_reset_form.html:7
+#: auth/templates/registration/password_reset_form.html:6
 msgid "Reset password"
 msgstr "Palauta salasana"
 
-#: auth/templates/registration/password_reset_complete.html:7
+#: auth/templates/registration/password_reset_complete.html:6
 msgid "Password has been reset successfully."
 msgstr "Salasana on palautettu onnistuneesti."
 
-#: auth/templates/registration/password_reset_complete.html:9
+#: auth/templates/registration/password_reset_complete.html:7
 msgid "Log in."
 msgstr "Kirjaudu sisään."
 
-#: auth/templates/registration/password_reset_confirm.html:18
+#: auth/templates/registration/password_reset_confirm.html:16
 msgid "Password reset failed."
 msgstr "Salasanan palautus epäonnistui."
 
@@ -170,6 +168,6 @@ msgstr ""
 msgid "Please go to the following page and choose a new password:"
 msgstr "Ole hyvä ja mene seuraavalle sivulle valitsemaan uusi salasana:"
 
-#: auth/templates/registration/password_reset_form.html:8
+#: auth/templates/registration/password_reset_form.html:7
 msgid "Instructions for resetting password will be send to your email."
 msgstr "Ohjeet salasanan palautukseen lähetetään sähköpostiisi."

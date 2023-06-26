@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% load i18n %}
 {% load static %}
-{% load bootstrap4 %}
+{% load django_bootstrap5 %}
 {% load attribute_filters %}
 {% block content %}
   <h1 class="text-center">{% trans "Service Provider Registry" %}</h1>
@@ -25,7 +25,7 @@
       <div class="col col-md-5">
         <h4>{% trans "Login using a local account" %}</h4>
         <br>
-        <button class="btn btn-outline-dark" type="button" data-toggle="collapse" data-target="#local_login" aria-expanded="false" aria-controls="local_login" name="local_login">
+        <button class="btn btn-outline-dark" type="button" data-bs-toggle="collapse" data-bs-target="#local_login" aria-expanded="false" aria-controls="local_login" name="local_login">
           Show login form
         </button>
         <div class="collapse" id="local_login">

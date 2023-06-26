@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% load i18n %}
-{% load bootstrap4 %}
+{% load django_bootstrap5 %}
 {% load static %}
 {% block content %}
   <h1>{% trans "Certificates" %} - <small>{{ object.display_identifier }}</small></h1>
@@ -41,7 +41,24 @@
         {% endfor %}
         </tbody>
       </table>
-      <p><input class="btn btn-danger" type="submit" data-toggle="confirmation" name="remove_certificate" value="{% trans "Remove selected" %}" /></p>
+      <p><button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#confirmationModal">{% trans "Remove selected" %}</button></p>
+      <div class="modal fade" id="confirmationModal" tabindex="-1" aria-labelledby="confirmationModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="confirmationModalLabel">{% trans "Confirm removal" %}</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              {% trans "Do you want to remove selected certificates?" %}
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{% trans "Cancel" %}</button>
+              <button type="submit" name="remove_certificate" class="btn btn-primary">{% trans "Confirm" %}</button>
+            </div>
+          </div>
+        </div>
+      </div>
     </form>
   {% else %}
     <p>{% trans "No certificates" %}</p>
@@ -52,24 +69,9 @@
     <form action="" method="post" class="form">
       {% csrf_token %}
       {% bootstrap_form form layout='horizontal' %}
-      {% buttons %}
-        <p><button type="submit" name="add_cert" class="btn btn-primary">{% trans "Save" %}</button></p>
-      {% endbuttons %}
+      {% bootstrap_button _("Save") name="add_cert" button_type="submit" button_class="btn-primary" %}
     </form>
   {% else %}
     {% trans "You cannot have more than two certificates" %}
   {% endif %}
-{% endblock %}
-{% block javascript %}
-  <script src="{% static "js/jquery.popconfirm.js" %}"></script>
-  <script>
-      $("[data-toggle='confirmation']").popConfirm({
-          title: "{% trans "Confirm removal" %}",
-          content: "{% trans "Do you want to remove selected certificates?" %}",
-          placement: "bottom",
-          container: "body",
-          yesBtn: "{% trans "Confirm" %}",
-          noBtn: "{% trans "Cancel" %}"
-      });
-  </script>
 {% endblock %}

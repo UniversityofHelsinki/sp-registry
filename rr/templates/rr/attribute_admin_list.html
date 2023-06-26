@@ -12,9 +12,9 @@
       <th scope="col">{% trans "Friendly name" %}</th>
       <th scope="col">{% trans "Attribute ID" %}</th>
       <th scope="col">{% trans "OID / Name" %}</th>
-      <th scope="col" data-toggle="tooltip" data-placement="top" title="{% trans "Public attribute for SAML." %}">{% trans "SAML" %}</th>
-      <th scope="col" data-toggle="tooltip" data-placement="top" title="{% trans "Public attribute for LDAP." %}">{% trans "LDAP" %}</th>
-      <th scope="col" data-toggle="tooltip" data-placement="top" title="{% trans "Public attribute for OIDC." %}">{% trans "OIDC" %}</th>
+      <th scope="col" data-bs-toggle="tooltip" data-bs-placement="top" title="{% trans "Public attribute for SAML." %}">{% trans "SAML" %}</th>
+      <th scope="col" data-bs-toggle="tooltip" data-bs-placement="top" title="{% trans "Public attribute for LDAP." %}">{% trans "LDAP" %}</th>
+      <th scope="col" data-bs-toggle="tooltip" data-bs-placement="top" title="{% trans "Public attribute for OIDC." %}">{% trans "OIDC" %}</th>
     </tr>
     </thead>
     <tbody>
@@ -38,11 +38,4 @@
     {% endfor %}
     </tbody>
   </table>
-{% endblock %}
-{% block javascript %}
-  <script>
-      $(function () {
-          $('[data-toggle="tooltip"]').tooltip()
-      })
-  </script>
 {% endblock %}

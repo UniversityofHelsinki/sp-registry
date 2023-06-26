@@ -4,6 +4,10 @@ body {
   overflow-wrap: break-word;
 }
 
+html {
+  scroll-behavior: auto !important;
+}
+
 .help-block {
   font-style: italic;
   opacity: 0.8;

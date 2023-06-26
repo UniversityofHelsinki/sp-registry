@@ -36,11 +36,11 @@
   {% endif %}
 {% endblock %}
 {% block javascript %}
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js" integrity="sha256-4iQZ6BVL4qNKlQ27TExEhBN1HFPvAvAMbFavKKosSWQ=" crossorigin="anonymous"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.js" integrity="sha256-arMsf+3JJK2LoTGqxfnuJPFTU4hAK57MtIPdFpiHXOU=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.3.0/dist/chart.umd.js" integrity="sha256-5dsP1lVzcWPn5aOwu+zs+G+TqAu9oT8NUNM0C4n3H+4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns@3.0.0/dist/chartjs-adapter-date-fns.bundle.min.js" integrity="sha256-6nqzDSbDjc8fLSa7Q+c6lFN7WPGQb1XhpUbdCTIbVhU=" crossorigin="anonymous"></script>
   <script type="text/javascript">
-      let a = document.getElementById('statschart').getContext('2d');
-      let myLineChart = new Chart(a, {
+      const ctx = document.getElementById('statschart').getContext('2d');
+      const statisticsChart = new Chart(ctx, {
           type: 'line',
           data: {
               labels: [{% for i in object_list %}"{{ i.date|date:"Y-m-d" }}",{% endfor %}],
@@ -49,25 +49,25 @@
                   data: [{% for i in object_list %}{{ i.logins }},{% endfor %}],
                   borderColor: '#28a745',
               },
-                  {
-                      label: '{% trans "Unique users" %}',
-                      data: [{% for i in object_list %}{% if i.users %}{{ i.users }}{% else %}0{% endif %},{% endfor %}],
-                      borderColor: '#007bff',
-                  }]
+              {
+                  label: '{% trans "Unique users" %}',
+                  data: [{% for i in object_list %}{% if i.users %}{{ i.users }}{% else %}0{% endif %},{% endfor %}],
+                  borderColor: '#007bff',
+              }]
           },
           options: {
               scales: {
-                  xAxes: [{
+                  x: {
                       type: 'time',
                       time: {
                           unit: 'week'
                       }
-                  }],
-                  yAxes: [{
+                  },
+                  y: {
                       ticks: {
                           beginAtZero: true
                       }
-                  }]
+                  }
               }
           }
       });

@@ -199,6 +199,9 @@ Splinter is used for automated browser tests.
 Install Firefox and geckodriver for headless tests: https://splinter.readthedocs.io/en/latest/drivers/firefox.html
 
 ## Production installation
+Similar to creating development environment.
+
+To modify logging, copy logging.py to local_logging.py and edit it to match your requirements.
 
 ### Shibboleth
 Program uses following attributes:
@@ -216,18 +219,18 @@ Redirect Shibboleth SP errors to /error/
 Example of Apache WSGI configuration
 ```
 <VirtualHost _default_:443>
-WSGIDaemonProcess sp-registry.example.org user=appuser group=appuser python-home=/path/to/venv python-path=/path/to/rr
+WSGIDaemonProcess sp-registry.example.org user=appuser group=appuser python-home=/path/to/venv python-path=/path/to/sp-registry
 WSGIProcessGroup sp-registry.example.org
 
-WSGIScriptAlias / /path/to/rr/rr/wsgi.py process-group=sp-registry.example.org
+WSGIScriptAlias / /path/to/sp-registry/rr/wsgi.py process-group=sp-registry.example.org
 
-Alias /static/ /path/to/rr/static/
+Alias /static/ /path/to/sp-registry/static/
 
-<Directory /path/to/rr/static>
+<Directory /path/to/sp-registry/static>
     Require all granted
 </Directory>
 
-<Directory /path/to/rr>
+<Directory /path/to/sp-registry>
     <Files wsgi.py>
         Require all granted
     </Files>
@@ -251,10 +254,10 @@ Attribute test service lists all user's attributes and validates them against th
 
 Attributes shown in the test service, validation regex and Shibboleth environment variable names are defined in
 Attribute model objects.
-Non public attributes are only listed if user has some value in the attribute.
+Non-public attributes are only listed if user has some value in the attribute.
 
 This service can be made available in different Apache virtual host by pointing it to the wsgi_attributetest.py.
-It should also have it's own Shibboleth ApplicationOverride, with all the attributes enabled.
+It should also have its own Shibboleth ApplicationOverride, with all the attributes enabled.
 
 ## Tests
 

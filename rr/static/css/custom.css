@@ -17,6 +17,14 @@ html {
     background-color: #f7f7f7;
 }
 
+.navbar {
+  --bs-dropdown-divider-bg: #e9ecef;
+}
+
+.navbar .btn-sm {
+  margin: 0.25rem;
+}
+
 .sidebar {
   position: fixed;
   top: 51px;

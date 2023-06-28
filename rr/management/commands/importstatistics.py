@@ -48,12 +48,14 @@ class Command(BaseCommand):
             date_end = (date.today() + timedelta(days=1)).strftime("%Y-%m-%d") + " 00:00:00"
         else:
             date_end = (date.today()).strftime("%Y-%m-%d") + " 00:00:00"
-        cursor.execute(
-            """SELECT relyingpartyid, DATE(requestTime), count(*), count(distinct principalName) FROM %s
-                          WHERE requestTime >= %s and requestTime < %s GROUP BY relyingpartyid,
-                          DATE(requestTime);""",
-            (table, date_start, date_end),
+        select_statement = (
+            "SELECT relyingpartyid, DATE(requestTime), count(*), count(distinct principalName) "
+            "FROM " + table + " WHERE requestTime >= %s and requestTime < %s GROUP BY relyingpartyid, "
+            "DATE(requestTime);"
         )
+        select_data = (date_start, date_end)
+        cursor.execute(select_statement, select_data)
+
         serviceproviders = ServiceProvider.objects.filter(end_at=None)
         while True:
             row = cursor.fetchone()

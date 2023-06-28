@@ -1,5 +1,4 @@
 import logging
-
 from smtplib import SMTPException
 
 from django.conf import settings
@@ -14,13 +13,12 @@ from django.template.context import Context
 from django.template.engine import Engine
 from django.template.loader import render_to_string
 from django.urls import reverse
-from django.utils.translation import ugettext as _
+from django.utils.translation import gettext as _
 
 from rr.forms.spadmin import SPAdminForm, SPAdminGroupForm
 from rr.models.email import Template
 from rr.models.spadmin import Keystore
 from rr.utils.serviceprovider import get_service_provider
-
 
 logger = logging.getLogger(__name__)
 
@@ -30,9 +28,9 @@ def get_hostname(request):
     Create URI with scheme and hostname
     """
     if request.is_secure():
-        return 'https://' + request.META.get('HTTP_HOST', '')
+        return "https://" + request.META.get("HTTP_HOST", "")
     else:
-        return 'http://' + request.META.get('HTTP_HOST', '')
+        return "http://" + request.META.get("HTTP_HOST", "")
 
 
 def get_activation_link(request, key):
@@ -46,11 +44,20 @@ def render_email(request, text, key):
     """
     Render invite email context from template object.
     """
-    context = Engine().from_string(text).render(Context(
-            {'creator': key.creator.first_name + " " + key.creator.last_name,
-             'entity_id': key.sp.entity_id,
-             'activation_link': get_activation_link(request, key),
-             'valid_until': key.valid_until}))
+    context = (
+        Engine()
+        .from_string(text)
+        .render(
+            Context(
+                {
+                    "creator": key.creator.first_name + " " + key.creator.last_name,
+                    "entity_id": key.sp.entity_id,
+                    "activation_link": get_activation_link(request, key),
+                    "valid_until": key.valid_until,
+                }
+            )
+        )
+    )
     return context
 
 
@@ -68,16 +75,18 @@ def create_invite_email(request, key, template):
         subject = render_email(request, template.title, key)
         message = render_email(request, template.body, key)
     else:
-        subject = render_to_string('email/activation_email_subject.txt')
+        subject = render_to_string("email/activation_email_subject.txt")
         message = render_to_string(
-                'email/activation_email.txt',
-                {'creator': key.creator.first_name + " " + key.creator.last_name,
-                 'entity_id': key.sp.entity_id,
-                 'activation_link': get_activation_link(request, key),
-                 'valid_until': key.valid_until.strftime("%d.%m.%Y")})
+            "email/activation_email.txt",
+            {
+                "creator": key.creator.first_name + " " + key.creator.last_name,
+                "entity_id": key.sp.entity_id,
+                "activation_link": get_activation_link(request, key),
+                "valid_until": key.valid_until.strftime("%d.%m.%Y"),
+            },
+        )
     if get_activation_link(request, key) not in message:
-        error = _("Template is missing activation link. "
-                  "Please include {{ activation_link }} to message.")
+        error = _("Template is missing activation link. Please include {{ activation_link }} to message.")
     else:
         error = None
     return subject, message, error
@@ -115,37 +124,42 @@ def admin_list(request, pk):
             form, subject, message, error = _create_invite(request, sp, True)
         elif "show_message" in request.POST:
             form, subject, message, error = _create_invite(request, sp, False)
-        elif "remove_invite" in request.POST:
+        elif "remove_invites" in request.POST:
             _remove_invites(request, sp)
-        elif "remove_admin" in request.POST:
+        elif "remove_admins" in request.POST:
             remove_self = _remove_admins(request, sp)
             if remove_self:
-                return HttpResponseRedirect(reverse('serviceprovider-list'))
+                return HttpResponseRedirect(reverse("serviceprovider-list"))
         elif "add_admin_group" in request.POST:
             admin_group_form = _add_admin_group(request, sp)
         elif "remove_admin_groups" in request.POST:
             remove_self = _remove_admin_groups(request, sp)
             if remove_self:
-                return HttpResponseRedirect(reverse('serviceprovider-list'))
+                return HttpResponseRedirect(reverse("serviceprovider-list"))
     invites = Keystore.objects.filter(sp=sp)
-    return render(request, "rr/spadmin.html", {'object_list': invites,
-                                               'form': form,
-                                               'admin_group_form': admin_group_form,
-                                               'object': sp,
-                                               'subject': subject,
-                                               'message': message,
-                                               'error': error})
+    return render(
+        request,
+        "rr/spadmin.html",
+        {
+            "object_list": invites,
+            "form": form,
+            "admin_group_form": admin_group_form,
+            "object": sp,
+            "subject": subject,
+            "message": message,
+            "error": error,
+        },
+    )
 
 
 def _add_admin_group(request, sp):
     form = SPAdminGroupForm(request.POST)
     if form.is_valid():
-        group_name = form.cleaned_data['group']
+        group_name = form.cleaned_data["group"]
         group, created = Group.objects.get_or_create(name=group_name)
         sp.admin_groups.add(group)
         logger.info("Admin group {group} added to {sp} by {user}".format(group=group.name, sp=sp, user=request.user))
-        messages.add_message(request, messages.INFO,
-                             _('Admin group added: ') + group.name)
+        messages.add_message(request, messages.INFO, _("Admin group added: ") + group.name)
     return form
 
 
@@ -154,10 +168,10 @@ def _remove_admin_groups(request, sp):
     for key, value in request.POST.dict().items():
         if value == "on":
             group = Group.objects.get(pk=key)
-            logger.info("Admin group {group} removed from {sp} by {user}"
-                        .format(group=group.name, sp=sp, user=request.user))
-            messages.add_message(request, messages.INFO,
-                                 _('Admin group removed: ') + group.name)
+            logger.info(
+                "Admin group {group} removed from {sp} by {user}".format(group=group.name, sp=sp, user=request.user)
+            )
+            messages.add_message(request, messages.INFO, _("Admin group removed: ") + group.name)
             sp.admin_groups.remove(group)
             if not get_service_provider(sp.pk, request.user, service_type=None, raise_404=False):
                 removed_self = True
@@ -170,29 +184,24 @@ def _create_invite(request, sp, send):
     message = None
     error = None
     if form.is_valid():
-        email = form.cleaned_data['email']
-        template = request.POST.get('template', None)
+        email = form.cleaned_data["email"]
+        template = request.POST.get("template", None)
         key = Keystore.objects.create_key(sp=sp, creator=request.user, email=email)
         subject, message, error = create_invite_email(request, key, template)
         if send and not error:
             try:
-                send_mail(subject, message, settings.SERVER_EMAIL, [email],
-                          fail_silently=False)
-                logger.info("Invite for {sp} sent to {email} by {user}"
-                            .format(sp=sp, email=email, user=request.user))
+                send_mail(subject, message, settings.SERVER_EMAIL, [email], fail_silently=False)
+                logger.info("Invite for {sp} sent to {email} by {user}".format(sp=sp, email=email, user=request.user))
                 form = SPAdminForm(superuser=request.user.is_superuser)
                 subject = None
                 message = None
-                messages.add_message(request, messages.INFO,
-                                     _('Invite sent to ') + email)
+                messages.add_message(request, messages.INFO, _("Invite sent to ") + email)
             except SMTPException:
-                logger.warning("Could not send invite to {email}"
-                               .format(email=email))
+                logger.warning("Could not send invite to {email}".format(email=email))
                 error = _("Could not send email.")
                 key.delete()
             except BadHeaderError:
-                logger.warning("Email from {user} contained invalid headers."
-                               .format(user=request.user))
+                logger.warning("Email from {user} contained invalid headers.".format(user=request.user))
                 error = _("Invalid header found, could not send email.")
                 key.delete()
         else:
@@ -205,14 +214,13 @@ def _remove_invites(request, sp):
         if value == "on":
             invite = Keystore.objects.filter(pk=key).first()
             if invite and invite.sp == sp:
-                logger.info("Invite for {email} to {sp} deleted by {user}"
-                            .format(email=invite.email, sp=sp, user=request.user))
-                messages.add_message(request, messages.INFO,
-                                     _('Invite removed for email ') + invite.email)
+                logger.info(
+                    "Invite for {email} to {sp} deleted by {user}".format(email=invite.email, sp=sp, user=request.user)
+                )
+                messages.add_message(request, messages.INFO, _("Invite removed for email ") + invite.email)
                 invite.delete()
             else:
-                messages.add_message(request, messages.INFO,
-                                     _('Invite already used or removed'))
+                messages.add_message(request, messages.INFO, _("Invite already used or removed"))
 
 
 def _remove_admins(request, sp):
@@ -220,10 +228,8 @@ def _remove_admins(request, sp):
     for key, value in request.POST.dict().items():
         if value == "on":
             admin = User.objects.get(pk=key)
-            logger.info("Admin {admin} removed from {sp} by {user}"
-                        .format(admin=admin, sp=sp, user=request.user))
-            messages.add_message(request, messages.INFO,
-                                 _('Admin removed: ') + admin.username)
+            logger.info("Admin {admin} removed from {sp} by {user}".format(admin=admin, sp=sp, user=request.user))
+            messages.add_message(request, messages.INFO, _("Admin removed: ") + admin.username)
             sp.admins.remove(admin)
             if not get_service_provider(sp.pk, request.user, service_type=None, raise_404=False):
                 removed_self = True
@@ -238,13 +244,12 @@ def activate_key(request, invite_key=""):
 
     Redirects to summary-view.
     """
-    get_key = request.GET.get('key', '')
+    get_key = request.GET.get("key", "")
     if get_key:
         invite_key = get_key
-    sp = Keystore.objects.activate_key(user=request.user,
-                                       key=invite_key)
+    sp = Keystore.objects.activate_key(user=request.user, key=invite_key)
     if sp:
-        return HttpResponseRedirect(reverse('summary-view', args=(sp,)))
+        return HttpResponseRedirect(reverse("summary-view", args=(sp,)))
     else:
         error_message = _("Activation key does not match")
-        return render(request, "error.html", {'error_message': error_message})
+        return render(request, "error.html", {"error_message": error_message})

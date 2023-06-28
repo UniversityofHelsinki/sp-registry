@@ -3,9 +3,9 @@ Command line script for importing metadata.xml
 
 Usage help: ./manage.py importstatistics -h
 """
-import MySQLdb
 from datetime import date, timedelta
 
+import MySQLdb
 from django.conf import settings
 from django.core.management.base import BaseCommand
 
@@ -15,19 +15,23 @@ from rr.models.statistics import Statistics
 
 class Command(BaseCommand):
     def add_arguments(self, parser):
-        parser.add_argument('-d', type=int, action='store', dest='number_of_days', default=3,
-                            help='How many days in past to import, default 3.')
-        parser.add_argument('-t', action='store_true', dest='include_today',
-                            help='Include current day')
-        parser.add_argument('-p', action='store_true', dest='verbose',
-                            help='Print statistics as updated')
+        parser.add_argument(
+            "-d",
+            type=int,
+            action="store",
+            dest="number_of_days",
+            default=3,
+            help="How many days in past to import, default 3.",
+        )
+        parser.add_argument("-t", action="store_true", dest="include_today", help="Include current day")
+        parser.add_argument("-p", action="store_true", dest="verbose", help="Print statistics as updated")
 
     def handle(self, *args, **options):
-        number_of_days = options['number_of_days']
+        number_of_days = options["number_of_days"]
         if number_of_days < 1:
             number_of_days = 1
-        include_today = options['include_today']
-        verbose = options['verbose']
+        include_today = options["include_today"]
+        verbose = options["verbose"]
         try:
             host = settings.STATISTICS_DATABASE_HOST
             user = settings.STATISTICS_DATABASE_USER
@@ -37,20 +41,19 @@ class Command(BaseCommand):
         except AttributeError:
             self.stderr.write("Missing database settings")
             exit(1)
-        db = MySQLdb.connect(
-            host=host,
-            user=user,
-            passwd=password,
-            db=database)
+        db = MySQLdb.connect(host=host, user=user, passwd=password, db=database)
         cursor = db.cursor()
         date_start = (date.today() - timedelta(days=number_of_days)).strftime("%Y-%m-%d") + " 00:00:00"
         if include_today:
             date_end = (date.today() + timedelta(days=1)).strftime("%Y-%m-%d") + " 00:00:00"
         else:
             date_end = (date.today()).strftime("%Y-%m-%d") + " 00:00:00"
-        cursor.execute("""SELECT relyingpartyid, DATE(requestTime), count(*), count(distinct principalName) FROM %s
+        cursor.execute(
+            """SELECT relyingpartyid, DATE(requestTime), count(*), count(distinct principalName) FROM %s
                           WHERE requestTime >= %s and requestTime < %s GROUP BY relyingpartyid,
-                          DATE(requestTime);""", (table, date_start, date_end))
+                          DATE(requestTime);""",
+            (table, date_start, date_end),
+        )
         serviceproviders = ServiceProvider.objects.filter(end_at=None)
         while True:
             row = cursor.fetchone()

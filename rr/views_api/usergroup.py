@@ -1,7 +1,6 @@
 import logging
 
 from django.utils import timezone
-
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters
 from rest_framework.permissions import IsAuthenticated
@@ -24,16 +23,15 @@ class UserGroupViewSet(CustomModelViewSet):
     destroy:
     Removes the given user group.
     """
+
     queryset = UserGroup.objects.all()
     permission_classes = [IsAuthenticated]
     serializer_class = UserGroupSerializer
-    filter_backends = [filters.SearchFilter,
-                       DjangoFilterBackend]
-    search_fields = ['name']
-    filterset_fields = ['sp', 'name']
+    filter_backends = [filters.SearchFilter, DjangoFilterBackend]
+    search_fields = ["name"]
+    filterset_fields = ["sp", "name"]
 
     def perform_destroy(self, instance):
         instance.end_at = timezone.now()
         instance.save()
-        logger.info("User group removed from {service} by {user}"
-                    .format(service=instance.sp, user=self.request.user))
+        logger.info("User group removed from {service} by {user}".format(service=instance.sp, user=self.request.user))

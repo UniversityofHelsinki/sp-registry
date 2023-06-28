@@ -14,11 +14,11 @@ def get_activation(affiliations, groups):
     affiliations: list of affiliations
     groups: list of group names
     """
-    if hasattr(settings, 'AUTO_ACTIVATE_AFFILIATIONS') and isinstance(settings.AUTO_ACTIVATE_AFFILIATIONS, list):
+    if hasattr(settings, "AUTO_ACTIVATE_AFFILIATIONS") and isinstance(settings.AUTO_ACTIVATE_AFFILIATIONS, list):
         auto_activate_affiliations = settings.AUTO_ACTIVATE_AFFILIATIONS
     else:
         auto_activate_affiliations = []
-    if hasattr(settings, 'AUTO_ACTIVATE_GROUPS') and isinstance(settings.AUTO_ACTIVATE_GROUPS, list):
+    if hasattr(settings, "AUTO_ACTIVATE_GROUPS") and isinstance(settings.AUTO_ACTIVATE_GROUPS, list):
         auto_activate_groups = settings.AUTO_ACTIVATE_GROUPS
     else:
         auto_activate_groups = []
@@ -52,15 +52,14 @@ class ShibbolethBackend:
     If Shibboleth EPPN is found, signs user in,
     creating a new user if necessary.
     """
+
     def authenticate(self, request):
-        username = request.META.get(settings.SAML_ATTR_EPPN, '')
-        first_name = request.META.get(
-            settings.SAML_ATTR_FIRST_NAME, '').encode('latin1').decode('utf-8', 'ignore')
-        last_name = request.META.get(
-            settings.SAML_ATTR_LAST_NAME, '').encode('latin1').decode('utf-8', 'ignore')
-        email = request.META.get(settings.SAML_ATTR_EMAIL, '')
-        affiliations = request.META.get(settings.SAML_ATTR_AFFILIATION, '').split(';')
-        groups = request.META.get(settings.SAML_ATTR_GROUPS, '').split(';')
+        username = request.META.get(settings.SAML_ATTR_EPPN, "")
+        first_name = request.META.get(settings.SAML_ATTR_FIRST_NAME, "").encode("latin1").decode("utf-8", "ignore")
+        last_name = request.META.get(settings.SAML_ATTR_LAST_NAME, "").encode("latin1").decode("utf-8", "ignore")
+        email = request.META.get(settings.SAML_ATTR_EMAIL, "")
+        affiliations = request.META.get(settings.SAML_ATTR_AFFILIATION, "").split(";")
+        groups = request.META.get(settings.SAML_ATTR_GROUPS, "").split(";")
         if username and re.match("[^@]+@[^@]+\.[^@]+", username):
             try:
                 user = User.objects.get(username=username)
@@ -78,12 +77,14 @@ class ShibbolethBackend:
                 # Create a new user with unusable password
                 logger.info("Created a new user: %s", username)
                 active = get_activation(affiliations, groups)
-                user = User(username=username,
-                            password=User.objects.make_random_password(),
-                            first_name=first_name,
-                            last_name=last_name,
-                            email=email,
-                            is_active=active)
+                user = User(
+                    username=username,
+                    password=User.objects.make_random_password(),
+                    first_name=first_name,
+                    last_name=last_name,
+                    email=email,
+                    is_active=active,
+                )
                 user.set_unusable_password = True
                 user.save()
                 update_groups(user, groups)

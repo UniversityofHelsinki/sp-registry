@@ -6,40 +6,57 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('rr', '0041_auto_20190108_0956'),
+        ("rr", "0041_auto_20190108_0956"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='endpoint',
-            name='url',
-            field=models.URLField(max_length=255, verbose_name='Location'),
+            model_name="endpoint",
+            name="url",
+            field=models.URLField(max_length=255, verbose_name="Location"),
         ),
         migrations.RenameField(
-            model_name='endpoint',
-            old_name='url',
-            new_name='location',
+            model_name="endpoint",
+            old_name="url",
+            new_name="location",
         ),
         migrations.AddField(
-            model_name='endpoint',
-            name='response_location',
-            field=models.URLField(blank=True, max_length=255, verbose_name='ResponseLocation'),
+            model_name="endpoint",
+            name="response_location",
+            field=models.URLField(blank=True, max_length=255, verbose_name="ResponseLocation"),
         ),
         migrations.AddField(
-            model_name='endpoint',
-            name='is_default',
-            field=models.BooleanField(default=False, verbose_name='isDefault'),
+            model_name="endpoint",
+            name="is_default",
+            field=models.BooleanField(default=False, verbose_name="isDefault"),
         ),
         migrations.AlterField(
-            model_name='endpoint',
-            name='binding',
-            field=models.CharField(choices=[('urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST', 'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST'), ('urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect', 'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect'), ('urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Artifact', 'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Artifact'), ('urn:oasis:names:tc:SAML:2.0:bindings:SOAP', 'urn:oasis:names:tc:SAML:2.0:bindings:SOAP')], max_length=60, verbose_name='Binding'),
+            model_name="endpoint",
+            name="binding",
+            field=models.CharField(
+                choices=[
+                    (
+                        "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST",
+                        "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST",
+                    ),
+                    (
+                        "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect",
+                        "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect",
+                    ),
+                    (
+                        "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Artifact",
+                        "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Artifact",
+                    ),
+                    ("urn:oasis:names:tc:SAML:2.0:bindings:SOAP", "urn:oasis:names:tc:SAML:2.0:bindings:SOAP"),
+                ],
+                max_length=60,
+                verbose_name="Binding",
+            ),
         ),
         migrations.AlterField(
-            model_name='endpoint',
-            name='index',
-            field=models.SmallIntegerField(blank=True, null=True, verbose_name='Index'),
+            model_name="endpoint",
+            name="index",
+            field=models.SmallIntegerField(blank=True, null=True, verbose_name="Index"),
         ),
     ]

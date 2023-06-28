@@ -1,8 +1,8 @@
 {% extends "base.html" %}
 {% load i18n %}
 {% block content %}
-<h1>Attributes - <small>{{ attribute }}</small></h1>
-<dl class="row">
+  <h1>Attributes - <small>{{ attribute }}</small></h1>
+  <dl class="row">
     <dt class="col-sm-3">{% trans "Friendly Name" %}</dt>
     <dd class="col-sm-9">{{ attribute.friendlyname }}</dd>
     <dt class="col-sm-3">{% trans "Attribute ID" %}</dt>
@@ -25,11 +25,11 @@
     {% if attribute.scoped %}<dd class="col-sm-9 text-success">&#10004;{% else %}<dd class="col-sm-9 text-danger">&#10005;{% endif %}</dd>
     <dt class="col-sm-3">{% trans "Information" %}</dt>
     <dd class="col-sm-9">{{ attribute.info }}</dd>
-</dl>
-<p><a href="/admin_django/rr/attribute/{{ attribute.pk }}/change/"><button type="button" class="btn btn-primary">{% trans "Edit in Django admin view" %}</button></a></p>
-<h2 id="service-providers">{% trans "Service Providers using the attribute" %}</h2>
-<table class="table table-sm table-responsive" aria-describedby="service-providers">
-  <thead>
+  </dl>
+  <p><a href="/admin_django/rr/attribute/{{ attribute.pk }}/change/"><button type="button" class="btn btn-primary">{% trans "Edit in Django admin view" %}</button></a></p>
+  <h2 id="service-providers">{% trans "Service Providers using the attribute" %}</h2>
+  <table class="table table-sm table-responsive" aria-describedby="service-providers">
+    <thead>
     <tr>
       <th scope="col">{% trans "SP" %}</th>
       <th scope="col">{% trans "Prod" %}</th>
@@ -38,24 +38,24 @@
       <th scope="col">{% trans "Contact" %}</th>
       <th scope="col">{% trans "Validated" %}</th>
     </tr>
-  </thead>
-  <tbody>
-{% for object in object_list %}
-    <tr>
-      <th scope="row"><a href="/summary/{{ object.sp.pk }}/">{{ object.sp }}</a></th>
-      {% if object.sp.production %}<td class="text-success">&#10004;{% else %}<td class="text-danger">&#10005;{% endif %}</td>
-      {% if object.sp.test %}<td class="text-success">&#10004;{% else %}<td class="text-danger">&#10005;{% endif %}</td>
-      <td>{{ object.reason }}</td>
-      <td>{% for contact in object.sp.contacts.all %}{{ contact.type }}: {{ contact.email }}{% if not forloop.last %}<br>{% endif %}{% endfor %}</td>
-      <td>{{ object.validated }}</td>
-    </tr>
-{% empty %}
-    <tr>
-      <th scope="row">{% trans "No attributes" %}</th>
-      <td></td>
-      <td></td>
-    </tr>
-{% endfor %}
-  </tbody>
-</table>
+    </thead>
+    <tbody>
+    {% for object in object_list %}
+      <tr>
+        <th scope="row"><a href="/summary/{{ object.sp.pk }}/">{{ object.sp }}</a></th>
+        {% if object.sp.production %}<td class="text-success">&#10004;{% else %}<td class="text-danger">&#10005;{% endif %}</td>
+        {% if object.sp.test %}<td class="text-success">&#10004;{% else %}<td class="text-danger">&#10005;{% endif %}</td>
+        <td>{{ object.reason }}</td>
+        <td>{% for contact in object.sp.contacts.all %}{{ contact.type }}: {{ contact.email }}{% if not forloop.last %}<br>{% endif %}{% endfor %}</td>
+        <td>{{ object.validated }}</td>
+      </tr>
+    {% empty %}
+      <tr>
+        <th scope="row">{% trans "No attributes" %}</th>
+        <td></td>
+        <td></td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
 {% endblock %}

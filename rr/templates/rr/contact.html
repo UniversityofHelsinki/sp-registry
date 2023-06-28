@@ -1,66 +1,68 @@
 {% extends "base.html" %}
 {% load i18n %}
-{% load bootstrap4 %}
+{% load django_bootstrap5 %}
 {% load static %}
 {% block content %}
-<h1>{% trans "Contacts" %} - <small>{{ object.display_identifier }}</small></h1>
-<div class="alert alert-success" role="alert">
-<p>{% trans "You need to specify at least the technical contact for a production use." %}</p>
-<p>{% trans "It's recommend that you use service addresses, not personal addresses. These contacts are used if the IdP administrators have to contact you about the SP or some client request has to be forwarded to you." %}</p>
-</div>
+  <h1>{% trans "Contacts" %} - <small>{{ object.display_identifier }}</small></h1>
+  <div class="alert alert-success" role="alert">
+    <p>{% trans "You need to specify at least the technical contact for a production use." %}</p>
+    <p>{% trans "It's recommend that you use service addresses, not personal addresses. These contacts are used if the IdP administrators have to contact you about the SP or some client request has to be forwarded to you." %}</p>
+  </div>
 
-<h2 id="contact-list">{% trans "List of contacts" %}</h2>
-{% if object_list %}
-<form action="" method='POST'>
-{% csrf_token %}
-<table class="table table-sm table-responsive" aria-describedby="contact-list">
-  <thead>
-    <tr>
-      <th scope="col">{% trans "Type" %}</th>
-      <th scope="col">{% trans "First name" %}</th>
-      <th scope="col">{% trans "Last name" %}</th>
-      <th scope="col">{% trans "E-Mail" %}</th>
-      <th scope="col">{% trans "Remove" %}</th>
-    </tr>
-  </thead>
-  <tbody>
-{% for contact in object_list %}
-    <tr>
-      <th scope="row">{{ contact.get_type_display }}</th>
-      <td>{{ contact.firstname }}</td>
-      <td>{{ contact.lastname }}</td>
-      <td>{{ contact.email }}</td>
-      <td><div class="checkbox"><input type="checkbox" aria-label="{%  trans "Mark for removal" %}" name="{{ contact.pk }}" class="" id="id_contact" /></div></td>
-    </tr>
-{% endfor %}
-  </tbody>
-</table>
-<p><input class="btn btn-danger" type="submit" data-toggle="confirmation" name="remove_contact" value="{% trans "Remove selected" %}" /></p>
-</form>
-{% else %}
-<p>{% trans "No contacts" %}</p>
-{% endif %}
-{% if form %}
-<h2>{% trans "Add contact" %}</h2>
-<form action="" method="post" class="form">
-    {% csrf_token %}
-    {% bootstrap_form form layout='horizontal' %}
-    {% buttons %}
-    <p><button type="submit" name="add_contact" class="btn btn-primary">{% trans "Save" %}</button></p>
-    {% endbuttons %}
-</form>
-{% endif %}
-{% endblock %}
-{% block javascript %}
-  <script src="{% static "js/jquery.popconfirm.js" %}"></script>
-  <script>
-  $("[data-toggle='confirmation']").popConfirm({
-    title: "{% trans "Confirm removal" %}",
-    content: "{% trans "Do you want to remove selected contacts?" %}",
-    placement: "bottom",
-    container: "body",
-    yesBtn: "{% trans "Confirm" %}",
-    noBtn: "{% trans "Cancel" %}"
-  });
-  </script>
+  <h2 id="contact-list">{% trans "List of contacts" %}</h2>
+  {% if object_list %}
+    <form action="" method='POST'>
+      {% csrf_token %}
+      <table class="table table-sm table-responsive" aria-describedby="contact-list">
+        <thead>
+        <tr>
+          <th scope="col">{% trans "Type" %}</th>
+          <th scope="col">{% trans "First name" %}</th>
+          <th scope="col">{% trans "Last name" %}</th>
+          <th scope="col">{% trans "E-Mail" %}</th>
+          <th scope="col">{% trans "Remove" %}</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for contact in object_list %}
+          <tr>
+            <th scope="row">{{ contact.get_type_display }}</th>
+            <td>{{ contact.firstname }}</td>
+            <td>{{ contact.lastname }}</td>
+            <td>{{ contact.email }}</td>
+            <td><div class="checkbox"><input type="checkbox" aria-label="{%  trans "Mark for removal" %}" name="{{ contact.pk }}" class="" id="id_contact" /></div></td>
+          </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+      <p><button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#confirmationModal">{% trans "Remove selected" %}</button></p>
+      <div class="modal fade" id="confirmationModal" tabindex="-1" aria-labelledby="confirmationModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="confirmationModalLabel">{% trans "Confirm removal" %}</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              {% trans "Do you want to remove selected contacts?" %}
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{% trans "Cancel" %}</button>
+              <button type="submit" name="remove_contact" class="btn btn-primary">{% trans "Confirm" %}</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  {% else %}
+    <p>{% trans "No contacts" %}</p>
+  {% endif %}
+  {% if form %}
+    <h2>{% trans "Add contact" %}</h2>
+    <form action="" method="post" class="form">
+      {% csrf_token %}
+      {% bootstrap_form form layout='horizontal' %}
+      {% bootstrap_button _("Save") name="add_contact" button_type="submit" button_class="btn-primary" %}
+    </form>
+  {% endif %}
 {% endblock %}

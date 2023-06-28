@@ -4,7 +4,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 from django.utils import timezone
-from django.utils.translation import ugettext as _
+from django.utils.translation import gettext as _
 
 from rr.forms.usergroup import UserGroupForm
 from rr.models.usergroup import UserGroup
@@ -44,21 +44,19 @@ def usergroup_list(request, pk):
             form = _add_usergroup(request, sp)
         elif "remove_usergroup" in request.POST:
             _remove_usergroups(request, sp)
-    contacts = UserGroup.objects.filter(sp=sp, end_at=None).order_by('name')
-    return render(request, "rr/usergroup.html", {'object_list': contacts,
-                                                 'form': form,
-                                                 'object': sp})
+    contacts = UserGroup.objects.filter(sp=sp, end_at=None).order_by("name")
+    return render(request, "rr/usergroup.html", {"object_list": contacts, "form": form, "object": sp})
 
 
 def _add_usergroup(request, sp):
     form = UserGroupForm(request.POST, sp=sp)
     if form.is_valid():
-        name = form.cleaned_data['name']
+        name = form.cleaned_data["name"]
         UserGroup.objects.create(sp=sp, name=name)
         sp.save_modified()
         logger.info("User group added for {sp} by {user}".format(sp=sp, user=request.user))
         form = UserGroupForm(sp=sp)
-        messages.add_message(request, messages.INFO, _('User group added.'))
+        messages.add_message(request, messages.INFO, _("User group added."))
     return form
 
 
@@ -70,6 +68,5 @@ def _remove_usergroups(request, sp):
                 user_group.end_at = timezone.now()
                 user_group.save()
                 sp.save_modified()
-                logger.info("User group removed from {sp} by {user}".format(
-                    sp=sp, user=request.user))
-                messages.add_message(request, messages.INFO, _('User group removed.'))
+                logger.info("User group removed from {sp} by {user}".format(sp=sp, user=request.user))
+                messages.add_message(request, messages.INFO, _("User group removed."))

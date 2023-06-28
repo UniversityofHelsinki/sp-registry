@@ -7,27 +7,30 @@ import json
 import logging
 import os
 from datetime import datetime
-from os.path import join
 from glob import glob
-
-from git import Repo
-from git.exc import InvalidGitRepositoryError, NoSuchPathError, GitCommandError
-from lxml import etree
+from os.path import join
 
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import PermissionDenied
 from django.http.response import Http404
 from django.shortcuts import render
-from django.utils.translation import ugettext as _
+from django.utils.translation import gettext as _
+from git import Repo
+from git.exc import GitCommandError, InvalidGitRepositoryError, NoSuchPathError
+from lxml import etree
 
-from rr.forms.metadata import MetadataForm, MetadataCommitForm
-from rr.utils.saml_metadata_generator import saml_metadata_generator
-from rr.utils.saml_metadata_generator import saml_metadata_generator_list
-from rr.utils.oidc_metadata_generator import oidc_metadata_generator
-from rr.utils.saml_metadata_parser import saml_metadata_parser
+from rr.forms.metadata import MetadataCommitForm, MetadataForm
 from rr.utils.ldap_metadata_generator import ldap_metadata_generator_list
-from rr.utils.oidc_metadata_generator import oidc_metadata_generator_list
+from rr.utils.oidc_metadata_generator import (
+    oidc_metadata_generator,
+    oidc_metadata_generator_list,
+)
+from rr.utils.saml_metadata_generator import (
+    saml_metadata_generator,
+    saml_metadata_generator_list,
+)
+from rr.utils.saml_metadata_parser import saml_metadata_parser
 from rr.utils.serviceprovider import get_service_provider
 
 logger = logging.getLogger(__name__)
@@ -51,7 +54,7 @@ def metadata(request, pk):
     :template:`rr/metadata.html`
     """
     sp = get_service_provider(pk, request.user, service_type=["oidc", "saml"])
-    if request.GET.get('validated', '') in ("false", "False"):
+    if request.GET.get("validated", "") in ("false", "False"):
         validated = False
     else:
         validated = True
@@ -60,18 +63,18 @@ def metadata(request, pk):
         if sp.service_type == "saml":
             tree = saml_metadata_generator(sp=sp, validated=validated)
             if tree is not None:
-                metadata = etree.tostring(tree, pretty_print=True,
-                                          encoding='UTF-8').replace(b'xmlns:xmlns', b'xmlns').decode()
+                metadata = (
+                    etree.tostring(tree, pretty_print=True, encoding="UTF-8")
+                    .replace(b"xmlns:xmlns", b"xmlns")
+                    .decode()
+                )
         elif sp.service_type == "oidc":
-            metadata = oidc_metadata_generator(sp=sp, validated=validated,
-                                               client_secret_encryption="masked")
+            metadata = oidc_metadata_generator(sp=sp, validated=validated, client_secret_encryption="masked")
             metadata = json.dumps(metadata, indent=4, sort_keys=True)
         else:
             raise Http404("Service provider does not exist")
 
-    return render(request, "rr/metadata.html", {'object': sp,
-                                                'metadata': metadata,
-                                                'validated': validated})
+    return render(request, "rr/metadata.html", {"object": sp, "metadata": metadata, "validated": validated})
 
 
 @login_required
@@ -94,22 +97,19 @@ def metadata_import(request):
     if request.method == "POST" and "import_metadata" in request.POST:
         form = MetadataForm(request.POST, user=request.user)
         if form.is_valid():
-            metadata = form.cleaned_data['metadata'].encode('utf-8')
-            disable_checks = request.POST.get('disable_checks', False)
-            validate = request.POST.get('validate', False)
-            parser = etree.XMLParser(ns_clean=True, remove_comments=True,
-                                     remove_blank_text=True, encoding='utf-8')
+            metadata = form.cleaned_data["metadata"].encode("utf-8")
+            disable_checks = request.POST.get("disable_checks", False)
+            validate = request.POST.get("validate", False)
+            parser = etree.XMLParser(ns_clean=True, remove_comments=True, remove_blank_text=True, encoding="utf-8")
             entity = etree.fromstring(metadata, parser)
-            sp, errors = saml_metadata_parser(entity, overwrite=False, verbosity=2,
-                                              validate=validate, disable_checks=disable_checks)
+            sp, errors = saml_metadata_parser(
+                entity, overwrite=False, verbosity=2, validate=validate, disable_checks=disable_checks
+            )
             if sp:
                 sp.admins.add(request.user)
                 form = None
-                logger.info("Metadata for SP %s imported by %s"
-                            .format(sp=sp, user=request.user))
-    return render(request, "rr/metadata_import.html", {'form': form,
-                                                       'errors': errors,
-                                                       'sp': sp})
+                logger.info("Metadata for SP %s imported by %s".format(sp=sp, user=request.user))
+    return render(request, "rr/metadata_import.html", {"form": form, "errors": errors, "sp": sp})
 
 
 @login_required
@@ -140,40 +140,46 @@ def metadata_management(request, service_type="saml"):
         raise PermissionDenied
     repo, error = _get_repositorio(service_type)
     if error:
-        return render(request, "error.html", {'error_message': error})
+        return render(request, "error.html", {"error_message": error})
     _write_medadata(repo, service_type)
     diff = _get_diff(repo)
     log = _get_last_commits(repo, 5)
     origin, warning, error = _get_origin(repo, warning)
     if error:
-        return render(request, "error.html", {'error_message': error})
+        return render(request, "error.html", {"error_message": error})
     if request.method == "POST":
         form = MetadataCommitForm(request.POST)
         if form.is_valid() and diff:
             repo, warning, error = _commit_and_push(form, repo, diff, origin, warning)
             if error:
-                return render(request, "error.html", {'error_message': error})
+                return render(request, "error.html", {"error_message": error})
             log = _get_last_commits(repo, 5)
     diff = _get_diff(repo)
-    diff_hash = hashlib.md5(diff.encode('utf-8')).hexdigest()
+    diff_hash = hashlib.md5(diff.encode("utf-8")).hexdigest()
     form = MetadataCommitForm(diff_hash=diff_hash)
-    return render(request, "rr/metadata_management.html", {'form': form,
-                                                           'diff': diff,
-                                                           'log': log,
-                                                           'warning': warning})
+    return render(request, "rr/metadata_management.html", {"form": form, "diff": diff, "log": log, "warning": warning})
 
 
 def _get_repositorio(service_type):
     error = None
     repo = None
-    if service_type == "saml" and hasattr(settings, 'METADATA_GIT_REPOSITORIO') and \
-            hasattr(settings, 'METADATA_FILENAME'):
+    if (
+        service_type == "saml"
+        and hasattr(settings, "METADATA_GIT_REPOSITORIO")
+        and hasattr(settings, "METADATA_FILENAME")
+    ):
         repo_location = settings.METADATA_GIT_REPOSITORIO
-    elif service_type == "oidc" and hasattr(settings, 'OIDC_GIT_REPOSITORIO') and \
-            hasattr(settings, 'OIDC_METADATA_FILENAME'):
+    elif (
+        service_type == "oidc"
+        and hasattr(settings, "OIDC_GIT_REPOSITORIO")
+        and hasattr(settings, "OIDC_METADATA_FILENAME")
+    ):
         repo_location = settings.OIDC_GIT_REPOSITORIO
-    elif service_type == "ldap" and hasattr(settings, 'LDAP_GIT_REPOSITORIO') and \
-            hasattr(settings, 'LDAP_METADATA_FILENAME'):
+    elif (
+        service_type == "ldap"
+        and hasattr(settings, "LDAP_GIT_REPOSITORIO")
+        and hasattr(settings, "LDAP_METADATA_FILENAME")
+    ):
         repo_location = settings.LDAP_GIT_REPOSITORIO
     else:
         raise PermissionDenied
@@ -184,16 +190,18 @@ def _get_repositorio(service_type):
     except NoSuchPathError:
         error = _("Repository path could not be accessed.")
     except GitCommandError:
-        error = _("Execution of git command failed. Might want to try git command locally "
-                  "from the command line and check that it works.")
+        error = _(
+            "Execution of git command failed. Might want to try git command locally "
+            "from the command line and check that it works."
+        )
     return repo, error
 
 
 def _get_diff(repo):
     try:
-        return repo.git.diff('HEAD')
+        return repo.git.diff("HEAD")
     except GitCommandError:
-        return repo.git.diff('4b825dc642cb6eb9a060e54bf8d69288fbee4904')
+        return repo.git.diff("4b825dc642cb6eb9a060e54bf8d69288fbee4904")
 
 
 def _get_last_commits(repo, n):
@@ -202,7 +210,7 @@ def _get_last_commits(repo, n):
     """
     log = []
     log_ref = repo.head.reference.log()
-    for x in range(1, n+1):
+    for x in range(1, n + 1):
         if len(log_ref) < x:
             break
         log_entry = log_ref[-x]
@@ -226,26 +234,20 @@ def _write_medadata(repo, service_type):
 def _write_saml_metadata():
     # Generate metadata and write it to file
     if settings.SAML_METADATA_EXPORT_INDIVIDUAL_FILES:
-        metadata_list = saml_metadata_generator_list(validated=True,
-                                                     privacypolicy=True,
-                                                     production=True,
-                                                     as_list=True)
+        metadata_list = saml_metadata_generator_list(validated=True, privacypolicy=True, production=True, as_list=True)
         for metadata in metadata_list:
             if metadata is not None and metadata.get("entityID"):
-                file_name = hashlib.sha1(metadata.get("entityID").encode()).hexdigest() + '.xml'
-                with open(os.path.join(settings.METADATA_GIT_REPOSITORIO, file_name), 'w') as f:
+                file_name = hashlib.sha1(metadata.get("entityID").encode()).hexdigest() + ".xml"
+                with open(os.path.join(settings.METADATA_GIT_REPOSITORIO, file_name), "w") as f:
                     f.write('<?xml version="1.0" encoding="UTF-8"?>\n')
-                    f.write(etree.tostring(metadata,
-                                           pretty_print=True,
-                                           encoding=str).replace('xmlns:xmlns', 'xmlns'))
+                    f.write(etree.tostring(metadata, pretty_print=True, encoding=str).replace("xmlns:xmlns", "xmlns"))
     else:
         metadata = saml_metadata_generator_list(validated=True, privacypolicy=True, production=True)
         metadata_file = join(settings.METADATA_GIT_REPOSITORIO, settings.METADATA_FILENAME)
-        with open(metadata_file, 'w') as f:
+        with open(metadata_file, "w") as f:
             f.write('<?xml version="1.0" encoding="UTF-8"?>\n')
             # Hack for correcting namespace definition by removing prefix.
-            f.write(etree.tostring(metadata, pretty_print=True,
-                                   encoding=str).replace('xmlns:xmlns', 'xmlns'))
+            f.write(etree.tostring(metadata, pretty_print=True, encoding=str).replace("xmlns:xmlns", "xmlns"))
 
 
 def _write_ldap_metadata():
@@ -254,31 +256,32 @@ def _write_ldap_metadata():
     files = []
     metadata_file = join(settings.LDAP_GIT_REPOSITORIO, settings.LDAP_METADATA_FILENAME)
     files.append(settings.LDAP_METADATA_FILENAME)
-    with open(metadata_file, 'w') as f:
+    with open(metadata_file, "w") as f:
         f.write('<?xml version="1.0" encoding="UTF-8"?>\n')
         f.write(etree.tostring(tree, pretty_print=True, encoding=str))
     # Generate separate files for all entities
     for entity in tree:
         entity_id = entity.get("ID")
         if entity_id:
-            metadata_file = join(settings.LDAP_GIT_REPOSITORIO, entity_id + '.xml')
-            files.append(entity_id + '.xml')
-            with open(metadata_file, 'w') as f:
+            metadata_file = join(settings.LDAP_GIT_REPOSITORIO, entity_id + ".xml")
+            files.append(entity_id + ".xml")
+            with open(metadata_file, "w") as f:
                 f.write('<?xml version="1.0" encoding="UTF-8"?>\n')
                 f.write(etree.tostring(entity, pretty_print=True, encoding=str))
     # Remove all other xml-files from repository
-    for f in glob(settings.LDAP_GIT_REPOSITORIO + '*.xml'):
-        if f.replace(settings.LDAP_GIT_REPOSITORIO, '') not in files:
+    for f in glob(settings.LDAP_GIT_REPOSITORIO + "*.xml"):
+        if f.replace(settings.LDAP_GIT_REPOSITORIO, "") not in files:
             os.remove(f)
     return
 
 
 def _write_oidc_metadata():
     # Generate metadata and write it to file
-    metadata = oidc_metadata_generator_list(validated=True, privacypolicy=True, production=True,
-                                            client_secret_encryption="encrypted")
+    metadata = oidc_metadata_generator_list(
+        validated=True, privacypolicy=True, production=True, client_secret_encryption="encrypted"
+    )
     metadata_file = join(settings.OIDC_GIT_REPOSITORIO, settings.OIDC_METADATA_FILENAME)
-    with open(metadata_file, 'w') as f:
+    with open(metadata_file, "w") as f:
         f.write(json.dumps(metadata, indent=4, sort_keys=True))
 
 
@@ -295,17 +298,19 @@ def _get_origin(repo, warning):
                 origin = False
                 warning.append(_("Remote repository not matching local, please fix manually."))
         except GitCommandError:
-            error = _("Execution of git command failed. Might want to try git command locally "
-                      "from the command line and check that it works.")
+            error = _(
+                "Execution of git command failed. Might want to try git command locally "
+                "from the command line and check that it works."
+            )
     return origin, warning, error
 
 
 def _commit_and_push(form, repo, diff, origin, warning):
     error = None
-    commit_message = form.cleaned_data['commit_message']
-    form_hash = form.cleaned_data['diff_hash']
+    commit_message = form.cleaned_data["commit_message"]
+    form_hash = form.cleaned_data["diff_hash"]
     # Check that file has not changed
-    if form_hash == hashlib.md5(diff.encode('utf-8')).hexdigest():
+    if form_hash == hashlib.md5(diff.encode("utf-8")).hexdigest():
         try:
             repo.index.commit(commit_message)
             if origin:
@@ -313,9 +318,11 @@ def _commit_and_push(form, repo, diff, origin, warning):
                 if repo.commit().hexsha != origin.fetch()[0].commit.hexsha:
                     warning.append(_("Pushing to remote did not work, please fix manually."))
         except GitCommandError:
-            error = _("Execution of git command failed. Might want to try git "
-                      "command locally  from the command line and check that it "
-                      "works.")
+            error = _(
+                "Execution of git command failed. Might want to try git "
+                "command locally  from the command line and check that it "
+                "works."
+            )
     else:
         warning.append(_("Metadata file has changed, please try again."))
     return repo, warning, error

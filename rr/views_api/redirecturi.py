@@ -1,7 +1,6 @@
 import logging
 
 from django.utils import timezone
-
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters
 from rest_framework.permissions import IsAuthenticated
@@ -24,16 +23,17 @@ class RedirectUriViewSet(CustomModelViewSet):
     destroy:
     Removes the given redirect URI.
     """
+
     queryset = RedirectUri.objects.all()
     permission_classes = [IsAuthenticated]
     serializer_class = RedirectUriSerializer
-    filter_backends = [filters.SearchFilter,
-                       DjangoFilterBackend]
-    search_fields = ['uri']
-    filterset_fields = ['sp', 'uri']
+    filter_backends = [filters.SearchFilter, DjangoFilterBackend]
+    search_fields = ["uri"]
+    filterset_fields = ["sp", "uri"]
 
     def perform_destroy(self, instance):
         instance.end_at = timezone.now()
         instance.save()
-        logger.info("Redirect URI removed from {service} by {user}"
-                    .format(service=instance.sp, user=self.request.user))
+        logger.info(
+            "Redirect URI removed from {service} by {user}".format(service=instance.sp, user=self.request.user)
+        )

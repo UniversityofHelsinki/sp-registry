@@ -1,146 +1,181 @@
 {% extends "base.html" %}
 {% load i18n %}
-{% load bootstrap4 %}
+{% load django_bootstrap5 %}
 {% load static %}
 {% block content %}
-<h1>{% trans "Admins" %} - <small>{{ object.display_identifier }}</small></h1>
-<div class="alert alert-success" role="alert">
-<p>{% trans "Users who can manage this service provider. You can send invites through email." %}</p>
-<p>{% trans "Users without a University of Helsinki login account have to requisition a local account from IdP administrators." %}</p>
-<p>{% trans "Admin groups are IAM groups. If the group has not been used in the SP-registry before, users will only get it when they log in next time." %}</p>
-</div>
+  <h1>{% trans "Admins" %} - <small>{{ object.display_identifier }}</small></h1>
+  <div class="alert alert-success" role="alert">
+    <p>{% trans "Users who can manage this service provider. You can send invites through email." %}</p>
+    <p>{% trans "Users without a University of Helsinki login account have to requisition a local account from IdP administrators." %}</p>
+    <p>{% trans "Admin groups are IAM groups. If the group has not been used in the SP-registry before, users will only get it when they log in next time." %}</p>
+  </div>
 
-<h2 id="admin-list">{% trans "List of admins" %}</h2>
-{% if object.admins.all %}
-<form action="" method='POST'>
-{% csrf_token %}
-<table class="table table-sm table-responsive" aria-describedby="admin-list">
-  <thead>
-    <tr>
-      <th scope="col">{% trans "First name" %}</th>
-      <th scope="col">{% trans "Last name" %}</th>
-      <th scope="col">{% trans "E-Mail" %}</th>
-      <th scope="col">{% trans "Remove" %}</th>
-    </tr>
-  </thead>
-  <tbody>
-{% for admin in object.admins.all %}
-    <tr>
-      <td>{{ admin.first_name }}</td>
-      <td>{{ admin.last_name }}</td>
-      <td>{{ admin.email }}</td>
-      <td><div class="checkbox"><input type="checkbox" aria-label="{%  trans "Mark for removal" %}" name="{{ admin.pk }}" class="" id="id_admin" /></div></td>
-    </tr>
-{% endfor %}
-  </tbody>
-</table>
-<p><input class="btn btn-danger" type="submit" data-toggle="confirmation" name="remove_admin" value="{% trans "Remove selected" %}" /></p>
-</form>
-{% else %}
-<p>{% trans "No admins" %}</p>
-{% endif %}
-<h2 id="invite-list">{% trans "List of invites" %}</h2>
-{% if object_list %}
-<form action="" method='POST'>
-<table class="table table-sm table-responsive" aria-describedby="invite-list">
-  <thead>
-    <tr>
-      <th scope="col">{% trans "E-Mail" %}</th>
-      <th scope="col">{% trans "Valid until" %}</th>
-      <th scope="col">{% trans "Creator" %}</th>
-      <th scope="col">{% trans "Remove" %}</th>
-    </tr>
-  </thead>
-  <tbody>
-  {% csrf_token %}
-{% for invite in object_list %}
-    <tr>
-      <td>{{ invite.email }}</td>
-      <td>{{ invite.valid_until|date:'j.n.Y' }}</td>
-      <td>{{ invite.creator.first_name }} {{ invite.creator.last_name }}</td>
-      <td><div class="checkbox"><input type="checkbox" aria-label="{%  trans "Mark for removal" %}" name="{{ invite.pk }}" class="" id="id_invite" /></div></td>
-    </tr>
-{% endfor %}
-  </tbody>
-</table>
-<p><input class="btn btn-danger" type="submit" data-toggle="confirmation" name="remove_invite" value="{% trans "Remove selected" %}" /></p>
-</form>
-{% else %}
-<p>{% trans "No invites" %}</p>
-{% endif %}
-{% if form %}
-<h2>{% trans "Add admin" %}</h2>
-{% if error %}
-<div class="alert alert-danger" role="alert">
-<p>{{ error }}</p>
-</div>
-{% endif %}
-{% if subject and message %}
-<h4>{% trans "Example message" %}</h4>
-{% trans "Subject" %}
-<div class="alert alert-info" role="alert">
-<pre>{{ subject }}</pre>
-</div>
-{% trans "Body" %}
-<div class="alert alert-info" role="alert">
-<pre>{{ message }}</pre>
-</div>
-{% endif %}
-<form action="" method="post" class="form">
-    {% csrf_token %}
-    {% bootstrap_form form layout='horizontal' %}
-    {% buttons %}
-    <p><button type="submit" name="add_invite" class="btn btn-primary">{% trans "Send invitation" %}</button> <button type="submit" name="show_message" class="btn btn-info">{% trans "Show message" %}</button></p>
-    {% endbuttons %}
-</form>
-{% endif %}
-<h2 id="admin-group-list">{% trans "List of admin groups" %}</h2>
-{% if object.admin_groups.all %}
-<form action="" method='POST'>
-{% csrf_token %}
-<table class="table table-sm table-responsive" aria-describedby="admin-group-list">
-  <thead>
-    <tr>
-      <th scope="col">{% trans "Group" %}</th>
-      <th scope="col">{% trans "Remove" %}</th>
-    </tr>
-  </thead>
-  <tbody>
-{% for group in object.admin_groups.all %}
-    <tr>
-      <td>{{ group.name }}</td>
-      <td><div class="checkbox"><input type="checkbox" aria-label="{%  trans "Mark for removal" %}" name="{{ group.pk }}" class="" id="id_admin_group" /></div></td>
-    </tr>
-{% endfor %}
-  </tbody>
-</table>
-<p><input class="btn btn-danger" type="submit" data-toggle="confirmation" name="remove_admin_groups" value="{% trans "Remove selected" %}" /></p>
-</form>
-{% else %}
-<p>{% trans "No admin groups" %}</p>
-{% endif %}
+  <h2 id="admin-list">{% trans "List of admins" %}</h2>
+  {% if object.admins.all %}
+    <form action="" method='POST'>
+      {% csrf_token %}
+      <table class="table table-sm table-responsive" aria-describedby="admin-list">
+        <thead>
+        <tr>
+          <th scope="col">{% trans "First name" %}</th>
+          <th scope="col">{% trans "Last name" %}</th>
+          <th scope="col">{% trans "E-Mail" %}</th>
+          <th scope="col">{% trans "Remove" %}</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for admin in object.admins.all %}
+          <tr>
+            <td>{{ admin.first_name }}</td>
+            <td>{{ admin.last_name }}</td>
+            <td>{{ admin.email }}</td>
+            <td><div class="checkbox"><input type="checkbox" aria-label="{%  trans "Mark for removal" %}" name="{{ admin.pk }}" class="" id="id_admin" /></div></td>
+          </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+      <p><button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#confirmationAdminModal">{% trans "Remove selected" %}</button></p>
+      <div class="modal fade" id="confirmationAdminModal" tabindex="-1" aria-labelledby="confirmationAdminModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="confirmationAdminModalLabel">{% trans "Confirm removal" %}</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              {% trans "Do you want to remove selected admins?" %}
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{% trans "Cancel" %}</button>
+              <button type="submit" name="remove_admins" class="btn btn-primary">{% trans "Confirm" %}</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  {% else %}
+    <p>{% trans "No admins" %}</p>
+  {% endif %}
+  <h2 id="invite-list">{% trans "List of invites" %}</h2>
+  {% if object_list %}
+    <form action="" method='POST'>
+      <table class="table table-sm table-responsive" aria-describedby="invite-list">
+        <thead>
+        <tr>
+          <th scope="col">{% trans "E-Mail" %}</th>
+          <th scope="col">{% trans "Valid until" %}</th>
+          <th scope="col">{% trans "Creator" %}</th>
+          <th scope="col">{% trans "Remove" %}</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% csrf_token %}
+        {% for invite in object_list %}
+          <tr>
+            <td>{{ invite.email }}</td>
+            <td>{{ invite.valid_until|date:'j.n.Y' }}</td>
+            <td>{{ invite.creator.first_name }} {{ invite.creator.last_name }}</td>
+            <td><div class="checkbox"><input type="checkbox" aria-label="{%  trans "Mark for removal" %}" name="{{ invite.pk }}" class="" id="id_invite" /></div></td>
+          </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+      <p><button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#confirmationInviteModal">{% trans "Remove selected" %}</button></p>
+      <div class="modal fade" id="confirmationInviteModal" tabindex="-1" aria-labelledby="confirmationInviteModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="confirmationAdminInviteLabel">{% trans "Confirm removal" %}</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              {% trans "Do you want to remove selected invites?" %}
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{% trans "Cancel" %}</button>
+              <button type="submit" name="remove_invites" class="btn btn-primary">{% trans "Confirm" %}</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  {% else %}
+    <p>{% trans "No invites" %}</p>
+  {% endif %}
+  {% if form %}
+    <h2>{% trans "Add admin" %}</h2>
+    {% if error %}
+      <div class="alert alert-danger" role="alert">
+        <p>{{ error }}</p>
+      </div>
+    {% endif %}
+    {% if subject and message %}
+      <h4>{% trans "Example message" %}</h4>
+      {% trans "Subject" %}
+      <div class="alert alert-info" role="alert">
+        <pre>{{ subject }}</pre>
+      </div>
+      {% trans "Body" %}
+      <div class="alert alert-info" role="alert">
+        <pre>{{ message }}</pre>
+      </div>
+    {% endif %}
+    <form action="" method="post" class="form">
+      {% csrf_token %}
+      {% bootstrap_form form layout='horizontal' %}
+      {% bootstrap_button _("Send invitation") name="add_invite" button_type="submit" button_class="btn-primary" %}
+      {% bootstrap_button _("Show message") name="show_message" button_type="submit" button_class="btn-info" %}
+    </form>
+  {% endif %}
+  <h2 id="admin-group-list">{% trans "List of admin groups" %}</h2>
+  {% if object.admin_groups.all %}
+    <form action="" method='POST'>
+      {% csrf_token %}
+      <table class="table table-sm table-responsive" aria-describedby="admin-group-list">
+        <thead>
+        <tr>
+          <th scope="col">{% trans "Group" %}</th>
+          <th scope="col">{% trans "Remove" %}</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for group in object.admin_groups.all %}
+          <tr>
+            <td>{{ group.name }}</td>
+            <td><div class="checkbox"><input type="checkbox" aria-label="{%  trans "Mark for removal" %}" name="{{ group.pk }}" class="" id="id_admin_group" /></div></td>
+          </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+      <p><button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#confirmationAdminGroupModal">{% trans "Remove selected" %}</button></p>
+      <div class="modal fade" id="confirmationAdminGroupModal" tabindex="-1" aria-labelledby="confirmationAdminGroupModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="confirmationAdminModalGroupLabel">{% trans "Confirm removal" %}</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              {% trans "Do you want to remove selected admin groups?" %}
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{% trans "Cancel" %}</button>
+              <button type="submit" name="remove_admin_groups" class="btn btn-primary">{% trans "Confirm" %}</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  {% else %}
+    <p>{% trans "No admin groups" %}</p>
+  {% endif %}
 
-{% if admin_group_form %}
-<h2>{% trans "Add admin group" %}</h2>
-<form action="" method="post" class="form">
-    {% csrf_token %}
-    {% bootstrap_form admin_group_form layout='horizontal' %}
-    {% buttons %}
-    <p><button type="submit" name="add_admin_group" class="btn btn-primary">{% trans "Add group" %}</button></p>
-    {% endbuttons %}
-</form>
-{% endif %}
-{% endblock %}
-{% block javascript %}
-  <script src="{% static "js/jquery.popconfirm.js" %}"></script>
-  <script>
-  $("[data-toggle='confirmation']").popConfirm({
-    title: "{% trans "Confirm removal" %}",
-    content: "{% trans "Do you want to remove selected admins/invites?" %}",
-    placement: "bottom",
-    container: "body",
-    yesBtn: "{% trans "Confirm" %}",
-    noBtn: "{% trans "Cancel" %}"
-  });
-  </script>
+  {% if admin_group_form %}
+    <h2>{% trans "Add admin group" %}</h2>
+    <form action="" method="post" class="form">
+      {% csrf_token %}
+      {% bootstrap_form admin_group_form layout='horizontal' %}
+      {% bootstrap_button _("Add group") name="add_admin_group" button_type="submit" button_class="btn-primary" %}
+    </form>
+  {% endif %}
 {% endblock %}

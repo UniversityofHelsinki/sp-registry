@@ -10,85 +10,85 @@
   <title>{% trans "Attribute Test Service" %}</title>
 </head>
 <body>
-  <div class="container-fluid">
-    <div class="row">
-      <main class="col-lg-10 offset-lg-2 col-xl-8 offset-xl-2 pt-3">
-<h1>{% trans "Attribute test service" %}</h1>
-<p>{% trans "This service lists all attributes that can be released to service providers by the login service." %}</p>
-<p>{% trans "Some deprecated attributes may be hidden from the view if they don't contain any value for you." %}</p>
-<p id="icon-descriptions">{% trans "Following icons are used to represent the status of each attribute:" %}</p>
-<table class="table table-sm" aria-describedby="icon-descriptions">
-  <thead>
-    <tr>
-      <th scope="col">{% trans "Icon" %}</th>
-      <th scope="col">{% trans "Description" %}</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td class="text-success">&#10004;</td>
-      <td>{% trans "Attribute was released and it has a seemingly correct value." %}</td>
-    </tr>
-    <tr>
-      <td class="text-danger">&#10006;</td>
-      <td>{% trans "Attribute marked as a mandatory was not released or the attribute's value is not within the accepted value range." %}</td>
-    </tr>
-    <tr>
-      <td class="text-info">&#128712;</td>
-      <td>{% trans "This attribute is an optional and doesn't have any value for you. Not all attributes are available for all users." %}</td>
-    </tr>
-  </tbody>
-</table>
-<p>{% trans "In case the attribute values are incorrect or a required attribute was not released, please contact" %} <a href="https://helpdesk.it.helsinki.fi/">{% trans "Helpdesk" %}.</a></p>
-<h2 id="authentication-context">{% trans "Authentication context" %}</h2>
-<table class="table table-sm" aria-describedby="authentication-context">
-  <thead>
-    <tr>
-      <th scope="col">{% trans "Context" %}</th>
-      <th scope="col">{% trans "Value" %}</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>Authentication Context Class</td>
-      <td>{{ shib_auth_context }}</td>
-    </tr>
-    <tr>
-      <td>Authentication Method</td>
-      <td>{{ shib_auth_method }}</td>
-    </tr>
-  </tbody>
-</table>
-{% if shib_auth_context != "https://refeds.org/profile/mfa" %}
-<p>{% trans "You have logged in using single-factor authentication." %}</p>
-<p><a href="https://{{ request.META.SERVER_NAME }}/Shibboleth.sso/Login?authnContextClassRef=https://refeds.org/profile/mfa"><button type="button" class="btn btn-primary">{% trans "Login using multi-factor authentication" %}</button></a></p>
-{% else %}
-<p>{% trans "You have logged in using multi-factor authentication." %}</p>
-<p><a href="https://{{ request.META.SERVER_NAME }}/Shibboleth.sso/Login?authnContextClassRef=https://refeds.org/profile/sfa"><button type="button" class="btn btn-primary">{% trans "Login using single-factor authentication" %}</button></a></p>
-{% endif %}
-<h2 id="attribute-values">{% trans "Attributes" %}</h2>
-<table class="table table-sm" aria-describedby="attribute-values">
-  <thead>
-    <tr>
-      <th scope="col">{% trans "Status" %}</th>
-      <th scope="col">{% trans "Attribute" %}</th>
-      <th scope="col">{% trans "Value" %}</th>
-    </tr>
-  </thead>
-  <tbody>
-{% for object in object_list %}
-    {% if object.icon == "invalid" %}<tr class="table-danger">{% else %}<tr>{% endif %}
-      {% if object.icon == "valid" %}<td class="text-success">&#10004;{% elif object.icon == "invalid" %}<td class="text-danger">&#10006;{% elif object.icon == "optional" %}<td class="text-info">&#128712;{% endif %}</td>
-      <td>{{ object.friendlyname }}<Br><small>{{ object.name }}</small></td>
-      <td>{{ object.value|safe }}{% if object.icon == "invalid" and object.regex %}<Br><span class="text-danger">{% trans "Value format (regex)" %}: {{ object.regex }}</span>{% endif %}</td>
-    </tr>
-{% endfor %}
-  </tbody>
-</table>
-{% if logout_url %}<a href="{{ logout_url }}"><button type="button" class="btn btn-primary">{% trans "Logout using Single Logout" %}</button></a>{% endif %}
-<p></p>
-      </main>
-    </div>
+<div class="container-fluid">
+  <div class="row">
+    <main class="col-lg-10 offset-lg-2 col-xl-8 offset-xl-2 pt-3">
+      <h1>{% trans "Attribute test service" %}</h1>
+      <p>{% trans "This service lists all attributes that can be released to service providers by the login service." %}</p>
+      <p>{% trans "Some deprecated attributes may be hidden from the view if they don't contain any value for you." %}</p>
+      <p id="icon-descriptions">{% trans "Following icons are used to represent the status of each attribute:" %}</p>
+      <table class="table table-sm" aria-describedby="icon-descriptions">
+        <thead>
+        <tr>
+          <th scope="col">{% trans "Icon" %}</th>
+          <th scope="col">{% trans "Description" %}</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+          <td class="text-success">&#10004;</td>
+          <td>{% trans "Attribute was released and it has a seemingly correct value." %}</td>
+        </tr>
+        <tr>
+          <td class="text-danger">&#10006;</td>
+          <td>{% trans "Attribute marked as a mandatory was not released or the attribute's value is not within the accepted value range." %}</td>
+        </tr>
+        <tr>
+          <td class="text-info">&#128712;</td>
+          <td>{% trans "This attribute is an optional and doesn't have any value for you. Not all attributes are available for all users." %}</td>
+        </tr>
+        </tbody>
+      </table>
+      <p>{% trans "In case the attribute values are incorrect or a required attribute was not released, please contact" %} <a href="https://helpdesk.it.helsinki.fi/">{% trans "Helpdesk" %}.</a></p>
+      <h2 id="authentication-context">{% trans "Authentication context" %}</h2>
+      <table class="table table-sm" aria-describedby="authentication-context">
+        <thead>
+        <tr>
+          <th scope="col">{% trans "Context" %}</th>
+          <th scope="col">{% trans "Value" %}</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+          <td>Authentication Context Class</td>
+          <td>{{ shib_auth_context }}</td>
+        </tr>
+        <tr>
+          <td>Authentication Method</td>
+          <td>{{ shib_auth_method }}</td>
+        </tr>
+        </tbody>
+      </table>
+      {% if shib_auth_context != "https://refeds.org/profile/mfa" %}
+        <p>{% trans "You have logged in using single-factor authentication." %}</p>
+        <p><a href="https://{{ request.META.SERVER_NAME }}/Shibboleth.sso/Login?authnContextClassRef=https://refeds.org/profile/mfa"><button type="button" class="btn btn-primary">{% trans "Login using multi-factor authentication" %}</button></a></p>
+      {% else %}
+        <p>{% trans "You have logged in using multi-factor authentication." %}</p>
+        <p><a href="https://{{ request.META.SERVER_NAME }}/Shibboleth.sso/Login?authnContextClassRef=https://refeds.org/profile/sfa"><button type="button" class="btn btn-primary">{% trans "Login using single-factor authentication" %}</button></a></p>
+      {% endif %}
+      <h2 id="attribute-values">{% trans "Attributes" %}</h2>
+      <table class="table table-sm" aria-describedby="attribute-values">
+        <thead>
+        <tr>
+          <th scope="col">{% trans "Status" %}</th>
+          <th scope="col">{% trans "Attribute" %}</th>
+          <th scope="col">{% trans "Value" %}</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for object in object_list %}
+          {% if object.icon == "invalid" %}<tr class="table-danger">{% else %}<tr>{% endif %}
+        {% if object.icon == "valid" %}<td class="text-success">&#10004;{% elif object.icon == "invalid" %}<td class="text-danger">&#10006;{% elif object.icon == "optional" %}<td class="text-info">&#128712;{% endif %}</td>
+        <td>{{ object.friendlyname }}<Br><small>{{ object.name }}</small></td>
+        <td>{{ object.value|safe }}{% if object.icon == "invalid" and object.regex %}<Br><span class="text-danger">{% trans "Value format (regex)" %}: {{ object.regex }}</span>{% endif %}</td>
+        </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+      {% if logout_url %}<a href="{{ logout_url }}"><button type="button" class="btn btn-primary">{% trans "Logout using Single Logout" %}</button></a>{% endif %}
+      <p></p>
+    </main>
   </div>
+</div>
 </body>
 </html>

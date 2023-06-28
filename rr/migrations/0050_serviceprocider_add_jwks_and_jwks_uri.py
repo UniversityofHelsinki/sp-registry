@@ -4,24 +4,23 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('rr', '0049_statistics'),
+        ("rr", "0049_statistics"),
     ]
 
     operations = [
         migrations.AlterModelOptions(
-            name='statistics',
-            options={'ordering': ['-date']},
+            name="statistics",
+            options={"ordering": ["-date"]},
         ),
         migrations.AddField(
-            model_name='serviceprovider',
-            name='jwks',
-            field=models.TextField(blank=True, verbose_name='JSON Web Key Set'),
+            model_name="serviceprovider",
+            name="jwks",
+            field=models.TextField(blank=True, verbose_name="JSON Web Key Set"),
         ),
         migrations.AddField(
-            model_name='serviceprovider',
-            name='jwks_uri',
-            field=models.URLField(blank=True, max_length=255, verbose_name='URL for the JSON Web Key Set'),
+            model_name="serviceprovider",
+            name="jwks_uri",
+            field=models.URLField(blank=True, max_length=255, verbose_name="URL for the JSON Web Key Set"),
         ),
     ]

@@ -6,15 +6,14 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('rr', '0030_template'),
+        ("rr", "0030_template"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='testuser',
-            name='password',
-            field=models.CharField(max_length=64, verbose_name='Password'),
+            model_name="testuser",
+            name="password",
+            field=models.CharField(max_length=64, verbose_name="Password"),
         ),
     ]

@@ -1,7 +1,6 @@
 import logging
 
 from django.utils import timezone
-
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters
 from rest_framework.permissions import IsAuthenticated
@@ -24,16 +23,15 @@ class CertificateViewSet(CustomModelViewSet):
     destroy:
     Removes the given certificate.
     """
+
     queryset = Certificate.objects.all()
     permission_classes = [IsAuthenticated]
     serializer_class = CertificateSerializer
-    filter_backends = [filters.SearchFilter,
-                       DjangoFilterBackend]
-    search_fields = ['cn', 'key_size']
-    filterset_fields = ['sp', 'cn', 'encryption', 'signing', 'key_size']
+    filter_backends = [filters.SearchFilter, DjangoFilterBackend]
+    search_fields = ["cn", "key_size"]
+    filterset_fields = ["sp", "cn", "encryption", "signing", "key_size"]
 
     def perform_destroy(self, instance):
         instance.end_at = timezone.now()
         instance.save()
-        logger.info("Certificate removed from {service} by {user}"
-                    .format(service=instance.sp, user=self.request.user))
+        logger.info("Certificate removed from {service} by {user}".format(service=instance.sp, user=self.request.user))

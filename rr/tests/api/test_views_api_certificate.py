@@ -1,5 +1,5 @@
-from django.test import override_settings
 from django.contrib.auth.models import Group, User
+from django.test import override_settings
 from rest_framework import status
 from rest_framework.test import APIRequestFactory
 
@@ -12,12 +12,13 @@ from rr.views_api.certificate import CertificateViewSet
 class CertificateTestCase(APITestCase):
     def setUp(self):
         self.factory = APIRequestFactory()
-        self.user = User.objects.create(username='tester')
-        self.superuser = User.objects.create(username='superuser', is_superuser=True)
-        self.user_sp = ServiceProvider.objects.create(entity_id='https://sp2.example.org/sp', service_type='saml',
-                                                     name_en='My Test')
+        self.user = User.objects.create(username="tester")
+        self.superuser = User.objects.create(username="superuser", is_superuser=True)
+        self.user_sp = ServiceProvider.objects.create(
+            entity_id="https://sp2.example.org/sp", service_type="saml", name_en="My Test"
+        )
         self.user_sp.admins.add(self.user)
-        self.admin_sp = ServiceProvider.objects.create(entity_id='test:entity:1', service_type='saml')
+        self.admin_sp = ServiceProvider.objects.create(entity_id="test:entity:1", service_type="saml")
 
         self.valid_certificate = """MIIFBTCCAu2gAwIBAgIJAKOceIf3koqXMA0GCSqGSIb3DQEBCwUAMBkxFzAVBgNV
 BAMMDnNwLmV4YW1wbGUub3JnMB4XDTE4MDExNjExMTAxN1oXDTI4MDExNDExMTAx
@@ -47,28 +48,32 @@ VSb6gzk3PYRVB0NzmlPdB4KFdBQbsuE8qoPr3UBbHIiD9wFU6K6eUZkIjqIV/5az
 rKLt+NcwtbkI6weLISJu9lFZnPMYT7LpqDWD4aMHHUWr8THO0T6mbCeQRYMlfSpU
 0es8zIhYt2fRbxHFRIFyRZYJrQoSfkU5OMas/ypz/q2wOvgqjH8qyRQ=
 """
-        self.object = Certificate.objects.add_certificate(certificate=self.valid_certificate,
-                                                          sp=self.user_sp,
-                                                          encryption=False,
-                                                          signing=True)
-        self.superuser_object = Certificate.objects.add_certificate(certificate=self.valid_certificate,
-                                                                    sp=self.admin_sp,
-                                                                    encryption=False,
-                                                                    signing=False)
-        self.data = {'id': self.object.id,
-                     'sp': self.object.sp.id,
-                     'certificate': self.object.certificate,
-                     'signing': self.object.signing,
-                     'encryption': self.object.encryption}
-        self.create_data = {'sp': self.object.sp.id,
-                            'certificate': self.valid_certificate,
-                            'signing': True,
-                            'encryption': True}
-        self.create_error_data = {'sp': self.object.sp.id,
-                                  'certificate': self.valid_certificate[:-20],
-                                  'signing': True,
-                                  'encryption': True}
-        self.url = '/api/v1/certificates/'
+        self.object = Certificate.objects.add_certificate(
+            certificate=self.valid_certificate, sp=self.user_sp, encryption=False, signing=True
+        )
+        self.superuser_object = Certificate.objects.add_certificate(
+            certificate=self.valid_certificate, sp=self.admin_sp, encryption=False, signing=False
+        )
+        self.data = {
+            "id": self.object.id,
+            "sp": self.object.sp.id,
+            "certificate": self.object.certificate,
+            "signing": self.object.signing,
+            "encryption": self.object.encryption,
+        }
+        self.create_data = {
+            "sp": self.object.sp.id,
+            "certificate": self.valid_certificate,
+            "signing": True,
+            "encryption": True,
+        }
+        self.create_error_data = {
+            "sp": self.object.sp.id,
+            "certificate": self.valid_certificate[:-20],
+            "signing": True,
+            "encryption": True,
+        }
+        self.url = "/api/v1/certificates/"
         self.viewset = CertificateViewSet
         self.model = Certificate
 
@@ -79,12 +84,12 @@ rKLt+NcwtbkI6weLISJu9lFZnPMYT7LpqDWD4aMHHUWr8THO0T6mbCeQRYMlfSpU
     def test_certificate_access_list_with_normal_user(self):
         response = self._test_list(user=self.user)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(len(response.data['results']), 1)
+        self.assertEqual(len(response.data["results"]), 1)
 
     def test_certificate_access_list_with_superuser(self):
         response = self._test_list(user=self.superuser)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(len(response.data['results']), 2)
+        self.assertEqual(len(response.data["results"]), 2)
 
     def test_certificate_access_object_without_user(self):
         response = self._test_access(user=None, pk=self.object.pk)

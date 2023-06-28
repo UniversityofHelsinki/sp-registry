@@ -6,15 +6,16 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('rr', '0033_auto_20180412_1141'),
+        ("rr", "0033_auto_20180412_1141"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='testuser',
-            name='valid_for',
-            field=models.ManyToManyField(blank=True, related_name='valid_for', to='rr.ServiceProvider', verbose_name='Valid for selected SPs'),
+            model_name="testuser",
+            name="valid_for",
+            field=models.ManyToManyField(
+                blank=True, related_name="valid_for", to="rr.ServiceProvider", verbose_name="Valid for selected SPs"
+            ),
         ),
     ]

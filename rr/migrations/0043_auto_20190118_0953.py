@@ -6,30 +6,29 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('rr', '0042_auto_20190114_1129'),
+        ("rr", "0042_auto_20190114_1129"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='serviceprovider',
-            name='admin_require_manual_configuration',
-            field=models.BooleanField(default=False, verbose_name='This service requires manual configuration'),
+            model_name="serviceprovider",
+            name="admin_require_manual_configuration",
+            field=models.BooleanField(default=False, verbose_name="This service requires manual configuration"),
         ),
         migrations.AddField(
-            model_name='serviceprovider',
-            name='force_mfa',
-            field=models.BooleanField(default=False, verbose_name='Require MFA authentication'),
+            model_name="serviceprovider",
+            name="force_mfa",
+            field=models.BooleanField(default=False, verbose_name="Require MFA authentication"),
         ),
         migrations.AddField(
-            model_name='serviceprovider',
-            name='force_nameidformat',
-            field=models.BooleanField(default=False, verbose_name='Force use of specific nameIDFormat'),
+            model_name="serviceprovider",
+            name="force_nameidformat",
+            field=models.BooleanField(default=False, verbose_name="Force use of specific nameIDFormat"),
         ),
         migrations.AddField(
-            model_name='serviceprovider',
-            name='force_sha1',
-            field=models.BooleanField(default=False, verbose_name='Use SHA-1 as signature algorithm'),
+            model_name="serviceprovider",
+            name="force_sha1",
+            field=models.BooleanField(default=False, verbose_name="Use SHA-1 as signature algorithm"),
         ),
     ]

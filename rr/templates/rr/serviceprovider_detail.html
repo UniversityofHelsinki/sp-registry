@@ -1,386 +1,384 @@
 {% extends "base.html" %}
 {% load i18n %}
-{% load bootstrap4 %}
+{% load django_bootstrap5 %}
 {% load static %}
 {% load attribute_filters %}
 {% block content %}
-<h1>{% trans "Details" %} - <small>{{ object.display_identifier }}</small></h1>
-<table class="table table-sm" aria-describedby="color-legend">
-  <thead>
+  <h1>{% trans "Details" %} - <small>{{ object.display_identifier }}</small></h1>
+  <table class="table table-sm" aria-describedby="color-legend">
+    <thead>
     <tr>
       <th scope="col" id="color-legend">{% trans "Colors legend" %}</th>
     </tr>
-  </thead>
-  <tbody>
+    </thead>
+    <tbody>
     <tr>
       <td class="table-warning">{% trans "Modified since last validation" %}</td>
     </tr>
     <tr>
       <td class="table-danger">{% trans "Removed since last validation" %}</td>
     </tr>
-  </tbody>  
-</table>
-{% if user.is_superuser and object.admin_require_manual_configuration %}
-<div class="alert alert-danger" role="alert">
-<p>{% trans "This service requires manual configuration. Detailed information should be in the admin notes." %}</p>
-</div>
-{% endif %}
-{% if not object.production and not object.test %}
-<div class="alert alert-info" role="alert">
-<p>{% trans "This service provider is currently not published to the production or the test IdPs. You may publish this SP in the Technical Attributes page." %}</p>
-{% if not object.production and not object|get_production_status %}
-<p>{% trans "You may also remove this SP from the registry by using the link at the bottom of this page." %}</p>
-{% endif %}
-</div>
-{% endif %}
+    </tbody>
+  </table>
+  {% if user.is_superuser and object.admin_require_manual_configuration %}
+    <div class="alert alert-danger" role="alert">
+      <p>{% trans "This service requires manual configuration. Detailed information should be in the admin notes." %}</p>
+    </div>
+  {% endif %}
+  {% if not object.production and not object.test %}
+    <div class="alert alert-info" role="alert">
+      <p>{% trans "This service provider is currently not published to the production or the test IdPs. You may publish this SP in the Technical Attributes page." %}</p>
+      {% if not object.production and not object|get_production_status %}
+        <p>{% trans "You may also remove this SP from the registry by using the link at the bottom of this page." %}</p>
+      {% endif %}
+    </div>
+  {% endif %}
 
-{% if missing %}
-<div class="alert alert-info" role="alert">
-<h2>{% trans "Missing data" %}</h2>
-{% if object.production %}
-<p>{% trans "This service is marked for the production use but is missing following data:" %}</p>
-{% endif %}
-<ul>
-{% for field in missing %}<li>{{ field |safe }}</li>{% endfor %}
-</ul>
-</div>
-{% endif %}
-{% if object.modified and not form %}
-<div class="alert alert-warning" role="alert">
-<h2>{% trans "Waiting for validation" %}</h2>
-<p>{% trans "There are changes waiting for validation by the IdP administrators." %}</p>
-<p>{% trans "You will receive an email when the changes are validated." %}</p>
-<p>{% trans "NB. only production systems are validated. Test servers are updated automatically every 15 minutes, using unvalidated data." %}</p>
-</div>
-{% endif %}
-{% if form %}
-<div class="alert alert-warning" role="alert">
-<h2>{% trans "Validate changes" %}</h2>
-<p>{% trans "This object has changed. Click the button to validate all changes listed in this page." %}</p>
-<form action="" method='POST'>
-    {% csrf_token %}
-    {% bootstrap_form form %}
-    {% buttons %}
-    <p><input class="btn btn-success" type="submit" name="validate_changes" value="{% trans "Validate changes" %}" /></p>
-    {% endbuttons %}
-</form>
-</div>
-{% endif %}
+  {% if missing %}
+    <div class="alert alert-info" role="alert">
+      <h2>{% trans "Missing data" %}</h2>
+      {% if object.production %}
+        <p>{% trans "This service is marked for the production use but is missing following data:" %}</p>
+      {% endif %}
+      <ul>
+        {% for field in missing %}<li>{{ field |safe }}</li>{% endfor %}
+      </ul>
+    </div>
+  {% endif %}
+  {% if object.modified and not form %}
+    <div class="alert alert-warning" role="alert">
+      <h2>{% trans "Waiting for validation" %}</h2>
+      <p>{% trans "There are changes waiting for validation by the IdP administrators." %}</p>
+      <p>{% trans "You will receive an email when the changes are validated." %}</p>
+      <p>{% trans "NB. only production systems are validated. Test servers are updated automatically every 15 minutes, using unvalidated data." %}</p>
+    </div>
+  {% endif %}
+  {% if form %}
+    <div class="alert alert-warning" role="alert">
+      <h2>{% trans "Validate changes" %}</h2>
+      <p>{% trans "This object has changed. Click the button to validate all changes listed in this page." %}</p>
+      <form action="" method='POST'>
+        {% csrf_token %}
+        {% bootstrap_form form %}
+        {% bootstrap_button _("Validate changes") name="validate_changes" button_type="submit" button_class="btn-success" %}
+      </form>
+    </div>
+  {% endif %}
 
-<h2 id="basic-information">{% trans "Basic information" %}</h2>
-<table class="table table-sm table-responsive" aria-describedby="basic-information">
-  <thead>
+  <h2 id="basic-information">{% trans "Basic information" %}</h2>
+  <table class="table table-sm table-responsive" aria-describedby="basic-information">
+    <thead>
     <tr>
       <th scope="col">{% trans "Attribute" %}</th>
       <th scope="col">{% trans "Value" %}</th>{% if history_object %}
       <th scope="col">{% trans "Validated value" %}</th>{% endif %}
     </tr>
-  </thead>
-  <tbody>
-{% for f in object.get_basic_fields %}
-{% if history_object %}
-    {% if f.value != history_object|get_item:f.name %}<tr class="table-warning">{% else %}<tr>{% endif %}
+    </thead>
+    <tbody>
+    {% for f in object.get_basic_fields %}
+      {% if history_object %}
+        {% if f.value != history_object|get_item:f.name %}<tr class="table-warning">{% else %}<tr>{% endif %}
       <td>{{ f.label }}</td>
       {% if f.value == True %}<td class="text-success">&#10004;{% elif f.value == False %}<td class="text-danger">&#10005;{% else %}<td>{{ f.value }}{% endif %}</td>
       {% if history_object|get_item:f.name == True %}<td class="text-success">&#10004;{% elif history_object|get_item:f.name == False %}<td class="text-danger">&#10005;{% else %}<td>{{ history_object|get_item:f.name }}{% endif %}</td>
-    </tr>
-{% else %}
-    <tr>
-      <td>{{ f.label }}</td>
-      {% if f.value == True %}<td class="text-success">&#10004;{% elif f.value == False %}<td class="text-danger">x{% else %}<td>{{ f.value }}{% endif %}</td>
-    </tr>
-{% endif %}
-{% endfor %}
-  </tbody>
-</table>
-<br>
+      </tr>
+      {% else %}
+        <tr>
+          <td>{{ f.label }}</td>
+          {% if f.value == True %}<td class="text-success">&#10004;{% elif f.value == False %}<td class="text-danger">x{% else %}<td>{{ f.value }}{% endif %}</td>
+        </tr>
+      {% endif %}
+    {% endfor %}
+    </tbody>
+  </table>
+  <br>
 
-{% if object.service_type == "saml" %}
-<h2 id="technical-attributes-saml">{% trans "Technical attributes" %}</h2>
-<table class="table table-sm table-responsive" aria-describedby="technical-attributes-saml">
-  <thead>
-    <tr>
-      <th scope="col">{% trans "Attribute" %}</th>
-      <th scope="col">{% trans "Value" %}</th>{% if history_object %}
-      <th scope="col">{% trans "Validated value" %}</th>{% endif %}
-    </tr>
-  </thead>
-  <tbody>
-{% for f in object.get_saml_technical_fields %}
-{% if history_object %}
-    {% if f.value != history_object|get_item:f.name %}<tr class="table-warning">{% else %}<tr>{% endif %}
-      <td>{{ f.label }}</td>
-      {% if f.value == True %}<td class="text-success">&#10004;{% elif f.value == False %}<td class="text-danger">x{% else %}<td>{{ f.value }}{% endif %}</td>
-      {% if history_object|get_item:f.name == True %}<td class="text-success">&#10004;{% elif history_object|get_item:f.name == False %}<td class="text-danger">&#10005;{% else %}<td>{{ history_object|get_item:f.name }}{% endif %}</td>
-    </tr>
-{% else %}
-    <tr>
-      <td>{{ f.label }}</td>
-      {% if f.value == True %}<td class="text-success">&#10004;{% elif f.value == False %}<td class="text-danger">x{% else %}<td>{{ f.value }}{% endif %}</td>
-    </tr>
-{% endif %}
-{% endfor %}
-{% if history_object %}
-    {% if not object.nameidformat.all|compare_querysets:history_object.nameidformat.all %}<tr class="table-warning">{% else %}<tr>{% endif %}
+  {% if object.service_type == "saml" %}
+    <h2 id="technical-attributes-saml">{% trans "Technical attributes" %}</h2>
+    <table class="table table-sm table-responsive" aria-describedby="technical-attributes-saml">
+      <thead>
+      <tr>
+        <th scope="col">{% trans "Attribute" %}</th>
+        <th scope="col">{% trans "Value" %}</th>{% if history_object %}
+        <th scope="col">{% trans "Validated value" %}</th>{% endif %}
+      </tr>
+      </thead>
+      <tbody>
+      {% for f in object.get_saml_technical_fields %}
+        {% if history_object %}
+          {% if f.value != history_object|get_item:f.name %}<tr class="table-warning">{% else %}<tr>{% endif %}
+        <td>{{ f.label }}</td>
+        {% if f.value == True %}<td class="text-success">&#10004;{% elif f.value == False %}<td class="text-danger">x{% else %}<td>{{ f.value }}{% endif %}</td>
+        {% if history_object|get_item:f.name == True %}<td class="text-success">&#10004;{% elif history_object|get_item:f.name == False %}<td class="text-danger">&#10005;{% else %}<td>{{ history_object|get_item:f.name }}{% endif %}</td>
+        </tr>
+        {% else %}
+          <tr>
+            <td>{{ f.label }}</td>
+            {% if f.value == True %}<td class="text-success">&#10004;{% elif f.value == False %}<td class="text-danger">x{% else %}<td>{{ f.value }}{% endif %}</td>
+          </tr>
+        {% endif %}
+      {% endfor %}
+      {% if history_object %}
+        {% if not object.nameidformat.all|compare_querysets:history_object.nameidformat.all %}<tr class="table-warning">{% else %}<tr>{% endif %}
       <td>{% trans "Name Identifier Format" %}</td>
       <td>{% for n in object.nameidformat.all %}{{ n.nameidformat }}{% if not forloop.last %}<br>{% endif %}{% endfor %}</td>
       <td>{% for n in history_object.nameidformat.all %}{{ n.nameidformat }}{% if not forloop.last %}<br>{% endif %}{% endfor %}</td>
-    </tr>
-{% else %}
-    <tr>
-      <td>{% trans "Name Identifier Format" %}</td>
-      <td>{% for n in object.nameidformat.all %}{{ n.nameidformat }}{% if not forloop.last %}<br>{% endif %}{% endfor %}</td>
-    </tr>
-{% endif %}
-  </tbody>
-</table>
-<br>
+      </tr>
+      {% else %}
+        <tr>
+          <td>{% trans "Name Identifier Format" %}</td>
+          <td>{% for n in object.nameidformat.all %}{{ n.nameidformat }}{% if not forloop.last %}<br>{% endif %}{% endfor %}</td>
+        </tr>
+      {% endif %}
+      </tbody>
+    </table>
+    <br>
 
-{% elif object.service_type == "ldap" %}
-<h2 id="technical-attributes-ldap">{% trans "Technical attributes" %}</h2>
-<table class="table table-sm table-responsive" aria-describedby="technical-attributes-ldap">
-  <thead>
-    <tr>
-      <th scope="col">{% trans "Attribute" %}</th>
-      <th scope="col">{% trans "Value" %}</th>{% if history_object %}
-      <th scope="col">{% trans "Validated value" %}</th>{% endif %}
-    </tr>
-  </thead>
-  <tbody>
-{% for f in object.get_ldap_technical_fields %}
-{% if history_object %}
-    {% if f.value != history_object|get_item:f.name %}<tr class="table-warning">{% else %}<tr>{% endif %}
-      <td>{{ f.label }}</td>
-      {% if f.value == True %}<td class="text-success">&#10004;{% elif f.value == False %}<td class="text-danger">x{% else %}<td>{{ f.value }}{% endif %}</td>
-      {% if history_object|get_item:f.name == True %}<td class="text-success">&#10004;{% elif history_object|get_item:f.name == False %}<td class="text-danger">&#10005;{% else %}<td>{{ history_object|get_item:f.name }}{% endif %}</td>
-    </tr>
-{% else %}
-    <tr>
-      <td>{{ f.label }}</td>
-      {% if f.value == True %}<td class="text-success">&#10004;{% elif f.value == False %}<td class="text-danger">x{% else %}<td>{{ f.value }}{% endif %}</td>
-    </tr>
-{% endif %}
-{% endfor %}
-  </tbody>
-</table>
-<br>
+  {% elif object.service_type == "ldap" %}
+    <h2 id="technical-attributes-ldap">{% trans "Technical attributes" %}</h2>
+    <table class="table table-sm table-responsive" aria-describedby="technical-attributes-ldap">
+      <thead>
+      <tr>
+        <th scope="col">{% trans "Attribute" %}</th>
+        <th scope="col">{% trans "Value" %}</th>{% if history_object %}
+        <th scope="col">{% trans "Validated value" %}</th>{% endif %}
+      </tr>
+      </thead>
+      <tbody>
+      {% for f in object.get_ldap_technical_fields %}
+        {% if history_object %}
+          {% if f.value != history_object|get_item:f.name %}<tr class="table-warning">{% else %}<tr>{% endif %}
+        <td>{{ f.label }}</td>
+        {% if f.value == True %}<td class="text-success">&#10004;{% elif f.value == False %}<td class="text-danger">x{% else %}<td>{{ f.value }}{% endif %}</td>
+        {% if history_object|get_item:f.name == True %}<td class="text-success">&#10004;{% elif history_object|get_item:f.name == False %}<td class="text-danger">&#10005;{% else %}<td>{{ history_object|get_item:f.name }}{% endif %}</td>
+        </tr>
+        {% else %}
+          <tr>
+            <td>{{ f.label }}</td>
+            {% if f.value == True %}<td class="text-success">&#10004;{% elif f.value == False %}<td class="text-danger">x{% else %}<td>{{ f.value }}{% endif %}</td>
+          </tr>
+        {% endif %}
+      {% endfor %}
+      </tbody>
+    </table>
+    <br>
 
-{% elif object.service_type == "oidc" %}
-<h2 id="technical-attributes-oidc">{% trans "Technical attributes" %}</h2>
-<table class="table table-sm table-responsive" aria-describedby="technical-attributes-oidc">
-  <thead>
-    <tr>
-      <th scope="col">{% trans "Attribute" %}</th>
-      <th scope="col">{% trans "Value" %}</th>{% if history_object %}
-      <th scope="col">{% trans "Validated value" %}</th>{% endif %}
-    </tr>
-  </thead>
-  <tbody>
-{% for f in object.get_oidc_technical_fields %}
-{% if history_object %}
-    {% if f.value != history_object|get_item:f.name %}<tr class="table-warning">{% else %}<tr>{% endif %}
-      <td>{{ f.label }}</td>
-      {% if f.value == True %}<td class="text-success">&#10004;{% elif f.value == False %}<td class="text-danger">x{% else %}<td>{{ f.value }}{% endif %}</td>
-      {% if history_object|get_item:f.name == True %}<td class="text-success">&#10004;{% elif history_object|get_item:f.name == False %}<td class="text-danger">&#10005;{% else %}<td>{{ history_object|get_item:f.name }}{% endif %}</td>
-    </tr>
-{% else %}
-    <tr>
-      <td>{{ f.label }}</td>
-      {% if f.value == True %}<td class="text-success">&#10004;{% elif f.value == False %}<td class="text-danger">x{% else %}<td>{{ f.value }}{% endif %}</td>
-    </tr>
-{% endif %}
-{% endfor %}
-{% if history_object %}
-    {% if not object.grant_types.all|compare_querysets:history_object.grant_types.all %}<tr class="table-warning">{% else %}<tr>{% endif %}
+  {% elif object.service_type == "oidc" %}
+    <h2 id="technical-attributes-oidc">{% trans "Technical attributes" %}</h2>
+    <table class="table table-sm table-responsive" aria-describedby="technical-attributes-oidc">
+      <thead>
+      <tr>
+        <th scope="col">{% trans "Attribute" %}</th>
+        <th scope="col">{% trans "Value" %}</th>{% if history_object %}
+        <th scope="col">{% trans "Validated value" %}</th>{% endif %}
+      </tr>
+      </thead>
+      <tbody>
+      {% for f in object.get_oidc_technical_fields %}
+        {% if history_object %}
+          {% if f.value != history_object|get_item:f.name %}<tr class="table-warning">{% else %}<tr>{% endif %}
+        <td>{{ f.label }}</td>
+        {% if f.value == True %}<td class="text-success">&#10004;{% elif f.value == False %}<td class="text-danger">x{% else %}<td>{{ f.value }}{% endif %}</td>
+        {% if history_object|get_item:f.name == True %}<td class="text-success">&#10004;{% elif history_object|get_item:f.name == False %}<td class="text-danger">&#10005;{% else %}<td>{{ history_object|get_item:f.name }}{% endif %}</td>
+        </tr>
+        {% else %}
+          <tr>
+            <td>{{ f.label }}</td>
+            {% if f.value == True %}<td class="text-success">&#10004;{% elif f.value == False %}<td class="text-danger">x{% else %}<td>{{ f.value }}{% endif %}</td>
+          </tr>
+        {% endif %}
+      {% endfor %}
+      {% if history_object %}
+        {% if not object.grant_types.all|compare_querysets:history_object.grant_types.all %}<tr class="table-warning">{% else %}<tr>{% endif %}
       <td>{% trans "Grant types" %}</td>
       <td>{% for n in object.grant_types.all %}{{ n.name }}{% if not forloop.last %}<br>{% endif %}{% endfor %}</td>
       <td>{% for n in history_object.grant_types.all %}{{ n.name }}{% if not forloop.last %}<br>{% endif %}{% endfor %}</td>
-    </tr>
-    {% if not object.response_types.all|compare_querysets:history_object.response_types.all %}<tr class="table-warning">{% else %}<tr>{% endif %}
+      </tr>
+        {% if not object.response_types.all|compare_querysets:history_object.response_types.all %}<tr class="table-warning">{% else %}<tr>{% endif %}
       <td>{% trans "Response types" %}</td>
       <td>{% for n in object.response_types.all %}{{ n.name }}{% if not forloop.last %}<br>{% endif %}{% endfor %}</td>
       <td>{% for n in history_object.response_types.all %}{{ n.name }}{% if not forloop.last %}<br>{% endif %}{% endfor %}</td>
-    </tr>
-    {% if not object.oidc_scopes.all|compare_querysets:history_object.oidc_scopes.all %}<tr class="table-warning">{% else %}<tr>{% endif %}
+      </tr>
+        {% if not object.oidc_scopes.all|compare_querysets:history_object.oidc_scopes.all %}<tr class="table-warning">{% else %}<tr>{% endif %}
       <td>{% trans "Scopes" %}</td>
       <td>{% for n in object.oidc_scopes.all %}{{ n.name }}{% if not forloop.last %}<br>{% endif %}{% endfor %}</td>
       <td>{% for n in history_object.oidc_scopes.all %}{{ n.name }}{% if not forloop.last %}<br>{% endif %}{% endfor %}</td>
-    </tr>
-{% else %}
-    <tr>
-      <td>{% trans "Grant types" %}</td>
-      <td>{% for n in object.grant_types.all %}{{ n.name }}{% if not forloop.last %}<br>{% endif %}{% endfor %}</td>
-    </tr>
-    <tr>
-      <td>{% trans "Response types" %}</td>
-      <td>{% for n in object.response_types.all %}{{ n.name }}{% if not forloop.last %}<br>{% endif %}{% endfor %}</td>
-    </tr>
-    <tr>
-      <td>{% trans "Scopes" %}</td>
-      <td>{% for n in object.oidc_scopes.all %}{{ n.name }}{% if not forloop.last %}<br>{% endif %}{% endfor %}</td>
-    </tr>
-{% endif %}
-  </tbody>
-</table>
-<br>
+      </tr>
+      {% else %}
+        <tr>
+          <td>{% trans "Grant types" %}</td>
+          <td>{% for n in object.grant_types.all %}{{ n.name }}{% if not forloop.last %}<br>{% endif %}{% endfor %}</td>
+        </tr>
+        <tr>
+          <td>{% trans "Response types" %}</td>
+          <td>{% for n in object.response_types.all %}{{ n.name }}{% if not forloop.last %}<br>{% endif %}{% endfor %}</td>
+        </tr>
+        <tr>
+          <td>{% trans "Scopes" %}</td>
+          <td>{% for n in object.oidc_scopes.all %}{{ n.name }}{% if not forloop.last %}<br>{% endif %}{% endfor %}</td>
+        </tr>
+      {% endif %}
+      </tbody>
+    </table>
+    <br>
 
-<h2 id="oidc-redirect-uris">{% trans "OIDC redirect URIs" %}</h2>
-<table class="table table-sm table-responsive" aria-describedby="oidc-redirect-uris">
-  <thead>
-    <tr>
-      <th scope="col">{% trans "URL" %}</th>
-    </tr>
-  </thead>
-  <tbody>
-{% for a in redirecturis %}
-    {% if a.end_at %}<tr class="table-danger">{% elif not a.validated %}<tr class="table-warning">{% else %}<tr>{% endif %}
+    <h2 id="oidc-redirect-uris">{% trans "OIDC redirect URIs" %}</h2>
+    <table class="table table-sm table-responsive" aria-describedby="oidc-redirect-uris">
+      <thead>
+      <tr>
+        <th scope="col">{% trans "URL" %}</th>
+      </tr>
+      </thead>
+      <tbody>
+      {% for a in redirecturis %}
+        {% if a.end_at %}<tr class="table-danger">{% elif not a.validated %}<tr class="table-warning">{% else %}<tr>{% endif %}
       <td>{{ a.uri }}</td>
-    </tr>
-{% endfor %}
-  </tbody>
-</table>
-<br>
-{% endif %}
+      </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+    <br>
+  {% endif %}
 
-<h2 id="registry-administrators">{% trans "Registry administrators" %}</h2>
-<table class="table table-sm table-responsive" aria-describedby="registry-administrators">
-  <thead>
+  <h2 id="registry-administrators">{% trans "Registry administrators" %}</h2>
+  <table class="table table-sm table-responsive" aria-describedby="registry-administrators">
+    <thead>
     <tr>
       <th scope="col">{% trans "Name" %}</th>
       <th scope="col">{% trans "Email" %}</th>
     </tr>
-  </thead>
-  <tbody>
-{% for o in object.admins.all %}
-    <tr>
-      <td>{{ o.first_name }} {{ o.last_name }}</td>
-      <td>{{ o.email }}</td>
-    </tr>
-{% endfor %}
-  </tbody>
-</table>
-<br>
+    </thead>
+    <tbody>
+    {% for o in object.admins.all %}
+      <tr>
+        <td>{{ o.first_name }} {{ o.last_name }}</td>
+        <td>{{ o.email }}</td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+  <br>
 
-<h2 id="attribute-requisitions">{% trans "Attribute requisitions" %}</h2>
-<table class="table table-sm table-responsive" aria-describedby="attribute-requisitions">
-  <thead>
+  <h2 id="attribute-requisitions">{% trans "Attribute requisitions" %}</h2>
+  <table class="table table-sm table-responsive" aria-describedby="attribute-requisitions">
+    <thead>
     <tr>
       <th scope="col">{% trans "Attribute" %}</th>
       <th scope="col">{% trans "Reason" %}</th>
-{% if object.service_type == "oidc" %}
-      <th scope="col">{% trans "Userinfo" %}</th>
-      <th scope="col">{% trans "ID Token" %}</th>
-{% endif %}
+      {% if object.service_type == "oidc" %}
+        <th scope="col">{% trans "Userinfo" %}</th>
+        <th scope="col">{% trans "ID Token" %}</th>
+      {% endif %}
     </tr>
-  </thead>
-  <tbody>
-{% for a in attributes %}
-    {% if a.end_at %}<tr class="table-danger">{% elif not a.validated %}<tr class="table-warning">{% else %}<tr>{% endif %}
-{% if object.service_type == "oidc" %}
+    </thead>
+    <tbody>
+    {% for a in attributes %}
+      {% if a.end_at %}<tr class="table-danger">{% elif not a.validated %}<tr class="table-warning">{% else %}<tr>{% endif %}
+    {% if object.service_type == "oidc" %}
       <td>{{ a.attribute }}{% if a.attribute.friendlyname != a.attribute.oidc_claim %} ({{  a.attribute.oidc_claim }}){% endif %}</td>
-{% else %}
+    {% else %}
       <td>{{ a.attribute }}</td>
-{% endif %}
-      <td>{{ a.reason }}</td>
-{% if object.service_type == "oidc" %}
+    {% endif %}
+    <td>{{ a.reason }}</td>
+    {% if object.service_type == "oidc" %}
       {% if a.oidc_userinfo %}<td class="text-success">&#10004;{% else %}<td class="text-danger">x{% endif %}</td>
       {% if a.oidc_id_token %}<td class="text-success">&#10004;{% else %}<td class="text-danger">x{% endif %}</td>
-{% endif %}
+    {% endif %}
     </tr>
-{% endfor %}
-  </tbody>
-</table>
-<br>
+    {% endfor %}
+    </tbody>
+  </table>
+  <br>
 
-{% if object.service_type == "saml" %}
-<h2 id="saml-certificates">{% trans "Certificates" %}</h2>
-<table class="table table-sm table-responsive" aria-describedby="saml-certificates">
-  <thead>
-    <tr>
-      <th scope="col">{% trans "Valid until" %}</th>
-      <th scope="col">{% trans "Valid from" %}</th>
-      <th scope="col">{% trans "Key size" %}</th>
-    </tr>
-  </thead>
-  <tbody>
-{% for a in certificates %}
-    {% if a.end_at %}<tr class="table-danger">{% elif not a.validated %}<tr class="table-warning">{% else %}<tr>{% endif %}
+  {% if object.service_type == "saml" %}
+    <h2 id="saml-certificates">{% trans "Certificates" %}</h2>
+    <table class="table table-sm table-responsive" aria-describedby="saml-certificates">
+      <thead>
+      <tr>
+        <th scope="col">{% trans "Valid until" %}</th>
+        <th scope="col">{% trans "Valid from" %}</th>
+        <th scope="col">{% trans "Key size" %}</th>
+      </tr>
+      </thead>
+      <tbody>
+      {% for a in certificates %}
+        {% if a.end_at %}<tr class="table-danger">{% elif not a.validated %}<tr class="table-warning">{% else %}<tr>{% endif %}
       <td>{{ a.valid_until }}</td>
       <td>{{ a.valid_from }}</td>
       <td>{{ a.key_size }}</td>
-    </tr>
-{% endfor %}
-  </tbody>
-</table>
-<br>
-{% endif %}
+      </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+    <br>
+  {% endif %}
 
-<h2 id="contact-list">{% trans "Contacts" %}</h2>
-<table class="table table-sm table-responsive" aria-describedby="contact-list">
-  <thead>
+  <h2 id="contact-list">{% trans "Contacts" %}</h2>
+  <table class="table table-sm table-responsive" aria-describedby="contact-list">
+    <thead>
     <tr>
       <th scope="col">{% trans "Type" %}</th>
       <th scope="col">{% trans "First name" %}</th>
       <th scope="col">{% trans "Last name" %}</th>
       <th scope="col">{% trans "Email" %}</th>
     </tr>
-  </thead>
-  <tbody>
-{% for a in contacts %}
-    {% if a.end_at %}<tr class="table-danger">{% elif not a.validated %}<tr class="table-warning">{% else %}<tr>{% endif %}
-      <td>{{ a.get_type_display }}</td>
-      <td>{{ a.firstname }}</td>
-      <td>{{ a.lastname }}</td>
-      <td>{{ a.email }}</td>
+    </thead>
+    <tbody>
+    {% for a in contacts %}
+      {% if a.end_at %}<tr class="table-danger">{% elif not a.validated %}<tr class="table-warning">{% else %}<tr>{% endif %}
+    <td>{{ a.get_type_display }}</td>
+    <td>{{ a.firstname }}</td>
+    <td>{{ a.lastname }}</td>
+    <td>{{ a.email }}</td>
     </tr>
-{% endfor %}
-  </tbody>
-</table>
-<br>
+    {% endfor %}
+    </tbody>
+  </table>
+  <br>
 
-{% if object.service_type == "saml" %}
-<h2 id="saml-endpoints">{% trans "SAML endpoints" %}</h2>
-<table class="table table-sm table-responsive" aria-describedby="saml-endpoints">
-  <thead>
-    <tr>
-      <th scope="col">{% trans "Type" %}</th>
-      <th scope="col">{% trans "Binding" %}</th>
-      <th scope="col">{% trans "Location" %}</th>
-      <th scope="col">{% trans "Index" %}</th>
-    </tr>
-  </thead>
-  <tbody>
-{% for endpoint in endpoints %}
-    {% if endpoint.end_at %}<tr class="table-danger">{% elif not endpoint.validated %}<tr class="table-warning">{% else %}<tr>{% endif %}
+  {% if object.service_type == "saml" %}
+    <h2 id="saml-endpoints">{% trans "SAML endpoints" %}</h2>
+    <table class="table table-sm table-responsive" aria-describedby="saml-endpoints">
+      <thead>
+      <tr>
+        <th scope="col">{% trans "Type" %}</th>
+        <th scope="col">{% trans "Binding" %}</th>
+        <th scope="col">{% trans "Location" %}</th>
+        <th scope="col">{% trans "Index" %}</th>
+      </tr>
+      </thead>
+      <tbody>
+      {% for endpoint in endpoints %}
+        {% if endpoint.end_at %}<tr class="table-danger">{% elif not endpoint.validated %}<tr class="table-warning">{% else %}<tr>{% endif %}
       <th scope="row">{{ endpoint.get_type_display }}</th>
       <td>{{ endpoint.get_binding_display }}</td>
       <td>{{ endpoint.location }}{% if endpoint.response_location %}<br>(<strong>{% trans "Response:" %}</strong> {{ endpoint.response_location }}){% endif %}</td>
       <td>{% if endpoint.index %}{{ endpoint.index }}{% endif %}{% if endpoint.is_default %} ({% trans "default" %}){% endif %}</td>
-    </tr>
-{% endfor %}
-  </tbody>  
-</table>
-{% endif %}
+      </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  {% endif %}
 
-{% if object.service_type == "ldap" %}
-<h2 id="ldap-user-groups">{% trans "LDAP user groups" %}</h2>
-<table class="table table-sm table-responsive" aria-describedby="ldap-user-groups">
-  <thead>
-    <tr>
-      <th scope="col">{% trans "name" %}</th>
-    </tr>
-  </thead>
-  <tbody>
-{% for a in usergroups %}
-    {% if a.end_at %}<tr class="table-danger">{% elif not a.validated %}<tr class="table-warning">{% else %}<tr>{% endif %}
+  {% if object.service_type == "ldap" %}
+    <h2 id="ldap-user-groups">{% trans "LDAP user groups" %}</h2>
+    <table class="table table-sm table-responsive" aria-describedby="ldap-user-groups">
+      <thead>
+      <tr>
+        <th scope="col">{% trans "name" %}</th>
+      </tr>
+      </thead>
+      <tbody>
+      {% for a in usergroups %}
+        {% if a.end_at %}<tr class="table-danger">{% elif not a.validated %}<tr class="table-warning">{% else %}<tr>{% endif %}
       <td>{{ a.name }}</td>
-    </tr>
-{% endfor %}
-  </tbody>  
-</table>
-{% endif %}
-{% if not object.production and not object|get_production_status %}
-<h2>{% trans "Removing this service provider" %}</h2>
-<p><a href="{% url 'serviceprovider-delete' object.pk %}">{% trans "Click this link to remove this service provider" %}</a></p>
-{% endif %}
+      </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  {% endif %}
+  {% if not object.production and not object|get_production_status %}
+    <h2>{% trans "Removing this service provider" %}</h2>
+    <p><a href="{% url 'serviceprovider-delete' object.pk %}">{% trans "Click this link to remove this service provider" %}</a></p>
+  {% endif %}
 {% endblock %}

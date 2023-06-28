@@ -6,28 +6,27 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('rr', '0031_auto_20180410_1009'),
+        ("rr", "0031_auto_20180410_1009"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='testuserdata',
-            name='entity_id',
-            field=models.CharField(default='', max_length=255, verbose_name='Entity Id'),
+            model_name="testuserdata",
+            name="entity_id",
+            field=models.CharField(default="", max_length=255, verbose_name="Entity Id"),
             preserve_default=False,
         ),
         migrations.AddField(
-            model_name='testuserdata',
-            name='friendlyname',
-            field=models.CharField(default='', max_length=255, verbose_name='Attribute FriendlyName'),
+            model_name="testuserdata",
+            name="friendlyname",
+            field=models.CharField(default="", max_length=255, verbose_name="Attribute FriendlyName"),
             preserve_default=False,
         ),
         migrations.AddField(
-            model_name='testuserdata',
-            name='username',
-            field=models.CharField(default='', max_length=255, verbose_name='Login name'),
+            model_name="testuserdata",
+            name="username",
+            field=models.CharField(default="", max_length=255, verbose_name="Login name"),
             preserve_default=False,
         ),
     ]

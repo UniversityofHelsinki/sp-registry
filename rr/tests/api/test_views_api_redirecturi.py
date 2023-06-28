@@ -11,25 +11,21 @@ from rr.views_api.redirecturi import RedirectUriViewSet
 class RedirectUriTestCase(APITestCase):
     def setUp(self):
         self.factory = APIRequestFactory()
-        self.user = User.objects.create(username='tester')
-        self.superuser = User.objects.create(username='superuser', is_superuser=True)
-        self.user_sp = ServiceProvider.objects.create(entity_id='https://sp2.example.org/sp',
-                                                      service_type='oidc',
-                                                      name_en="SP2 Example service",)
-        self.admin_sp = ServiceProvider.objects.create(entity_id='test:entity:1', service_type='oidc')
+        self.user = User.objects.create(username="tester")
+        self.superuser = User.objects.create(username="superuser", is_superuser=True)
+        self.user_sp = ServiceProvider.objects.create(
+            entity_id="https://sp2.example.org/sp",
+            service_type="oidc",
+            name_en="SP2 Example service",
+        )
+        self.admin_sp = ServiceProvider.objects.create(entity_id="test:entity:1", service_type="oidc")
         self.user_sp.admins.add(self.user)
-        self.object = RedirectUri.objects.create(sp=self.user_sp,
-                                                 uri='https://sp2.example.org/')
-        self.superuser_object = RedirectUri.objects.create(sp=self.admin_sp,
-                                                           uri='https://sp.example.org/')
-        self.data = {'id': self.object.id,
-                     'sp': self.object.sp.id,
-                     'uri': self.object.uri}
-        self.create_data = {'sp': self.object.sp.id,
-                            'uri': 'https://sp2.example.org/redirect'}
-        self.create_error_data = {'id': self.object.id,
-                                  'uri': 'invalid'}
-        self.url = '/api/v1/redirecturis/'
+        self.object = RedirectUri.objects.create(sp=self.user_sp, uri="https://sp2.example.org/")
+        self.superuser_object = RedirectUri.objects.create(sp=self.admin_sp, uri="https://sp.example.org/")
+        self.data = {"id": self.object.id, "sp": self.object.sp.id, "uri": self.object.uri}
+        self.create_data = {"sp": self.object.sp.id, "uri": "https://sp2.example.org/redirect"}
+        self.create_error_data = {"id": self.object.id, "uri": "invalid"}
+        self.url = "/api/v1/redirecturis/"
         self.viewset = RedirectUriViewSet
         self.model = RedirectUri
 
@@ -40,12 +36,12 @@ class RedirectUriTestCase(APITestCase):
     def test_redirecturi_access_list_with_normal_user(self):
         response = self._test_list(user=self.user)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(len(response.data['results']), 1)
+        self.assertEqual(len(response.data["results"]), 1)
 
     def test_redirecturi_access_list_with_superuser(self):
         response = self._test_list(user=self.superuser)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(len(response.data['results']), 2)
+        self.assertEqual(len(response.data["results"]), 2)
 
     def test_redirecturi_access_object_without_user(self):
         response = self._test_access(user=None, pk=self.object.pk)

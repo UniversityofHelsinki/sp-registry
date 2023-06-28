@@ -4,30 +4,29 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('rr', '0054_statistics_users'),
+        ("rr", "0054_statistics_users"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='organization',
-            name='privacypolicy_en',
-            field=models.URLField(blank=True, max_length=255, verbose_name='Privacy Policy URL (English)'),
+            model_name="organization",
+            name="privacypolicy_en",
+            field=models.URLField(blank=True, max_length=255, verbose_name="Privacy Policy URL (English)"),
         ),
         migrations.AddField(
-            model_name='organization',
-            name='privacypolicy_fi',
-            field=models.URLField(blank=True, max_length=255, verbose_name='Privacy Policy URL (Finnish)'),
+            model_name="organization",
+            name="privacypolicy_fi",
+            field=models.URLField(blank=True, max_length=255, verbose_name="Privacy Policy URL (Finnish)"),
         ),
         migrations.AddField(
-            model_name='organization',
-            name='privacypolicy_sv',
-            field=models.URLField(blank=True, max_length=255, verbose_name='Privacy Policy URL (Swedish)'),
+            model_name="organization",
+            name="privacypolicy_sv",
+            field=models.URLField(blank=True, max_length=255, verbose_name="Privacy Policy URL (Swedish)"),
         ),
         migrations.AddField(
-            model_name='serviceprovider',
-            name='privacypolicy_org',
-            field=models.BooleanField(default=False, verbose_name='Privacy Policy URLs from Organization'),
+            model_name="serviceprovider",
+            name="privacypolicy_org",
+            field=models.BooleanField(default=False, verbose_name="Privacy Policy URLs from Organization"),
         ),
     ]

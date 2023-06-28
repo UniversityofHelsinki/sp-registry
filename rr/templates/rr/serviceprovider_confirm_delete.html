@@ -1,16 +1,15 @@
 {% extends "base.html" %}
 {% load i18n %}
 {% load static %}
-{% load bootstrap4 %}
+{% load django_bootstrap5 %}
 {% block content %}
-<h1>{% trans "Service provider removal" %}</h1>
-<div class="alert alert-danger" role="alert">
-<p>{% trans "Please confirm the removal of this service provider:" %}</p>
-<h2>{{object}}</h2>
-<form action="" method="post" class="form">
-    {% csrf_token %}
-    <input type="submit" value="Confirm" />
-</form>
-
-</div>
+  <h1>{% trans "Service provider removal" %}</h1>
+  <div class="alert alert-danger" role="alert">
+    <p>{% trans "Please confirm the removal of this service provider:" %}</p>
+    <h2>{{object}}</h2>
+    <form action="" method="post" class="form">
+      {% csrf_token %}
+      <input type="submit" value="Confirm" />
+    </form>
+  </div>
 {% endblock %}

@@ -2,7 +2,6 @@ import logging
 
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
-
 from rest_framework.authtoken.models import Token
 
 logger = logging.getLogger(__name__)
@@ -28,4 +27,4 @@ def authtoken(request):
             if token:
                 token.delete()
             token = None
-    return render(request, "authtoken.html", {'token': token})
+    return render(request, "authtoken.html", {"token": token})

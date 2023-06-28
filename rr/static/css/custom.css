@@ -4,6 +4,10 @@ body {
   overflow-wrap: break-word;
 }
 
+html {
+  scroll-behavior: auto !important;
+}
+
 .help-block {
   font-style: italic;
   opacity: 0.8;
@@ -11,6 +15,14 @@ body {
 
 .bg-faded {
     background-color: #f7f7f7;
+}
+
+.navbar {
+  --bs-dropdown-divider-bg: #e9ecef;
+}
+
+.navbar .btn-sm {
+  margin: 0.25rem;
 }
 
 .sidebar {

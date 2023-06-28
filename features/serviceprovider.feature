@@ -42,4 +42,15 @@ Scenario: Service provider creation
     When clicking visible link with text "Show unvalidated"
     Then the result page will include text "EntityDescriptor"
     And the result page will include text "https://new.example.org/sp"
-    
+
+
+Scenario: Service provider deletion
+    Given test environment with logged in user exists
+    When clicking object with text "Add a new SAML service provider"
+    Then the result page will include text "Adding a new service provider"
+    When filling service creation form
+    Then number of service providers is "5" and number of deleted is "0"
+    When clicking visible link with text "Click this link to remove this service provider"
+    And clicking object with value "Confirm"
+    Then number of service providers is "4" and number of deleted is "1"
+	And the result page will include text "Service deleted."

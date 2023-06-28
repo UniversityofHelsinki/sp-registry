@@ -1,75 +1,77 @@
 {% extends "base.html" %}
 {% load i18n %}
-{% load bootstrap4 %}
+{% load django_bootstrap5 %}
 {% load static %}
 {% block content %}
-<h1>{% trans "Certificates" %} - <small>{{ object.display_identifier }}</small></h1>
-<div class="alert alert-success" role="alert">
-<p>{% trans "You need at least one certificate for signing SAML messages between SP and IdP. It's possible to use the same certificate for both signing and encryption." %}</p>
-<p>{% trans "It's highly recommended to use different certificate for signing and encrypting SAML messages than the certificate that is used for encrypting HTTPS traffic." %}</p>
-<p>{% trans "You may well use self-signed certificate for SAML messages. You may create a self-signed certificate using the following openssl command, using hostname sp1.test.helsinki.fi as an example." %}</p>
-<code>openssl req -new -x509 -nodes -newkey rsa:4096 -keyout sp1.test.helsinki.fi-shib.key -days 3650 -subj '/CN=sp1.test.helsinki.fi' -out sp1.test.helsinki.fi-shib.crt</code>
-</div>
+  <h1>{% trans "Certificates" %} - <small>{{ object.display_identifier }}</small></h1>
+  <div class="alert alert-success" role="alert">
+    <p>{% trans "You need at least one certificate for signing SAML messages between SP and IdP. It's possible to use the same certificate for both signing and encryption." %}</p>
+    <p>{% trans "It's highly recommended to use different certificate for signing and encrypting SAML messages than the certificate that is used for encrypting HTTPS traffic." %}</p>
+    <p>{% trans "You may well use self-signed certificate for SAML messages. You may create a self-signed certificate using the following openssl command, using hostname sp1.test.helsinki.fi as an example." %}</p>
+    <code>openssl req -new -x509 -nodes -newkey rsa:4096 -keyout sp1.test.helsinki.fi-shib.key -days 3650 -subj '/CN=sp1.test.helsinki.fi' -out sp1.test.helsinki.fi-shib.crt</code>
+  </div>
 
-<h2 id="certificate-list">{% trans "List of certificates" %}</h2>
-{% if object_list %}
-<form action="" method='POST'>
-{% csrf_token %}
-<table class="table table-sm table-responsive" aria-describedby="certificate-list">
-  <thead>
-    <tr>
-      <th scope="col">{% trans "Subject" %}</th>
-      <th scope="col">{% trans "Valid until" %}</th>
-      <th scope="col">{% trans "Valid from" %}</th>
-      <th scope="col">{% trans "Key size" %}</th>
-	  <th scope="col">{% trans "Signing" %}</th>
-      <th scope="col">{% trans "Encryption" %}</th>
-      <th scope="col">{% trans "Remove" %}</th>
-    </tr>
-  </thead>
-  <tbody>
-{% for certificate in object_list %}
-    <tr>
-      <th scope="row"><a href="{% url 'certificate-info' certificate.pk %}">{{ certificate.cn }}</a></th>
-      <td>{{ certificate.valid_until }}</td>
-      <td>{{ certificate.valid_from }}</td>
-      <td>{{ certificate.key_size }}</td>
-      {% if certificate.signing %}<td class="text-success">&#10004;{% else %}<td class="text-danger">&#10005;{% endif %}</td>
-      {% if certificate.encryption %}<td class="text-success">&#10004;{% else %}<td class="text-danger">&#10005;{% endif %}</td>
-      <td><div class="checkbox"><input aria-label="{%  trans "Mark for removal" %}" type="checkbox" name="{{ certificate.pk }}" class="" id="id_certificate" /></div></td>
-    </tr>
-{% endfor %}
-  </tbody>
-</table>
-<p><input class="btn btn-danger" type="submit" data-toggle="confirmation" name="remove_certificate" value="{% trans "Remove selected" %}" /></p>
-</form>
-{% else %}
-<p>{% trans "No certificates" %}</p>
-{% endif %}
+  <h2 id="certificate-list">{% trans "List of certificates" %}</h2>
+  {% if object_list %}
+    <form action="" method='POST'>
+      {% csrf_token %}
+      <table class="table table-sm table-responsive" aria-describedby="certificate-list">
+        <thead>
+        <tr>
+          <th scope="col">{% trans "Subject" %}</th>
+          <th scope="col">{% trans "Valid until" %}</th>
+          <th scope="col">{% trans "Valid from" %}</th>
+          <th scope="col">{% trans "Key size" %}</th>
+          <th scope="col">{% trans "Signing" %}</th>
+          <th scope="col">{% trans "Encryption" %}</th>
+          <th scope="col">{% trans "Remove" %}</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for certificate in object_list %}
+          <tr>
+            <th scope="row"><a href="{% url 'certificate-info' certificate.pk %}">{{ certificate.cn }}</a></th>
+            <td>{{ certificate.valid_until }}</td>
+            <td>{{ certificate.valid_from }}</td>
+            <td>{{ certificate.key_size }}</td>
+            {% if certificate.signing %}<td class="text-success">&#10004;{% else %}<td class="text-danger">&#10005;{% endif %}</td>
+            {% if certificate.encryption %}<td class="text-success">&#10004;{% else %}<td class="text-danger">&#10005;{% endif %}</td>
+            <td><div class="checkbox"><input aria-label="{%  trans "Mark for removal" %}" type="checkbox" name="{{ certificate.pk }}" class="" id="id_certificate" /></div></td>
+          </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+      <p><button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#confirmationModal">{% trans "Remove selected" %}</button></p>
+      <div class="modal fade" id="confirmationModal" tabindex="-1" aria-labelledby="confirmationModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="confirmationModalLabel">{% trans "Confirm removal" %}</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              {% trans "Do you want to remove selected certificates?" %}
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{% trans "Cancel" %}</button>
+              <button type="submit" name="remove_certificate" class="btn btn-primary">{% trans "Confirm" %}</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  {% else %}
+    <p>{% trans "No certificates" %}</p>
+  {% endif %}
 
-{% if form %}
-<h2>{% trans "Add certificate" %}</h2>
-<form action="" method="post" class="form">
-    {% csrf_token %}
-    {% bootstrap_form form layout='horizontal' %}
-    {% buttons %}
-    <p><button type="submit" name="add_cert" class="btn btn-primary">{% trans "Save" %}</button></p>
-    {% endbuttons %}
-</form>
-{% else %}
-{% trans "You cannot have more than two certificates" %}
-{% endif %}
-{% endblock %}
-{% block javascript %}
-  <script src="{% static "js/jquery.popconfirm.js" %}"></script>
-  <script>
-  $("[data-toggle='confirmation']").popConfirm({
-    title: "{% trans "Confirm removal" %}",
-    content: "{% trans "Do you want to remove selected certificates?" %}",
-    placement: "bottom",
-    container: "body",
-    yesBtn: "{% trans "Confirm" %}",
-    noBtn: "{% trans "Cancel" %}"
-  });
-  </script>
+  {% if form %}
+    <h2>{% trans "Add certificate" %}</h2>
+    <form action="" method="post" class="form">
+      {% csrf_token %}
+      {% bootstrap_form form layout='horizontal' %}
+      {% bootstrap_button _("Save") name="add_cert" button_type="submit" button_class="btn-primary" %}
+    </form>
+  {% else %}
+    {% trans "You cannot have more than two certificates" %}
+  {% endif %}
 {% endblock %}

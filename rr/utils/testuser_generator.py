@@ -1,16 +1,15 @@
+import logging
+from random import randint
+
 from rr.models.serviceprovider import SPAttribute
 from rr.models.testuser import TestUserData
-
-from random import randint
-import logging
 
 logger = logging.getLogger(__name__)
 
 
 def update_test_data(testuser, attribute, value):
     if TestUserData.objects.filter(user=testuser, attribute=attribute.attribute).count() < 2:
-        TestUserData.objects.update_or_create(user=testuser, attribute=attribute.attribute,
-                                              defaults={'value': value})
+        TestUserData.objects.update_or_create(user=testuser, attribute=attribute.attribute, defaults={"value": value})
 
 
 def generate_user_data(testuser, userdata=True, otherdata=True, scope="example.org"):
@@ -28,8 +27,9 @@ def generate_user_data(testuser, userdata=True, otherdata=True, scope="example.o
             elif attribute.attribute.friendlyname == "uid":
                 update_test_data(testuser, attribute, testuser.username)
             elif attribute.attribute.friendlyname == "mail":
-                update_test_data(testuser, attribute,
-                                 testuser.firstname.lower() + "." + testuser.lastname.lower() + "@" + scope)
+                update_test_data(
+                    testuser, attribute, testuser.firstname.lower() + "." + testuser.lastname.lower() + "@" + scope
+                )
             elif attribute.attribute.friendlyname == "eduPersonPrincipalName":
                 update_test_data(testuser, attribute, testuser.username + "@" + scope)
         if otherdata:
@@ -48,8 +48,7 @@ def generate_user_data(testuser, userdata=True, otherdata=True, scope="example.o
             elif attribute.attribute.friendlyname == "schacDateOfBirth":
                 update_test_data(testuser, attribute, str(randint(1960, 1998)) + "0213")
             elif attribute.attribute.friendlyname == "schacHomeOrganizationType":
-                update_test_data(testuser, attribute,
-                                 "urn:schac:homeOrganizationType:fi:university")
+                update_test_data(testuser, attribute, "urn:schac:homeOrganizationType:fi:university")
             elif attribute.attribute.friendlyname == "schacCountryOfCitizenship":
                 update_test_data(testuser, attribute, "fi")
             elif attribute.attribute.friendlyname == "schacHomeOrganization":

@@ -6,15 +6,14 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('rr', '0019_auto_20180122_1231'),
+        ("rr", "0019_auto_20180122_1231"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='serviceprovider',
-            name='validated',
-            field=models.DateTimeField(blank=True, null=True, verbose_name='Validated on'),
+            model_name="serviceprovider",
+            name="validated",
+            field=models.DateTimeField(blank=True, null=True, verbose_name="Validated on"),
         ),
     ]

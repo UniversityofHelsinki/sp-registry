@@ -1,7 +1,6 @@
 import logging
 
 from django.utils import timezone
-
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters
 from rest_framework.permissions import IsAuthenticated
@@ -24,16 +23,15 @@ class ContactViewSet(CustomModelViewSet):
     destroy:
     Removes the given contact.
     """
+
     queryset = Contact.objects.all()
     permission_classes = [IsAuthenticated]
     serializer_class = ContactSerializer
-    filter_backends = [filters.SearchFilter,
-                       DjangoFilterBackend]
-    search_fields = ['lastname', 'firstname', 'email']
-    filterset_fields = ['sp', 'lastname', 'firstname', 'email']
+    filter_backends = [filters.SearchFilter, DjangoFilterBackend]
+    search_fields = ["lastname", "firstname", "email"]
+    filterset_fields = ["sp", "lastname", "firstname", "email"]
 
     def perform_destroy(self, instance):
         instance.end_at = timezone.now()
         instance.save()
-        logger.info("Contact removed from {service} by {user}"
-                    .format(service=instance.sp, user=self.request.user))
+        logger.info("Contact removed from {service} by {user}".format(service=instance.sp, user=self.request.user))

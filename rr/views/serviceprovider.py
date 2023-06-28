@@ -9,26 +9,41 @@ from django.http.response import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls.base import reverse, reverse_lazy
 from django.utils import timezone
-from django.utils.translation import ugettext as _
-from django.views.generic.edit import CreateView, UpdateView, DeleteView
+from django.utils.translation import gettext as _
 from django.views.generic.detail import DetailView
+from django.views.generic.edit import CreateView, DeleteView, UpdateView
 from django.views.generic.list import ListView
 
-from rr.forms.serviceprovider import BasicInformationForm, SamlTechnicalInformationForm
-from rr.forms.serviceprovider import OidcServiceProviderCreateForm, OidcTechnicalInformationForm
-from rr.forms.serviceprovider import SamlServiceProviderCreateForm, LdapServiceProviderCreateForm
-from rr.forms.serviceprovider import ServiceProviderValidationForm, LdapTechnicalInformationForm
-
+from rr.forms.serviceprovider import (
+    BasicInformationForm,
+    LdapServiceProviderCreateForm,
+    LdapTechnicalInformationForm,
+    OidcServiceProviderCreateForm,
+    OidcTechnicalInformationForm,
+    SamlServiceProviderCreateForm,
+    SamlTechnicalInformationForm,
+    ServiceProviderValidationForm,
+)
 from rr.models.certificate import Certificate
 from rr.models.contact import Contact
 from rr.models.endpoint import Endpoint
 from rr.models.redirecturi import RedirectUri
-from rr.models.serviceprovider import ServiceProvider, SPAttribute, new_ldap_entity_id_from_name
+from rr.models.serviceprovider import (
+    ServiceProvider,
+    SPAttribute,
+    new_ldap_entity_id_from_name,
+)
 from rr.models.testuser import update_entity_ids
 from rr.models.usergroup import UserGroup
 from rr.utils.missing_data import get_missing_sp_data
-from rr.utils.notifications import validation_notification, admin_notification_created_sp
-from rr.utils.serviceprovider import create_sp_history_copy, get_service_provider_queryset
+from rr.utils.notifications import (
+    admin_notification_created_sp,
+    validation_notification,
+)
+from rr.utils.serviceprovider import (
+    create_sp_history_copy,
+    get_service_provider_queryset,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -48,40 +63,41 @@ class ServiceProviderList(ListView):
 
     :template:`rr/serviceprovider_list.html`
     """
+
     model = ServiceProvider
 
     def get_queryset(self):
         if not settings.ACTIVATE_SAML:
             return ServiceProvider.objects.none()
-        providers = get_service_provider_queryset(request=self.request, service_type='saml')
+        providers = get_service_provider_queryset(request=self.request, service_type="saml")
         if self.request.user.is_superuser:
-            return providers.order_by('-modified', '-production', '-test', 'entity_id')
+            return providers.order_by("-modified", "-production", "-test", "entity_id")
         else:
             return providers
 
     def get_context_data(self, **kwargs):
         context = super(ServiceProviderList, self).get_context_data(**kwargs)
         if not settings.ACTIVATE_LDAP:
-            context['ldap_providers'] = ServiceProvider.objects.none()
+            context["ldap_providers"] = ServiceProvider.objects.none()
         else:
-            providers = get_service_provider_queryset(request=self.request, service_type='ldap')
+            providers = get_service_provider_queryset(request=self.request, service_type="ldap")
             if self.request.user.is_superuser:
-                context['ldap_providers'] = providers.order_by('-modified', '-production', 'entity_id')
+                context["ldap_providers"] = providers.order_by("-modified", "-production", "entity_id")
             else:
-                context['ldap_providers'] = providers
+                context["ldap_providers"] = providers
 
         if not settings.ACTIVATE_OIDC:
-            context['oidc_providers'] = ServiceProvider.objects.none()
+            context["oidc_providers"] = ServiceProvider.objects.none()
         else:
-            providers = get_service_provider_queryset(request=self.request, service_type='oidc')
+            providers = get_service_provider_queryset(request=self.request, service_type="oidc")
             if self.request.user.is_superuser:
-                context['oidc_providers'] = providers.order_by('-modified', '-production', 'entity_id')
+                context["oidc_providers"] = providers.order_by("-modified", "-production", "entity_id")
             else:
-                context['oidc_providers'] = providers
+                context["oidc_providers"] = providers
 
-        context['activate_saml'] = settings.ACTIVATE_SAML
-        context['activate_ldap'] = settings.ACTIVATE_LDAP
-        context['activate_oidc'] = settings.ACTIVATE_OIDC
+        context["activate_saml"] = settings.ACTIVATE_SAML
+        context["activate_ldap"] = settings.ACTIVATE_LDAP
+        context["activate_oidc"] = settings.ACTIVATE_OIDC
         return context
 
 
@@ -98,6 +114,7 @@ class BasicInformationView(DetailView):
 
     :template:`rr/serviceprovider_detail.html`
     """
+
     model = ServiceProvider
 
     @staticmethod
@@ -123,8 +140,8 @@ class BasicInformationView(DetailView):
 
     def post(self, request, *args, **kwargs):
         if self.request.user.is_superuser:
-            modified_date = request.POST.get('modified_date')
-            no_email = request.POST.get('no_email')
+            modified_date = request.POST.get("modified_date")
+            no_email = request.POST.get("no_email")
             sp = self.get_object()
             if modified_date == sp.updated_at.strftime("%Y%m%d%H%M%S%f"):
                 self._validate_linked_models(sp)
@@ -134,70 +151,79 @@ class BasicInformationView(DetailView):
                 if not no_email:
                     validation_notification(sp)
                 logger.info("SP {sp} validated by {user}".format(sp=sp, user=self.request.user))
-                messages.add_message(request, messages.INFO, _('Changes validated.'))
-            return HttpResponseRedirect(reverse('summary-view', args=(sp.pk,)))
+                messages.add_message(request, messages.INFO, _("Changes validated."))
+            return HttpResponseRedirect(reverse("summary-view", args=(sp.pk,)))
         else:
             error_message = _("You should not be here.")
             logger.warning("Tried to validate without superuser access")
-            return render(request, "error.html", {'error_message': error_message})
+            return render(request, "error.html", {"error_message": error_message})
 
     def get_queryset(self):
         return get_service_provider_queryset(request=self.request)
 
     def get_context_data(self, **kwargs):
         context = super(BasicInformationView, self).get_context_data(**kwargs)
-        sp = context['object']
+        sp = context["object"]
         history = ServiceProvider.objects.filter(history=sp.pk).exclude(validated=None).last()
-        if not context['object'].validated and history:
-            context['attributes'] = SPAttribute.objects.filter(
-                Q(sp=sp, end_at__gte=history.created_at) | Q(sp=sp, end_at=None))
-            context['certificates'] = Certificate.objects.filter(
-                Q(sp=sp, end_at__gte=history.created_at) | Q(sp=sp, end_at=None))
-            context['contacts'] = Contact.objects.filter(
-                Q(sp=sp, end_at__gte=history.created_at) | Q(sp=sp, end_at=None))
-            context['endpoints'] = Endpoint.objects.filter(
-                Q(sp=sp, end_at__gte=history.created_at) | Q(sp=sp, end_at=None))
-            context['usergroups'] = UserGroup.objects.filter(
-                Q(sp=sp, end_at__gte=history.created_at) | Q(sp=sp, end_at=None))
-            context['redirecturis'] = RedirectUri.objects.filter(
-                Q(sp=sp, end_at__gte=history.created_at) | Q(sp=sp, end_at=None))
-        elif context['object'].validated:
+        if not context["object"].validated and history:
+            context["attributes"] = SPAttribute.objects.filter(
+                Q(sp=sp, end_at__gte=history.created_at) | Q(sp=sp, end_at=None)
+            )
+            context["certificates"] = Certificate.objects.filter(
+                Q(sp=sp, end_at__gte=history.created_at) | Q(sp=sp, end_at=None)
+            )
+            context["contacts"] = Contact.objects.filter(
+                Q(sp=sp, end_at__gte=history.created_at) | Q(sp=sp, end_at=None)
+            )
+            context["endpoints"] = Endpoint.objects.filter(
+                Q(sp=sp, end_at__gte=history.created_at) | Q(sp=sp, end_at=None)
+            )
+            context["usergroups"] = UserGroup.objects.filter(
+                Q(sp=sp, end_at__gte=history.created_at) | Q(sp=sp, end_at=None)
+            )
+            context["redirecturis"] = RedirectUri.objects.filter(
+                Q(sp=sp, end_at__gte=history.created_at) | Q(sp=sp, end_at=None)
+            )
+        elif context["object"].validated:
             history = None
-            context['attributes'] = SPAttribute.objects.filter(
-                Q(sp=sp, end_at__gte=sp.validated) | Q(sp=sp, end_at=None))
-            context['certificates'] = Certificate.objects.filter(
-                Q(sp=sp, end_at__gte=sp.validated) | Q(sp=sp, end_at=None))
-            context['contacts'] = Contact.objects.filter(
-                Q(sp=sp, end_at__gte=sp.validated) | Q(sp=sp, end_at=None))
-            context['endpoints'] = Endpoint.objects.filter(
-                Q(sp=sp, end_at__gte=sp.validated) | Q(sp=sp, end_at=None))
-            context['usergroups'] = UserGroup.objects.filter(
-                Q(sp=sp, end_at__gte=sp.validated) | Q(sp=sp, end_at=None))
-            context['redirecturis'] = RedirectUri.objects.filter(
-                Q(sp=sp, end_at__gte=sp.validated) | Q(sp=sp, end_at=None))
+            context["attributes"] = SPAttribute.objects.filter(
+                Q(sp=sp, end_at__gte=sp.validated) | Q(sp=sp, end_at=None)
+            )
+            context["certificates"] = Certificate.objects.filter(
+                Q(sp=sp, end_at__gte=sp.validated) | Q(sp=sp, end_at=None)
+            )
+            context["contacts"] = Contact.objects.filter(Q(sp=sp, end_at__gte=sp.validated) | Q(sp=sp, end_at=None))
+            context["endpoints"] = Endpoint.objects.filter(Q(sp=sp, end_at__gte=sp.validated) | Q(sp=sp, end_at=None))
+            context["usergroups"] = UserGroup.objects.filter(
+                Q(sp=sp, end_at__gte=sp.validated) | Q(sp=sp, end_at=None)
+            )
+            context["redirecturis"] = RedirectUri.objects.filter(
+                Q(sp=sp, end_at__gte=sp.validated) | Q(sp=sp, end_at=None)
+            )
         else:
             history = None
-            context['attributes'] = SPAttribute.objects.filter(
-                Q(sp=sp, end_at__gte=sp.created_at) | Q(sp=sp, end_at=None))
-            context['certificates'] = Certificate.objects.filter(
-                Q(sp=sp, end_at__gte=sp.created_at) | Q(sp=sp, end_at=None))
-            context['contacts'] = Contact.objects.filter(
-                Q(sp=sp, end_at__gte=sp.created_at) | Q(sp=sp, end_at=None))
-            context['endpoints'] = Endpoint.objects.filter(
-                Q(sp=sp, end_at__gte=sp.created_at) | Q(sp=sp, end_at=None))
-            context['usergroups'] = UserGroup.objects.filter(
-                Q(sp=sp, end_at__gte=sp.created_at) | Q(sp=sp, end_at=None))
-            context['redirecturis'] = RedirectUri.objects.filter(
-                Q(sp=sp, end_at__gte=sp.created_at) | Q(sp=sp, end_at=None))
+            context["attributes"] = SPAttribute.objects.filter(
+                Q(sp=sp, end_at__gte=sp.created_at) | Q(sp=sp, end_at=None)
+            )
+            context["certificates"] = Certificate.objects.filter(
+                Q(sp=sp, end_at__gte=sp.created_at) | Q(sp=sp, end_at=None)
+            )
+            context["contacts"] = Contact.objects.filter(Q(sp=sp, end_at__gte=sp.created_at) | Q(sp=sp, end_at=None))
+            context["endpoints"] = Endpoint.objects.filter(Q(sp=sp, end_at__gte=sp.created_at) | Q(sp=sp, end_at=None))
+            context["usergroups"] = UserGroup.objects.filter(
+                Q(sp=sp, end_at__gte=sp.created_at) | Q(sp=sp, end_at=None)
+            )
+            context["redirecturis"] = RedirectUri.objects.filter(
+                Q(sp=sp, end_at__gte=sp.created_at) | Q(sp=sp, end_at=None)
+            )
         if history:
-            context['history_object'] = history
+            context["history_object"] = history
         if sp.production:
-            context['missing'] = get_missing_sp_data(sp)
+            context["missing"] = get_missing_sp_data(sp)
         if self.request.user.is_superuser and sp.modified:
-            context['form'] = ServiceProviderValidationForm(
-                modified_date=sp.updated_at.strftime("%Y%m%d%H%M%S%f"))
+            context["form"] = ServiceProviderValidationForm(modified_date=sp.updated_at.strftime("%Y%m%d%H%M%S%f"))
         else:
-            context['form'] = None
+            context["form"] = None
         return context
 
 
@@ -214,14 +240,15 @@ class SamlServiceProviderCreate(CreateView):
 
     :template:`rr/serviceprovider_saml_create_form.html`
     """
+
     model = ServiceProvider
     form_class = SamlServiceProviderCreateForm
-    success_url = '#'
-    template_name_suffix = '_saml_create_form'
+    success_url = "#"
+    template_name_suffix = "_saml_create_form"
 
     def get_form_kwargs(self):
         kwargs = super(SamlServiceProviderCreate, self).get_form_kwargs()
-        kwargs.update({'request': self.request})
+        kwargs.update({"request": self.request})
         return kwargs
 
     def form_valid(self, form):
@@ -231,7 +258,7 @@ class SamlServiceProviderCreate(CreateView):
         self.object.admins.add(self.request.user)
         logger.info("SAML service %s created by %s", self.object, self.request.user)
         admin_notification_created_sp(self.object)
-        return HttpResponseRedirect(reverse('summary-view', args=(self.object.pk,)))
+        return HttpResponseRedirect(reverse("summary-view", args=(self.object.pk,)))
 
 
 class LdapServiceProviderCreate(CreateView):
@@ -247,14 +274,15 @@ class LdapServiceProviderCreate(CreateView):
 
     :template:`rr/serviceprovider_ldap_create_form.html`
     """
+
     model = ServiceProvider
     form_class = LdapServiceProviderCreateForm
-    success_url = '#'
-    template_name_suffix = '_ldap_create_form'
+    success_url = "#"
+    template_name_suffix = "_ldap_create_form"
 
     def get_form_kwargs(self):
         kwargs = super(LdapServiceProviderCreate, self).get_form_kwargs()
-        kwargs.update({'request': self.request})
+        kwargs.update({"request": self.request})
         return kwargs
 
     def form_valid(self, form):
@@ -265,7 +293,7 @@ class LdapServiceProviderCreate(CreateView):
         self.object.admins.add(self.request.user)
         logger.info("LDAP service %s created by %s", self.object, self.request.user)
         admin_notification_created_sp(self.object)
-        return HttpResponseRedirect(reverse('summary-view', args=(self.object.pk,)))
+        return HttpResponseRedirect(reverse("summary-view", args=(self.object.pk,)))
 
 
 class OidcServiceProviderCreate(CreateView):
@@ -281,14 +309,15 @@ class OidcServiceProviderCreate(CreateView):
 
     :template:`rr/serviceprovider_oidc_create_form.html`
     """
+
     model = ServiceProvider
     form_class = OidcServiceProviderCreateForm
-    success_url = '#'
-    template_name_suffix = '_oidc_create_form'
+    success_url = "#"
+    template_name_suffix = "_oidc_create_form"
 
     def get_form_kwargs(self):
         kwargs = super(OidcServiceProviderCreate, self).get_form_kwargs()
-        kwargs.update({'request': self.request})
+        kwargs.update({"request": self.request})
         return kwargs
 
     def form_valid(self, form):
@@ -299,7 +328,7 @@ class OidcServiceProviderCreate(CreateView):
         self.object.generate_client_secret()
         logger.info("OIDC service %s created by %s", self.object, self.request.user)
         admin_notification_created_sp(self.object)
-        return HttpResponseRedirect(reverse('summary-view', args=(self.object.pk,)))
+        return HttpResponseRedirect(reverse("summary-view", args=(self.object.pk,)))
 
 
 class BasicInformationUpdate(SuccessMessageMixin, UpdateView):
@@ -315,18 +344,19 @@ class BasicInformationUpdate(SuccessMessageMixin, UpdateView):
 
     :template:`rr/serviceprovider_form.html`
     """
+
     model = ServiceProvider
     form_class = BasicInformationForm
-    success_url = '#'
+    success_url = "#"
     success_message = _("Form successfully saved")
-    template_name_suffix = '_basic_form'
+    template_name_suffix = "_basic_form"
 
     def get_queryset(self):
         return get_service_provider_queryset(request=self.request)
 
     def get_form_kwargs(self):
         kwargs = super(BasicInformationUpdate, self).get_form_kwargs()
-        kwargs.update({'request': self.request})
+        kwargs.update({"request": self.request})
         return kwargs
 
     def form_valid(self, form):
@@ -358,18 +388,19 @@ class SamlTechnicalInformationUpdate(SuccessMessageMixin, UpdateView):
 
     :template:`rr/serviceprovider_saml_technical_form.html`
     """
+
     model = ServiceProvider
     form_class = SamlTechnicalInformationForm
-    success_url = '#'
+    success_url = "#"
     success_message = _("Form successfully saved")
-    template_name_suffix = '_saml_technical_form'
+    template_name_suffix = "_saml_technical_form"
 
     def get_queryset(self):
-        return get_service_provider_queryset(request=self.request, service_type='saml')
+        return get_service_provider_queryset(request=self.request, service_type="saml")
 
     def get_form_kwargs(self):
         kwargs = super(SamlTechnicalInformationUpdate, self).get_form_kwargs()
-        kwargs.update({'request': self.request})
+        kwargs.update({"request": self.request})
         return kwargs
 
     def form_valid(self, form):
@@ -381,7 +412,7 @@ class SamlTechnicalInformationUpdate(SuccessMessageMixin, UpdateView):
             self.object.updated_by = self.request.user
             self.object.validated = None
             # Update entity_ids for testusers if it has changed
-            if 'entity_id' in form.changed_data:
+            if "entity_id" in form.changed_data:
                 update_entity_ids(self.object)
             form.save(commit=False)
             self.object.save_modified()
@@ -405,18 +436,19 @@ class LdapTechnicalInformationUpdate(SuccessMessageMixin, UpdateView):
 
     :template:`rr/serviceprovider_ldap_technical_form.html`
     """
+
     model = ServiceProvider
     form_class = LdapTechnicalInformationForm
-    success_url = '#'
+    success_url = "#"
     success_message = _("Form successfully saved")
-    template_name_suffix = '_ldap_technical_form'
+    template_name_suffix = "_ldap_technical_form"
 
     def get_queryset(self):
-        return get_service_provider_queryset(request=self.request, service_type='ldap')
+        return get_service_provider_queryset(request=self.request, service_type="ldap")
 
     def get_form_kwargs(self):
         kwargs = super(LdapTechnicalInformationUpdate, self).get_form_kwargs()
-        kwargs.update({'request': self.request})
+        kwargs.update({"request": self.request})
         return kwargs
 
     def form_valid(self, form):
@@ -448,22 +480,22 @@ class OidcTechnicalInformationUpdate(SuccessMessageMixin, UpdateView):
 
     :template:`rr/serviceprovider_oidc_technical_form.html`
     """
+
     model = ServiceProvider
     form_class = OidcTechnicalInformationForm
-    success_url = '#'
+    success_url = "#"
     success_message = _("Form successfully saved")
-    template_name_suffix = '_oidc_technical_form'
+    template_name_suffix = "_oidc_technical_form"
 
     def get_queryset(self):
-        return get_service_provider_queryset(request=self.request, service_type='oidc')
+        return get_service_provider_queryset(request=self.request, service_type="oidc")
 
     def get_form_kwargs(self):
         kwargs = super(OidcTechnicalInformationUpdate, self).get_form_kwargs()
-        kwargs.update({'request': self.request})
+        kwargs.update({"request": self.request})
         return kwargs
 
     def form_valid(self, form):
-
         if form.has_changed():
             sp = ServiceProvider.objects.get(pk=form.instance.pk)
             # create a history copy if modifying validated SP
@@ -473,20 +505,23 @@ class OidcTechnicalInformationUpdate(SuccessMessageMixin, UpdateView):
             self.object.updated_by = self.request.user
             self.object.validated = None
             # Update entity_ids for testusers if it has changed
-            if 'entity_id' in form.changed_data:
+            if "entity_id" in form.changed_data:
                 update_entity_ids(self.object)
-            if form.cleaned_data['reset_client_secret']:
+            if form.cleaned_data["reset_client_secret"]:
                 client_secret = self.object.generate_client_secret()
                 if client_secret:
                     logger.info("Client secret generated for {sp} by {user}".format(sp=sp, user=self.request.user))
-                    messages.add_message(self.request, messages.INFO, _('Client secret generated.'))
+                    messages.add_message(self.request, messages.INFO, _("Client secret generated."))
                 else:
-                    messages.add_message(self.request, messages.ERROR,
-                        _('Unable to generate a client secret. Usually this means incorrect server configuration.'))
-            if form.cleaned_data['remove_client_secret']:
+                    messages.add_message(
+                        self.request,
+                        messages.ERROR,
+                        _("Unable to generate a client secret. Usually this means incorrect server configuration."),
+                    )
+            if form.cleaned_data["remove_client_secret"]:
                 self.object.encrypted_client_secret = ""
                 logger.info("Client secret removed from {sp} by {user}".format(sp=sp, user=self.request.user))
-                messages.add_message(self.request, messages.INFO, _('Client secret removed.'))
+                messages.add_message(self.request, messages.INFO, _("Client secret removed."))
             self.object.save_modified()
             logger.info("RP %s updated by %s", self.object, self.request.user)
             return redirect_url
@@ -496,32 +531,34 @@ class OidcTechnicalInformationUpdate(SuccessMessageMixin, UpdateView):
 
 class ServiceProviderDelete(SuccessMessageMixin, DeleteView):
     model = ServiceProvider
-    success_url = reverse_lazy('serviceprovider-list')
+    success_url = reverse_lazy("serviceprovider-list")
     success_message = _("Service deleted.")
 
     def get_queryset(self):
         return get_service_provider_queryset(request=self.request)
 
-    def delete(self, request, *args, **kwargs):
+    def form_valid(self, form):
         """
-        Update regular delete function to set end_at null instead.
+        Set end_at null instead of deletion
         """
-        self.object = self.get_object()
         success_url = self.get_success_url()
+        obj = self.get_object()
         allow_delete = True
-        if self.object.production:
+        if obj.production:
             allow_delete = False
-        if not self.object.validated:
-            history = ServiceProvider.objects.filter(history=self.object.pk).exclude(validated=None).last()
+        if not obj.validated:
+            history = ServiceProvider.objects.filter(history=obj.pk).exclude(validated=None).last()
             if history and history.production:
                 allow_delete = False
         if allow_delete:
-            self.object.end_at = timezone.now()
-            self.object.save()
-            messages.add_message(request, messages.INFO, self.success_message)
+            obj.end_at = timezone.now()
+            obj.save()
+            messages.add_message(self.request, messages.INFO, self.success_message)
         else:
-            messages.add_message(request, messages.ERROR, _("Service removal is not allowed for production services."))
-            success_url = reverse_lazy('summary-view', kwargs={'pk': self.object.pk})
+            messages.add_message(
+                self.request, messages.ERROR, _("Service removal is not allowed for production services.")
+            )
+            success_url = reverse_lazy("summary-view", kwargs={"pk": self.object.pk})
         return HttpResponseRedirect(success_url)
 
 
@@ -539,11 +576,12 @@ class SAMLAdminList(ListView):
 
     :template:`rr/serviceprovider_saml_admin_list.html`
     """
+
     model = ServiceProvider
-    template_name_suffix = '_saml_admin_list'
+    template_name_suffix = "_saml_admin_list"
 
     def get_queryset(self):
         if self.request.user.is_superuser:
-            return ServiceProvider.objects.filter(service_type="saml", end_at=None).order_by('entity_id')
+            return ServiceProvider.objects.filter(service_type="saml", end_at=None).order_by("entity_id")
         else:
             raise PermissionDenied

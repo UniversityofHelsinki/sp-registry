@@ -11,33 +11,42 @@ from rr.views_api.contact import ContactViewSet
 class ContactTestCase(APITestCase):
     def setUp(self):
         self.factory = APIRequestFactory()
-        self.user = User.objects.create(username='tester')
-        self.superuser = User.objects.create(username='superuser', is_superuser=True)
-        self.user_sp = ServiceProvider.objects.create(entity_id='https://sp2.example.org/sp', service_type='saml',
-                                                     name_en='My Test')
+        self.user = User.objects.create(username="tester")
+        self.superuser = User.objects.create(username="superuser", is_superuser=True)
+        self.user_sp = ServiceProvider.objects.create(
+            entity_id="https://sp2.example.org/sp", service_type="saml", name_en="My Test"
+        )
         self.user_sp.admins.add(self.user)
-        self.admin_sp = ServiceProvider.objects.create(entity_id='test:entity:1', service_type='saml')
-        self.object = Contact.objects.create(sp=self.user_sp, type='support', firstname='Test', lastname='User',
-                                             email="t@e.o")
-        self.superuser_object = Contact.objects.create(sp=self.admin_sp, type='administrative',
-                                                       email='test@example.org')
-        self.data = {'id': self.object.id,
-                     'sp': self.object.sp.id,
-                     'type': self.object.type,
-                     'firstname': self.object.firstname,
-                     'lastname': self.object.lastname,
-                     'email': self.object.email}
-        self.create_data = {'sp': self.object.sp.id,
-                            'type': self.object.type,
-                            'firstname': 'Ex',
-                            'lastname': 'Org',
-                            'email': 'newtest@example.org'}
-        self.create_error_data = {'sp': self.object.sp.id,
-                                  'type': 'error',
-                                  'firstname': 'Ex',
-                                  'lastname': 'Org',
-                                  'email': 'newtest@example.org'}
-        self.url = '/api/v1/contacts/'
+        self.admin_sp = ServiceProvider.objects.create(entity_id="test:entity:1", service_type="saml")
+        self.object = Contact.objects.create(
+            sp=self.user_sp, type="support", firstname="Test", lastname="User", email="t@e.o"
+        )
+        self.superuser_object = Contact.objects.create(
+            sp=self.admin_sp, type="administrative", email="test@example.org"
+        )
+        self.data = {
+            "id": self.object.id,
+            "sp": self.object.sp.id,
+            "type": self.object.type,
+            "firstname": self.object.firstname,
+            "lastname": self.object.lastname,
+            "email": self.object.email,
+        }
+        self.create_data = {
+            "sp": self.object.sp.id,
+            "type": self.object.type,
+            "firstname": "Ex",
+            "lastname": "Org",
+            "email": "newtest@example.org",
+        }
+        self.create_error_data = {
+            "sp": self.object.sp.id,
+            "type": "error",
+            "firstname": "Ex",
+            "lastname": "Org",
+            "email": "newtest@example.org",
+        }
+        self.url = "/api/v1/contacts/"
         self.viewset = ContactViewSet
         self.model = Contact
 
@@ -48,12 +57,12 @@ class ContactTestCase(APITestCase):
     def test_contact_access_list_with_normal_user(self):
         response = self._test_list(user=self.user)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(len(response.data['results']), 1)
+        self.assertEqual(len(response.data["results"]), 1)
 
     def test_contact_access_list_with_superuser(self):
         response = self._test_list(user=self.superuser)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(len(response.data['results']), 2)
+        self.assertEqual(len(response.data["results"]), 2)
 
     def test_contact_access_object_without_user(self):
         response = self._test_access(user=None, pk=self.object.pk)

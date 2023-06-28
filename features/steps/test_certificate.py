@@ -1,7 +1,7 @@
 from behave import when
 
 
-@when(u'filling certificate form with invalid certificate')
+@when("filling certificate form with invalid certificate")
 def fill_invalid_certificate(context):
     certificate = """MIIFBTCCAu2gAwIBAgIJAKOceIf3koqXMA0GCSqGSIb3DQEBCwUAMBkxFzAVBgNV
 BAMMDnNwLmV4YW1wbGUub3JnMB4XDTE4MDExNjExMTAxN1oXDTI4MDExNDExMTAx
@@ -34,10 +34,10 @@ rKLt+NcwtbkI6weLISJu9lFZnPMYT7LpqDWD4aMHHUWr8THO0T6mbCeQRYMlfSpU
     context.browser.fill("certificate", certificate)
     context.browser.check("encryption")
     context.browser.check("signing")
-    context.browser.find_by_text('Save').first.click()
+    context.browser.find_by_text("Save").first.click()
 
 
-@when(u'filling certificate form with valid certificate')
+@when("filling certificate form with valid certificate")
 def fill_valid_certificate(context):
     certificate = """MIIFBTCCAu2gAwIBAgIJAKOceIf3koqXMA0GCSqGSIb3DQEBCwUAMBkxFzAVBgNV
 BAMMDnNwLmV4YW1wbGUub3JnMB4XDTE4MDExNjExMTAxN1oXDTI4MDExNDExMTAx
@@ -70,11 +70,11 @@ rKLt+NcwtbkI6weLISJu9lFZnPMYT7LpqDWD4aMHHUWr8THO0T6mbCeQRYMlfSpU
     context.browser.fill("certificate", certificate)
     context.browser.check("encryption")
     context.browser.check("signing")
-    context.browser.find_by_text('Save').first.click()
+    context.browser.find_by_text("Save").first.click()
 
 
-@when(u'removing first certificate')
+@when("removing first certificate")
 def fill_basic_form(context):
     context.browser.check("1")
-    context.browser.find_by_name('remove_certificate').first.click()
-    context.browser.find_by_text('Confirm').first.click()
+    context.browser.find_by_text("Remove selected").first.click()
+    context.browser.find_by_text("Confirm").first.click()

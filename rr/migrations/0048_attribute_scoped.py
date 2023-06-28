@@ -4,15 +4,14 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('rr', '0047_oidc_fixes'),
+        ("rr", "0047_oidc_fixes"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='attribute',
-            name='scoped',
-            field=models.BooleanField(default=False, verbose_name='Scoped attribute'),
+            model_name="attribute",
+            name="scoped",
+            field=models.BooleanField(default=False, verbose_name="Scoped attribute"),
         ),
     ]

@@ -3,11 +3,11 @@ Functions for genereating metadata of service providers
 """
 import logging
 
-from lxml import etree
 from django.db.models import Q
+from lxml import etree
 
 from rr.models.contact import Contact
-from rr.models.serviceprovider import SPAttribute, ServiceProvider
+from rr.models.serviceprovider import ServiceProvider, SPAttribute
 from rr.models.usergroup import UserGroup
 from rr.utils.metadata_generator_common import get_entity
 
@@ -23,14 +23,16 @@ def ldap_metadata_usergroups(element, sp, validation_date):
     validation_date: if None, using unvalidated metadata
     """
     if validation_date:
-        usergroups = UserGroup.objects.filter(sp=sp).filter(Q(end_at=None) |
-                                                            Q(end_at__gt=validation_date)).exclude(validated=None)
+        usergroups = (
+            UserGroup.objects.filter(sp=sp)
+            .filter(Q(end_at=None) | Q(end_at__gt=validation_date))
+            .exclude(validated=None)
+        )
     else:
         usergroups = UserGroup.objects.filter(sp=sp, end_at=None)
     entity = etree.SubElement(element, "UserGroups")
     for usergroup in usergroups:
-        etree.SubElement(entity, "UserGroup",
-                         name=usergroup.name)
+        etree.SubElement(entity, "UserGroup", name=usergroup.name)
 
 
 def ldap_metadata_attributes(element, sp, validation_date):
@@ -42,11 +44,14 @@ def ldap_metadata_attributes(element, sp, validation_date):
     validation_date: if None, using unvalidated metadata
     """
     if validation_date:
-        attributes = SPAttribute.objects.filter(sp=sp).filter(Q(end_at=None) |
-                                                              Q(end_at__gt=validation_date)).exclude(validated=None)
+        attributes = (
+            SPAttribute.objects.filter(sp=sp)
+            .filter(Q(end_at=None) | Q(end_at__gt=validation_date))
+            .exclude(validated=None)
+        )
     else:
         attributes = SPAttribute.objects.filter(sp=sp, end_at=None)
-    attribute_groups = attributes.order_by().values_list('attribute__group').distinct()
+    attribute_groups = attributes.order_by().values_list("attribute__group").distinct()
     entity = etree.SubElement(element, "AttributeGroups")
     for group in attribute_groups:
         if group[0]:
@@ -71,8 +76,9 @@ def ldap_metadata_generator(sp, validated=True, tree=None):
     if not provider:
         return tree
     if validation_date:
-        entity = etree.SubElement(tree, "Entity", ID=provider.entity_id,
-                                  validated=validation_date.strftime('%Y-%m-%dT%H:%M:%S%z'))
+        entity = etree.SubElement(
+            tree, "Entity", ID=provider.entity_id, validated=validation_date.strftime("%Y-%m-%dT%H:%M:%S%z")
+        )
     else:
         entity = etree.SubElement(tree, "Entity", ID=provider.entity_id, validated="false")
     if provider.server_names:

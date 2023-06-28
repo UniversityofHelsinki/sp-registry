@@ -6,35 +6,60 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('rr', '0006_endpoint'),
+        ("rr", "0006_endpoint"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='certificate',
-            name='encryption',
-            field=models.BooleanField(default=False, verbose_name='Use for encryption'),
+            model_name="certificate",
+            name="encryption",
+            field=models.BooleanField(default=False, verbose_name="Use for encryption"),
         ),
         migrations.AddField(
-            model_name='certificate',
-            name='signing',
-            field=models.BooleanField(default=False, verbose_name='Use for signing'),
+            model_name="certificate",
+            name="signing",
+            field=models.BooleanField(default=False, verbose_name="Use for signing"),
         ),
         migrations.AddField(
-            model_name='endpoint',
-            name='index',
-            field=models.SmallIntegerField(blank=True, null=True, verbose_name='Endpoint Index'),
+            model_name="endpoint",
+            name="index",
+            field=models.SmallIntegerField(blank=True, null=True, verbose_name="Endpoint Index"),
         ),
         migrations.AlterField(
-            model_name='endpoint',
-            name='binding',
-            field=models.CharField(choices=[('urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST', 'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST'), ('urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect', 'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect'), ('urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Artifact', 'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Artifact'), ('urn:oasis:names:tc:SAML:2.0:bindings:SOAP', 'urn:oasis:names:tc:SAML:2.0:bindings:SOAP')], max_length=60, verbose_name='Endpoint Binding'),
+            model_name="endpoint",
+            name="binding",
+            field=models.CharField(
+                choices=[
+                    (
+                        "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST",
+                        "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST",
+                    ),
+                    (
+                        "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect",
+                        "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect",
+                    ),
+                    (
+                        "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Artifact",
+                        "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Artifact",
+                    ),
+                    ("urn:oasis:names:tc:SAML:2.0:bindings:SOAP", "urn:oasis:names:tc:SAML:2.0:bindings:SOAP"),
+                ],
+                max_length=60,
+                verbose_name="Endpoint Binding",
+            ),
         ),
         migrations.AlterField(
-            model_name='endpoint',
-            name='type',
-            field=models.CharField(choices=[('AssertionConsumerService', 'AssertionConsumerService'), ('SingleLogoutService', 'SingleLogoutService'), ('ArtifactResolutionService', 'ArtifactResolutionService')], max_length=30, verbose_name='Endpoint Type'),
+            model_name="endpoint",
+            name="type",
+            field=models.CharField(
+                choices=[
+                    ("AssertionConsumerService", "AssertionConsumerService"),
+                    ("SingleLogoutService", "SingleLogoutService"),
+                    ("ArtifactResolutionService", "ArtifactResolutionService"),
+                ],
+                max_length=30,
+                verbose_name="Endpoint Type",
+            ),
         ),
     ]

@@ -1,6 +1,6 @@
 from django.core.validators import ValidationError
 from django.forms import ModelForm
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 from rr.models.contact import Contact
 
@@ -8,10 +8,10 @@ from rr.models.contact import Contact
 class ContactForm(ModelForm):
     class Meta:
         model = Contact
-        fields = ['type', 'firstname', 'lastname', 'email']
+        fields = ["type", "firstname", "lastname", "email"]
 
     def __init__(self, *args, **kwargs):
-        self.sp = kwargs.pop('sp', None)
+        self.sp = kwargs.pop("sp", None)
         super(ContactForm, self).__init__(*args, **kwargs)
 
     def clean(self):
@@ -20,6 +20,7 @@ class ContactForm(ModelForm):
         firstname = cleaned_data.get("firstname")
         lastname = cleaned_data.get("lastname")
         email = cleaned_data.get("email")
-        if Contact.objects.filter(sp=self.sp, type=contacttype, firstname=firstname,
-                                  lastname=lastname, email=email, end_at=None).exists():
+        if Contact.objects.filter(
+            sp=self.sp, type=contacttype, firstname=firstname, lastname=lastname, email=email, end_at=None
+        ).exists():
             raise ValidationError(_("Contact already exists"))

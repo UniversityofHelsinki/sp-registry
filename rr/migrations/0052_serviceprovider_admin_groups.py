@@ -4,16 +4,15 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('auth', '0011_update_proxy_permissions'),
-        ('rr', '0051_serviceprovider_token_endpoint_auth_method'),
+        ("auth", "0011_update_proxy_permissions"),
+        ("rr", "0051_serviceprovider_token_endpoint_auth_method"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='serviceprovider',
-            name='admin_groups',
-            field=models.ManyToManyField(blank=True, related_name='admin_groups', to='auth.Group'),
+            model_name="serviceprovider",
+            name="admin_groups",
+            field=models.ManyToManyField(blank=True, related_name="admin_groups", to="auth.Group"),
         ),
     ]

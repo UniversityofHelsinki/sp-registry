@@ -6,28 +6,27 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('rr', '0001_initial'),
+        ("rr", "0001_initial"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='Certificate',
+            name="Certificate",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('cn', models.CharField(blank=True, max_length=255, verbose_name='cn')),
-                ('issuer_cn', models.CharField(blank=True, max_length=255, verbose_name='Issuer cn')),
-                ('organization', models.CharField(blank=True, max_length=255, verbose_name='Organization')),
-                ('valid_from', models.DateTimeField(blank=True, null=True, verbose_name='Valid from')),
-                ('valid_until', models.DateTimeField(blank=True, null=True, verbose_name='Valid until')),
-                ('key_size', models.SmallIntegerField(verbose_name='Key size')),
-                ('certificate', models.TextField(verbose_name='Certificate')),
+                ("id", models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name="ID")),
+                ("cn", models.CharField(blank=True, max_length=255, verbose_name="cn")),
+                ("issuer_cn", models.CharField(blank=True, max_length=255, verbose_name="Issuer cn")),
+                ("organization", models.CharField(blank=True, max_length=255, verbose_name="Organization")),
+                ("valid_from", models.DateTimeField(blank=True, null=True, verbose_name="Valid from")),
+                ("valid_until", models.DateTimeField(blank=True, null=True, verbose_name="Valid until")),
+                ("key_size", models.SmallIntegerField(verbose_name="Key size")),
+                ("certificate", models.TextField(verbose_name="Certificate")),
             ],
         ),
         migrations.AddField(
-            model_name='serviceprovider',
-            name='certificates',
-            field=models.ManyToManyField(to='rr.Certificate'),
+            model_name="serviceprovider",
+            name="certificates",
+            field=models.ManyToManyField(to="rr.Certificate"),
         ),
     ]

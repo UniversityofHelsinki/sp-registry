@@ -4,7 +4,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 from django.utils import timezone
-from django.utils.translation import ugettext as _
+from django.utils.translation import gettext as _
 
 from rr.forms.redirecturi import RedirectUriForm
 from rr.models.redirecturi import RedirectUri
@@ -44,21 +44,19 @@ def redirecturi_list(request, pk):
             form = _add_redirecturi(request, sp)
         elif "remove_redirecturi" in request.POST:
             _remove_redirecturis(request, sp)
-    redirect_uris = RedirectUri.objects.filter(sp=sp, end_at=None).order_by('uri')
-    return render(request, "rr/redirecturi.html", {'object_list': redirect_uris,
-                                                   'form': form,
-                                                   'object': sp})
+    redirect_uris = RedirectUri.objects.filter(sp=sp, end_at=None).order_by("uri")
+    return render(request, "rr/redirecturi.html", {"object_list": redirect_uris, "form": form, "object": sp})
 
 
 def _add_redirecturi(request, sp):
     form = RedirectUriForm(request.POST, sp=sp)
     if form.is_valid():
-        uri = form.cleaned_data['uri']
+        uri = form.cleaned_data["uri"]
         RedirectUri.objects.create(sp=sp, uri=uri)
         sp.save_modified()
         logger.info("Redirect URL added for {sp} by {user}".format(sp=sp, user=request.user))
         form = RedirectUriForm(sp=sp)
-        messages.add_message(request, messages.INFO, _('Redirect URL added.'))
+        messages.add_message(request, messages.INFO, _("Redirect URL added."))
     return form
 
 
@@ -70,6 +68,5 @@ def _remove_redirecturis(request, sp):
                 user_group.end_at = timezone.now()
                 user_group.save()
                 sp.save_modified()
-                logger.info("Redirect URL removed from {sp} by {user}".format(
-                    sp=sp, user=request.user))
-                messages.add_message(request, messages.INFO, _('Redirect URL removed.'))
+                logger.info("Redirect URL removed from {sp} by {user}".format(sp=sp, user=request.user))
+                messages.add_message(request, messages.INFO, _("Redirect URL removed."))

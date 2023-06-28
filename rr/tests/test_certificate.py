@@ -12,10 +12,10 @@ from rr.views.certificate import certificate_list
 class CertificateFormTestCase(TestCase):
     def setUp(self):
         self.factory = RequestFactory()
-        self.user = User.objects.create(username='tester')
+        self.user = User.objects.create(username="tester")
         self.superuser = User.objects.create(username="superuser", is_superuser=True)
-        self.admin_sp = ServiceProvider.objects.create(entity_id='test:entity:1', service_type='saml')
-        self.user_sp = ServiceProvider.objects.create(entity_id='https://sp2.example.org/sp', service_type='saml')
+        self.admin_sp = ServiceProvider.objects.create(entity_id="test:entity:1", service_type="saml")
+        self.user_sp = ServiceProvider.objects.create(entity_id="https://sp2.example.org/sp", service_type="saml")
         self.user_sp.admins.add(self.user)
         self.invalid_certificate = """MIIFBTCCAu2gAwIBAgIJAKOceIf3koqXMA0GCSqGSIb3DQEBCwUAMBkxFzAVBgNV
 BAMMDnNwLmV4YW1wbGUub3JnMB4XDTE4MDExNjExMTAxN1oXDTI4MDExNDExMTAx
@@ -76,42 +76,44 @@ rKLt+NcwtbkI6weLISJu9lFZnPMYT7LpqDWD4aMHHUWr8THO0T6mbCeQRYMlfSpU
 """
 
     def test_certificate_form_save_content_saml_user(self):
-        form_data = {'certificate': self.valid_certificate, 'encryption': True, 'signing': True}
+        form_data = {"certificate": self.valid_certificate, "encryption": True, "signing": True}
         form = CertificateForm(sp=self.user_sp, data=form_data)
         self.assertTrue(form.is_valid())
 
     def test_certificate_form_save_invalid_content_saml_user(self):
-        form_data = {'certificate': self.invalid_certificate, 'encryption': True, 'signing': True}
+        form_data = {"certificate": self.invalid_certificate, "encryption": True, "signing": True}
         form = CertificateForm(sp=self.user_sp, data=form_data)
         self.assertFalse(form.is_valid())
 
     def test_certificate_view_denies_anonymous(self):
-        response = self.client.get(reverse('certificate-list', kwargs={'pk': self.user_sp.pk}), follow=True)
-        self.assertRedirects(response,
-                             reverse('login') + '?next=' + reverse('certificate-list', kwargs={'pk': self.user_sp.pk}))
-        response = self.client.post(reverse('certificate-list', kwargs={'pk': self.user_sp.pk}), follow=True)
-        self.assertRedirects(response,
-                             reverse('login') + '?next=' + reverse('certificate-list', kwargs={'pk': self.user_sp.pk}))
+        response = self.client.get(reverse("certificate-list", kwargs={"pk": self.user_sp.pk}), follow=True)
+        self.assertRedirects(
+            response, reverse("login") + "?next=" + reverse("certificate-list", kwargs={"pk": self.user_sp.pk})
+        )
+        response = self.client.post(reverse("certificate-list", kwargs={"pk": self.user_sp.pk}), follow=True)
+        self.assertRedirects(
+            response, reverse("login") + "?next=" + reverse("certificate-list", kwargs={"pk": self.user_sp.pk})
+        )
 
     def test_certificate_view_denies_unauthorized_user(self):
         self.client.force_login(self.user)
-        response = self.client.get(reverse('certificate-list', kwargs={'pk': self.admin_sp.pk}))
+        response = self.client.get(reverse("certificate-list", kwargs={"pk": self.admin_sp.pk}))
         self.assertEqual(response.status_code, 404)
-        response = self.client.post(reverse('certificate-list', kwargs={'pk': self.admin_sp.pk}))
+        response = self.client.post(reverse("certificate-list", kwargs={"pk": self.admin_sp.pk}))
         self.assertEqual(response.status_code, 404)
 
     def test_certificate_view_list(self):
         self.client.force_login(self.user)
-        response = self.client.get(reverse('certificate-list', kwargs={'pk': self.user_sp.pk}))
+        response = self.client.get(reverse("certificate-list", kwargs={"pk": self.user_sp.pk}))
         self.assertEqual(response.status_code, 200)
 
     def test_certificate_form_view_add_certificate(self):
-        form_data = {'certificate': self.valid_certificate, 'encryption': True, 'signing': True, 'add_cert': True}
-        request = self.factory.post(reverse('certificate-list', kwargs={'pk': self.user_sp.pk}), form_data)
+        form_data = {"certificate": self.valid_certificate, "encryption": True, "signing": True, "add_cert": True}
+        request = self.factory.post(reverse("certificate-list", kwargs={"pk": self.user_sp.pk}), form_data)
         request.user = self.user
-        setattr(request, 'session', 'session')
+        setattr(request, "session", "session")
         messages = FallbackStorage(request)
-        setattr(request, '_messages', messages)
+        setattr(request, "_messages", messages)
         response = certificate_list(request, pk=self.user_sp.pk)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(Certificate.objects.filter(sp=self.user_sp).count(), 1)

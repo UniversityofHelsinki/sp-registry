@@ -1,33 +1,33 @@
 {% extends "base.html" %}
 {% load i18n %}
-{% load bootstrap4 %}
+{% load django_bootstrap5 %}
 {% load static %}
 {% block content %}
-<h1 class="page-header" id="statistics-summary">{% trans "Login Statistics Summary" %}</h1>
-{% if object_list %}
-  <table class="table table-sm table-responsive" aria-describedby="statistics-summary">
-  <thead>
-    <tr>
-      <th scope="col">{% trans "Service" %}</th>
-      <th scope="col">{% trans "Week" %}</th>
-      <th scope="col">{% trans "Month" %}</th>
-      <th scope="col">{% trans "6 months" %}</th>
-      <th scope="col">{% trans "Year" %}</th>
-    </tr>
-  </thead>
-  <tbody>
-{% for row in object_list %}
-    {% if row.5 is None %}<tr class="table-danger">{% elif row.4 is None %}<tr class="table-warning">{% else %}<tr>{% endif %}
+  <h1 class="page-header" id="statistics-summary">{% trans "Login Statistics Summary" %}</h1>
+  {% if object_list %}
+    <table class="table table-sm table-responsive" aria-describedby="statistics-summary">
+      <thead>
+      <tr>
+        <th scope="col">{% trans "Service" %}</th>
+        <th scope="col">{% trans "Week" %}</th>
+        <th scope="col">{% trans "Month" %}</th>
+        <th scope="col">{% trans "6 months" %}</th>
+        <th scope="col">{% trans "Year" %}</th>
+      </tr>
+      </thead>
+      <tbody>
+      {% for row in object_list %}
+        {% if row.5 is None %}<tr class="table-danger">{% elif row.4 is None %}<tr class="table-warning">{% else %}<tr>{% endif %}
       <td><a href="{% url 'summary-view' row.0 %}">{{ row.1 }}</a></td>
       <td>{% if row.2 is not None %}{{ row.2 }}{% endif %}</td>
       <td>{% if row.3 is not None %}{{ row.3 }}{% endif %}</td>
       <td>{% if row.4 is not None %}{{ row.4 }}{% endif %}</td>
       <td>{% if row.5 is not None %}{{ row.5 }}{% endif %}</td>
-    </tr>
-{% endfor %}
-  </tbody>
-</table>
-{% else %}
-<p>{% trans "No statistics" %}</p>
-{% endif %}
+      </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  {% else %}
+    <p>{% trans "No statistics" %}</p>
+  {% endif %}
 {% endblock %}

@@ -3,7 +3,7 @@ Missing data checks
 """
 
 from django.urls.base import reverse
-from django.utils.translation import ugettext as _
+from django.utils.translation import gettext as _
 
 from rr.models.certificate import Certificate
 from rr.models.contact import Contact
@@ -19,8 +19,7 @@ def _format_missing_message(links, msg, url=None):
 
 
 def _get_missing_privacy_data(sp, missing, links):
-    if (not sp.privacypolicy_org and not sp.privacypolicy_en and not sp.privacypolicy_fi and
-            sp.attributes):
+    if not sp.privacypolicy_org and not sp.privacypolicy_en and not sp.privacypolicy_fi and sp.attributes:
         msg = _("Privacy policy URL in English or in Finnish")
         url = reverse("basicinformation-update", args=[sp.pk])
         missing.append(_format_missing_message(links, msg, url))
@@ -32,8 +31,7 @@ def _get_missing_saml_data(sp, missing, links):
         msg = _("Certificate")
         url = reverse("certificate-list", args=[sp.pk])
         missing.append(_format_missing_message(links, msg, url))
-    if not Endpoint.objects.filter(sp=sp, end_at=None,
-                                   type='AssertionConsumerService'):
+    if not Endpoint.objects.filter(sp=sp, end_at=None, type="AssertionConsumerService"):
         msg = _("AssertionConsumerService endpoint")
         url = reverse("endpoint-list", args=[sp.pk])
         missing.append(_format_missing_message(links, msg, url))

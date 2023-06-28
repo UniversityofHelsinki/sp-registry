@@ -4,7 +4,7 @@ from django.conf import settings
 from django.db.models import Q
 from django.http.response import Http404
 from django.utils import timezone
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 from rr.models.serviceprovider import ServiceProvider
 
@@ -30,18 +30,24 @@ def get_service_provider(pk, user, service_type=None, raise_404=True):
                 sp = ServiceProvider.objects.get(pk=pk, end_at=None)
         else:
             if service_type:
-                sp = ServiceProvider.objects.filter(
-                    (Q(admins=user) |
-                     Q(admin_groups__in=user.groups.all())),
-                    pk=pk,
-                    end_at=None,
-                    service_type__in=service_type).distinct().last()
+                sp = (
+                    ServiceProvider.objects.filter(
+                        (Q(admins=user) | Q(admin_groups__in=user.groups.all())),
+                        pk=pk,
+                        end_at=None,
+                        service_type__in=service_type,
+                    )
+                    .distinct()
+                    .last()
+                )
             else:
-                sp = ServiceProvider.objects.filter(
-                    (Q(admins=user) |
-                     Q(admin_groups__in=user.groups.all())),
-                    pk=pk,
-                    end_at=None).distinct().last()
+                sp = (
+                    ServiceProvider.objects.filter(
+                        (Q(admins=user) | Q(admin_groups__in=user.groups.all())), pk=pk, end_at=None
+                    )
+                    .distinct()
+                    .last()
+                )
             if not sp:
                 raise ServiceProvider.DoesNotExist
     except ServiceProvider.DoesNotExist:
@@ -63,26 +69,30 @@ def get_service_provider_queryset(request, service_type=None):
     return: service provider queryset
     """
     user = request.user
-    read_all_group = settings.READ_ALL_GROUP if hasattr(settings, 'READ_ALL_GROUP') else None
+    read_all_group = settings.READ_ALL_GROUP if hasattr(settings, "READ_ALL_GROUP") else None
 
     if user.is_superuser or (
-            request.method == "GET" and read_all_group and user.groups.filter(name=read_all_group).exists()):
+        request.method == "GET" and read_all_group and user.groups.filter(name=read_all_group).exists()
+    ):
         if service_type:
-            return ServiceProvider.objects.filter(end_at=None, service_type=service_type).order_by('entity_id')
+            return ServiceProvider.objects.filter(end_at=None, service_type=service_type).order_by("entity_id")
         else:
-            return ServiceProvider.objects.filter(end_at=None).order_by('entity_id')
+            return ServiceProvider.objects.filter(end_at=None).order_by("entity_id")
     else:
         if service_type:
-            return ServiceProvider.objects.filter(
-                (Q(admins=user) |
-                 Q(admin_groups__in=user.groups.all())),
-                service_type=service_type,
-                end_at=None).distinct().order_by('entity_id')
+            return (
+                ServiceProvider.objects.filter(
+                    (Q(admins=user) | Q(admin_groups__in=user.groups.all())), service_type=service_type, end_at=None
+                )
+                .distinct()
+                .order_by("entity_id")
+            )
         else:
-            return ServiceProvider.objects.filter(
-                (Q(admins=user) |
-                 Q(admin_groups__in=user.groups.all())),
-                end_at=None).distinct().order_by('entity_id')
+            return (
+                ServiceProvider.objects.filter((Q(admins=user) | Q(admin_groups__in=user.groups.all())), end_at=None)
+                .distinct()
+                .order_by("entity_id")
+            )
 
 
 def create_sp_history_copy(sp):

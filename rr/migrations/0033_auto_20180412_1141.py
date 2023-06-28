@@ -6,15 +6,14 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('rr', '0032_auto_20180410_1255'),
+        ("rr", "0032_auto_20180410_1255"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='serviceprovider',
-            name='autoupdate_idp_metadata',
-            field=models.BooleanField(default=False, verbose_name='SP updates IdP metadata automatically'),
+            model_name="serviceprovider",
+            name="autoupdate_idp_metadata",
+            field=models.BooleanField(default=False, verbose_name="SP updates IdP metadata automatically"),
         ),
     ]

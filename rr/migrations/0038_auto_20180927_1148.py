@@ -7,25 +7,39 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('rr', '0037_merge_20180918_0837'),
+        ("rr", "0037_merge_20180918_0837"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='serviceprovider',
-            name='name_en',
-            field=models.CharField(blank=True, max_length=140, validators=[django.core.validators.MaxLengthValidator(140)], verbose_name='Service Name (English)'),
+            model_name="serviceprovider",
+            name="name_en",
+            field=models.CharField(
+                blank=True,
+                max_length=140,
+                validators=[django.core.validators.MaxLengthValidator(140)],
+                verbose_name="Service Name (English)",
+            ),
         ),
         migrations.AlterField(
-            model_name='serviceprovider',
-            name='name_fi',
-            field=models.CharField(blank=True, max_length=140, validators=[django.core.validators.MaxLengthValidator(140)], verbose_name='Service Name (Finnish)'),
+            model_name="serviceprovider",
+            name="name_fi",
+            field=models.CharField(
+                blank=True,
+                max_length=140,
+                validators=[django.core.validators.MaxLengthValidator(140)],
+                verbose_name="Service Name (Finnish)",
+            ),
         ),
         migrations.AlterField(
-            model_name='serviceprovider',
-            name='name_sv',
-            field=models.CharField(blank=True, max_length=140, validators=[django.core.validators.MaxLengthValidator(140)], verbose_name='Service Name (Swedish)'),
+            model_name="serviceprovider",
+            name="name_sv",
+            field=models.CharField(
+                blank=True,
+                max_length=140,
+                validators=[django.core.validators.MaxLengthValidator(140)],
+                verbose_name="Service Name (Swedish)",
+            ),
         ),
     ]

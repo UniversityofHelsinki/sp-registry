@@ -1,10 +1,9 @@
-from lxml import etree
-
 from django.core.exceptions import ValidationError
 from django.core.validators import URLValidator
-from django.forms import Form, Textarea, HiddenInput
-from django.forms.fields import CharField, BooleanField
-from django.utils.translation import ugettext_lazy as _
+from django.forms import Form, HiddenInput, Textarea
+from django.forms.fields import BooleanField, CharField
+from django.utils.translation import gettext_lazy as _
+from lxml import etree
 
 from rr.models.serviceprovider import ServiceProvider
 
@@ -13,23 +12,22 @@ class MetadataForm(Form):
     """
     Form for importing metadata.
     """
-    metadata = CharField(widget=Textarea,
-                         help_text=_("Service Provider metadata"))
-    disable_checks = BooleanField(required=False,
-                                  help_text=_("Disable checks for Endpoint bindings"))
+
+    metadata = CharField(widget=Textarea, help_text=_("Service Provider metadata"))
+    disable_checks = BooleanField(required=False, help_text=_("Disable checks for Endpoint bindings"))
     validate = BooleanField(required=False, help_text=_("Validate imported metadata"))
 
     def __init__(self, *args, **kwargs):
-        self.user = kwargs.pop('user', None)
+        self.user = kwargs.pop("user", None)
         super(MetadataForm, self).__init__(*args, **kwargs)
         if not self.user.is_superuser:
-            del self.fields['disable_checks']
-            del self.fields['validate']
+            del self.fields["disable_checks"]
+            del self.fields["validate"]
 
     def clean(self):
         cleaned_data = super().clean()
-        metadata = cleaned_data.get("metadata").encode('utf-8')
-        parser = etree.XMLParser(ns_clean=True, remove_comments=True, remove_blank_text=True, encoding='utf-8')
+        metadata = cleaned_data.get("metadata").encode("utf-8")
+        parser = etree.XMLParser(ns_clean=True, remove_comments=True, remove_blank_text=True, encoding="utf-8")
         try:
             root = etree.fromstring(metadata, parser)
         except etree.XMLSyntaxError as e:
@@ -44,8 +42,7 @@ class MetadataForm(Form):
             try:
                 url_validator(entity_id)
             except ValidationError:
-                raise ValidationError(_("Entity Id should be URI, please contact IdP admins if "
-                                        "this is not possible."))
+                raise ValidationError(_("Entity Id should be URI, please contact IdP admins if this is not possible."))
         if ServiceProvider.objects.filter(entity_id=entity_id, end_at=None, history=None):
             raise ValidationError(_("Entity Id already exists"))
 
@@ -54,11 +51,12 @@ class MetadataCommitForm(Form):
     """
     Form for committing metadata.
     """
-    commit_message = CharField(initial='Metadata update', help_text=_("Commit message"))
+
+    commit_message = CharField(initial="Metadata update", help_text=_("Commit message"))
     diff_hash = CharField()
 
     def __init__(self, *args, **kwargs):
-        self.diff_hash = kwargs.pop('diff_hash', None)
+        self.diff_hash = kwargs.pop("diff_hash", None)
         super(MetadataCommitForm, self).__init__(*args, **kwargs)
-        self.fields['diff_hash'].widget = HiddenInput()
-        self.fields['diff_hash'].initial = self.diff_hash
+        self.fields["diff_hash"].widget = HiddenInput()
+        self.fields["diff_hash"].initial = self.diff_hash

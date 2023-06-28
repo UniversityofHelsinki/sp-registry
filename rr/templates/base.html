@@ -5,295 +5,296 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha256-aAr2Zpq8MZ+YA/D6JtRD3xtrwpEz2IqOS+pWD/7XKIw=" crossorigin="anonymous" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
   <link href="{% static "css/custom.css" %}" rel="stylesheet">
   <title>{% trans "Service Provider Registry" %}</title>
 </head>
 <body>
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top" aria-label="{% trans "Top navigation bar" %}">
+  <div class="container-fluid">
     <a class="navbar-brand" href="{% url 'serviceprovider-list' %}">{% trans "SP Registry" %}</a>
-{% if object %}
-      <div class="navbar-brand d-none d-sm-block">- {{ object.name }} ({{ object.display_identifier }})</div>
-{% endif %}
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+    {% if object %}
+      <div class="navbar-brand d-none d-md-block">- {{ object.name }} ({{ object.display_identifier }})</div>
+      <div class="navbar-brand d-none d-sm-block d-md-none">- {{ object.name }}</div>
+    {% endif %}
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
-    <div class="collapse navbar-collapse" id="navbarCollapse">
+    <div class="collapse navbar-collapse navbar-nav-scroll" id="navbarCollapse">
       <ul class="navbar-nav mr-auto d-lg-none">
         <li class="nav-item">
           <a class="nav-link" href="{% url 'serviceprovider-list' %}">{% trans "Service Providers" %}</a>
         </li>
-{% if object %}
-        <div class="dropdown-divider"></div>
-        <li class="nav-item">
-          <div class="navbar-brand">{% trans "SP Configuration" %}</div>
-        </li>
-        <div class="dropdown-divider"></div>
-        <li class="nav-item">
-          <a class="nav-link" href="{% url 'summary-view' object.pk %}">{% trans "Summary" %}</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="{% url 'basicinformation-update' object.pk %}">{% trans "Basic Information" %}</a>
-        </li>
-{% if object.service_type == "saml" %}
-        <li class="nav-item">
-          <a class="nav-link" href="{% url 'technical-update' object.pk %}">{% trans "Technical Attributes" %}</a>
-        </li>
-{% elif object.service_type == "ldap" %}
-        <li class="nav-item">
-          <a class="nav-link" href="{% url 'ldap-technical-update' object.pk %}">{% trans "Technical Attributes" %}</a>
-        </li>
-{% elif object.service_type == "oidc" %}
-        <li class="nav-item">
-          <a class="nav-link" href="{% url 'oidc-technical-update' object.pk %}">{% trans "Technical Attributes" %}</a>
-        </li>
-{% endif %}
-        <li class="nav-item">
-          <a class="nav-link" href="{% url 'attribute-list' object.pk %}">{% trans "Attributes" %}</a>
-        </li>
-{% if object.service_type == "saml" %}
-        <li class="nav-item">
-          <a class="nav-link" href="{% url 'certificate-list' object.pk %}">{% trans "Certificates" %}</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="{% url 'endpoint-list' object.pk %}">{% trans "SAML Endpoints" %}</a>
-        </li>
-{% endif %}
-{% if object.service_type == "ldap" %}
-        <li class="nav-item">
-          <a class="nav-link" href="{% url 'usergroup-list' object.pk %}">{% trans "User Groups" %}</a>
-        </li>
-{% endif %}
-{% if object.service_type == "oidc" %}
-        <li class="nav-item">
-          <a class="nav-link" href="{% url 'redirecturi-list' object.pk %}">{% trans "Redirect URIs" %}</a>
-        </li>
-{% endif %}
-        <li class="nav-item">
-          <a class="nav-link" href="{% url 'contact-list' object.pk %}">{% trans "Contacts" %}</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="{% url 'admin-list' object.pk %}">{% trans "Admins" %}</a>
-        </li>
-{% if object.test %}
-        <li class="nav-item">
-          <a class="nav-link" href="{% url 'testuser-list' object.pk %}">{% trans "Test users" %}</a>
-        </li>
-{% endif %}
-{% if object.service_type == "saml" or object.service_type == "oidc" %}
-        <li class="nav-item">
-          <a class="nav-link" href="{% url 'metadata-view' object.pk %}">{% trans "View Metadata" %}</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="{% url 'statistics-list' object.pk %}">{% trans "Login Statistics" %}</a>
-        </li>
-{% endif %}
-{% endif %}
-{% if user.is_superuser %}
-        <div class="dropdown-divider"></div>
-        <li class="nav-item">
-          <div class="navbar-brand">{% trans "Administration" %}</div>
-        </li>
-        <div class="dropdown-divider"></div>
-        <li class="nav-item">
-          <a class="nav-link" href="{% url 'attribute-admin-list' %}">{% trans "Attributes" %}</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="{% url 'certificate-admin-list' %}">{% trans "Certificates" %}</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="{% url 'saml-admin-list' %}">{% trans "SAML Special Configs" %}</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="{% url 'statistics-summary-list' %}">{% trans "SAML Login Summary" %}</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="{% url 'email-list' %}">{% trans "Emails" %}</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="{% url 'metadata-manage-saml' %}">{% trans "Manage SAML metadata" %}</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="{% url 'metadata-manage-ldap' %}">{% trans "Manage LDAP metadata" %}</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="{% url 'metadata-manage-oidc' %}">{% trans "Manage OIDC metadata" %}</a>
-        </li>
-        <div class="dropdown-divider"></div>
-        <li class="nav-item">
-          <a class="nav-link" href="/admin_django/">{% trans "Database Admin" %}</a>
-        </li>
-{% endif %}
-{% if user.is_authenticated %}
-        <div class="dropdown-divider"></div>
-        <li class="nav-item">
-          <a class="nav-link {% if request.path|slice:":11" == "/authtoken/" %}active{% endif %}" href="{% url 'auth-token' %}">{% trans "API" %}</a>
-        </li>
-{% endif %}
+        {% if object %}
+          <li><hr class="dropdown-divider"></li>
+          <li class="nav-item">
+            <div class="navbar-brand">{% trans "SP Configuration" %}</div>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'summary-view' object.pk %}">{% trans "Summary" %}</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'basicinformation-update' object.pk %}">{% trans "Basic Information" %}</a>
+          </li>
+          {% if object.service_type == "saml" %}
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'technical-update' object.pk %}">{% trans "Technical Attributes" %}</a>
+            </li>
+          {% elif object.service_type == "ldap" %}
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'ldap-technical-update' object.pk %}">{% trans "Technical Attributes" %}</a>
+            </li>
+          {% elif object.service_type == "oidc" %}
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'oidc-technical-update' object.pk %}">{% trans "Technical Attributes" %}</a>
+            </li>
+          {% endif %}
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'attribute-list' object.pk %}">{% trans "Attributes" %}</a>
+          </li>
+          {% if object.service_type == "saml" %}
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'certificate-list' object.pk %}">{% trans "Certificates" %}</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'endpoint-list' object.pk %}">{% trans "SAML Endpoints" %}</a>
+            </li>
+          {% endif %}
+          {% if object.service_type == "ldap" %}
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'usergroup-list' object.pk %}">{% trans "User Groups" %}</a>
+            </li>
+          {% endif %}
+          {% if object.service_type == "oidc" %}
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'redirecturi-list' object.pk %}">{% trans "Redirect URIs" %}</a>
+            </li>
+          {% endif %}
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'contact-list' object.pk %}">{% trans "Contacts" %}</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'admin-list' object.pk %}">{% trans "Admins" %}</a>
+          </li>
+          {% if object.test %}
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'testuser-list' object.pk %}">{% trans "Test users" %}</a>
+            </li>
+          {% endif %}
+          {% if object.service_type == "saml" or object.service_type == "oidc" %}
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'metadata-view' object.pk %}">{% trans "View Metadata" %}</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'statistics-list' object.pk %}">{% trans "Login Statistics" %}</a>
+            </li>
+          {% endif %}
+        {% endif %}
+        {% if user.is_superuser %}
+          <li><hr class="dropdown-divider"></li>
+          <li class="nav-item">
+            <div class="navbar-brand">{% trans "Administration" %}</div>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'attribute-admin-list' %}">{% trans "Attributes" %}</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'certificate-admin-list' %}">{% trans "Certificates" %}</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'saml-admin-list' %}">{% trans "SAML Special Configs" %}</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'statistics-summary-list' %}">{% trans "SAML Login Summary" %}</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'email-list' %}">{% trans "Emails" %}</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'metadata-manage-saml' %}">{% trans "Manage SAML metadata" %}</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'metadata-manage-ldap' %}">{% trans "Manage LDAP metadata" %}</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'metadata-manage-oidc' %}">{% trans "Manage OIDC metadata" %}</a>
+          </li>
+          <li><hr class="dropdown-divider"></li>
+          <li class="nav-item">
+            <a class="nav-link" href="/admin_django/">{% trans "Database Admin" %}</a>
+          </li>
+        {% endif %}
+        {% if user.is_authenticated %}
+          <li><hr class="dropdown-divider"></li>
+          <li class="nav-item">
+            <a class="nav-link {% if request.path|slice:":11" == "/authtoken/" %}active{% endif %}" href="{% url 'auth-token' %}">{% trans "API" %}</a>
+          </li>
+        {% endif %}
       </ul>
-      <ul class="navbar-nav ml-auto">
-      <div class="dropdown-divider"></div>
-{% get_current_language as LANGUAGE_CODE %}
-{% get_available_languages as LANGUAGES %}
-{% get_language_info_list for LANGUAGES as languages %}
-{% for language in languages %}
-<form action="{% url 'set_language' %}" method="post">{% csrf_token %}
-    <input name="next" type="hidden" value="{{ request.get_full_path }}">
-    <input name="language" type="hidden" value="{{ language.code }}" />
-    <input class="btn btn-sm {% if language.code == LANGUAGE_CODE %}btn-outline-secondary{% else %}btn-outline-primary{% endif %}" type="submit" value="{{ language.name }}" /> 
-</form>&nbsp;
-{% endfor %}
-      <div class="dropdown-divider"></div>
-{% if user.is_authenticated %}
-        <li class="nav-item">
-          <a class="nav-link" href="{% url 'logout' %}">{% trans "Logout" %}</a>
-        </li>
-{% else %}
-        <li class="nav-item">
-          <a class="nav-link" href="{% url 'login' %}">{% trans "Login" %}</a>
-        </li>
-{% endif %}
-       </ul>
-    </div>
-  </nav>
-
-  <div class="container-fluid">
-    <div class="row">
-{% if user.is_authenticated %}
-      <nav class="col-lg-2 d-none d-lg-block sidebar bg-faded">
-        <ul class="nav nav-pills flex-column">
-        <li class="nav-item">
-          <a class="nav-link {% if request.path|slice:":6" == "/list/" %}active{% endif %}" href="{% url 'serviceprovider-list' %}">{% trans "Service Providers" %}</a>
-        </li>
-{% if object %}
+      <ul class="navbar-nav ms-auto">
         <div class="dropdown-divider"></div>
-        <li class="nav-item">
-          <div class="navbar-brand">{% trans "SP Configuration" %}</div>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link {% if request.path|slice:":9" == "/summary/" %}active{% endif %}" href="{% url 'summary-view' object.pk %}">{% trans "Summary" %}</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link {% if request.path|slice:":18" == "/serviceprovider/" %}active{% endif %}" href="{% url 'basicinformation-update' object.pk %}">{% trans "Basic Information" %}</a>
-        </li>
-{% if object.service_type == "saml" %}
-        <li class="nav-item">
-          <a class="nav-link {% if request.path|slice:":11" == "/technical/" %}active{% endif %}" href="{% url 'technical-update' object.pk %}">{% trans "Technical Attributes" %}</a>
-        </li>
-{% elif object.service_type == "ldap" %}
-        <li class="nav-item">
-          <a class="nav-link {% if request.path|slice:":7" == "/ldap/" %}active{% endif %}" href="{% url 'ldap-technical-update' object.pk %}">{% trans "Technical Attributes" %}</a>
-        </li>
-{% elif object.service_type == "oidc" %}
-        <li class="nav-item">
-          <a class="nav-link {% if request.path|slice:":7" == "/oidc/" %}active{% endif %}" href="{% url 'oidc-technical-update' object.pk %}">{% trans "Technical Attributes" %}</a>
-        </li>
-{% endif %}
-        <li class="nav-item">
-          <a class="nav-link {% if request.path|slice:":11" == "/attribute/" %}active{% endif %}" href="{% url 'attribute-list' object.pk %}">{% trans "Attributes" %}</a>
-        </li>
-{% if object.service_type == "saml" %}
-        <li class="nav-item">
-          <a class="nav-link {% if request.path|slice:":13" == "/certificate/" %}active{% endif %}" href="{% url 'certificate-list' object.pk %}">{% trans "Certificates" %}</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link {% if request.path|slice:":10" == "/endpoint/" %}active{% endif %}" href="{% url 'endpoint-list' object.pk %}">{% trans "SAML Endpoints" %}</a>
-        </li>
-{% endif %}
-{% if object.service_type == "ldap" %}
-        <li class="nav-item">
-          <a class="nav-link {% if request.path|slice:":11" == "/usergroup/" %}active{% endif %}" href="{% url 'usergroup-list' object.pk %}">{% trans "User Groups" %}</a>
-        </li>
-{% endif %}
-{% if object.service_type == "oidc" %}
-        <li class="nav-item">
-          <a class="nav-link {% if request.path|slice:":13" == "/redirecturi/" %}active{% endif %}" href="{% url 'redirecturi-list' object.pk %}">{% trans "Redirect URIs" %}</a>
-        </li>
-{% endif %}
-        <li class="nav-item">
-          <a class="nav-link {% if request.path|slice:":9" == "/contact/" %}active{% endif %}" href="{% url 'contact-list' object.pk %}">{% trans "Contacts" %}</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link {% if request.path|slice:":7" == "/admin/" %}active{% endif %}" href="{% url 'admin-list' object.pk %}">{% trans "Admins" %}</a>
-        </li>
-{% if object.test %}
-        <li class="nav-item">
-          <a class="nav-link {% if request.path|slice:":10" == "/testuser/" %}active{% endif %}" href="{% url 'testuser-list' object.pk %}">{% trans "Test Users" %}</a>
-        </li>
-{% endif %}
-{% if object.service_type == "saml" or object.service_type == "oidc" %}
-        <li class="nav-item">
-          <a class="nav-link {% if request.path|slice:":10" == "/metadata/" %}active{% endif %}" href="{% url 'metadata-view' object.pk %}">{% trans "View Metadata" %}</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link {% if request.path|slice:":12" == "/statistics/" %}active{% endif %}" href="{% url 'statistics-list' object.pk %}">{% trans "Login Statistics" %}</a>
-        </li>
-{% endif %}
-{% endif %}
-{% if user.is_superuser %}
+        {% get_current_language as LANGUAGE_CODE %}
+        {% get_available_languages as LANGUAGES %}
+        {% get_language_info_list for LANGUAGES as languages %}
+        {% for language in languages %}
+          {% if language.code != LANGUAGE_CODE %}
+          <form action="{% url 'set_language' %}" method="post">{% csrf_token %}
+            <input name="next" type="hidden" value="{{ request.get_full_path }}">
+            <input name="language" type="hidden" value="{{ language.code }}" />
+            <input class="btn btn-sm btn-secondary" type="submit" value="{{ language.name }}" />
+          </form>
+          {% endif %}
+        {% endfor %}
         <div class="dropdown-divider"></div>
-        <li class="nav-item">
-          <div class="navbar-brand">{% trans "Administration" %}</div>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link {% if request.path|slice:":16" == "/attribute/list/" %}active{% endif %}" href="{% url 'attribute-admin-list' %}">{% trans "Attributes" %}</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link {% if request.path|slice:":18" == "/certificate/list/" %}active{% endif %}" href="{% url 'certificate-admin-list' %}">{% trans "Certificates" %}</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link {% if request.path|slice:":17" == "/saml_admin_list/" %}active{% endif %}" href="{% url 'saml-admin-list' %}">{% trans "SAML Special Configs" %}</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link {% if request.path|slice:":17" == "/adminstatistics/" %}active{% endif %}" href="{% url 'statistics-summary-list' %}">{% trans "SAML Login Summary" %}</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link {% if request.path|slice:":7" == "/email/" %}active{% endif %}" href="{% url 'email-list' %}">{% trans "Emails" %}</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link {% if request.path|slice:":22" == "/metadata/manage/saml/" %}active{% endif %}" href="{% url 'metadata-manage-saml' %}">{% trans "Manage SAML metadata" %}</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link {% if request.path|slice:":22" == "/metadata/manage/ldap/" %}active{% endif %}" href="{% url 'metadata-manage-ldap' %}">{% trans "Manage LDAP metadata" %}</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link {% if request.path|slice:":22" == "/metadata/manage/oidc/" %}active{% endif %}" href="{% url 'metadata-manage-oidc' %}">{% trans "Manage OIDC metadata" %}</a>
-        </li>
-
-        <div class="dropdown-divider"></div>
-        <li class="nav-item">
-          <a class="nav-link" href="/admin_django/">{% trans "Database Admin" %}</a>
-        </li>
-{% endif %}
-        <div class="dropdown-divider"></div>
-        <li class="nav-item">
-          <a class="nav-link {% if request.path|slice:":11" == "/authtoken/" %}active{% endif %}" href="{% url 'auth-token' %}">{% trans "API" %}</a>
-        </li>
-        </ul>
-      </nav>
-{% endif %}
-      <main class="col-lg-10 offset-lg-2 col-xl-8 offset-xl-2 pt-3">
-{% if messages %}
-{% for message in messages %}
-    {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
-        <div class="alert alert-danger" role="alert">
-    {% elif message.level == DEFAULT_MESSAGE_LEVELS.WARNING%}
-        <div class="alert alert-warning" role="alert">
-    {% else %}
-        <div class="alert alert-info" role="alert">
-    {% endif %}
-        {{ message }}<br>
-        </div>
-{% endfor %}
-{% endif %}
-	{% block content %}
-	{% endblock %}
-      </main>
+        {% if user.is_authenticated %}
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'logout' %}">{% trans "Logout" %}</a>
+          </li>
+        {% else %}
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'login' %}">{% trans "Login" %}</a>
+          </li>
+        {% endif %}
+      </ul>
     </div>
   </div>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.slim.min.js" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" crossorigin="anonymous"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/js/bootstrap.bundle.min.js" integrity="sha256-Xt8pc4G0CdcRvI0nZ2lRpZ4VHng0EoUDMlGcBSQ9HiQ=" crossorigin="anonymous"></script>
-{% block javascript %}
+</nav>
+
+<div class="container-fluid">
+  <div class="row">
+    {% if user.is_authenticated %}
+      <nav class="col-lg-2 d-none d-lg-block sidebar bg-faded" aria-label="{% trans "Side navigation bar" %}">
+        <ul class="nav nav-pills flex-column">
+          <li class="nav-item">
+            <a class="nav-link {% if request.path|slice:":6" == "/list/" %}active{% endif %}" href="{% url 'serviceprovider-list' %}">{% trans "Service Providers" %}</a>
+          </li>
+          {% if object %}
+            <li><hr></li>
+            <li class="nav-item">
+              <div class="navbar-brand">{% trans "SP Configuration" %}</div>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link {% if request.path|slice:":9" == "/summary/" %}active{% endif %}" href="{% url 'summary-view' object.pk %}">{% trans "Summary" %}</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link {% if request.path|slice:":18" == "/serviceprovider/" %}active{% endif %}" href="{% url 'basicinformation-update' object.pk %}">{% trans "Basic Information" %}</a>
+            </li>
+            {% if object.service_type == "saml" %}
+              <li class="nav-item">
+                <a class="nav-link {% if request.path|slice:":11" == "/technical/" %}active{% endif %}" href="{% url 'technical-update' object.pk %}">{% trans "Technical Attributes" %}</a>
+              </li>
+            {% elif object.service_type == "ldap" %}
+              <li class="nav-item">
+                <a class="nav-link {% if request.path|slice:":7" == "/ldap/" %}active{% endif %}" href="{% url 'ldap-technical-update' object.pk %}">{% trans "Technical Attributes" %}</a>
+              </li>
+            {% elif object.service_type == "oidc" %}
+              <li class="nav-item">
+                <a class="nav-link {% if request.path|slice:":7" == "/oidc/" %}active{% endif %}" href="{% url 'oidc-technical-update' object.pk %}">{% trans "Technical Attributes" %}</a>
+              </li>
+            {% endif %}
+            <li class="nav-item">
+              <a class="nav-link {% if request.path|slice:":11" == "/attribute/" %}active{% endif %}" href="{% url 'attribute-list' object.pk %}">{% trans "Attributes" %}</a>
+            </li>
+            {% if object.service_type == "saml" %}
+              <li class="nav-item">
+                <a class="nav-link {% if request.path|slice:":13" == "/certificate/" %}active{% endif %}" href="{% url 'certificate-list' object.pk %}">{% trans "Certificates" %}</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link {% if request.path|slice:":10" == "/endpoint/" %}active{% endif %}" href="{% url 'endpoint-list' object.pk %}">{% trans "SAML Endpoints" %}</a>
+              </li>
+            {% endif %}
+            {% if object.service_type == "ldap" %}
+              <li class="nav-item">
+                <a class="nav-link {% if request.path|slice:":11" == "/usergroup/" %}active{% endif %}" href="{% url 'usergroup-list' object.pk %}">{% trans "User Groups" %}</a>
+              </li>
+            {% endif %}
+            {% if object.service_type == "oidc" %}
+              <li class="nav-item">
+                <a class="nav-link {% if request.path|slice:":13" == "/redirecturi/" %}active{% endif %}" href="{% url 'redirecturi-list' object.pk %}">{% trans "Redirect URIs" %}</a>
+              </li>
+            {% endif %}
+            <li class="nav-item">
+              <a class="nav-link {% if request.path|slice:":9" == "/contact/" %}active{% endif %}" href="{% url 'contact-list' object.pk %}">{% trans "Contacts" %}</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link {% if request.path|slice:":7" == "/admin/" %}active{% endif %}" href="{% url 'admin-list' object.pk %}">{% trans "Admins" %}</a>
+            </li>
+            {% if object.test %}
+              <li class="nav-item">
+                <a class="nav-link {% if request.path|slice:":10" == "/testuser/" %}active{% endif %}" href="{% url 'testuser-list' object.pk %}">{% trans "Test Users" %}</a>
+              </li>
+            {% endif %}
+            {% if object.service_type == "saml" or object.service_type == "oidc" %}
+              <li class="nav-item">
+                <a class="nav-link {% if request.path|slice:":10" == "/metadata/" %}active{% endif %}" href="{% url 'metadata-view' object.pk %}">{% trans "View Metadata" %}</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link {% if request.path|slice:":12" == "/statistics/" %}active{% endif %}" href="{% url 'statistics-list' object.pk %}">{% trans "Login Statistics" %}</a>
+              </li>
+            {% endif %}
+          {% endif %}
+          {% if user.is_superuser %}
+            <li><hr></li>
+            <li class="nav-item">
+              <div class="navbar-brand">{% trans "Administration" %}</div>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link {% if request.path|slice:":16" == "/attribute/list/" %}active{% endif %}" href="{% url 'attribute-admin-list' %}">{% trans "Attributes" %}</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link {% if request.path|slice:":18" == "/certificate/list/" %}active{% endif %}" href="{% url 'certificate-admin-list' %}">{% trans "Certificates" %}</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link {% if request.path|slice:":17" == "/saml_admin_list/" %}active{% endif %}" href="{% url 'saml-admin-list' %}">{% trans "SAML Special Configs" %}</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link {% if request.path|slice:":17" == "/adminstatistics/" %}active{% endif %}" href="{% url 'statistics-summary-list' %}">{% trans "SAML Login Summary" %}</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link {% if request.path|slice:":7" == "/email/" %}active{% endif %}" href="{% url 'email-list' %}">{% trans "Emails" %}</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link {% if request.path|slice:":22" == "/metadata/manage/saml/" %}active{% endif %}" href="{% url 'metadata-manage-saml' %}">{% trans "Manage SAML metadata" %}</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link {% if request.path|slice:":22" == "/metadata/manage/ldap/" %}active{% endif %}" href="{% url 'metadata-manage-ldap' %}">{% trans "Manage LDAP metadata" %}</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link {% if request.path|slice:":22" == "/metadata/manage/oidc/" %}active{% endif %}" href="{% url 'metadata-manage-oidc' %}">{% trans "Manage OIDC metadata" %}</a>
+            </li>
+            <li><hr></li>
+            <li class="nav-item">
+              <a class="nav-link" href="/admin_django/">{% trans "Database Admin" %}</a>
+            </li>
+          {% endif %}
+          <li><hr></li>
+          <li class="nav-item">
+            <a class="nav-link {% if request.path|slice:":11" == "/authtoken/" %}active{% endif %}" href="{% url 'auth-token' %}">{% trans "API" %}</a>
+          </li>
+        </ul>
+      </nav>
+    {% endif %}
+    <main class="col-lg-10 offset-lg-2 col-xl-8 offset-xl-2 pt-3">
+      {% if messages %}
+        {% for message in messages %}
+          {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
+            <div class="alert alert-danger" role="alert">
+          {% elif message.level == DEFAULT_MESSAGE_LEVELS.WARNING%}
+            <div class="alert alert-warning" role="alert">
+          {% else %}
+            <div class="alert alert-info" role="alert">
+          {% endif %}
+        {{ message }}<br>
+        </div>
+        {% endfor %}
+      {% endif %}
+      {% block content %}
+      {% endblock %}
+    </main>
+  </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js" integrity="sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V" crossorigin="anonymous"></script>{% block javascript %}
 {% endblock %}
 </body>
 </html>

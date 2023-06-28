@@ -117,7 +117,7 @@ For more information run "./manage.py <command> -h"
 * cleandb
   * Cleans old services or personal information from the db
 * decryptclientsecret
-  * Decrypt client secrets from OIDC metadata (if ecncrypted)
+  * Decrypt client secrets from OIDC metadata (if encrypted)
 * exportattributefilter
   * Exporting SAML attribute filter
 * exportldap
@@ -141,14 +141,18 @@ API tokens with browser UI.
 
 API documentation is available in path swagger/ for authenticated users.
 
-## Installation
 ### Requirements
-* Django 3.2
-* Python 3.7-3.9
-* MySQL 5.6+ / MariaDB 10.1+
+* Django 4.2
+* Python 3.8-3.11
+* MySQL 8+ / MariaDB 10.4+
 * Requires dev libraries for Python and MySQL/MariaDB for compiling Python mysqlclient.
 
-### Test environment
+## Development
+
+### Style guide
+Use black and isort for formatting and sorting imports.
+
+### Using Vagrant to install development environment
 Vagrantfile with Ansible provisioning is provided for test environment.
 
 Usage:
@@ -157,24 +161,47 @@ Usage:
 1. Open https://localhost:8443/ in browser (browser complains about security risk as self-signed certificate is used)
 1. Use local login with user admin, password RandomPass12
 
-Shibboleth and attribute test service are not yet included.
+Shibboleth and attribute test service are not included.
 
-### Installation
+### Creating development environment
+Steps for creating development environment.
 
-Example on 18.04 LTS
+1. cmd: git clone https://github.com/UniversityofHelsinki/sp-registry.git
+2. cmd: cd sp-registry
+3. cmd: python3 -m venv venv
+4. cmd: source venv/bin/activate
+5. cmd: pip install -r requirements/development.txt
+   * Requires dev libraries for Python and MySQL/MariaDB for compiling Python mysqlclient.
+6. cmd: cp settings/local_settings_example.py settings/local_settings.py
+7. Create mysql database, test database and user
+   * create database registry;
+   * create user registry@localhost identified by 'registry';
+   * grant all privileges on registry.* to registry@localhost;
+   * grant all privileges on test_registry.* to registry@localhost;
+8. Edit settings/local_settings.py to match DB settings, unless you used the example above
+9. run tests: ./manage.py test
+10. run browser tests: ./manage.py behave --settings=settings.development
+    * Requires Firefox and geckodriver for headless tests.
+11. Apply database schema: ./manage.py migrate
+11. Compile translations: ./manage.py makemessages
+12. Create superuser: ./manage.py createsuperuser
+13. run development server: ./manage.py runserver --settings=settings.development
+    * You need to add ALLOWED_HOSTS to settings/local_settings.py unless using development settings.
 
-1. Install apt requirements: "sudo apt install python3 python3-venv python3-dev python3-pip mariadb-server
-python-mysqldb libmariadbclient-dev libapache2-mod-wsgi-py3"
-1. Clone source from git
-1. Set up Python virtual environment "python3 -m venv /path/to/venv" and activate it "source /path/to/venv/bin/activate"
-1. Install requirements "pip install -r requirements/[production|development].txt"
-1. Set up database (MariaDB)
-1. Copy settings/local_settings_example.py to settings/local_settings.py and modify as necessary
-1. Modify manage.py to point django config file to production or development
-1. Run db migrations: "./manage.py migrate"
-1. Collect static files "./manage.py collectstatic"
-1. Load fixtures: "./manage.py loaddata rr/fixtures/attribute.json rr/fixtures/nameidformat.json"
-1. Set up apache, wsgi and shibd
+### Running tests
+./manage.py test
+
+For behaviour testing with browser automation:
+./manage.py behave --settings=settings.development
+
+### Requirements
+Splinter is used for automated browser tests.
+Install Firefox and geckodriver for headless tests: https://splinter.readthedocs.io/en/latest/drivers/firefox.html
+
+## Production installation
+Similar to creating development environment.
+
+To modify logging, copy logging.py to local_logging.py and edit it to match your requirements.
 
 ### Shibboleth
 Program uses following attributes:
@@ -192,18 +219,18 @@ Redirect Shibboleth SP errors to /error/
 Example of Apache WSGI configuration
 ```
 <VirtualHost _default_:443>
-WSGIDaemonProcess sp-registry.example.org user=appuser group=appuser python-home=/path/to/venv python-path=/path/to/rr
+WSGIDaemonProcess sp-registry.example.org user=appuser group=appuser python-home=/path/to/venv python-path=/path/to/sp-registry
 WSGIProcessGroup sp-registry.example.org
 
-WSGIScriptAlias / /path/to/rr/rr/wsgi.py process-group=sp-registry.example.org
+WSGIScriptAlias / /path/to/sp-registry/rr/wsgi.py process-group=sp-registry.example.org
 
-Alias /static/ /path/to/rr/static/
+Alias /static/ /path/to/sp-registry/static/
 
-<Directory /path/to/rr/static>
+<Directory /path/to/sp-registry/static>
     Require all granted
 </Directory>
 
-<Directory /path/to/rr>
+<Directory /path/to/sp-registry>
     <Files wsgi.py>
         Require all granted
     </Files>
@@ -227,10 +254,10 @@ Attribute test service lists all user's attributes and validates them against th
 
 Attributes shown in the test service, validation regex and Shibboleth environment variable names are defined in
 Attribute model objects.
-Non public attributes are only listed if user has some value in the attribute.
+Non-public attributes are only listed if user has some value in the attribute.
 
 This service can be made available in different Apache virtual host by pointing it to the wsgi_attributetest.py.
-It should also have it's own Shibboleth ApplicationOverride, with all the attributes enabled.
+It should also have its own Shibboleth ApplicationOverride, with all the attributes enabled.
 
 ## Tests
 
@@ -238,7 +265,7 @@ It should also have it's own Shibboleth ApplicationOverride, with all the attrib
 ./manage.py test
 
 For behaviour testing with browser automation:
-./manage.py behave --settings=settings.development
+./manage.py behave --settings=settings.test
 Behaviour tests usually take 3-4 minutes to run.
 
 ### Requirements

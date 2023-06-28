@@ -1,68 +1,70 @@
 {% extends "base.html" %}
 {% load i18n %}
-{% load bootstrap4 %}
+{% load django_bootstrap5 %}
 {% load static %}
 {% block content %}
-<h1 class="page-header">{% trans "Endpoints" %} - <small>{{ object.display_identifier }}</small></h1>
-<div class="alert alert-success" role="alert">
-<p>{% trans "Endpoints are communication addresses to the SP. Any request sent to the IdP by the SP includes a return address. That address must be in this list or the request results in error." %}</p>
-<p>{% trans "In most cases you only have to specify AssertionConsumerService with HTTP-POST binding." %}</p>
-<p>{% trans "If the service supports Single Logout Service, you should also specify endpoint for that." %}</p>
-</div>
+  <h1 class="page-header">{% trans "Endpoints" %} - <small>{{ object.display_identifier }}</small></h1>
+  <div class="alert alert-success" role="alert">
+    <p>{% trans "Endpoints are communication addresses to the SP. Any request sent to the IdP by the SP includes a return address. That address must be in this list or the request results in error." %}</p>
+    <p>{% trans "In most cases you only have to specify AssertionConsumerService with HTTP-POST binding." %}</p>
+    <p>{% trans "If the service supports Single Logout Service, you should also specify endpoint for that." %}</p>
+  </div>
 
-<h2 id="endpoint-list">{% trans "List of endpoints" %}</h2>
-{% if object_list %}
-<form action="" method='POST'>
-{% csrf_token %}
-<table class="table table-sm table-responsive" aria-describedby="endpoint-list">
-  <thead>
-    <tr>
-      <th scope="col">{% trans "Type" %}</th>
-      <th scope="col">{% trans "Binding" %}</th>
-      <th scope="col">{% trans "Location" %}</th>
-      <th scope="col">{% trans "Index" %}</th>
-      <th scope="col">{% trans "Remove" %}</th>
-    </tr>
-  </thead>
-  <tbody>
-{% for endpoint in object_list %}
-    <tr>
-      <th scope="row">{{ endpoint.get_type_display }}</th>
-      <td>{{ endpoint.get_binding_display }}</td>
-      <td>{{ endpoint.location }}{% if endpoint.response_location %}<br>(<strong>{% trans "Response:" %}</strong> {{ endpoint.response_location }}){% endif %}</td>
-      <td>{% if endpoint.index %}{{ endpoint.index }}{% endif %}{% if endpoint.is_default %} ({% trans "default" %}){% endif %}</td>
-      <td><div class="checkbox"><input type="checkbox" aria-label="{%  trans "Mark for removal" %}" name="{{ endpoint.pk }}" id="id_endpoint_{{ endpoint.pk }}" /></div></td>
-    </tr>
-{% endfor %}
-  </tbody>
-</table>
-<p><input class="btn btn-danger" type="submit" data-toggle="confirmation" name="remove_endpoint" value="{% trans "Remove selected" %}" /></p>
-</form>
-{% else %}
-<p>{% trans "No endpoints" %}</p>
-{% endif %}
+  <h2 id="endpoint-list">{% trans "List of endpoints" %}</h2>
+  {% if object_list %}
+    <form action="" method='POST'>
+      {% csrf_token %}
+      <table class="table table-sm table-responsive" aria-describedby="endpoint-list">
+        <thead>
+        <tr>
+          <th scope="col">{% trans "Type" %}</th>
+          <th scope="col">{% trans "Binding" %}</th>
+          <th scope="col">{% trans "Location" %}</th>
+          <th scope="col">{% trans "Index" %}</th>
+          <th scope="col">{% trans "Remove" %}</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for endpoint in object_list %}
+          <tr>
+            <th scope="row">{{ endpoint.get_type_display }}</th>
+            <td>{{ endpoint.get_binding_display }}</td>
+            <td>{{ endpoint.location }}{% if endpoint.response_location %}<br>(<strong>{% trans "Response:" %}</strong> {{ endpoint.response_location }}){% endif %}</td>
+            <td>{% if endpoint.index %}{{ endpoint.index }}{% endif %}{% if endpoint.is_default %} ({% trans "default" %}){% endif %}</td>
+            <td><div class="checkbox"><input type="checkbox" aria-label="{%  trans "Mark for removal" %}" name="{{ endpoint.pk }}" id="id_endpoint_{{ endpoint.pk }}" /></div></td>
+          </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+      <p><button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#confirmationModal">{% trans "Remove selected" %}</button></p>
+      <div class="modal fade" id="confirmationModal" tabindex="-1" aria-labelledby="confirmationModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="confirmationModalLabel">{% trans "Confirm removal" %}</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              {% trans "Do you want to remove selected endpoints?" %}
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{% trans "Cancel" %}</button>
+              <button type="submit" name="remove_endpoint" class="btn btn-primary">{% trans "Confirm" %}</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  {% else %}
+    <p>{% trans "No endpoints" %}</p>
+  {% endif %}
 
-{% if form %}
-<h2>{% trans "Add endpoint" %}</h2>
-<form action="" method="post" class="form">
-    {% csrf_token %}
-    {% bootstrap_form form layout='horizontal' %}
-    {% buttons %}
-    <p><button type="submit" name="add_endpoint" class="btn btn-primary">{% trans "Save" %}</button></p>
-    {% endbuttons %}
-</form>
-{% endif %}
-{% endblock %}
-{% block javascript %}
-  <script src="{% static "js/jquery.popconfirm.js" %}"></script>
-  <script>
-  $("[data-toggle='confirmation']").popConfirm({
-    title: "{% trans "Confirm removal" %}",
-    content: "{% trans "Do you want to remove selected endpoints?" %}",
-    placement: "bottom",
-    container: "body",
-    yesBtn: "{% trans "Confirm" %}",
-    noBtn: "{% trans "Cancel" %}"
-  });
-  </script>
+  {% if form %}
+    <h2>{% trans "Add endpoint" %}</h2>
+    <form action="" method="post" class="form">
+      {% csrf_token %}
+      {% bootstrap_form form layout='horizontal' %}
+      {% bootstrap_button _("Save") name="add_endpoint" button_type="submit" button_class="btn-primary" %}
+    </form>
+  {% endif %}
 {% endblock %}

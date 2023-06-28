@@ -6,30 +6,29 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('rr', '0026_auto_20180216_1026'),
+        ("rr", "0026_auto_20180216_1026"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='NameIDFormat',
+            name="NameIDFormat",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('nameidformat', models.CharField(max_length=255, verbose_name='Name Identifier Format')),
+                ("id", models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name="ID")),
+                ("nameidformat", models.CharField(max_length=255, verbose_name="Name Identifier Format")),
             ],
         ),
         migrations.RemoveField(
-            model_name='serviceprovider',
-            name='name_format_persistent',
+            model_name="serviceprovider",
+            name="name_format_persistent",
         ),
         migrations.RemoveField(
-            model_name='serviceprovider',
-            name='name_format_transient',
+            model_name="serviceprovider",
+            name="name_format_transient",
         ),
         migrations.AddField(
-            model_name='serviceprovider',
-            name='nameidformat',
-            field=models.ManyToManyField(blank=True, to='rr.NameIDFormat'),
+            model_name="serviceprovider",
+            name="nameidformat",
+            field=models.ManyToManyField(blank=True, to="rr.NameIDFormat"),
         ),
     ]

@@ -2,9 +2,12 @@ from .common import *
 
 DEBUG = True
 
-INSTALLED_APPS += (
-    'behave_django',
-)
+INSTALLED_APPS += ("behave_django",)
+
+try:
+    from .local_logging import *
+except ModuleNotFoundError:
+    from .logging import *
 
 SESSION_COOKIE_SECURE = False
 CSRF_COOKIE_SECURE = False

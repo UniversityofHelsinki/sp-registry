@@ -1,16 +1,17 @@
-from django.forms import ModelForm
-from rr.models.usergroup import UserGroup
 from django.core.validators import ValidationError
-from django.utils.translation import ugettext_lazy as _
+from django.forms import ModelForm
+from django.utils.translation import gettext_lazy as _
+
+from rr.models.usergroup import UserGroup
 
 
 class UserGroupForm(ModelForm):
     class Meta:
         model = UserGroup
-        fields = ['name']
+        fields = ["name"]
 
     def __init__(self, *args, **kwargs):
-        self.sp = kwargs.pop('sp', None)
+        self.sp = kwargs.pop("sp", None)
         super(UserGroupForm, self).__init__(*args, **kwargs)
 
     def clean(self):

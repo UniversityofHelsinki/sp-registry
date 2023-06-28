@@ -1,53 +1,53 @@
 {% extends "base.html" %}
 {% load i18n %}
 {% load static %}
-{% load bootstrap4 %}
+{% load django_bootstrap5 %}
 {% load attribute_filters %}
 {% block content %}
-<h1 class="text-center">{% trans "Service Provider Registry" %}</h1>
-<h2 class="text-center">{% trans "University of Helsinki" %}</h2>
-{% if user.is_authenticated %}
-<h3>{% trans "You have already logged in" %}</h3>
-<a href="{% url 'logout' %}"><button type="button" class="btn btn-primary">{% trans "Logout" %}</button></a>
-{% else %}
-  <Br/>
-  <div class="row justify-content-md-center text-center">
-    <div class="col col-md-5">
-    	<h4>{% trans "Login using Single Sign-On" %}</h4>
-    	<br>
-    	<div class="text-center">
-    	<a href="{{ SAML_LOGIN_URL }}{% firstof next '/' %}"><img src="{% static "login-hy-idp.gif" %}" alt="SSO Login"/></a>
-    	</div>
+  <h1 class="text-center">{% trans "Service Provider Registry" %}</h1>
+  <h2 class="text-center">{% trans "University of Helsinki" %}</h2>
+  {% if user.is_authenticated %}
+    <h3>{% trans "You have already logged in" %}</h3>
+    <a href="{% url 'logout' %}"><button type="button" class="btn btn-primary">{% trans "Logout" %}</button></a>
+  {% else %}
+    <Br/>
+    <div class="row justify-content-md-center text-center">
+      <div class="col col-md-5">
+        <h4>{% trans "Login using Single Sign-On" %}</h4>
+        <br>
+        <div class="text-center">
+          <a href="{{ SAML_LOGIN_URL }}{% firstof next '/' %}"><img src="{% static "login-hy-idp.gif" %}" alt="SSO Login"/></a>
+        </div>
+      </div>
     </div>
-  </div>
-  <Br/><Br/>
-  <div class="row justify-content-md-center text-center">
-    <div class="col col-md-5">
-		<h4>{% trans "Login using a local account" %}</h4>
-		<br>
-		<button class="btn btn-outline-dark" type="button" data-toggle="collapse" data-target="#local_login" aria-expanded="false" aria-controls="local_login" name="local_login">
-    	Show login form
- 		</button>
-		<div class="collapse" id="local_login">
-		<br>
-		<p>{% trans "Use this only if you do not have University of Helsinki user account." %}</p>
-		<form method="post" action="{% url 'login' %}">
-		{% csrf_token %}
-		{% bootstrap_form form %}
-		<button type="submit" class="btn btn-primary">{% trans "Submit" %}</button>
-		<input type="hidden" name="next" value="{% firstof next '/' %}" />
-		</form>
-		<br>
-		<p><a href="{% url 'password_reset' %}">{% trans "Lost password? Reset it here. You may use same form to get forgotten username." %}</a></p>
-		</div>
-		<br><br>
+    <Br/><Br/>
+    <div class="row justify-content-md-center text-center">
+      <div class="col col-md-5">
+        <h4>{% trans "Login using a local account" %}</h4>
+        <br>
+        <button class="btn btn-outline-dark" type="button" data-bs-toggle="collapse" data-bs-target="#local_login" aria-expanded="false" aria-controls="local_login" name="local_login">
+          Show login form
+        </button>
+        <div class="collapse" id="local_login">
+          <br>
+          <p>{% trans "Use this only if you do not have University of Helsinki user account." %}</p>
+          <form method="post" action="{% url 'login' %}">
+            {% csrf_token %}
+            {% bootstrap_form form %}
+            <button type="submit" class="btn btn-primary">{% trans "Submit" %}</button>
+            <input type="hidden" name="next" value="{% firstof next '/' %}" />
+          </form>
+          <br>
+          <p><a href="{% url 'password_reset' %}">{% trans "Lost password? Reset it here. You may use same form to get forgotten username." %}</a></p>
+        </div>
+        <br><br>
+      </div>
     </div>
-  </div>
-  <div class="row text-center">
-    <div class="col">
-		<p><a href="{% privacy_policy_url "PRIVACY_POLICY_URL" %}">{% trans "Data privacy information of the service" %}</a></p>
-		<p>{% trans "This site uses cookies to save session information between page changes. By logging in to the site, you are agreeing to our use of cookies." %}</p>
+    <div class="row text-center">
+      <div class="col">
+        <p><a href="{% privacy_policy_url "PRIVACY_POLICY_URL" %}">{% trans "Data privacy information of the service" %}</a></p>
+        <p>{% trans "This site uses cookies to save session information between page changes. By logging in to the site, you are agreeing to our use of cookies." %}</p>
+      </div>
     </div>
-  </div>
-{% endif %}
+  {% endif %}
 {% endblock %}

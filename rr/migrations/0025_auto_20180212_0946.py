@@ -6,15 +6,14 @@ from django.db import migrations
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('rr', '0024_serviceprovider_application_portfolio'),
+        ("rr", "0024_serviceprovider_application_portfolio"),
     ]
 
     operations = [
         migrations.RenameField(
-            model_name='serviceprovider',
-            old_name='encyrpt_assertions',
-            new_name='encrypt_assertions',
+            model_name="serviceprovider",
+            old_name="encyrpt_assertions",
+            new_name="encrypt_assertions",
         ),
     ]

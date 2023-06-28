@@ -1,104 +1,114 @@
 {% extends "base.html" %}
 {% load i18n %}
-{% load bootstrap4 %}
+{% load django_bootstrap5 %}
 {% load static %}
 {% block content %}
-<h1>{% trans "Test users" %} - <small>{{ object.display_identifier }}</small></h1>
-<div class="alert alert-success" role="alert">
-<p>{% trans "These users are added to the test IdP database and can be used to test this SP against the test IdP." %}</p>
-</div>
-<h2 id="test-user-list">{% trans "List of users" %}</h2>
-<div class="alert alert-success" role="alert">
-<p>{% trans "Click the username to configure user attribute values." %}</p>
-</div>
-{% if object_list %}
-<form action="" method='POST'>
-{% csrf_token %}
-<table class="table table-sm table-responsive" aria-describedby="test-user-list">
-  <thead>
-    <tr>
-      <th scope="col">{% trans "Username" %}</th>
-      <th scope="col">{% trans "First name" %}</th>
-      <th scope="col">{% trans "Last name" %}</th>
-      <th scope="col">{% trans "Remove" %}</th>
-    </tr>
-  </thead>
-  <tbody>
-{% for testuser in object_list %}
-    <tr>
-      <th scope="row"><a href="{% url 'testuser-attribute-data' testuser.pk %}">{{ testuser.username }}</a></th>
-      <td>{{ testuser.firstname }}</td>
-      <td>{{ testuser.lastname }}</td>
-      <td><div class="checkbox"><input type="checkbox" aria-label="{%  trans "Mark for removal" %}" name="{{ testuser.pk }}" class="local_test_user" id="id_user" /></div></td>
-    </tr>
-{% endfor %}
-  </tbody>
-</table>
-<p><input type="checkbox" aria-label="{%  trans "Check all local users" %}" id="checkAllLocal" /> {% trans "Check all local users" %}</p>
-<p><input class="btn btn-danger" type="submit" data-toggle="confirmation" name="remove_testuser" value="{% trans "Remove selected" %}" /></p>
-</form>
-{% else %}
-<p>{% trans "No users" %}</p>
-{% endif %}
-{% if object_list_external %}
-<h3 id="external-test-user-list">{% trans "External test users available for this SP" %}</h3>
-<div class="alert alert-success" role="alert">
-<p>{% trans "These users are keyed to some other SP but have also been activated for this SP by a user who has admin rights for both SPs." %}</p>
-</div>
-<form action="" method='POST'>
-{% csrf_token %}
-<table class="table table-sm table-responsive" aria-describedby="external-test-user-list">
-  <thead>
-    <tr>
-      <th scope="col">{% trans "Username" %}</th>
-      <th scope="col">{% trans "First name" %}</th>
-      <th scope="col">{% trans "Last name" %}</th>
-      <th scope="col">{% trans "Remove" %}</th>
-    </tr>
-  </thead>
-  <tbody>
-{% for testuser in object_list_external %}
-    <tr>
-      <th scope="row"><a href="{% url 'testuser-attribute-data' testuser.pk %}">{{ testuser.username }}</a></th>
-      <td>{{ testuser.firstname }}</td>
-      <td>{{ testuser.lastname }}</td>
-      <td><div class="checkbox"><input type="checkbox" aria-label="{%  trans "Mark for removal" %}" name="{{ testuser.pk }}" class="external_test_user" id="id_user" /></div></td>
-    </tr>
-{% endfor %}
-  </tbody>
-</table>
-<p><input type="checkbox" aria-label="{%  trans "Check all external users" %}" id="checkAllExternal" /> {% trans "Check all external users" %}</p>
-<p><input class="btn btn-danger" type="submit" data-toggle="confirmation" name="remove_testuser_external" value="{% trans "Remove selected" %}" /></p>
-</form>
-{% endif %}
-{% if form %}
-<h2>{% trans "Add a test user" %}</h2>
-<form action="" method="post" class="form">
-    {% csrf_token %}
-    {% bootstrap_form form layout='horizontal' %}
-    {% buttons %}
-    <p><button type="submit" name="add_testuser" class="btn btn-primary">{% trans "Save" %}</button></p>
-    {% endbuttons %}
-</form>
-{% endif %}
-{% endblock %}
-{% block javascript %}
-  <script src="{% static "js/popover.js" %}"></script>
-  <script src="{% static "js/jquery.popconfirm.js" %}"></script>
-  <script>
-  $("[data-toggle='confirmation']").popConfirm({
-    title: "{% trans "Confirm removal" %}",
-    content: "{% trans "Do you want to remove selected test users?" %}",
-    placement: "bottom",
-    container: "body",
-    yesBtn: "{% trans "Confirm" %}",
-    noBtn: "{% trans "Cancel" %}"
-  });
-  $("#checkAllLocal").click(function () {
-    $(".local_test_user").prop('checked', $(this).prop('checked'));
-  });
-  $("#checkAllExternal").click(function () {
-    $(".external_test_user").prop('checked', $(this).prop('checked'));
-  });
-  </script>
+  <h1>{% trans "Test users" %} - <small>{{ object.display_identifier }}</small></h1>
+  <div class="alert alert-success" role="alert">
+    <p>{% trans "These users are added to the test IdP database and can be used to test this SP against the test IdP." %}</p>
+  </div>
+  <h2 id="test-user-list">{% trans "List of users" %}</h2>
+  <div class="alert alert-success" role="alert">
+    <p>{% trans "Click the username to configure user attribute values." %}</p>
+  </div>
+  {% if object_list %}
+    <form action="" method='POST'>
+      {% csrf_token %}
+      <table class="table table-sm table-responsive" aria-describedby="test-user-list">
+        <thead>
+        <tr>
+          <th scope="col">{% trans "Username" %}</th>
+          <th scope="col">{% trans "First name" %}</th>
+          <th scope="col">{% trans "Last name" %}</th>
+          <th scope="col">{% trans "Remove" %}</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for testuser in object_list %}
+          <tr>
+            <th scope="row"><a href="{% url 'testuser-attribute-data' testuser.pk %}">{{ testuser.username }}</a></th>
+            <td>{{ testuser.firstname }}</td>
+            <td>{{ testuser.lastname }}</td>
+            <td><div class="checkbox"><input type="checkbox" aria-label="{%  trans "Mark for removal" %}" name="{{ testuser.pk }}" class="local_test_user" id="id_user" /></div></td>
+          </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+      <p><button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#confirmationModal">{% trans "Remove selected" %}</button></p>
+      <div class="modal fade" id="confirmationModal" tabindex="-1" aria-labelledby="confirmationModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="confirmationModalLabel">{% trans "Confirm removal" %}</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              {% trans "Do you want to remove selected test users?" %}
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{% trans "Cancel" %}</button>
+              <button type="submit" name="remove_testuser" class="btn btn-primary">{% trans "Confirm" %}</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  {% else %}
+    <p>{% trans "No users" %}</p>
+  {% endif %}
+  {% if object_list_external %}
+    <h3 id="external-test-user-list">{% trans "External test users available for this SP" %}</h3>
+    <div class="alert alert-success" role="alert">
+      <p>{% trans "These users are keyed to some other SP but have also been activated for this SP by a user who has admin rights for both SPs." %}</p>
+    </div>
+    <form action="" method='POST'>
+      {% csrf_token %}
+      <table class="table table-sm table-responsive" aria-describedby="external-test-user-list">
+        <thead>
+        <tr>
+          <th scope="col">{% trans "Username" %}</th>
+          <th scope="col">{% trans "First name" %}</th>
+          <th scope="col">{% trans "Last name" %}</th>
+          <th scope="col">{% trans "Remove" %}</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for testuser in object_list_external %}
+          <tr>
+            <th scope="row"><a href="{% url 'testuser-attribute-data' testuser.pk %}">{{ testuser.username }}</a></th>
+            <td>{{ testuser.firstname }}</td>
+            <td>{{ testuser.lastname }}</td>
+            <td><div class="checkbox"><input type="checkbox" aria-label="{%  trans "Mark for removal" %}" name="{{ testuser.pk }}" class="external_test_user" id="id_user" /></div></td>
+          </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+      <p><button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#confirmationExternalModal">{% trans "Remove selected" %}</button></p>
+      <div class="modal fade" id="confirmationExternalModal" tabindex="-1" aria-labelledby="confirmationExternalModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="confirmationExternalModalLabel">{% trans "Confirm removal" %}</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              {% trans "Do you want to remove selected external test users?" %}
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{% trans "Cancel" %}</button>
+              <button type="submit" name="remove_testuser_external" class="btn btn-primary">{% trans "Confirm" %}</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  {% endif %}
+  {% if form %}
+    <h2>{% trans "Add a test user" %}</h2>
+    <form action="" method="post" class="form">
+      {% csrf_token %}
+      {% bootstrap_form form layout='horizontal' %}
+      {% bootstrap_button _("Save") name="add_testuser" button_type="submit" button_class="btn-primary" %}
+    </form>
+  {% endif %}
 {% endblock %}

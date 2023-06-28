@@ -6,24 +6,23 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('rr', '0035_auto_20180629_1425'),
+        ("rr", "0035_auto_20180629_1425"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='testuser',
-            name='username',
-            field=models.CharField(max_length=50, verbose_name='Login name'),
+            model_name="testuser",
+            name="username",
+            field=models.CharField(max_length=50, verbose_name="Login name"),
         ),
         migrations.AlterField(
-            model_name='testuserdata',
-            name='username',
-            field=models.CharField(max_length=50, verbose_name='Login name'),
+            model_name="testuserdata",
+            name="username",
+            field=models.CharField(max_length=50, verbose_name="Login name"),
         ),
         migrations.AddIndex(
-            model_name='testuserdata',
-            index=models.Index(fields=['username'], name='rr_testuser_usernam_a96fae_idx'),
+            model_name="testuserdata",
+            index=models.Index(fields=["username"], name="rr_testuser_usernam_a96fae_idx"),
         ),
     ]

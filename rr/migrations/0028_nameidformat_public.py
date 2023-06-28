@@ -6,15 +6,14 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('rr', '0027_auto_20180219_0838'),
+        ("rr", "0027_auto_20180219_0838"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='nameidformat',
-            name='public',
-            field=models.BooleanField(default=True, verbose_name='Show in list'),
+            model_name="nameidformat",
+            name="public",
+            field=models.BooleanField(default=True, verbose_name="Show in list"),
         ),
     ]

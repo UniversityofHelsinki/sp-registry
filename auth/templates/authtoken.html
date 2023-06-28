@@ -18,13 +18,11 @@
   {% endif %}
   <form action="" method="post" class="form">
     {% csrf_token %}
-    {% buttons %}
-      {% if token %}
-        <p><button type="submit" value="Reset token" name="token_reset" class="btn btn-primary">{% trans "Reset key" %}</button>
-          <button type="submit" value="Remove token" name="token_remove" class="btn btn-primary">{% trans "Remove key" %}</button></p>
-      {% else %}
-        <p><button type="submit" value="Create token" name="token_create" class="btn btn-primary">{% trans "Create key" %}</button></p>
-      {% endif %}
-    {% endbuttons %}
+    {% if token %}
+      {% bootstrap_button _("Reset token") button_type="submit" value="Reset token" name="token_reset" button_class="btn-primary" %}
+      {% bootstrap_button _("Remove token") button_type="submit" value="Remove token" name="token_remove" button_class="btn-primary" %}
+    {% else %}
+      {% bootstrap_button _("Create token") button_type="submit" value="Create token" name="token_create" button_class="btn-primary" %}
+    {% endif %}
   </form>
 {% endblock %}

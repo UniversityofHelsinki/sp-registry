@@ -1,6 +1,6 @@
 # Changelog
 
-## [2.0.0] - xx.xx.xxxx
+## [2.0.0] - 2023-06-28
 ### Changes
 * Upgrade to Django 4.2
 * Upgrade to Bootstrap 5
@@ -16,12 +16,6 @@
 ### Updating notes
 Django 4.2 requires Python 3.8 or newer and MySQL 8/MariaDb 10.4 or newer.
 CDN has changed to jsdelivr.net from cloudflare.com, update CSP if needed.
-
-## [1.11.0] - 2022-11-08
-### Changes
-* Requirements version updates
-* Add automatic account activation by group
-* Add contacts to attribute admin view
 
 ## [1.10.0] - 2022-08-05
 ### Changes

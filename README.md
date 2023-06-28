@@ -117,7 +117,7 @@ For more information run "./manage.py <command> -h"
 * cleandb
   * Cleans old services or personal information from the db
 * decryptclientsecret
-  * Decrypt client secrets from OIDC metadata (if ecncrypted)
+  * Decrypt client secrets from OIDC metadata (if encrypted)
 * exportattributefilter
   * Exporting SAML attribute filter
 * exportldap
@@ -161,7 +161,7 @@ Usage:
 1. Open https://localhost:8443/ in browser (browser complains about security risk as self-signed certificate is used)
 1. Use local login with user admin, password RandomPass12
 
-Shibboleth and attribute test service are not yet included.
+Shibboleth and attribute test service are not included.
 
 ### Creating development environment
 Steps for creating development environment.

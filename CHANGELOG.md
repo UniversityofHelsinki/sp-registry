@@ -1,5 +1,22 @@
 # Changelog
 
+## [2.0.0] - xx.xx.xxxx
+### Changes
+* Upgrade to Django 4.2
+* Upgrade to Bootstrap 5
+* Change formatting to use black and isort
+* Other requirements version updates
+* Update chart.js and change moment.js to date-fns
+* Update logging settings to allow local config file
+* Remove duplicate addresses from notification emails
+* Add service name to admin notifications
+* Remove test services from admin notifications, with option
+* Fix group permissions to edit test users
+
+### Updating notes
+Django 4.2 requires Python 3.8 or newer and MySQL 8/MariaDb 10.4 or newer.
+CDN has changed to jsdelivr.net from cloudflare.com, update CSP if needed.
+
 ## [1.11.0] - 2022-11-08
 ### Changes
 * Requirements version updates

@@ -1,4 +1,9 @@
 # Changelog
+## [2.0.1] - 2023-06-29
+### Changes
+* Fix buttons in auth token and password reset templates
+* Fix attribute test service urls and css
+* Fix table name setting in importstatistics command
 
 ## [2.0.0] - 2023-06-28
 ### Changes

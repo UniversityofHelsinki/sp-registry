@@ -5,7 +5,7 @@
 {% block content %}
   <h1>{% trans "API" %}</h1>
   <p>{% trans "API keys may be used to access SP-registry REST API." %}</p>
-  <p><a href="/swagger">{% trans "Show API schema." %}</a></p>
+  <p>{% trans "API schema: " %}<a href="{% url 'swagger-ui' %}">Swagger</a>, <a href="{% url 'redoc' %}">Redoc</a></p>
   {% if token %}
     <p><button class="btn btn-outline-dark" type="button" data-bs-toggle="collapse" data-bs-target="#show_token" aria-expanded="false" aria-controls="show_token" name="Show token">{% trans "Show API key" %}</button></p>
     <div class="collapse alert alert-info" id="show_token" role="alert">

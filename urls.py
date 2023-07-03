@@ -1,11 +1,14 @@
-from django.conf import settings
 from django.conf.urls import include
 from django.contrib import admin
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import LoginView, LogoutView
-from django.urls import path, re_path
-from drf_yasg import openapi
-from drf_yasg.views import get_schema_view
+from django.urls import path
+from django.views.generic.base import RedirectView
+from drf_spectacular.views import (
+    SpectacularAPIView,
+    SpectacularRedocView,
+    SpectacularSwaggerView,
+)
 
 from auth.views.authtoken import authtoken
 from rr.routers import router
@@ -40,15 +43,6 @@ from rr.views.statistics import statistics_list, statistics_summary_list
 from rr.views.testuser import testuser_attribute_data, testuser_list
 from rr.views.usergroup import usergroup_list
 
-schema_view = get_schema_view(
-    openapi.Info(
-        title="SP Registry API",
-        default_version="1.0",
-        description="REST API for modifying service provider information.",
-        contact=openapi.Contact(name="Technical contact", email=settings.DEFAULT_CONTACT_EMAIL),
-    )
-)
-
 # Overwrite default status handlers
 handler400 = "rr.views.handlers.bad_request"
 handler403 = "rr.views.handlers.permission_denied"
@@ -57,8 +51,10 @@ handler500 = "rr.views.handlers.server_error"
 
 urlpatterns = [
     path("api/v1/", include(router.urls)),
-    re_path("swagger(?P<format>\.json|\.yaml)", schema_view.without_ui(cache_timeout=0), name="schema-json"),
-    re_path("swagger/", schema_view.with_ui("swagger", cache_timeout=0), name="schema-swagger-ui"),
+    path("api/schema/", SpectacularAPIView.as_view(), name="schema"),
+    path("api/schema/swagger/", SpectacularSwaggerView.as_view(url_name="schema"), name="swagger-ui"),
+    path("api/schema/redoc/", SpectacularRedocView.as_view(url_name="schema"), name="redoc"),
+    path("swagger/", RedirectView.as_view(url="/api/schema/swagger/")),
     path("admin_django/doc/", include("django.contrib.admindocs.urls")),
     path("admin_django/", admin.site.urls),
     path("", login_required(ServiceProviderList.as_view()), name="front-page"),

@@ -21,9 +21,9 @@ class CustomModelViewSet(
         if user.is_superuser or (
             self.request.method == "GET" and read_all_group and user.groups.filter(name=read_all_group).exists()
         ):
-            self.queryset = self.queryset.filter(end_at=None)
+            self.queryset = self.queryset.filter(end_at=None, sp__end_at=None)
         else:
             self.queryset = self.queryset.filter(
-                (Q(sp__admins=user) | Q(sp__admin_groups__in=user.groups.all())), end_at=None
+                (Q(sp__admins=user) | Q(sp__admin_groups__in=user.groups.all())), end_at=None, sp__end_at=None
             ).distinct()
         return self.queryset

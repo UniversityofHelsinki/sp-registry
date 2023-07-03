@@ -19,7 +19,7 @@ INSTALLED_APPS = [
     "django_bootstrap5",
     "rest_framework",
     "rest_framework.authtoken",
-    "drf_yasg",
+    "drf_spectacular",
     "django_filters",
     "rr",
 ]
@@ -41,7 +41,7 @@ REST_FRAMEWORK = {
         "rest_framework.authentication.SessionAuthentication",
     ),
     "TEST_REQUEST_DEFAULT_FORMAT": "json",
-    "DEFAULT_SCHEMA_CLASS": "rest_framework.schemas.coreapi.AutoSchema",
+    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
     "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.LimitOffsetPagination",
     "PAGE_SIZE": 100,
     "DEFAULT_PERMISSION_CLASSES": ("rest_framework.permissions.IsAuthenticated",),
@@ -50,6 +50,18 @@ REST_FRAMEWORK = {
         "rest_framework.throttling.UserRateThrottle",
     ],
     "DEFAULT_THROTTLE_RATES": {"anon": "5/min", "user": "100/min"},
+}
+
+SPECTACULAR_SETTINGS = {
+    "TITLE": "SP Registry API",
+    "DESCRIPTION": "REST API for modifying service information.",
+    "VERSION": "1.0.0",
+    "SERVE_INCLUDE_SCHEMA": False,
+    "SCHEMA_PATH_PREFIX": r"/api/v[0-9]",
+    "ENUM_NAME_OVERRIDES": {
+        "ContactTypeEnum": "rr.models.contact.Contact.TYPECHOICES",
+        "EndpointTypeEnum": "rr.models.endpoint.Endpoint.TYPECHOICES",
+    },
 }
 
 ROOT_URLCONF = "urls"

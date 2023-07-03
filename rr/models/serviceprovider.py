@@ -11,6 +11,8 @@ from django.core.validators import MaxLengthValidator
 from django.db import models
 from django.utils.translation import get_language
 from django.utils.translation import gettext_lazy as _
+from drf_spectacular.types import OpenApiTypes
+from drf_spectacular.utils import extend_schema_field
 
 from rr.models.attribute import Attribute
 from rr.models.nameidformat import NameIDFormat
@@ -495,6 +497,7 @@ class SPAttribute(models.Model):
         ordering = ["attribute__friendlyname"]
 
     @property
+    @extend_schema_field(OpenApiTypes.STR)
     def status(self):
         if self.end_at and not self.validated or self.end_at and self.validated > self.end_at:
             return _("removed")

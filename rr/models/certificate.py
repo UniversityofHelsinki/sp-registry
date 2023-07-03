@@ -8,6 +8,8 @@ from cryptography.x509 import oid
 from django.db import models
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
+from drf_spectacular.types import OpenApiTypes
+from drf_spectacular.utils import extend_schema_field
 
 from rr.models.serviceprovider import ServiceProvider
 
@@ -123,6 +125,7 @@ class Certificate(models.Model):
         return "%s: Signing: %s, Encryption: %s" % (self.cn, self.signing, self.encryption)
 
     @property
+    @extend_schema_field(OpenApiTypes.STR)
     def status(self):
         if self.end_at and not self.validated or self.end_at and self.validated > self.end_at:
             return _("removed")

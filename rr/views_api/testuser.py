@@ -1,7 +1,8 @@
 import logging
 
 from django.utils import timezone
-from rest_framework import viewsets
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework import filters, viewsets
 from rest_framework.permissions import IsAuthenticated
 
 from rr.models.testuser import TestUser, TestUserData
@@ -29,6 +30,16 @@ class TestUserViewSet(viewsets.ModelViewSet):
     queryset = TestUser.objects.all()
     permission_classes = [IsAuthenticated]
     serializer_class = TestUserSerializer
+    filter_backends = [filters.SearchFilter, DjangoFilterBackend]
+    search_fields = ["username", "sp__entity_id", "valid_for__entity_id"]
+    filterset_fields = [
+        "username",
+        "sp",
+        "attributes__attribute__friendlyname",
+        "attributes__value",
+        "sp__entity_id",
+        "valid_for__entity_id",
+    ]
 
     def perform_destroy(self, instance):
         instance.end_at = timezone.now()
@@ -69,6 +80,9 @@ class TestUserDataViewSet(viewsets.ModelViewSet):
     queryset = TestUserData.objects.all()
     permission_classes = [IsAuthenticated]
     serializer_class = TestUserDataSerializer
+    filter_backends = [filters.SearchFilter, DjangoFilterBackend]
+    search_fields = ["attribute__friendlyname", "user__username", "value"]
+    filterset_fields = ["attribute__friendlyname", "user__username"]
 
     def get_queryset(self):
         """

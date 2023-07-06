@@ -1,4 +1,12 @@
 # Changelog
+## [2.1.0] - 2023-07-06
+### Changes
+* Changed drf-yasg to drf-spectacular and support CoreAPI 3.0 
+* Improved search and filter fields to TestUser API
+* Improved properties, search and filters to admin views
+* Filter out objects linked to deleted SPs in API
+* Django's security update to 4.2.3
+
 ## [2.0.1] - 2023-06-29
 ### Changes
 * Fix buttons in auth token and password reset templates

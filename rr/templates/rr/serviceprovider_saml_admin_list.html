@@ -32,12 +32,12 @@
         {% if force_sha1 or object.sign_assertions or not object.sign_responses or not object.encrypt_assertions %}
           <tr>
             <th scope="row"><a href="/summary/{{ object.pk }}/">{{ object.entity_id  }}</a></th>
-            {% if object.force_sha1 %}<td class="text-success">&#10004;{% else %}<td class="text-danger">&#10005;{% endif %}</td>
-            {% if object.sign_assertions %}<td class="text-success">&#10004;{% else %}<td class="text-danger">&#10005;{% endif %}</td>
-            {% if object.sign_responses %}<td class="text-success">&#10004;{% else %}<td class="text-danger">&#10005;{% endif %}</td>
-            {% if object.encrypt_assertions %}<td class="text-success">&#10004;{% else %}<td class="text-danger">&#10005;{% endif %}</td>
-            {% if object|get_production_status %}<td class="text-success">&#10004;{% else %}<td class="text-danger">&#10005;{% endif %}</td>
-            {% if object.test %}<td class="text-success">&#10004;{% else %}<td class="text-danger">&#10005;{% endif %}</td>
+            <td>{% if object.force_sha1 %}<img src="{% static 'admin/img/icon-yes.svg' %}" alt="True">{% else %}<img src="{% static 'admin/img/icon-no.svg' %}" alt="False">{% endif %}</td>
+            <td>{% if object.sign_assertions %}<img src="{% static 'admin/img/icon-yes.svg' %}" alt="True">{% else %}<img src="{% static 'admin/img/icon-no.svg' %}" alt="False">{% endif %}</td>
+            <td>{% if object.sign_responses %}<img src="{% static 'admin/img/icon-yes.svg' %}" alt="True">{% else %}<img src="{% static 'admin/img/icon-no.svg' %}" alt="False">{% endif %}</td>
+            <td>{% if object.encrypt_assertions %}<img src="{% static 'admin/img/icon-yes.svg' %}" alt="True">{% else %}<img src="{% static 'admin/img/icon-no.svg' %}" alt="False">{% endif %}</td>
+            <td>{% if object|get_production_status %}<img src="{% static 'admin/img/icon-yes.svg' %}" alt="True">{% else %}<img src="{% static 'admin/img/icon-no.svg' %}" alt="False">{% endif %}</td>
+            <td>{% if object.test %}<img src="{% static 'admin/img/icon-yes.svg' %}" alt="True">{% else %}<img src="{% static 'admin/img/icon-no.svg' %}" alt="False">{% endif %}</td>
           </tr>
         {% endif %}
       {% empty %}
@@ -69,10 +69,10 @@
         {% if object.force_nameidformat or object.nameidformat.all %}
           <tr>
             <th scope="row"><a href="/summary/{{ object.pk }}/">{{ object.entity_id  }}</a></th>
-            {% if object.force_nameidformat %}<td class="text-success">&#10004;{% else %}<td class="text-danger">&#10005;{% endif %}</td>
+            <td>{% if object.force_nameidformat %}<img src="{% static 'admin/img/icon-yes.svg' %}" alt="True">{% else %}<img src="{% static 'admin/img/icon-no.svg' %}" alt="False">{% endif %}</td>
             <td>{% for n in object.nameidformat.all %}{{ n.nameidformat }}{% if not forloop.last %}<br>{% endif %}{% endfor %}</td>
-            {% if object|get_production_status %}<td class="text-success">&#10004;{% else %}<td class="text-danger">&#10005;{% endif %}</td>
-            {% if object.test %}<td class="text-success">&#10004;{% else %}<td class="text-danger">&#10005;{% endif %}</td>
+            <td>{% if object|get_production_status %}<img src="{% static 'admin/img/icon-yes.svg' %}" alt="True">{% else %}<img src="{% static 'admin/img/icon-no.svg' %}" alt="False">{% endif %}</td>
+            <td>{% if object.test %}<img src="{% static 'admin/img/icon-yes.svg' %}" alt="True">{% else %}<img src="{% static 'admin/img/icon-no.svg' %}" alt="False">{% endif %}</td>
           </tr>
         {% endif %}
       {% empty %}
@@ -103,9 +103,9 @@
         {% if object.force_mfa %}
           <tr>
             <th scope="row"><a href="/summary/{{ object.pk }}/">{{ object.entity_id  }}</a></th>
-            {% if object.force_mfa %}<td class="text-success">&#10004;{% else %}<td class="text-danger">&#10005;{% endif %}</td>
-            {% if object|get_production_status %}<td class="text-success">&#10004;{% else %}<td class="text-danger">&#10005;{% endif %}</td>
-            {% if object.test %}<td class="text-success">&#10004;{% else %}<td class="text-danger">&#10005;{% endif %}</td>
+            <td>{% if object.force_mfa %}<img src="{% static 'admin/img/icon-yes.svg' %}" alt="True">{% else %}<img src="{% static 'admin/img/icon-no.svg' %}" alt="False">{% endif %}</td>
+            <td>{% if object|get_production_status %}<img src="{% static 'admin/img/icon-yes.svg' %}" alt="True">{% else %}<img src="{% static 'admin/img/icon-no.svg' %}" alt="False">{% endif %}</td>
+            <td>{% if object.test %}<img src="{% static 'admin/img/icon-yes.svg' %}" alt="True">{% else %}<img src="{% static 'admin/img/icon-no.svg' %}" alt="False">{% endif %}</td>
           </tr>
         {% endif %}
       {% empty %}
@@ -137,9 +137,9 @@
         <tr>
           <th scope="row"><a href="/summary/{{ object.pk }}/">{{ object.entity_id  }}</a></th>
           <td>{{ object.saml_product }}</td>
-          {% if object.saml_product %}<td class="text-success">&#10004;{% else %}<td class="text-danger">&#10005;{% endif %}</td>
-          {% if object|get_production_status %}<td class="text-success">&#10004;{% else %}<td class="text-danger">&#10005;{% endif %}</td>
-          {% if object.test %}<td class="text-success">&#10004;{% else %}<td class="text-danger">&#10005;{% endif %}</td>
+          <td>{% if object.saml_product %}<img src="{% static 'admin/img/icon-yes.svg' %}" alt="True">{% else %}<img src="{% static 'admin/img/icon-no.svg' %}" alt="False">{% endif %}</td>
+          <td>{% if object|get_production_status %}<img src="{% static 'admin/img/icon-yes.svg' %}" alt="True">{% else %}<img src="{% static 'admin/img/icon-no.svg' %}" alt="False">{% endif %}</td>
+          <td>{% if object.test %}<img src="{% static 'admin/img/icon-yes.svg' %}" alt="True">{% else %}<img src="{% static 'admin/img/icon-no.svg' %}" alt="False">{% endif %}</td>
         </tr>
       {% empty %}
         <tr>

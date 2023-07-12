@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load i18n %}
+{% load static %}
 {% block content %}
   <h1 id="attributes">Attributes</h1>
   <div class="alert alert-success" role="alert">
@@ -23,9 +24,9 @@
         <th scope="row"><a href="{% url 'attribute-view' object.pk %}">{{ object.friendlyname }}</a></th>
         <td>{{ object.attributeid }}</td>
         <td>{{ object.name }}</td>
-        {% if object.public_saml %}<td class="text-success">&#10004;{% else %}<td class="text-danger">&#10005;{% endif %}</td>
-        {% if object.public_ldap %}<td class="text-success">&#10004;{% else %}<td class="text-danger">&#10005;{% endif %}</td>
-        {% if object.public_oidc %}<td class="text-success">&#10004;{% else %}<td class="text-danger">&#10005;{% endif %}</td>
+        <td>{% if object.public_saml %}<img src="{% static 'admin/img/icon-yes.svg' %}" alt="True">{% else %}<img src="{% static 'admin/img/icon-no.svg' %}" alt="False">{% endif %}</td>
+        <td>{% if object.public_ldap %}<img src="{% static 'admin/img/icon-yes.svg' %}" alt="True">{% else %}<img src="{% static 'admin/img/icon-no.svg' %}" alt="False">{% endif %}</td>
+        <td>{% if object.public_oidc %}<img src="{% static 'admin/img/icon-yes.svg' %}" alt="True">{% else %}<img src="{% static 'admin/img/icon-no.svg' %}" alt="False">{% endif %}</td>
       </tr>
     {% empty %}
       <tr>

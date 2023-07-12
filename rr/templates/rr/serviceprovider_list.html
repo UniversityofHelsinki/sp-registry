@@ -25,14 +25,16 @@
         </thead>
         <tbody>
         {% for object in object_list %}
-          {% if user.is_superuser %}{% if object|get_production_status or object.production %}{% if object.modified %}<tr>{% else %}<tr class="collapse out collapsesaml">{% endif %}{% else %}<tr class="collapse out collapsesaml">{% endif %}{% else %}<tr>{% endif %}
+          {% with production=object|get_production_status %}
+          {% if user.is_superuser %}{% if production or object.production %}{% if object.modified %}<tr>{% else %}<tr class="collapse out collapsesaml">{% endif %}{% else %}<tr class="collapse out collapsesaml">{% endif %}{% else %}<tr>{% endif %}
           <th scope="row">{% if object.display_identifier|length > 60 %}<a data-bs-toggle="tooltip" data-bs-placement="top" title="{{ display_identifier }}" href="/summary/{{ object.pk }}/">{{ object.display_identifier|truncatechars:60 }}{% else %}<a href="/summary/{{ object.pk }}/">{{ object.display_identifier }}{% endif %}</a></th>
           {% if object.name|length > 50 %}<td data-bs-toggle="tooltip" data-bs-placement="top" title="{{ object.name }}">{{ object.name|truncatechars:50 }}{% else %}<td>{{ object.name }}{% endif %}</td>
-          {% if object|get_production_status %}<td class="text-success">&#10004;{% else %}<td class="text-danger">&#10005;{% endif %}</td>
-          {% if object.test %}<td class="text-success">&#10004;{% else %}<td class="text-danger">&#10005;{% endif %}</td>
-          {% if object.validated and not object.modified %}<td class="table-success">{% trans "OK "%}</td>{% elif not object|get_production_status and not object.production %}<td class="table-info">{% trans "Modified "%}</td>{% else %}<td class="table-warning">{% trans "Modified "%}</td>{% endif %}{% if user.is_superuser %}
-            {% if not object.admins.count %}<td class="text-danger">&#10005;{% else %}<td>{{ object.admins.count }}{% endif %}  {% if object.keystore_set.count %}({{ object.keystore_set.count }}){% endif %}</td>{% endif %}
+          <td>{% if production %}<img src="{% static 'admin/img/icon-yes.svg' %}" alt="True">{% else %}<img src="{% static 'admin/img/icon-no.svg' %}" alt="False">{% endif %}</td>
+          <td>{% if object.test %}<img src="{% static 'admin/img/icon-yes.svg' %}" alt="True">{% else %}<img src="{% static 'admin/img/icon-no.svg' %}" alt="False">{% endif %}</td>
+          {% if object.validated and not object.modified %}<td class="table-success">{% trans "OK "%}</td>{% elif not production and not object.production %}<td class="table-info">{% trans "Modified "%}</td>{% else %}<td class="table-warning">{% trans "Modified "%}</td>{% endif %}{% if user.is_superuser %}
+            <td>{% if not object.admins.count and not object.admin_groups.count %}<img src="{% static 'admin/img/icon-no.svg' %}" alt="False">{% else %}{{ object.admins.count }}{% endif %}  {% if object.keystore_set.count %}({{ object.keystore_set.count }}){% endif %}</td>{% endif %}
           </tr>
+          {% endwith %}
         {% empty %}
           <tr>
             <th scope="row">{% trans "You do not have access to any service providers." %}</th>
@@ -61,13 +63,15 @@
         </thead>
         <tbody>
         {% for object in oidc_providers %}
-          {% if user.is_superuser %}{% if object|get_production_status or object.production %}{% if object.modified %}<tr>{% else %}<tr class="collapse out collapseoidc">{% endif %}{% else %}<tr class="collapse out collapseoidc">{% endif %}{% else %}<tr>{% endif %}
+          {% with production=object|get_production_status %}
+          {% if user.is_superuser %}{% if production or object.production %}{% if object.modified %}<tr>{% else %}<tr class="collapse out collapseoidc">{% endif %}{% else %}<tr class="collapse out collapseoidc">{% endif %}{% else %}<tr>{% endif %}
           <th scope="row">{% if object.display_identifier|length > 60 %}<a data-bs-toggle="tooltip" data-bs-placement="top" title="{{ display_identifier }}" href="/summary/{{ object.pk }}/">{{ object.display_identifier|truncatechars:60 }}{% else %}<a href="/summary/{{ object.pk }}/">{{ object.display_identifier }}{% endif %}</a></th>
-          {% if object|get_production_status %}<td class="text-success">&#10004;{% else %}<td class="text-danger">&#10005;{% endif %}</td>
-          {% if object.test %}<td class="text-success">&#10004;{% else %}<td class="text-danger">&#10005;{% endif %}</td>
-          {% if object.validated and not object.modified %}<td class="table-success">{% trans "OK "%}</td>{% elif not object|get_production_status and not object.production %}<td class="table-info">{% trans "Modified "%}</td>{% else %}<td class="table-warning">{% trans "Modified "%}</td>{% endif %}{% if user.is_superuser %}
-            {% if not object.admins.count %}<td class="text-danger">&#10005;{% else %}<td>{{ object.admins.count }}{% endif %}  {% if object.keystore_set.count %}({{ object.keystore_set.count }}){% endif %}</td>{% endif %}
+          <td>{% if production %}<img src="{% static 'admin/img/icon-yes.svg' %}" alt="True">{% else %}<img src="{% static 'admin/img/icon-no.svg' %}" alt="False">{% endif %}</td>
+          <td>{% if object.test %}<img src="{% static 'admin/img/icon-yes.svg' %}" alt="True">{% else %}<img src="{% static 'admin/img/icon-no.svg' %}" alt="False">{% endif %}</td>
+          {% if object.validated and not object.modified %}<td class="table-success">{% trans "OK "%}</td>{% elif not production and not object.production %}<td class="table-info">{% trans "Modified "%}</td>{% else %}<td class="table-warning">{% trans "Modified "%}</td>{% endif %}{% if user.is_superuser %}
+            <td>{% if not object.admins.count and not object.admin_groups.count %}<img src="{% static 'admin/img/icon-no.svg' %}" alt="False">{% else %}{{ object.admins.count }}{% endif %}  {% if object.keystore_set.count %}({{ object.keystore_set.count }}){% endif %}</td>{% endif %}
           </tr>
+          {% endwith %}
         {% empty %}
           <tr>
             <th scope="row">{% trans "You do not have access to any service providers." %}</th>
@@ -96,13 +100,15 @@
         </thead>
         <tbody>
         {% for object in ldap_providers %}
-          {% if user.is_superuser %}{% if object|get_production_status or object.production %}{% if object.modified %}<tr>{% else %}<tr class="collapse out collapseldap">{% endif %}{% else %}<tr class="collapse out collapseldap">{% endif %}{% else %}<tr>{% endif %}
+          {% with production=object|get_production_status %}
+          {% if user.is_superuser %}{% if production or object.production %}{% if object.modified %}<tr>{% else %}<tr class="collapse out collapseldap">{% endif %}{% else %}<tr class="collapse out collapseldap">{% endif %}{% else %}<tr>{% endif %}
           <th scope="row">{% if object.display_identifier|length > 60 %}<a data-bs-toggle="tooltip" data-bs-placement="top" title="{{ display_identifier }}" href="/summary/{{ object.pk }}/">{{ object.display_identifier|truncatechars:60 }}{% else %}<a href="/summary/{{ object.pk }}/">{{ object.display_identifier }}{% endif %}</a></th>
           {% if object.name|length > 50 %}<td data-bs-toggle="tooltip" data-bs-placement="top" title="{{ object.name }}">{{ object.name|truncatechars:50 }}{% else %}<td>{{ object.name }}{% endif %}</td>
-          {% if object.production %}<td class="text-success">&#10004;{% else %}<td class="text-danger">&#10005;{% endif %}</td>
-          {% if object.validated and not object.modified %}<td class="table-success">{% trans "OK "%}</td>{% else %}<td class="table-warning">{% trans "Modified "%}</td>{% endif %}{% if user.is_superuser %}
-            {% if not object.admins.count %}<td class="text-danger">&#10005;{% else %}<td>{{ object.admins.count }}{% endif %}  {% if object.keystore_set.count %}({{ object.keystore_set.count }}){% endif %}</td>{% endif %}
+          <td>{% if production %}<img src="{% static 'admin/img/icon-yes.svg' %}" alt="True">{% else %}<img src="{% static 'admin/img/icon-no.svg' %}" alt="False">{% endif %}</td>
+          {% if object.validated and not object.modified %}<td class="table-success">{% trans "OK "%}</td>{% elif not production and not object.production %}<td class="table-info">{% trans "Modified "%}</td>{% else %}<td class="table-warning">{% trans "Modified "%}</td>{% endif %}{% if user.is_superuser %}
+            <td>{% if not object.admins.count and not object.admin_groups.count %}<img src="{% static 'admin/img/icon-no.svg' %}" alt="False">{% else %}{{ object.admins.count }}{% endif %}  {% if object.keystore_set.count %}({{ object.keystore_set.count }}){% endif %}</td>{% endif %}
           </tr>
+          {% endwith %}
         {% empty %}
           <tr>
             <th scope="row">{% trans "You do not have access to any service providers." %}</th>

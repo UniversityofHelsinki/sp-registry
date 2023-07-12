@@ -26,15 +26,15 @@
         </thead>
         <tbody>
         <tr>
-          <td class="text-success">&#10004;</td>
+          <td><img src="{% static 'admin/img/icon-yes.svg' %}" alt="True"></td>
           <td>{% trans "Attribute was released and it has a seemingly correct value." %}</td>
         </tr>
         <tr>
-          <td class="text-danger">&#10006;</td>
+          <td><img src="{% static 'admin/img/icon-no.svg' %}" alt="False"></td>
           <td>{% trans "Attribute marked as a mandatory was not released or the attribute's value is not within the accepted value range." %}</td>
         </tr>
         <tr>
-          <td class="text-info">&#128712;</td>
+          <td><img src="{% static 'admin/img/icon-unknown.svg' %}" alt="Optional"></td>
           <td>{% trans "This attribute is an optional and doesn't have any value for you. Not all attributes are available for all users." %}</td>
         </tr>
         </tbody>
@@ -78,7 +78,7 @@
         <tbody>
         {% for object in object_list %}
           {% if object.icon == "invalid" %}<tr class="table-danger">{% else %}<tr>{% endif %}
-        {% if object.icon == "valid" %}<td class="text-success">&#10004;{% elif object.icon == "invalid" %}<td class="text-danger">&#10006;{% elif object.icon == "optional" %}<td class="text-info">&#128712;{% endif %}</td>
+        <td>{% if object.icon == "valid" %}<img src="{% static 'admin/img/icon-yes.svg' %}" alt="True">{% elif object.icon == "invalid" %}<img src="{% static 'admin/img/icon-no.svg' %}" alt="False">{% elif object.icon == "optional" %}<img src="{% static 'admin/img/icon-unknown.svg' %}" alt="Optional">{% endif %}</td>
         <td>{{ object.friendlyname }}<Br><small>{{ object.name }}</small></td>
         <td>{{ object.value|safe }}{% if object.icon == "invalid" and object.regex %}<Br><span class="text-danger">{% trans "Value format (regex)" %}: {{ object.regex }}</span>{% endif %}</td>
         </tr>

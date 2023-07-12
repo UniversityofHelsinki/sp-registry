@@ -42,4 +42,4 @@ osv-scanner:
   script:
     - go install github.com/google/osv-scanner/cmd/osv-scanner@v1
     - osv-scanner --version
-    - osv-scanner --lockfile 'requirements.txt:requirements/development.txt'
+    - osv-scanner --lockfile 'requirements.txt:requirements/production.txt'

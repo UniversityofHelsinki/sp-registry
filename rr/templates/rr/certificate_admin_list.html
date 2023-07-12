@@ -23,8 +23,8 @@
           <td><a href="{% url 'certificate-list' certificate.sp.pk %}">{{ certificate.sp }}</a></td>
           <td>{{ certificate.valid_until }}</td>
           <td>{{ certificate.key_size }}</td>
-          {% if certificate.signing %}<td class="text-success">&#10004;{% else %}<td class="text-danger">&#10005;{% endif %}</td>
-          {% if certificate.encryption %}<td class="text-success">&#10004;{% else %}<td class="text-danger">&#10005;{% endif %}</td>
+          <td>{% if certificate.signing %}<img src="{% static 'admin/img/icon-yes.svg' %}" alt="True">{% else %}<img src="{% static 'admin/img/icon-no.svg' %}" alt="False">{% endif %}</td>
+          <td>{% if certificate.encryption %}<img src="{% static 'admin/img/icon-yes.svg' %}" alt="True">{% else %}<img src="{% static 'admin/img/icon-no.svg' %}" alt="False">{% endif %}</td>
         </tr>
       {% endfor %}
       </tbody>
@@ -49,8 +49,8 @@
           <td><a href="{% url 'certificate-list' certificate.sp.pk %}">{{ certificate.sp }}</a></td>
           <td>{{ certificate.valid_until }}</td>
           <td>{{ certificate.key_size }}</td>
-          {% if certificate.signing %}<td class="text-success">&#10004;{% else %}<td class="text-danger">&#10005;{% endif %}</td>
-          {% if certificate.encryption %}<td class="text-success">&#10004;{% else %}<td class="text-danger">&#10005;{% endif %}</td>
+          <td>{% if certificate.signing %}<img src="{% static 'admin/img/icon-yes.svg' %}" alt="True">{% else %}<img src="{% static 'admin/img/icon-no.svg' %}" alt="False">{% endif %}</td>
+          <td>{% if certificate.encryption %}<img src="{% static 'admin/img/icon-yes.svg' %}" alt="True">{% else %}<img src="{% static 'admin/img/icon-no.svg' %}" alt="False">{% endif %}</td>
         </tr>
       {% endfor %}
       </tbody>

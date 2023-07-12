@@ -79,13 +79,13 @@
       {% if history_object %}
         {% if f.value != history_object|get_item:f.name %}<tr class="table-warning">{% else %}<tr>{% endif %}
       <td>{{ f.label }}</td>
-      {% if f.value == True %}<td class="text-success">&#10004;{% elif f.value == False %}<td class="text-danger">&#10005;{% else %}<td>{{ f.value }}{% endif %}</td>
-      {% if history_object|get_item:f.name == True %}<td class="text-success">&#10004;{% elif history_object|get_item:f.name == False %}<td class="text-danger">&#10005;{% else %}<td>{{ history_object|get_item:f.name }}{% endif %}</td>
+      <td>{% if f.value == True %}<img src="{% static 'admin/img/icon-yes.svg' %}" alt="True">{% elif f.value == False %}<img src="{% static 'admin/img/icon-no.svg' %}" alt="False">{% else %}{{ f.value }}{% endif %}</td>
+      <td>{% if history_object|get_item:f.name == True %}<img src="{% static 'admin/img/icon-yes.svg' %}" alt="True">{% elif history_object|get_item:f.name == False %}<img src="{% static 'admin/img/icon-no.svg' %}" alt="False">{% else %}{{ history_object|get_item:f.name }}{% endif %}</td>
       </tr>
       {% else %}
         <tr>
           <td>{{ f.label }}</td>
-          {% if f.value == True %}<td class="text-success">&#10004;{% elif f.value == False %}<td class="text-danger">x{% else %}<td>{{ f.value }}{% endif %}</td>
+          <td>{% if f.value == True %}<img src="{% static 'admin/img/icon-yes.svg' %}" alt="True">{% elif f.value == False %}<img src="{% static 'admin/img/icon-no.svg' %}" alt="False">{% else %}{{ f.value }}{% endif %}</td>
         </tr>
       {% endif %}
     {% endfor %}
@@ -108,13 +108,13 @@
         {% if history_object %}
           {% if f.value != history_object|get_item:f.name %}<tr class="table-warning">{% else %}<tr>{% endif %}
         <td>{{ f.label }}</td>
-        {% if f.value == True %}<td class="text-success">&#10004;{% elif f.value == False %}<td class="text-danger">x{% else %}<td>{{ f.value }}{% endif %}</td>
-        {% if history_object|get_item:f.name == True %}<td class="text-success">&#10004;{% elif history_object|get_item:f.name == False %}<td class="text-danger">&#10005;{% else %}<td>{{ history_object|get_item:f.name }}{% endif %}</td>
+        <td>{% if f.value == True %}<img src="{% static 'admin/img/icon-yes.svg' %}" alt="True">{% elif f.value == False %}<img src="{% static 'admin/img/icon-no.svg' %}" alt="False">{% else %}{{ f.value }}{% endif %}</td>
+        <td>{% if history_object|get_item:f.name == True %}<img src="{% static 'admin/img/icon-yes.svg' %}" alt="True">{% elif history_object|get_item:f.name == False %}<img src="{% static 'admin/img/icon-no.svg' %}" alt="False">{% else %}{{ history_object|get_item:f.name }}{% endif %}</td>
         </tr>
         {% else %}
           <tr>
             <td>{{ f.label }}</td>
-            {% if f.value == True %}<td class="text-success">&#10004;{% elif f.value == False %}<td class="text-danger">x{% else %}<td>{{ f.value }}{% endif %}</td>
+            <td>{% if f.value == True %}<img src="{% static 'admin/img/icon-yes.svg' %}" alt="True">{% elif f.value == False %}<img src="{% static 'admin/img/icon-no.svg' %}" alt="False">{% else %}{{ f.value }}{% endif %}</td>
           </tr>
         {% endif %}
       {% endfor %}
@@ -149,13 +149,13 @@
         {% if history_object %}
           {% if f.value != history_object|get_item:f.name %}<tr class="table-warning">{% else %}<tr>{% endif %}
         <td>{{ f.label }}</td>
-        {% if f.value == True %}<td class="text-success">&#10004;{% elif f.value == False %}<td class="text-danger">x{% else %}<td>{{ f.value }}{% endif %}</td>
-        {% if history_object|get_item:f.name == True %}<td class="text-success">&#10004;{% elif history_object|get_item:f.name == False %}<td class="text-danger">&#10005;{% else %}<td>{{ history_object|get_item:f.name }}{% endif %}</td>
+        <td>{% if f.value == True %}<img src="{% static 'admin/img/icon-yes.svg' %}" alt="True">{% elif f.value == False %}<img src="{% static 'admin/img/icon-no.svg' %}" alt="False">{% else %}{{ f.value }}{% endif %}</td>
+        <td>{% if history_object|get_item:f.name == True %}<img src="{% static 'admin/img/icon-yes.svg' %}" alt="True">{% elif history_object|get_item:f.name == False %}<img src="{% static 'admin/img/icon-no.svg' %}" alt="False">{% else %}{{ history_object|get_item:f.name }}{% endif %}</td>
         </tr>
         {% else %}
           <tr>
             <td>{{ f.label }}</td>
-            {% if f.value == True %}<td class="text-success">&#10004;{% elif f.value == False %}<td class="text-danger">x{% else %}<td>{{ f.value }}{% endif %}</td>
+            <td>{% if f.value == True %}<img src="{% static 'admin/img/icon-yes.svg' %}" alt="True">{% elif f.value == False %}<img src="{% static 'admin/img/icon-no.svg' %}" alt="False">{% else %}{{ f.value }}{% endif %}</td>
           </tr>
         {% endif %}
       {% endfor %}
@@ -178,13 +178,13 @@
         {% if history_object %}
           {% if f.value != history_object|get_item:f.name %}<tr class="table-warning">{% else %}<tr>{% endif %}
         <td>{{ f.label }}</td>
-        {% if f.value == True %}<td class="text-success">&#10004;{% elif f.value == False %}<td class="text-danger">x{% else %}<td>{{ f.value }}{% endif %}</td>
-        {% if history_object|get_item:f.name == True %}<td class="text-success">&#10004;{% elif history_object|get_item:f.name == False %}<td class="text-danger">&#10005;{% else %}<td>{{ history_object|get_item:f.name }}{% endif %}</td>
+        <td>{% if f.value == True %}<img src="{% static 'admin/img/icon-yes.svg' %}" alt="True">{% elif f.value == False %}<img src="{% static 'admin/img/icon-no.svg' %}" alt="False">{% else %}{{ f.value }}{% endif %}</td>
+        <td>{% if history_object|get_item:f.name == True %}<img src="{% static 'admin/img/icon-yes.svg' %}" alt="True">{% elif history_object|get_item:f.name == False %}<img src="{% static 'admin/img/icon-no.svg' %}" alt="False">{% else %}{{ history_object|get_item:f.name }}{% endif %}</td>
         </tr>
         {% else %}
           <tr>
             <td>{{ f.label }}</td>
-            {% if f.value == True %}<td class="text-success">&#10004;{% elif f.value == False %}<td class="text-danger">x{% else %}<td>{{ f.value }}{% endif %}</td>
+            <td>{% if f.value == True %}<img src="{% static 'admin/img/icon-yes.svg' %}" alt="True">{% elif f.value == False %}<img src="{% static 'admin/img/icon-no.svg' %}" alt="False">{% else %}{{ f.value }}{% endif %}</td>
           </tr>
         {% endif %}
       {% endfor %}
@@ -281,8 +281,8 @@
     {% endif %}
     <td>{{ a.reason }}</td>
     {% if object.service_type == "oidc" %}
-      {% if a.oidc_userinfo %}<td class="text-success">&#10004;{% else %}<td class="text-danger">x{% endif %}</td>
-      {% if a.oidc_id_token %}<td class="text-success">&#10004;{% else %}<td class="text-danger">x{% endif %}</td>
+      <td>{% if a.oidc_userinfo %}<img src="{% static 'admin/img/icon-yes.svg' %}" alt="True">{% else %}<img src="{% static 'admin/img/icon-no.svg' %}" alt="False">{% endif %}</td>
+      <td>{% if a.oidc_id_token %}<img src="{% static 'admin/img/icon-yes.svg' %}" alt="True">{% else %}<img src="{% static 'admin/img/icon-no.svg' %}" alt="False">{% endif %}</td>
     {% endif %}
     </tr>
     {% endfor %}

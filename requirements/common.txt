@@ -1,5 +1,5 @@
 # Common requirements
-cryptography==41.0.2
+cryptography==41.0.3
 Django==4.2.3
 django-bootstrap5==23.1
 django-filter==23.2

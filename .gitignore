@@ -57,6 +57,7 @@ test-screenshots/
 
 # Settings
 local_settings.py
+local_logging.py
 
 # Sphinx documentation
 docs/_build/

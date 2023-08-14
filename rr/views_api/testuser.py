@@ -1,5 +1,6 @@
 import logging
 
+from django.db.models import Q
 from django.utils import timezone
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters, viewsets
@@ -41,6 +42,18 @@ class TestUserViewSet(viewsets.ModelViewSet):
         "valid_for__entity_id",
     ]
 
+    def get_queryset(self):
+        """
+        Restricts the returned information to test users in services user has admin access
+        """
+        user = self.request.user
+
+        if not user.is_superuser:
+            self.queryset = self.queryset.filter(
+                Q(sp__admins=user) | Q(sp__admin_groups__in=user.groups.all()), end_at=None
+            )
+        return self.queryset.prefetch_related("attributes", "valid_for", "attributes__attribute").select_related("sp")
+
     def perform_destroy(self, instance):
         instance.end_at = timezone.now()
         instance.save()
@@ -49,16 +62,6 @@ class TestUserViewSet(viewsets.ModelViewSet):
                 username=instance.username, sp=instance.sp, user=self.request.user
             )
         )
-
-    def get_queryset(self):
-        """
-        Restricts the returned information to test users in services user has admin access
-        """
-        user = self.request.user
-
-        if not user.is_superuser:
-            self.queryset = self.queryset.filter(sp__admins=user, end_at=None)
-        return self.queryset
 
 
 class TestUserDataViewSet(viewsets.ModelViewSet):
@@ -90,5 +93,7 @@ class TestUserDataViewSet(viewsets.ModelViewSet):
         """
         user = self.request.user
         if not user.is_superuser:
-            self.queryset = self.queryset.filter(user__sp__admins=user)
-        return self.queryset
+            self.queryset = self.queryset.filter(
+                Q(user__sp__admins=user) | Q(user__sp__admin_groups__in=user.groups.all())
+            )
+        return self.queryset.select_related("attribute")

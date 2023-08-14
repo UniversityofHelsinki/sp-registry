@@ -133,7 +133,7 @@ class ServiceTestCase(APITestCase):
         self.assertEqual(len(response.data["attributes"]), 2)
         self.assertEqual(len(response.data["contacts"]), 2)
 
-    def test_service_provider_update_with_nested_attribute_Removal(self):
+    def test_service_provider_update_with_nested_attribute_removal(self):
         self.test_service_provider_create_with_nested_data()
         data = {"attributes": [{"attribute": "cn", "reason": "Frog"}]}
         response = self._test_update(user=self.user, data=data, pk=self.sp_id)

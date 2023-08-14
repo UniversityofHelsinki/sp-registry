@@ -4,7 +4,6 @@ from rest_framework import serializers
 from rest_framework.validators import UniqueTogetherValidator
 
 from rr.models.certificate import Certificate, certificate_validator
-from rr.serializers.common import ActiveListSerializer
 
 logger = logging.getLogger(__name__)
 
@@ -80,7 +79,6 @@ class CertificateSerializer(serializers.ModelSerializer):
 
 class CertificateLimitedSerializer(serializers.ModelSerializer):
     class Meta:
-        list_serializer_class = ActiveListSerializer
         model = Certificate
         fields = ["id", "sp", "valid_from", "valid_until", "certificate", "signing", "encryption", "status"]
         read_only_fields = ["valid_from", "valid_until", "status"]

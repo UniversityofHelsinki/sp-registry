@@ -40,15 +40,15 @@ class AttributeForm(Form):
             attributes = Attribute.objects.all().order_by("friendlyname")
         elif self.sp.service_type == "saml":
             attributes = Attribute.objects.filter(
-                Q(public_saml=True) | Q(spattribute__sp=self.sp, spattribute__end_at=None)
+                Q(public_saml=True) | Q(spattributes__sp=self.sp, spattributes__end_at=None)
             ).order_by("friendlyname")
         elif self.sp.service_type == "ldap":
             attributes = Attribute.objects.filter(
-                Q(public_ldap=True) | Q(spattribute__sp=self.sp, spattribute__end_at=None)
+                Q(public_ldap=True) | Q(spattributes__sp=self.sp, spattributes__end_at=None)
             ).order_by("friendlyname")
         elif self.sp.service_type == "oidc":
             attributes = Attribute.objects.filter(
-                Q(public_oidc=True) | Q(spattribute__sp=self.sp, spattribute__end_at=None)
+                Q(public_oidc=True) | Q(spattributes__sp=self.sp, spattributes__end_at=None)
             ).order_by("friendlyname")
         else:
             attributes = Attribute.objects.none()

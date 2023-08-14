@@ -75,9 +75,17 @@ def get_service_provider_queryset(request, service_type=None):
         request.method == "GET" and read_all_group and user.groups.filter(name=read_all_group).exists()
     ):
         if service_type:
-            return ServiceProvider.objects.filter(end_at=None, service_type=service_type).order_by("entity_id")
+            return (
+                ServiceProvider.objects.filter(end_at=None, service_type=service_type)
+                .order_by("entity_id")
+                .prefetch_related("admins", "admin_groups")
+            )
         else:
-            return ServiceProvider.objects.filter(end_at=None).order_by("entity_id")
+            return (
+                ServiceProvider.objects.filter(end_at=None)
+                .order_by("entity_id")
+                .prefetch_related("admins", "admin_groups")
+            )
     else:
         if service_type:
             return (
@@ -86,13 +94,13 @@ def get_service_provider_queryset(request, service_type=None):
                 )
                 .distinct()
                 .order_by("entity_id")
-            )
+            ).prefetch_related("admins", "admin_groups")
         else:
             return (
                 ServiceProvider.objects.filter((Q(admins=user) | Q(admin_groups__in=user.groups.all())), end_at=None)
                 .distinct()
                 .order_by("entity_id")
-            )
+            ).prefetch_related("admins", "admin_groups")
 
 
 def create_sp_history_copy(sp):

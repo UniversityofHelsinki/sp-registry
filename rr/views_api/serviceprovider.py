@@ -1,5 +1,6 @@
 import logging
 
+from django.db.models import Prefetch
 from django.utils import timezone
 from django_filters import rest_framework as df_filters
 from django_filters.rest_framework import DjangoFilterBackend
@@ -7,7 +8,12 @@ from django_filters.widgets import BooleanWidget
 from rest_framework import filters, viewsets
 from rest_framework.permissions import IsAuthenticated
 
+from rr.models.certificate import Certificate
+from rr.models.contact import Contact
+from rr.models.endpoint import Endpoint
+from rr.models.redirecturi import RedirectUri
 from rr.models.serviceprovider import ServiceProvider, SPAttribute
+from rr.models.usergroup import UserGroup
 from rr.serializers.serviceprovider import (
     LdapServiceProviderSerializer,
     OidcServiceProviderSerializer,
@@ -98,7 +104,19 @@ class SamlServiceProviderViewSet(viewsets.ModelViewSet):
         """
         Restricts the returned information to services
         """
-        return get_service_provider_queryset(request=self.request, service_type="saml")
+        return get_service_provider_queryset(request=self.request, service_type="saml").prefetch_related(
+            Prefetch(
+                "spattributes",
+                queryset=SPAttribute.objects.filter(end_at=None).select_related("attribute"),
+                to_attr="sp_attributes",
+            ),
+            Prefetch("certificates", queryset=Certificate.objects.filter(end_at=None)),
+            Prefetch("contacts", queryset=Contact.objects.filter(end_at=None)),
+            Prefetch("endpoints", queryset=Endpoint.objects.filter(end_at=None)),
+            "nameidformat",
+            "admins",
+            "admin_groups",
+        )
 
     def perform_destroy(self, instance):
         instance.end_at = timezone.now()
@@ -107,10 +125,10 @@ class SamlServiceProviderViewSet(viewsets.ModelViewSet):
 
 
 class OidcServiceProviderViewSet(viewsets.ModelViewSet):
-    """API endpoint for OIDC relying partys.
+    """API endpoint for OIDC relying parties.
 
     list:
-    Returns a list of all the existing OIDC relying partys.
+    Returns a list of all the existing OIDC relying parties.
     retrieve:
     Returns the given OIDC relying party.
     create:
@@ -134,7 +152,20 @@ class OidcServiceProviderViewSet(viewsets.ModelViewSet):
         """
         Restricts the returned information to services
         """
-        return get_service_provider_queryset(request=self.request, service_type="oidc")
+        return get_service_provider_queryset(request=self.request, service_type="oidc").prefetch_related(
+            Prefetch(
+                "spattributes",
+                queryset=SPAttribute.objects.filter(end_at=None).select_related("attribute"),
+                to_attr="sp_attributes",
+            ),
+            Prefetch("contacts", queryset=Contact.objects.filter(end_at=None)),
+            Prefetch("redirecturis", queryset=RedirectUri.objects.filter(end_at=None)),
+            "grant_types",
+            "response_types",
+            "oidc_scopes",
+            "admins",
+            "admin_groups",
+        )
 
     def perform_destroy(self, instance):
         instance.end_at = timezone.now()
@@ -170,7 +201,17 @@ class LdapServiceProviderViewSet(viewsets.ModelViewSet):
         """
         Restricts the returned information to services
         """
-        return get_service_provider_queryset(request=self.request, service_type="ldap")
+        return get_service_provider_queryset(request=self.request, service_type="ldap").prefetch_related(
+            Prefetch(
+                "spattributes",
+                queryset=SPAttribute.objects.filter(end_at=None).select_related("attribute"),
+                to_attr="sp_attributes",
+            ),
+            Prefetch("contacts", queryset=Contact.objects.filter(end_at=None)),
+            Prefetch("usergroups", queryset=UserGroup.objects.filter(end_at=None)),
+            "admins",
+            "admin_groups",
+        )
 
     def perform_destroy(self, instance):
         instance.end_at = timezone.now()

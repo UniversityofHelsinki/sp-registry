@@ -23,7 +23,6 @@ from rr.models.serviceprovider import (
 )
 from rr.models.usergroup import UserGroup
 from rr.serializers.certificate import CertificateLimitedSerializer
-from rr.serializers.common import ActiveListSerializer
 from rr.serializers.contact import ContactLimitedSerializer
 from rr.serializers.endpoint import EndpointLimitedSerializer
 from rr.serializers.redirecturi import RedirectUriLimitedSerializer
@@ -34,9 +33,9 @@ logger = logging.getLogger(__name__)
 
 
 def _update_spattributes(validated_data, instance, user, modified):
-    if "spattribute_set" in validated_data:
-        attributes = validated_data.pop("spattribute_set")
-        removed_attributes = instance.spattribute_set.filter(end_at=None)
+    if "spattributes" in validated_data:
+        attributes = validated_data.pop("spattributes")
+        removed_attributes = [attr for attr in instance.sp_attributes if attr.end_at is None]
         for attribute in attributes:
             if not SPAttribute.objects.filter(sp=instance, attribute=attribute["attribute"], end_at=None).count():
                 modified = True
@@ -46,9 +45,7 @@ def _update_spattributes(validated_data, instance, user, modified):
                         attribute=spattribute.attribute, sp=instance, user=user
                     )
                 )
-                removed_attributes = removed_attributes.exclude(pk=spattribute.pk)
-            else:
-                removed_attributes = removed_attributes.exclude(attribute__friendlyname=attribute["attribute"])
+            removed_attributes = [attr for attr in removed_attributes if attr.attribute != attribute["attribute"]]
         if removed_attributes:
             modified = True
             for attribute in removed_attributes:
@@ -180,13 +177,12 @@ class SPAttributeSerializer(serializers.ModelSerializer):
 class SamlSPAttributeLimitedSerializer(SPAttributeSerializer):
     class Meta:
         model = SPAttribute
-        list_serializer_class = ActiveListSerializer
         fields = ("id", "attribute", "reason", "status")
         read_only_fields = ["status"]
 
 
 class SamlServiceProviderSerializer(serializers.ModelSerializer):
-    attributes = SamlSPAttributeLimitedSerializer(source="spattribute_set", many=True, required=False)
+    attributes = SamlSPAttributeLimitedSerializer(source="spattributes", many=True, required=False)
 
     certificates = CertificateLimitedSerializer(many=True, required=False)
 
@@ -212,6 +208,16 @@ class SamlServiceProviderSerializer(serializers.ModelSerializer):
         validators = [
             UniqueTogetherValidator(queryset=ServiceProvider.objects.filter(end_at=None), fields=["entity_id"])
         ]
+
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+        representation["attributes"] = list(filter(lambda x: x["status"] != "removed", representation["attributes"]))
+        representation["certificates"] = list(
+            filter(lambda x: x["status"] != "removed", representation["certificates"])
+        )
+        representation["contacts"] = list(filter(lambda x: x["status"] != "removed", representation["contacts"]))
+        representation["endpoints"] = list(filter(lambda x: x["status"] != "removed", representation["endpoints"]))
+        return representation
 
     def _get_value(self, data, field):
         if field in data:
@@ -266,7 +272,7 @@ class SamlServiceProviderSerializer(serializers.ModelSerializer):
         user = self.context["request"].user
         admins = validated_data.pop("admins", None)
         admin_groups = validated_data.pop("admin_groups", None)
-        attributes = validated_data.pop("spattribute_set", None)
+        attributes = validated_data.pop("spattributes", None)
         certificates = validated_data.pop("certificates", None)
         contacts = validated_data.pop("contacts", None)
         endpoints = validated_data.pop("endpoints", None)
@@ -320,7 +326,7 @@ class SamlServiceProviderSerializer(serializers.ModelSerializer):
 
         if changed_data:
             if instance.validated:
-                create_sp_history_copy(instance.pk)
+                create_sp_history_copy(ServiceProvider.objects.get(pk=instance.pk))
             instance.validated = None
             modified = True
 
@@ -347,13 +353,12 @@ class SamlServiceProviderSerializer(serializers.ModelSerializer):
 class OidcSPAttributeLimitedSerializer(SPAttributeSerializer):
     class Meta:
         model = SPAttribute
-        list_serializer_class = ActiveListSerializer
         fields = ("id", "attribute", "oidc_userinfo", "oidc_id_token", "reason", "status")
         read_only_fields = ["status"]
 
 
 class OidcServiceProviderSerializer(serializers.ModelSerializer):
-    attributes = OidcSPAttributeLimitedSerializer(source="spattribute_set", many=True, required=False)
+    attributes = OidcSPAttributeLimitedSerializer(source="spattributes", many=True, required=False)
 
     contacts = ContactLimitedSerializer(many=True, required=False)
 
@@ -385,6 +390,15 @@ class OidcServiceProviderSerializer(serializers.ModelSerializer):
         validators = [
             UniqueTogetherValidator(queryset=ServiceProvider.objects.filter(end_at=None), fields=["entity_id"])
         ]
+
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+        representation["attributes"] = list(filter(lambda x: x["status"] != "removed", representation["attributes"]))
+        representation["contacts"] = list(filter(lambda x: x["status"] != "removed", representation["contacts"]))
+        representation["redirecturis"] = list(
+            filter(lambda x: x["status"] != "removed", representation["redirecturis"])
+        )
+        return representation
 
     def _get_value(self, data, field):
         if field in data:
@@ -424,7 +438,7 @@ class OidcServiceProviderSerializer(serializers.ModelSerializer):
         user = self.context["request"].user
         admins = validated_data.pop("admins", None)
         admin_groups = validated_data.pop("admin_groups", None)
-        attributes = validated_data.pop("spattribute_set", None)
+        attributes = validated_data.pop("spattributes", None)
         contacts = validated_data.pop("contacts", None)
         grant_types = validated_data.pop("grant_types", None)
         oidc_scopes = validated_data.pop("oidc_scopes", None)
@@ -478,7 +492,7 @@ class OidcServiceProviderSerializer(serializers.ModelSerializer):
 
         if changed_data:
             if instance.validated:
-                create_sp_history_copy(instance.pk)
+                create_sp_history_copy(ServiceProvider.objects.get(pk=instance.pk))
             instance.validated = None
             modified = True
 
@@ -509,13 +523,12 @@ class OidcServiceProviderSerializer(serializers.ModelSerializer):
 class LdapSPAttributeLimitedSerializer(SPAttributeSerializer):
     class Meta:
         model = SPAttribute
-        list_serializer_class = ActiveListSerializer
         fields = ("id", "attribute", "reason", "status")
         read_only_fields = ["status"]
 
 
 class LdapServiceProviderSerializer(serializers.ModelSerializer):
-    attributes = LdapSPAttributeLimitedSerializer(source="spattribute_set", many=True, required=False)
+    attributes = LdapSPAttributeLimitedSerializer(source="spattributes", many=True, required=False)
 
     contacts = ContactLimitedSerializer(many=True, required=False)
 
@@ -534,6 +547,13 @@ class LdapServiceProviderSerializer(serializers.ModelSerializer):
         model = ServiceProvider
         fields = ["id"] + get_field_names(["basic", "ldap", "basic_linked", "ldap_linked", "meta"])
         read_only_fields = get_field_names("meta")
+
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+        representation["attributes"] = list(filter(lambda x: x["status"] != "removed", representation["attributes"]))
+        representation["contacts"] = list(filter(lambda x: x["status"] != "removed", representation["contacts"]))
+        representation["usergroups"] = list(filter(lambda x: x["status"] != "removed", representation["usergroups"]))
+        return representation
 
     def _get_value(self, data, field):
         if field in data:
@@ -571,7 +591,7 @@ class LdapServiceProviderSerializer(serializers.ModelSerializer):
         user = self.context["request"].user
         admins = validated_data.pop("admins", None)
         admin_groups = validated_data.pop("admin_groups", None)
-        attributes = validated_data.pop("spattribute_set", None)
+        attributes = validated_data.pop("spattributes", None)
         contacts = validated_data.pop("contacts", None)
         usergroups = validated_data.pop("usergroups", None)
         name_fi = validated_data["name_fi"]
@@ -617,7 +637,7 @@ class LdapServiceProviderSerializer(serializers.ModelSerializer):
 
         if changed_data:
             if instance.validated:
-                create_sp_history_copy(instance.pk)
+                create_sp_history_copy(ServiceProvider.objects.get(pk=instance.pk))
             instance.validated = None
             modified = True
 

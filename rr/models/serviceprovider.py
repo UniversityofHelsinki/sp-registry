@@ -483,8 +483,8 @@ class SPAttribute(models.Model):
     and :model:`rr.Attribute`
     """
 
-    attribute = models.ForeignKey(Attribute, on_delete=models.CASCADE)
-    sp = models.ForeignKey(ServiceProvider, on_delete=models.CASCADE)
+    attribute = models.ForeignKey(Attribute, related_name="spattributes", on_delete=models.CASCADE)
+    sp = models.ForeignKey(ServiceProvider, related_name="spattributes", on_delete=models.CASCADE)
     reason = models.CharField(max_length=255, verbose_name=_("Reason for the attribute requisition"))
     oidc_userinfo = models.BooleanField(default=False, verbose_name=_("Release from the userinfo endpoint"))
     oidc_id_token = models.BooleanField(default=False, verbose_name=_("Release in the ID Token"))

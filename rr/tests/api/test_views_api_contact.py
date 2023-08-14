@@ -95,9 +95,26 @@ class ContactTestCase(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_contact_delete_with_user(self):
+        response = self._test_list(user=self.user)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(response.data["results"]), 1)
         response = self._test_delete(user=self.user, pk=self.object.pk)
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         self.assertIsNotNone(Contact.objects.get(pk=self.object.pk).end_at)
+        response = self._test_list(user=self.user)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(response.data["results"]), 0)
+
+    def test_contact_delete_with_superuser(self):
+        response = self._test_list(user=self.superuser)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(response.data["results"]), 2)
+        response = self._test_delete(user=self.superuser, pk=self.superuser_object.pk)
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+        self.assertIsNotNone(Contact.objects.get(pk=self.superuser_object.pk).end_at)
+        response = self._test_list(user=self.superuser)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(response.data["results"]), 1)
 
     def test_contact_delete_with_user_without_permission(self):
         response = self._test_delete(user=self.user, pk=self.superuser_object.pk)

@@ -4,7 +4,6 @@ from rest_framework import serializers
 from rest_framework.validators import UniqueTogetherValidator
 
 from rr.models.endpoint import Endpoint, endpoint_validator
-from rr.serializers.common import ActiveListSerializer
 
 logger = logging.getLogger(__name__)
 
@@ -54,7 +53,6 @@ class EndpointSerializer(serializers.ModelSerializer):
 
 class EndpointLimitedSerializer(serializers.ModelSerializer):
     class Meta:
-        list_serializer_class = ActiveListSerializer
         model = Endpoint
         fields = ["id", "type", "binding", "location", "response_location", "index", "is_default", "status"]
         read_only_fields = ["status"]

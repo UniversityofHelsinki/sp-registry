@@ -5,7 +5,6 @@ from rest_framework import serializers
 from rest_framework.validators import UniqueTogetherValidator
 
 from rr.models.usergroup import UserGroup
-from rr.serializers.common import ActiveListSerializer
 
 logger = logging.getLogger(__name__)
 
@@ -34,7 +33,6 @@ class UserGroupSerializer(serializers.ModelSerializer):
 
 class UserGroupLimitedSerializer(serializers.ModelSerializer):
     class Meta:
-        list_serializer_class = ActiveListSerializer
         model = UserGroup
         fields = ["id", "name", "status"]
         read_only_fields = ["status"]

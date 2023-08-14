@@ -1,4 +1,10 @@
 # Changelog
+## [2.2.0] - 2023-xx-xx
+### Changes
+* DB query optimizations using prefetch_related and select_related
+* Requirements version updates
+* Change yes/no icons to use django admin images
+
 ## [2.1.0] - 2023-07-06
 ### Changes
 * Changed drf-yasg to drf-spectacular and support CoreAPI 3.0 

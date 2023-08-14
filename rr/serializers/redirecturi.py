@@ -4,7 +4,6 @@ from rest_framework import serializers
 from rest_framework.validators import UniqueTogetherValidator
 
 from rr.models.redirecturi import RedirectUri, redirecturi_validator
-from rr.serializers.common import ActiveListSerializer
 
 logger = logging.getLogger(__name__)
 
@@ -32,7 +31,6 @@ class RedirectUriSerializer(serializers.ModelSerializer):
 
 class RedirectUriLimitedSerializer(serializers.ModelSerializer):
     class Meta:
-        list_serializer_class = ActiveListSerializer
         model = RedirectUri
         fields = ["id", "uri", "status"]
         read_only_fields = ["status"]

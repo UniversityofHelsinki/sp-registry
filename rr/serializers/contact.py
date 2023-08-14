@@ -4,7 +4,6 @@ from rest_framework import serializers
 from rest_framework.validators import UniqueTogetherValidator
 
 from rr.models.contact import Contact
-from rr.serializers.common import ActiveListSerializer
 
 logger = logging.getLogger(__name__)
 
@@ -42,7 +41,6 @@ class ContactSerializer(serializers.ModelSerializer):
 
 class ContactLimitedSerializer(serializers.ModelSerializer):
     class Meta:
-        list_serializer_class = ActiveListSerializer
         model = Contact
         fields = ["id", "type", "firstname", "lastname", "email", "status"]
         read_only_fields = ["status"]

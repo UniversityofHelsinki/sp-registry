@@ -186,6 +186,4 @@ def oidc_metadata_generator_list(
             sp_metadata = oidc_metadata_generator(sp, validated, privacypolicy, client_secret_encryption)
             if sp_metadata:
                 metadata.append(sp_metadata)
-            else:
-                return None
     return metadata

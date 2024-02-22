@@ -1,45 +1,118 @@
+image: python:3.10
+
+cache:
+  paths:
+    - .cache/pip
+  key: pip
+
 stages:
+  - lint
   - test
-  - osv-scanner
+  - dependency-check
+  - sonarqube-check
+
+.script_template_venv:
+  before_script:
+    - python -V
+    - pip install virtualenv
+    - virtualenv venv
+    - source venv/bin/activate
+    - pip install -r requirements_dev.txt
+
+.script_template_venv_with_gecko:
+  before_script:
+    - apt update && apt install -y firefox-esr
+    - curl -fL -o /tmp/geckodriver.tar.gz https://github.com/mozilla/geckodriver/releases/download/v0.31.0/geckodriver-v0.31.0-linux64.tar.gz
+    - tar -xzf /tmp/geckodriver.tar.gz -C /tmp/ && chmod +x /tmp/geckodriver && mv /tmp/geckodriver /usr/local/bin/
+    - python -V
+    - pip install virtualenv
+    - virtualenv venv
+    - source venv/bin/activate
+    - pip install -r requirements_dev.txt
 
 tests:
-  rules:
-    - if: $CI_PIPELINE_SOURCE != "schedule"
-
-  image: python:3.8
-
+  stage: test
   variables:
     PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
-
   cache:
     paths:
       - .cache/pip
       - venv/
-
-  before_script:
-    - python -V
-    - apt update && apt install -y firefox-esr
-    - curl -fL -o /tmp/geckodriver.tar.gz https://github.com/mozilla/geckodriver/releases/download/v0.31.0/geckodriver-v0.31.0-linux64.tar.gz
-    - tar -xzf /tmp/geckodriver.tar.gz -C /tmp/ && chmod +x /tmp/geckodriver && mv /tmp/geckodriver /usr/local/bin/
-    - pip install virtualenv
-    - virtualenv venv
-    - source venv/bin/activate
+  extends: .script_template_venv_with_gecko
   script:
-    - pip install -r requirements/development.txt
     - COVERAGE_FILE=.coverage.unit coverage run ./manage.py test --settings=settings.test
     - COVERAGE_FILE=.coverage.integration coverage run ./manage.py behave --settings=settings.test
     - coverage combine
     - coverage xml
   artifacts:
     expire_in: 2 days
-    reports:
-      coverage_report:
-        coverage_format: cobertura
-        path: coverage.xml
+    paths:
+      - coverage.xml
+  needs: []
 
-osv-scanner:
-  image: golang:latest
+black:
+  stage: lint
+  extends: .script_template_venv
   script:
-    - go install github.com/google/osv-scanner/cmd/osv-scanner@v1
-    - osv-scanner --version
-    - osv-scanner --lockfile 'requirements.txt:requirements/production.txt'
+    - black . --check
+  needs: []
+
+isort:
+  stage: lint
+  extends: .script_template_venv
+  script:
+    - isort . --check
+  needs: []
+
+sonarqube-check:
+  stage: sonarqube-check
+  image:
+    name: sonarsource/sonar-scanner-cli:latest
+    entrypoint: [""]
+  variables:
+    SONAR_USER_HOME: "${CI_PROJECT_DIR}/.sonar"
+    GIT_DEPTH: "0"
+  cache:
+    key: "${CI_JOB_NAME}"
+    paths:
+      - .sonar/cache
+  before_script:
+    - ''
+  script:
+    - >
+      sonar-scanner
+      -Dsonar.qualitygate.wait=true
+      -Dsonar.host.url=${CI_SONAR_HOST}
+      -Dsonar.token=${CI_SONAR_TOKEN}
+      -Dsonar.dependencyCheck.jsonReportPath=dependency-check-report.json
+      -Dsonar.dependencyCheck.htmlReportPath=dependency-check-report.html
+      -Dsonar.dependencyCheck.severity.high=7.0
+      -Dsonar.dependencyCheck.severity.medium=4.0
+      -Dsonar.dependencyCheck.severity.low=0.0
+  allow_failure: true
+  needs:
+    - job: tests
+      artifacts: true
+    - job: dependency-check
+      artifacts: true
+
+dependency-check:
+  stage: dependency-check
+  image:
+    name: owasp/dependency-check-action:latest
+    entrypoint: [""]
+  before_script:
+    - apt update && apt install -y python3
+  script:
+    - >
+      /usr/share/dependency-check/bin/dependency-check.sh
+      --project Kamu --scan . --enableExperimental
+      --format HTML --format JSON
+  allow_failure: true
+  artifacts:
+    when: always
+    expire_in: 1 week
+    paths:
+      - dependency-check-report.html
+      - dependency-check-report.json
+  needs: []

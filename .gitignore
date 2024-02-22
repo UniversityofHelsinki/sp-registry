@@ -88,3 +88,7 @@ venv.bak/
 # SonarQube
 .scannerwork
 coverage-reports
+
+# Dependency Check
+dependency-check-report.html
+dependency-check-report.json

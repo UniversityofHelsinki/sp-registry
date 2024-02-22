@@ -1,5 +1,6 @@
 from .common import *
 from .local_settings_example import *
+from .logging import LOGGING
 
 DEBUG = True
 
@@ -14,3 +15,5 @@ DATABASES = {
         "ENGINE": "django.db.backends.sqlite3",
     }
 }
+
+LOGGING["loggers"]["django.request"] = {"level": "ERROR"}

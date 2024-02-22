@@ -94,7 +94,7 @@
 
   - name: sp-registry | Install virtual env and requirements
     pip: 
-      requirements: "{{ spregistry_install_dir }}/sp-registry/requirements/development.txt"
+      requirements: "{{ spregistry_install_dir }}/sp-registry/requirements/requirements_dev.txt"
       virtualenv: "{{ spregistry_install_dir }}/venv"
       virtualenv_command: /usr/bin/python3 -m venv
     become_user: "{{ spregistry_install_user }}"

@@ -170,7 +170,7 @@ Steps for creating development environment.
 2. cmd: cd sp-registry
 3. cmd: python3 -m venv venv
 4. cmd: source venv/bin/activate
-5. cmd: pip install -r requirements/development.txt
+5. cmd: pip install -r requirements_dev.txt
    * Requires dev libraries for Python and MySQL/MariaDB for compiling Python mysqlclient.
 6. cmd: cp settings/local_settings_example.py settings/local_settings.py
 7. Create mysql database, test database and user

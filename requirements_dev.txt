@@ -2,9 +2,9 @@
 -r requirements.txt
 behave-django==1.4.0
 black==23.7.0
-coverage==7.3.0
+coverage==7.4.3
 factory-boy==3.3.0
-Faker==19.3.0
-isort==5.12.0
-selenium==4.11.2
-splinter==0.19.0
+Faker==23.2.1
+isort==5.13.2
+selenium==4.18.1
+splinter==0.21.0

@@ -1,5 +1,6 @@
 import logging
 
+from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
@@ -51,15 +52,20 @@ def endpoint_list(request, pk):
 def _add_endpoint(request, sp):
     form = EndpointForm(request.POST, sp=sp)
     if form.is_valid():
-        contact_type = form.cleaned_data["type"]
+        endpoint_type = form.cleaned_data["type"]
         binding = form.cleaned_data["binding"]
         location = form.cleaned_data["location"]
         response_location = form.cleaned_data["response_location"]
-        index = form.cleaned_data["index"]
-        is_default = form.cleaned_data["is_default"]
+        indexed_endpoints = settings.INDEXED_ENDPOINT_TYPES
+        if endpoint_type in indexed_endpoints:
+            index = form.cleaned_data["index"]
+            is_default = form.cleaned_data["is_default"]
+        else:
+            index = None
+            is_default = False
         Endpoint.objects.create(
             sp=sp,
-            type=contact_type,
+            type=endpoint_type,
             binding=binding,
             location=location,
             response_location=response_location,

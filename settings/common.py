@@ -135,3 +135,5 @@ BOOTSTRAP5 = {
 }
 
 DEFAULT_AUTO_FIELD = "django.db.models.AutoField"
+
+INDEXED_ENDPOINT_TYPES = ["ArtifactResolutionService", "AssertionConsumerService"]

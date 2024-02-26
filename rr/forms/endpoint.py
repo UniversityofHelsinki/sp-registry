@@ -11,8 +11,12 @@ class EndpointForm(ModelForm):
         fields = ["type", "binding", "location", "response_location", "index", "is_default"]
         help_texts = {
             "response_location": _("Almost never used, leave empty if you do not know for sure."),
-            "index": _("Usually not used and is safe to leave empty."),
-            "is_default": _("Usually not used and is safe to leave empty."),
+            "index": _(
+                "Usually not used and is safe to leave empty. Only used for AssertionConsumerService and ArtifactResolutionService."
+            ),
+            "is_default": _(
+                "Usually not used and is safe to leave empty. Only used for AssertionConsumerService and ArtifactResolutionService."
+            ),
         }
 
     def __init__(self, *args, **kwargs):

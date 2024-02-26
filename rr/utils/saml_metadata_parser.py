@@ -1,6 +1,7 @@
 """
 Functions for genereating metadata of service providers
 """
+
 import logging
 
 from cryptography.hazmat.primitives.serialization import Encoding

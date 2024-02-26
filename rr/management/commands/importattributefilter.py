@@ -4,6 +4,7 @@ Import metadata first as this imports attributes only if entityID is found from 
 
 Usage help: ./manage.py cleandb -h
 """
+
 from django.core.management.base import BaseCommand
 from django.utils import timezone
 from lxml import etree

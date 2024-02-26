@@ -1,6 +1,7 @@
 """
 Email notifications
 """
+
 import logging
 from smtplib import SMTPException
 

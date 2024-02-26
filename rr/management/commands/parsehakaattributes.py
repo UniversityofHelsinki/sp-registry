@@ -4,6 +4,7 @@ Short term manual hack for IdP 2 as Haka stopped releasing attribute-filter file
 
 Usage help: ./manage.py cleandb -h
 """
+
 from django.core.management.base import BaseCommand
 from lxml import etree
 
@@ -65,9 +66,9 @@ def haka_attribute_parser(filename):
                         policy_requirement_rule = etree.SubElement(
                             attribute_filter_policy, "PolicyRequirementRule", value=entity_id
                         )
-                        policy_requirement_rule.attrib[
-                            "{http://www.w3.org/2001/XMLSchema-instance}type"
-                        ] = "basic:AttributeRequesterString"
+                        policy_requirement_rule.attrib["{http://www.w3.org/2001/XMLSchema-instance}type"] = (
+                            "basic:AttributeRequesterString"
+                        )
                         for attribute in attributes:
                             attribute_rule = etree.SubElement(
                                 attribute_filter_policy, "AttributeRule", attributeID=attribute.attributeid

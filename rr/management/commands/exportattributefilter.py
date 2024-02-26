@@ -62,9 +62,9 @@ class Command(BaseCommand):
                     policy_requirement_rule = etree.SubElement(
                         attribute_filter_policy, "PolicyRequirementRule", value=sp.entity_id
                     )
-                    policy_requirement_rule.attrib[
-                        "{http://www.w3.org/2001/XMLSchema-instance}type"
-                    ] = "basic:AttributeRequesterString"
+                    policy_requirement_rule.attrib["{http://www.w3.org/2001/XMLSchema-instance}type"] = (
+                        "basic:AttributeRequesterString"
+                    )
                     for attribute in attributes:
                         attribute_rule = etree.SubElement(
                             attribute_filter_policy, "AttributeRule", attributeID=attribute.attribute.attributeid

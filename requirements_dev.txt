@@ -1,7 +1,7 @@
 # Requirements for develepment/testing environment
 -r requirements.txt
 behave-django==1.4.0
-black==23.7.0
+black==24.2.0
 coverage==7.4.3
 factory-boy==3.3.0
 Faker==23.2.1

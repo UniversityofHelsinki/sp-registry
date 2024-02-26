@@ -3,6 +3,7 @@ Remove historic data from database
 
 Usage help: ./manage.py cleandb -h
 """
+
 import logging
 
 from dateutil.relativedelta import relativedelta

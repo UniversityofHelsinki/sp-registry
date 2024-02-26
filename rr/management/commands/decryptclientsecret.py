@@ -3,6 +3,7 @@ Command line script for decrypting client_secrets in JSON metadata file.
 
 Usage help: ./manage.py decryptclientsecret -h
 """
+
 import json
 from argparse import FileType
 from sys import stdin, stdout

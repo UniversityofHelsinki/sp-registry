@@ -3,6 +3,7 @@ Command line script for importing old CSV file for LDAP services
 
 Usage help: ./manage.py importoldldapcsv -h
 """
+
 import csv
 
 from django.core.management.base import BaseCommand

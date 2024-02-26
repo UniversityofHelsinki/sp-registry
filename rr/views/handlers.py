@@ -1,6 +1,7 @@
 """"
 Custom handlers for status pages
 """
+
 import logging
 
 from django.shortcuts import render

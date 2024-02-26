@@ -3,6 +3,7 @@ Command line script for importing metadata.xml
 
 Usage help: ./manage.py cleandb -h
 """
+
 from django.core.management.base import BaseCommand
 from lxml import etree
 

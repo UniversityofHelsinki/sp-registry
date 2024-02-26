@@ -3,6 +3,7 @@ Command line script for importing metadata.xml
 
 Usage help: ./manage.py importstatistics -h
 """
+
 from datetime import date, timedelta
 
 import MySQLdb

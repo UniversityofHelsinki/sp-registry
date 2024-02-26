@@ -3,6 +3,7 @@ Check that addresses are found in DNS
 
 Usage help: ./manage.py nslookup
 """
+
 import logging
 from urllib.parse import urlparse
 

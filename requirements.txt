@@ -1,6 +1,6 @@
 # Common requirements
 cryptography==42.0.5
-Django==4.2.10
+Django==4.2.11
 django-bootstrap5==23.3
 django-filter==23.5
 djangorestframework==3.14

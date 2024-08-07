@@ -1,6 +1,5 @@
 from datetime import timedelta
 
-import pytz
 from cryptography import x509
 from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives.serialization import Encoding
@@ -70,8 +69,8 @@ class CertificateManager(models.Manager):
             issuer = ""
         except IndexError:
             issuer = ""
-        valid_from = cert.not_valid_before
-        valid_until = cert.not_valid_after
+        valid_from = cert.not_valid_before_utc
+        valid_until = cert.not_valid_after_utc
         key_size = cert.public_key().key_size
         if validate:
             validated = timezone.now()
@@ -82,8 +81,8 @@ class CertificateManager(models.Manager):
                 sp=sp,
                 cn=cn,
                 issuer=issuer,
-                valid_from=pytz.utc.localize(valid_from),
-                valid_until=pytz.utc.localize(valid_until),
+                valid_from=valid_from,
+                valid_until=valid_until,
                 key_size=key_size,
                 certificate=cert.public_bytes(Encoding.PEM)
                 .decode("utf-8")

@@ -31,25 +31,25 @@ def metadata_parser_uiinfo(sp, element):
     for child in element:
         if etree.QName(child.tag).localname == "DisplayName":
             if child.values()[0] == "fi" and child.text:
-                sp.name_fi = child.text
+                sp.name_fi = child.text[:140]
             elif child.values()[0] == "en" and child.text:
-                sp.name_en = child.text
+                sp.name_en = child.text[:140]
             elif child.values()[0] == "sv" and child.text:
-                sp.name_sv = child.text
+                sp.name_sv = child.text[:140]
         if etree.QName(child.tag).localname == "Description":
             if child.values()[0] == "fi" and child.text:
-                sp.description_fi = child.text
+                sp.description_fi = child.text[:140]
             elif child.values()[0] == "en" and child.text:
-                sp.description_en = child.text
+                sp.description_en = child.text[:140]
             elif child.values()[0] == "sv" and child.text:
-                sp.description_sv = child.text
+                sp.description_sv = child.text[:140]
         if etree.QName(child.tag).localname == "PrivacyStatementURL":
             if child.values()[0] == "fi" and child.text:
-                sp.privacypolicy_fi = child.text
+                sp.privacypolicy_fi = child.text[:255]
             elif child.values()[0] == "en" and child.text:
-                sp.privacypolicy_en = child.text
+                sp.privacypolicy_en = child.text[:255]
             elif child.values()[0] == "sv" and child.text:
-                sp.privacypolicy_sv = child.text
+                sp.privacypolicy_sv = child.text[:255]
 
 
 def metadata_parser_requestinitiator(sp, element):
@@ -283,18 +283,18 @@ def metadata_parser_attributeconsumingservice(sp, element, validate, errors):
             errors = _parse_attribute(sp, child, validate, errors)
         if etree.QName(child.tag).localname == "ServiceName":
             if child.values()[0] == "fi" and child.text:
-                sp.name_fi = child.text
+                sp.name_fi = child.text[:140]
             elif child.values()[0] == "en" and child.text:
-                sp.name_en = child.text
+                sp.name_en = child.text[:140]
             elif child.values()[0] == "sv" and child.text:
-                sp.name_sv = child.text
+                sp.name_sv = child.text[:140]
         if etree.QName(child.tag).localname == "ServiceDescription":
             if child.values()[0] == "fi" and child.text:
-                sp.description_fi = child.text
+                sp.description_fi = child.text[:140]
             elif child.values()[0] == "en" and child.text:
-                sp.description_en = child.text
+                sp.description_en = child.text[:140]
             elif child.values()[0] == "sv" and child.text:
-                sp.description_sv = child.text
+                sp.description_sv = child.text[:140]
 
 
 def _parse_attribute(sp, element, validate, errors):

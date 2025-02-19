@@ -147,6 +147,15 @@ def metadata_entity_extensions(element, sp):
         )
         attribute_value = etree.SubElement(attribute, "{urn:oasis:names:tc:SAML:2.0:assertion}AttributeValue")
         attribute_value.text = sp.nameidformat.all()[0].nameidformat
+    if sp.saml_subject_identifier and sp.saml_subject_identifier != "none":
+        attribute = etree.SubElement(
+            entity_attributes,
+            "{urn:oasis:names:tc:SAML:2.0:assertion}Attribute",
+            Name="urn:oasis:names:tc:SAML:profiles:subject-id:req",
+            NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri",
+        )
+        attribute_value = etree.SubElement(attribute, "{urn:oasis:names:tc:SAML:2.0:assertion}AttributeValue")
+        attribute_value.text = sp.saml_subject_identifier
     if len(entity_attributes) == 0:
         extensions.remove(entity_attributes)
         element.remove(extensions)

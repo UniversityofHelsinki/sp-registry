@@ -130,6 +130,7 @@ class SamlTechnicalInformationForm(ModelForm):
             "sign_requests",
             "sign_responses",
             "encrypt_assertions",
+            "saml_subject_identifier",
             "force_mfa",
             "force_sha1",
             "force_nameidformat",

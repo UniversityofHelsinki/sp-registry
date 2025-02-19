@@ -60,6 +60,7 @@ class MetadataParserGenerationTestCase(TestCase):
         self.assertEqual(self.sp.sign_responses, False)
         self.assertEqual(self.sp.sign_requests, True)
         self.assertEqual(self.sp.sign_assertions, True)
+        self.assertEqual(self.sp.saml_subject_identifier, "pairwise-id")
         self.assertEqual(self.sp.nameidformat.all().count(), 1)
         self.assertEqual(self.sp.discovery_service_url, "https://sp.example.org/Shibboleth.sso/DS")
         self.assertEqual(self.sp.login_page_url, "https://sp.example.org/Shibboleth.sso/Login")

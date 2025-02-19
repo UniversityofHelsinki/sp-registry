@@ -22,6 +22,9 @@
       <saml:Attribute Name="http://shibboleth.net/ns/profiles/nameIDFormatPrecedence" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri">
         <saml:AttributeValue>urn:oasis:names:tc:SAML:2.0:nameid-format:transient</saml:AttributeValue>
       </saml:Attribute>
+      <saml:Attribute Name="urn:oasis:names:tc:SAML:profiles:subject-id:req" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri">
+        <saml:AttributeValue>pairwise-id</saml:AttributeValue>
+      </saml:Attribute>
     </mdattr:EntityAttributes>
   </Extensions>
   <SPSSODescriptor WantAssertionsSigned="true" AuthnRequestsSigned="true" protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol">

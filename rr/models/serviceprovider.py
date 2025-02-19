@@ -47,6 +47,7 @@ SAML_TECHNICAL_FIELDS = [
     "sign_requests",
     "sign_responses",
     "encrypt_assertions",
+    "saml_subject_identifier",
     "force_mfa",
     "force_sha1",
     "force_nameidformat",
@@ -235,6 +236,16 @@ class ServiceProvider(models.Model):
     SUBJECTIDENTIFIERS = (("public", _("public")), ("pairwise", _("pairwise")))
     subject_identifier = models.CharField(
         blank=True, max_length=8, choices=SUBJECTIDENTIFIERS, verbose_name=_("Subject identifier")
+    )
+
+    SAML_SUBJECTIDENTIFIERS = (
+        ("none", _("none")),
+        ("any", _("any")),
+        ("pairwise-id", _("pairwise-id")),
+        ("subject-id", _("subject-id")),
+    )
+    saml_subject_identifier = models.CharField(
+        default="none", max_length=11, choices=SAML_SUBJECTIDENTIFIERS, verbose_name=_("Subject identifier")
     )
 
     TOKENENDPOINTAUTHMETHODS = (

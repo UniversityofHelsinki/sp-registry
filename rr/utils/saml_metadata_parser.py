@@ -119,6 +119,8 @@ def metadata_parser_entityattributes(sp, element):
                 and child[0].text == "shibboleth.SecurityConfiguration.SHA1"
             ):
                 sp.force_sha1 = True
+            if child.get("Name") == "urn:oasis:names:tc:SAML:profiles:subject-id:req":
+                sp.saml_subject_identifier = child[0].text
 
 
 def metadata_parser_extensions(sp, element):

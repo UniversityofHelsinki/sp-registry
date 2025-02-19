@@ -408,7 +408,7 @@ class OidcServiceProviderSerializer(serializers.ModelSerializer):
         return None
 
     def validate_entity_id(self, value):
-        test = re.compile("^[a-zA-Z0-9.]+$")
+        test = re.compile(r"^[a-zA-Z0-9.]+$")
         if not test.match(value):
             raise serializers.ValidationError(_("Only letters, numbers and a dot allowed."))
         return value

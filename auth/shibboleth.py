@@ -60,7 +60,7 @@ class ShibbolethBackend:
         email = request.META.get(settings.SAML_ATTR_EMAIL, "")
         affiliations = request.META.get(settings.SAML_ATTR_AFFILIATION, "").split(";")
         groups = request.META.get(settings.SAML_ATTR_GROUPS, "").split(";")
-        if username and re.match("[^@]+@[^@]+\.[^@]+", username):
+        if username and re.match(r"[^@]+@[^@]+\.[^@]+", username):
             try:
                 user = User.objects.get(username=username)
                 update_groups(user, groups)

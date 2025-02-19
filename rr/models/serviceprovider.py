@@ -134,8 +134,8 @@ def server_names_validator(server_names, error):
     """
     server_names_list = server_names.splitlines()
     pattern = re.compile(
-        "^(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\-]*[a-zA-Z0-9])\.)*"
-        "([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9\-]*[A-Za-z0-9])$"
+        r"^(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\-]*[a-zA-Z0-9])\.)*"
+        r"([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9\-]*[A-Za-z0-9])$"
     )
     for server_name in server_names_list:
         if not pattern.match(server_name):
@@ -535,7 +535,7 @@ def ldap_entity_id_from_name(horribleunicodestring):
     s = s.decode()
     s = re.sub(r"\.helsinki\.fi$", "", s)
     s = re.sub(r"[./|]", "_", s)
-    s = re.sub(r"[^a-zA-Z0-9_]", "", s)
+    s = re.sub(r"[\W]", "", s)
     s = s.lower()
 
     return s

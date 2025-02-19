@@ -120,7 +120,7 @@ class TestUserDataForm(Form):
             values = data.split(";")
             attribute = Attribute.objects.filter(friendlyname=field).first()
             if attribute.scoped:
-                scoped_test = re.compile("^[^@\s]+@[^@\s]+$")
+                scoped_test = re.compile(r"^[^@\s]+@[^@\s]+$")
                 for value in values:
                     if not scoped_test.match(value):
                         raise ValidationError({field: [_("Value must be scoped")]})

@@ -6,7 +6,7 @@ from django.conf import settings
 from rr.models.serviceprovider import ServiceProvider
 
 register = template.Library()
-numeric_test = re.compile("^\d+$")
+numeric_test = re.compile(r"^\d+$")
 
 
 @register.filter

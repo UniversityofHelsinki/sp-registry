@@ -323,11 +323,11 @@ class LdapTechnicalInformationForm(ModelForm):
         Check service account contact format
         """
         service_account_contact = self.cleaned_data["service_account_contact"]
-        pattern = re.compile("^($|[-a-z.]+@helsinki.fi 0[0-9]+)", re.I)
+        pattern = re.compile(r"^($|[-a-z.]+@helsinki.fi 0\d+)", re.I)
         if not self.request.user.is_superuser and not pattern.match(service_account_contact):
             raise ValidationError(_("Invalid service account contact."))
         if self.request.user.is_superuser:
-            pattern = re.compile("^($|[-a-z.]+@[-a-z.]+ 0[0-9]+)", re.I)
+            pattern = re.compile(r"^($|[-a-z.]+@[-a-z.]+ 0\d+)", re.I)
             if not pattern.match(service_account_contact):
                 raise ValidationError(_("Invalid service account contact."))
         return service_account_contact
@@ -643,8 +643,8 @@ class LdapServiceProviderCreateForm(ModelForm):
         server_names = self.cleaned_data["server_names"]
         server_names_list = server_names.splitlines()
         pattern = re.compile(
-            "^(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\-]*[a-zA-Z0-9])\.)*"
-            "([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9\-]*[A-Za-z0-9])$"
+            r"^(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\-]*[a-zA-Z0-9])\.)*"
+            r"([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9\-]*[A-Za-z0-9])$"
         )
         for server_name in server_names_list:
             if not pattern.match(server_name):

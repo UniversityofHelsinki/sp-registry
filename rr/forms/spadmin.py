@@ -43,7 +43,7 @@ class SPAdminGroupForm(Form):
             raise ValidationError(_("Minimum length 6 characters."))
         if len(group) > 32:
             raise ValidationError(_("Maximum length 32 characters."))
-        pattern = re.compile("^([a-z0-9])([a-z0-9-])*([a-z0-9])$")
+        pattern = re.compile(r"^([a-z0-9])([a-z0-9-])*([a-z0-9])$")
         if not pattern.match(group):
             raise ValidationError(_("Invalid characters in group name."))
         return group

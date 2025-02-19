@@ -27,8 +27,8 @@ def before_scenario(context, scenario):
 def after_step(context, step):
     if step.status == "failed":
         directory = settings.TEST_SCREENSHOT_DIR
-        scenario = re.sub("\W+", "", context.scenario.name)
-        step = re.sub("\W+", "", step.name)
+        scenario = re.sub(r"\W+", "", context.scenario.name)
+        step = re.sub(r"\W+", "", step.name)
         if not os.path.exists(directory):
             os.makedirs(directory)
         with open(directory + scenario + " " + step + ".html", "w") as f:

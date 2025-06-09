@@ -1,10 +1,10 @@
 # Requirements for develepment/testing environment
 -r requirements.txt
-behave-django==1.4.0
-black==24.8.0
-coverage==7.6.1
-factory-boy==3.3.0
-Faker==26.1.0
-isort==5.13.2
-selenium==4.23.1
+behave-django==1.5.0
+black==25.1.0
+coverage==7.8.2
+factory-boy==3.3.3
+Faker==37.3.0
+isort==6.0.1
+selenium==4.33.0
 splinter==0.21.0

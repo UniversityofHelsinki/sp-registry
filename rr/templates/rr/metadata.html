@@ -7,12 +7,12 @@
     <div class="alert alert-success" role="alert">
       {% trans "Displaying validated metadata. This is used for production IdP." %}
     </div>
-    <p><a class="btn btn-info" href="{{ request.path }}?validated=false" role="button">{% trans "Show unvalidated" %}</a></p>
+    <p><a href="{{ request.path }}?validated=false"><button type="button" class="btn btn-info">{% trans "Show unvalidated" %}</button></a></p>
   {% else %}
     <div class="alert alert-danger" role="alert">
       {% trans "Displaying unvalidated metadata. This is used for test IdP." %}
     </div>
-    <p><a class="btn btn-info" href="{{ request.path }}?validated=true" role="button">{% trans "Show validated" %}</a></p>
+    <p><a href="{{ request.path }}?validated=true"><button type="button" class="btn btn-info">{% trans "Show validated" %}</button></a></p>
   {% endif %}
   <pre><code>
 {% if metadata %}{{ metadata }}{% else %}{% trans "Could not find metadata" %}{% endif %}

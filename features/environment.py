@@ -7,11 +7,17 @@ import re
 
 from django.conf import settings
 from django.core.management import call_command
+from selenium.webdriver.firefox.service import Service
 from splinter import Browser
 
 
 def before_all(context):
-    context.browser = Browser("firefox", headless=True)
+    driver_path = getattr(settings, "FIREFOX_DRIVER_PATH", None)
+    if driver_path:
+        service = Service(executable_path=driver_path)
+        context.browser = Browser("firefox", headless=True, service=service)
+    else:
+        context.browser = Browser("firefox", headless=True)
 
 
 def before_feature(context, feature):

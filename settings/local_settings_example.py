@@ -103,3 +103,6 @@ OIDC_CLIENT_SECRET_KEY = "generated fernet key"
 
 # Turn true if UI metadata export should write individual files
 SAML_METADATA_EXPORT_INDIVIDUAL_FILES = False
+
+# WebDriver path for Selenium tests
+# FIREFOX_DRIVER_PATH = "/path/to/geckodriver"

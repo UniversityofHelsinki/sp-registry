@@ -22,7 +22,7 @@ Scenario: Technical information modifications
 	Then the result page will include text "Details"
 	When clicking visible link with text "Technical Attributes"
 	And filling technical information form with invalid information
-	Then the result page will include text "Entity Id should be URI, please contact IdP admins if this is not possible."
+	Then the result page will include text "Should be URI including scheme, hostname of your application and path"
 	When filling technical information form
 	And clicking visible link with text "Summary"
 	Then the result page will include text "https://sp.example.org/sp"

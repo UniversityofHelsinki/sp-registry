@@ -457,12 +457,13 @@ class LdapTechnicalInformationUpdate(SuccessMessageMixin, UpdateView):
             # create a history copy if modifying validated SP
             if sp.validated:
                 create_sp_history_copy(sp)
-            redirect_url = super().form_valid(form)
             self.object.updated_by = self.request.user
             self.object.validated = None
+            form.save(commit=False)
             self.object.save_modified()
+            form.save_m2m()
             logger.info("SP %s updated by %s", self.object, self.request.user)
-            return redirect_url
+            return HttpResponseRedirect(self.get_success_url())
         else:
             return super().form_invalid(form)
 

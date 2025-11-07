@@ -3,12 +3,16 @@ import logging
 from django.conf import settings
 from django.contrib.auth import login
 from django.contrib.auth.signals import user_logged_in, user_logged_out
+from django.contrib.auth.views import LogoutView
 from django.dispatch import receiver
 from django.http.response import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls.base import reverse
+from django.utils.decorators import method_decorator
 from django.utils.translation import gettext as _
 from django.views import View
+from django.views.decorators.cache import never_cache
+from django.views.decorators.csrf import csrf_protect
 
 from auth.shibboleth import ShibbolethBackend
 
@@ -48,16 +52,35 @@ class ShibbolethLoginView(View):
         return HttpResponseRedirect(reverse("serviceprovider-list"))
 
 
-def logout_redirect(request):
+@method_decorator([csrf_protect, never_cache], name="post")
+class LocalLogoutView(LogoutView):
     """
-    Redirect to Shibboleth logout url for SLO, if login method is Shibboleth
-    and url is configured. Otherwise use local logout.
+    Custom logout view to redirect to the correct page.
     """
-    login_method = request.session.get("LOGIN_METHOD", None)
-    if login_method == "Shibboleth" and settings.SHIBBOLETH_LOGOUT_URL:
-        return HttpResponseRedirect(settings.SHIBBOLETH_LOGOUT_URL)
-    else:
-        return HttpResponseRedirect(reverse("logout-local"))
+
+    template_name = "registration/logout.html"
+    http_method_names = ["get", "head", "post", "options"]
+
+    @method_decorator(never_cache)
+    def dispatch(self, request, *args, **kwargs):
+        """
+        Set next page to the correct url.
+
+        If it's from a Shibboleth SP front-channel notification, return it to return url.
+        """
+        if "action" in request.GET and request.GET.get("action") == "logout" and "return" in request.GET:
+            self.next_page = request.GET.get("return")
+        login_method = request.session.get("LOGIN_METHOD", None)
+        if login_method == "Shibboleth" and settings.SHIBBOLETH_LOGOUT_URL:
+            self.next_page = settings.SHIBBOLETH_LOGOUT_URL
+        return super().dispatch(request, *args, **kwargs)
+
+    def get(self, request, *args, **kwargs):
+        """
+        Redirect get to post. Support to get logouts was removed in Django 5.0, but it is required
+        for Shibboleth front-channel logout notifications.
+        """
+        return super().post(request, *args, **kwargs)
 
 
 @receiver(user_logged_in)

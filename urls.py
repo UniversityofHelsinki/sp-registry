@@ -21,7 +21,7 @@ from rr.views.certificate import (
 from rr.views.contact import contact_list
 from rr.views.email import email_list
 from rr.views.endpoint import endpoint_list
-from rr.views.login import ShibbolethLoginView, logout_redirect
+from rr.views.login import LocalLogoutView, ShibbolethLoginView
 from rr.views.metadata import metadata, metadata_import, metadata_management
 from rr.views.redirecturi import redirecturi_list
 from rr.views.serviceprovider import (
@@ -61,12 +61,7 @@ urlpatterns = [
     path("authtoken/", authtoken, name="auth-token"),
     path("login/", LoginView.as_view(), name="login"),
     path("login/shibboleth/", ShibbolethLoginView.as_view(), name="shibboleth-login"),
-    path("logout/", logout_redirect, name="logout"),
-    path(
-        "logout/local/",
-        LogoutView.as_view(template_name="registration/logout.html", redirect_field_name="return"),
-        name="logout-local",
-    ),
+    path("logout/", LocalLogoutView.as_view(), name="logout"),
     path("list/", login_required(ServiceProviderList.as_view()), name="serviceprovider-list"),
     path("admin/<int:pk>/", admin_list, name="admin-list"),
     path("attribute/<int:pk>/", attribute_list, name="attribute-list"),

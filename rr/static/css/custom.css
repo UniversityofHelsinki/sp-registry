@@ -25,6 +25,9 @@ html {
   margin: 0.25rem;
 }
 
+.invalid-feedback {
+  display: block;
+}
 .sidebar {
   position: fixed;
   top: 51px;

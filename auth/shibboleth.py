@@ -77,16 +77,14 @@ class ShibbolethBackend:
                 # Create a new user with unusable password
                 logger.info("Created a new user: %s", username)
                 active = get_activation(affiliations, groups)
-                user = User(
+                user = User.objects.create_user(
                     username=username,
-                    password=User.objects.make_random_password(),
+                    password=None,
                     first_name=first_name,
                     last_name=last_name,
                     email=email,
                     is_active=active,
                 )
-                user.set_unusable_password = True
-                user.save()
                 update_groups(user, groups)
             return user
         return None

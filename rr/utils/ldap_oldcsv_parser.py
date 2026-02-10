@@ -121,7 +121,7 @@ def parse_ldap_attributes(sp, d, validate, errors):
 
 
 def add_ldap_spadmin(sp, maileppn):
-    (adminemail, eppn) = maileppn.split("=")
+    adminemail, eppn = maileppn.split("=")
 
     admin = User.objects.filter(username=eppn).first()
 

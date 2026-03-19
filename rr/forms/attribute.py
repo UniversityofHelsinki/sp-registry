@@ -20,8 +20,8 @@ class AttributeForm(Form):
             help_text = _("Name: ") + field.name
         if field.schemalink:
             schema_link = (
-                "https://wiki.eduuni.fi/display/CSCHAKA/funetEduPersonSchema2dot2"
-                "#funetEduPersonSchema2dot2-" + field.friendlyname
+                "https://wiki.eduuni.fi/display/CSCHAKA/funetEduPersonSchema2dot6"
+                "#funetEduPersonSchema2dot6-" + field.friendlyname
             )
             help_text = help_text + ' (<a target="_blank" href="' + schema_link + '">' + _("schema") + "</a>)"
         if self.is_admin and self.sp.service_type == "saml" and not field.public_saml:

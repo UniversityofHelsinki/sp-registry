@@ -59,7 +59,8 @@ class AttributeFormTestCase(TestCase):
         self.assertTrue(form.is_valid())
         self.assertTrue(form.fields["eduPersonPrincipalName"].has_changed)
         self.assertEqual(
-            'Name: urn:oid:1.3.6.1.4.1.5923.1.1.1.6 (<a target="_blank" href="https://wiki.eduuni.fi/display/CSCHAKA/funetEduPersonSchema2dot2#funetEduPersonSchema2dot2-eduPersonPrincipalName">schema</a>)',
+            'Name: urn:oid:1.3.6.1.4.1.5923.1.1.1.6 (<a target="_blank" href="https://wiki.eduuni.fi/display/'
+            'CSCHAKA/funetEduPersonSchema2dot6#funetEduPersonSchema2dot6-eduPersonPrincipalName">schema</a>)',
             form.fields["eduPersonPrincipalName"].help_text,
         )
 

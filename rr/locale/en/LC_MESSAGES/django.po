@@ -1874,7 +1874,7 @@ msgstr ""
 
 #: templates/rr/attribute_list.html:10
 msgid "instructions_url_attributes"
-msgstr "https://wiki.helsinki.fi/pages/viewpage.action?pageId=226580829"
+msgstr "https://wiki.helsinki.fi/xwiki/bin/view/SO/User%20management/User%20attributes/"
 
 #: templates/rr/attribute_list.html:13
 msgid "Attribute list"
@@ -2447,7 +2447,7 @@ msgstr ""
 
 #: templates/rr/serviceprovider_ldap_create_form.html:9
 msgid "instructions_url_ldap"
-msgstr "https://wiki.helsinki.fi/pages/viewpage.action?pageId=197657102"
+msgstr "https://wiki.helsinki.fi/xwiki/bin/view/SO/User%20management/LDAP/"
 
 #: templates/rr/serviceprovider_ldap_create_form.html:10
 msgid ""
@@ -2627,7 +2627,7 @@ msgstr ""
 
 #: templates/rr/serviceprovider_oidc_create_form.html:9
 msgid "instructions_url_oidc"
-msgstr "https://wiki.helsinki.fi/display/IAMasioita/Ohjeet+Shibbolointiin"
+msgstr "https://wiki.helsinki.fi/xwiki/bin/view/SO/User%20management/login.helsinki.fi/"
 
 #: templates/rr/serviceprovider_oidc_create_form.html:10
 msgid "Required attributes for the production RPs."
@@ -2755,7 +2755,7 @@ msgstr ""
 
 #: templates/rr/serviceprovider_saml_create_form.html:9
 msgid "instructions_url_saml"
-msgstr "https://wiki.helsinki.fi/display/IAMasioita/Ohjeet+Shibbolointiin"
+msgstr "https://wiki.helsinki.fi/xwiki/bin/view/SO/User%20management/login.helsinki.fi/"
 
 #: templates/rr/serviceprovider_saml_create_form.html:10
 msgid "Required attributes for the production SPs."

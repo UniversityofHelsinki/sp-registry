@@ -1,12 +1,12 @@
 # Common requirements
-cryptography==47.0.0
-Django==5.2.13
+cryptography==48.0.0
+Django==5.2.14
 django-bootstrap5==26.2
 django-filter==25.2
 djangorestframework==3.17.1
 docutils==0.22.4
 drf-spectacular==0.29.0
-GitPython==3.1.47
-lxml==6.1.0
+GitPython==3.1.50
+lxml==6.1.1
 mysqlclient==2.2.8
 python-dateutil==2.9.0

@@ -166,23 +166,27 @@ Shibboleth and attribute test service are not included.
 ### Creating development environment
 Steps for creating development environment.
 
+Install uv: https://docs.astral.sh/uv/getting-started/installation/ (i.e. "pipx install uv")
+
 1. cmd: git clone https://github.com/UniversityofHelsinki/sp-registry.git
 2. cmd: cd sp-registry
-3. cmd: python3 -m venv venv
-4. cmd: source venv/bin/activate
-5. cmd: pip install -r requirements_dev.txt
-   * Requires dev libraries for Python and MySQL/MariaDB for compiling Python mysqlclient.
-6. cmd: cp settings/local_settings_example.py settings/local_settings.py
-7. Create mysql database, test database and user
+3. cmd: uv sync 
+   * Install dependencies using uv, creating .venv directory for the virtual environment.
+   * Use --extra mysql or --extra postgresql to install database driver.
+4. source .venv/bin/activate
+   * Activate the virtual environment,
+   * or use "uv run <command>" to run commands in the virtual environment
+5. cmd: cp settings/local_settings_example.py settings/local_settings.py
+6. Create mysql database, test database and user
    * create database registry;
    * create user registry@localhost identified by 'registry';
    * grant all privileges on registry.* to registry@localhost;
    * grant all privileges on test_registry.* to registry@localhost;
-8. Edit settings/local_settings.py to match DB settings, unless you used the example above
-9. run tests: ./manage.py test
-10. run browser tests: ./manage.py behave --settings=settings.development
+7. Edit settings/local_settings.py to match DB settings, unless you used the example above
+8. run tests: ./manage.py test
+9. run browser tests: ./manage.py behave --settings=settings.development
     * Requires Firefox and geckodriver for headless tests.
-11. Apply database schema: ./manage.py migrate
+10. Apply database schema: ./manage.py migrate
 11. Compile translations: ./manage.py makemessages
 12. Create superuser: ./manage.py createsuperuser
 13. run development server: ./manage.py runserver --settings=settings.development

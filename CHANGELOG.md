@@ -1,9 +1,16 @@
 # Changelog
-## [2.2.0] - 2023-xx-xx
+## [2.2.0] - 2026-08-06
 ### Changes
-* DB query optimizations using prefetch_related and select_related
+* Changed to Django 5.2
 * Requirements version updates
-* Change yes/no icons to use django admin images
+* Changed requirements management to uv
+* Added support for SAML subject IDs
+* DB query optimizations using prefetch_related and select_related
+* Removed unused management commands
+* Various minor fixes, see git log for details
+
+### Updating notes
+Django 5.2 requires Python 3.10 or newer and MySQL 8/MariaDb 10.4 or newer.
 
 ## [2.1.0] - 2023-07-06
 ### Changes

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-06-26 15:34+0300\n"
+"POT-Creation-Date: 2026-10-07 09:01+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -27,7 +27,7 @@ msgid "API keys may be used to access SP-registry REST API."
 msgstr ""
 
 #: auth/templates/authtoken.html:8
-msgid "Show API schema."
+msgid "API schema: "
 msgstr ""
 
 #: auth/templates/authtoken.html:10
@@ -46,16 +46,16 @@ msgstr ""
 msgid "You do not currently have an API key."
 msgstr ""
 
+#: auth/templates/authtoken.html:22
+msgid "Reset token"
+msgstr ""
+
 #: auth/templates/authtoken.html:23
-msgid "Reset key"
+msgid "Remove token"
 msgstr ""
 
-#: auth/templates/authtoken.html:24
-msgid "Remove key"
-msgstr ""
-
-#: auth/templates/authtoken.html:26
-msgid "Create key"
+#: auth/templates/authtoken.html:25
+msgid "Create token"
 msgstr ""
 
 #: auth/templates/registration/login.html:7
@@ -120,6 +120,7 @@ msgstr ""
 
 #: auth/templates/registration/password_reset_complete.html:5
 #: auth/templates/registration/password_reset_confirm.html:6
+#: auth/templates/registration/password_reset_confirm.html:11
 #: auth/templates/registration/password_reset_done.html:5
 #: auth/templates/registration/password_reset_form.html:6
 msgid "Reset password"
@@ -130,10 +131,10 @@ msgid "Password has been reset successfully."
 msgstr ""
 
 #: auth/templates/registration/password_reset_complete.html:7
-msgid "Log in."
+msgid "Log in"
 msgstr ""
 
-#: auth/templates/registration/password_reset_confirm.html:16
+#: auth/templates/registration/password_reset_confirm.html:14
 msgid "Password reset failed."
 msgstr ""
 
@@ -161,4 +162,8 @@ msgstr ""
 
 #: auth/templates/registration/password_reset_form.html:7
 msgid "Instructions for resetting password will be send to your email."
+msgstr ""
+
+#: auth/templates/registration/password_reset_form.html:11
+msgid "Send"
 msgstr ""

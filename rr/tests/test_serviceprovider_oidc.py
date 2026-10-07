@@ -2,7 +2,7 @@ import json
 import os
 
 from django.contrib.auth.models import User
-from django.test import RequestFactory, TestCase
+from django.test import RequestFactory, TestCase, override_settings
 from django.urls import reverse
 
 from rr.models.attribute import Attribute
@@ -57,18 +57,35 @@ class ServiceProviderOIDCTechnicalTestCase(TestCase):
     def test_sp_oidc_entity_id_change(self):
         self.client.force_login(self.user)
         response = self.client.post(
-            reverse("oidc-technical-update", kwargs={"pk": self.user_sp.pk}), {"entity_id": "test:entity:1"}
+            reverse("oidc-technical-update", kwargs={"pk": self.user_sp.pk}),
+            {"entity_id": "test:entity:1", "application_type": "web"},
         )
         self.assertEqual(response.status_code, 200)
         self.assertIn("Client ID already exists", response.content.decode())
         response = self.client.post(
             reverse("oidc-technical-update", kwargs={"pk": self.user_sp.pk}),
-            {"entity_id": "https://sp2.example.org/sp/valid"},
+            {"entity_id": "https://sp2.example.org/sp/valid", "application_type": "web"},
             follow=True,
         )
         self.assertEqual(response.status_code, 200)
         self.assertNotIn("Client ID already exists", response.content.decode())
         self.assertIn("https://sp2.example.org/sp/valid", response.content.decode())
+        self.assertNotIn("_error", response.content.decode())
+
+    @override_settings(ALLOW_BOTH_PRODUCTION_AND_TEST_ENVIRONMENT=False)
+    def test_sp_technical_production_and_test_disabled(self):
+        self.client.force_login(self.user)
+        response = self.client.post(
+            reverse("oidc-technical-update", kwargs={"pk": self.user_sp.pk}),
+            {
+                "entity_id": "https://sp2.example.org/sp/valid",
+                "application_type": "web",
+                "production": True,
+                "test": True,
+            },
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertIn("_error", response.content.decode())
 
     def test_sp_oidc_grant_and_response_type(self):
         self.client.force_login(self.user)

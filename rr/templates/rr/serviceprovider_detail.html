@@ -25,6 +25,12 @@
       <p>{% trans "This service requires manual configuration. Detailed information should be in the admin notes." %}</p>
     </div>
   {% endif %}
+  {% if object.production and object.test %}
+    <div class="alert alert-warning" role="alert">
+      <p>{% trans "This service has been published to both the production and test environments. This is problematic from a data protection perspective and should be avoided." %}</p>
+      <p>{% trans "Please remove the service from either the production or the test environment. This can be done in the Technical Attributes page." %}</p>
+    </div>
+  {% endif %}
   {% if not object.production and not object.test %}
     <div class="alert alert-info" role="alert">
       <p>{% trans "This service provider is currently not published to the production or the test IdPs. You may publish this SP in the Technical Attributes page." %}</p>

@@ -106,3 +106,7 @@ SAML_METADATA_EXPORT_INDIVIDUAL_FILES = False
 
 # WebDriver path for Selenium tests
 # FIREFOX_DRIVER_PATH = "/path/to/geckodriver"
+
+# Allow both production and test environment with the same registration.
+# It is recommended to set this to False, but behaviour defaults to True for backwards compatibility.
+# ALLOW_BOTH_PRODUCTION_AND_TEST_ENVIRONMENT = True

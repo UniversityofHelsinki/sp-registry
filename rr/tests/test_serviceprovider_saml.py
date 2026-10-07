@@ -1,5 +1,5 @@
 from django.contrib.auth.models import User
-from django.test import RequestFactory, TestCase
+from django.test import RequestFactory, TestCase, override_settings
 from django.urls import reverse
 
 from rr.models.serviceprovider import ServiceProvider
@@ -39,18 +39,37 @@ class ServiceProviderSAMLTechnicalTestCase(TestCase):
     def test_sp_technical_entity_id_change(self):
         self.client.force_login(self.user)
         response = self.client.post(
-            reverse("technical-update", kwargs={"pk": self.user_sp.pk}), {"entity_id": "invalid_entity_id"}
+            reverse("technical-update", kwargs={"pk": self.user_sp.pk}),
+            {"entity_id": "invalid_entity_id", "saml_subject_identifier": "none"},
         )
         self.assertEqual(response.status_code, 200)
         self.assertIn("Entity Id should be URI", response.content.decode())
         response = self.client.post(
             reverse("technical-update", kwargs={"pk": self.user_sp.pk}),
-            {"entity_id": "https://valid.entity.id"},
+            {"entity_id": "https://valid.entity.id", "saml_subject_identifier": "none"},
             follow=True,
         )
         self.assertEqual(response.status_code, 200)
         self.assertNotIn("Entity Id should be URI", response.content.decode())
         self.assertIn("https://valid.entity.id", response.content.decode())
+        self.assertNotIn("_error", response.content.decode())
+
+    @override_settings(ALLOW_BOTH_PRODUCTION_AND_TEST_ENVIRONMENT=False)
+    def test_sp_technical_production_and_test_disabled(self):
+        self.client.force_login(self.user)
+        response = self.client.post(
+            reverse("technical-update", kwargs={"pk": self.user_sp.pk}),
+            {
+                "entity_id": "https://valid.entity.id",
+                "saml_subject_identifier": "none",
+                "production": True,
+                "test": True,
+            },
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertIn(
+            "You cannot publish service to both production and test at the same time", response.content.decode()
+        )
 
     def test_sp_technical_view_production_disabled_if_missing(self):
         self.client.force_login(self.user)

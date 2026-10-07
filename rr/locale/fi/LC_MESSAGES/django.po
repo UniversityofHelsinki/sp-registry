@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-07 09:01+0300\n"
+"POT-Creation-Date: 2026-10-08 11:20+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -2497,7 +2497,25 @@ msgstr ""
 "Tämä palvelu vaatii paikallisia konfiguraatiomuutoksia. Tarkempien tietojen "
 "pitäisi löytyä ylläpitäjän muistiinpanoista."
 
-#: templates/rr/serviceprovider_detail.html:30
+#: rr/templates/rr/serviceprovider_detail.html:30
+msgid ""
+"This service has been published to both the production and test "
+"environments. This is problematic from a data protection perspective and "
+"should be avoided."
+msgstr ""
+"Palvelu on tällä hetkellä julkaistu sekä tuotanto‑ että testiympäristöön. "
+"Tämä asetelma on ongelmallinen tietosuojan näkökulmasta, ja sitä tulisi "
+"välttää."
+
+#: rr/templates/rr/serviceprovider_detail.html:31
+msgid ""
+"Please remove the service from either the production or the test "
+"environment. This can be done in the Technical Attributes page."
+msgstr ""
+"Poistathan palvelun toisesta ympäristöstä (tuotannosta tai testistä). Tämä "
+"voidaan tehdä Tekniset tiedot -sivulla."
+
+#: rr/templates/rr/serviceprovider_detail.html:36
 msgid ""
 "This service provider is currently not published to the production or the "
 "test IdPs. You may publish this SP in the Technical Attributes page."
@@ -3429,21 +3447,23 @@ msgstr "Muutokset hyväksytty."
 msgid "You should not be here."
 msgstr "Sinun ei kuuluisi olla täällä."
 
-#: rr/views/serviceprovider.py:351 rr/views/serviceprovider.py:395
-#: rr/views/serviceprovider.py:454 rr/views/serviceprovider.py:499
+#: rr/views/serviceprovider.py:351 rr/views/serviceprovider.py:414
+#: rr/views/serviceprovider.py:464 rr/views/serviceprovider.py:509
 msgid "Form successfully saved"
 msgstr "Lomake tallennettu"
 
-#: rr/views/serviceprovider.py:416 rr/views/serviceprovider.py:520
+#: rr/views/serviceprovider.py:389 rr/views/serviceprovider.py:391
+#: rr/views/serviceprovider.py:392
 msgid ""
 "You cannot publish service to both production and test at the same time."
 msgstr ""
+"Et voi julkaista palvelua sekä tuotantoon että testiin samanaikaisesti."
 
-#: rr/views/serviceprovider.py:537
+#: rr/views/serviceprovider.py:538
 msgid "Client secret generated."
 msgstr "Palvelun salaisuus luotu"
 
-#: rr/views/serviceprovider.py:542
+#: rr/views/serviceprovider.py:543
 msgid ""
 "Unable to generate a client secret. Usually this means incorrect server "
 "configuration."
@@ -3451,15 +3471,15 @@ msgstr ""
 "Ei voitu luoda palvelun salaisuutta. Yleensä tämä merkitsee virheellisiä "
 "palvelinasetuksia."
 
-#: rr/views/serviceprovider.py:547
+#: rr/views/serviceprovider.py:548
 msgid "Client secret removed."
 msgstr "Palvelun salaisuus poistettu"
 
-#: rr/views/serviceprovider.py:558
+#: rr/views/serviceprovider.py:559
 msgid "Service deleted."
 msgstr "Palvelu poistettu."
 
-#: rr/views/serviceprovider.py:582
+#: rr/views/serviceprovider.py:583
 msgid "Service removal is not allowed for production services."
 msgstr "Tuotantopalvelun poisto ei ole sallittua."
 

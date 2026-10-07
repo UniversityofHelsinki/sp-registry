@@ -375,7 +375,26 @@ class BasicInformationUpdate(SuccessMessageMixin, UpdateView):
             return super().form_invalid(form)
 
 
-class SamlTechnicalInformationUpdate(SuccessMessageMixin, UpdateView):
+class ProductionAndTestCheckMixin:
+    def check_both_production_and_test_allowed(self, form):
+        if (
+            not getattr(settings, "ALLOW_BOTH_PRODUCTION_AND_TEST_ENVIRONMENT", True)
+            and ("production" in form.changed_data or "test" in form.changed_data)
+            and form.cleaned_data["production"]
+            and form.cleaned_data["test"]
+        ):
+            messages.add_message(
+                self.request,
+                messages.ERROR,
+                _("You cannot publish service to both production and test at the same time."),
+            )
+            form.add_error("production", _("You cannot publish service to both production and test at the same time."))
+            form.add_error("test", _("You cannot publish service to both production and test at the same time."))
+            return False
+        return True
+
+
+class SamlTechnicalInformationUpdate(ProductionAndTestCheckMixin, SuccessMessageMixin, UpdateView):
     """
     Displays a form for updating a :model:`rr.ServiceProvider`.
 
@@ -405,6 +424,8 @@ class SamlTechnicalInformationUpdate(SuccessMessageMixin, UpdateView):
 
     def form_valid(self, form):
         if form.has_changed():
+            if not self.check_both_production_and_test_allowed(form):
+                return super().form_invalid(form)
             sp = ServiceProvider.objects.get(pk=form.instance.pk)
             # create a history copy if modifying validated SP
             if sp.validated:
@@ -468,7 +489,7 @@ class LdapTechnicalInformationUpdate(SuccessMessageMixin, UpdateView):
             return super().form_invalid(form)
 
 
-class OidcTechnicalInformationUpdate(SuccessMessageMixin, UpdateView):
+class OidcTechnicalInformationUpdate(ProductionAndTestCheckMixin, SuccessMessageMixin, UpdateView):
     """
     Displays a form for updating a :model:`rr.ServiceProvider`.
 
@@ -498,6 +519,8 @@ class OidcTechnicalInformationUpdate(SuccessMessageMixin, UpdateView):
 
     def form_valid(self, form):
         if form.has_changed():
+            if not self.check_both_production_and_test_allowed(form):
+                return super().form_invalid(form)
             sp = ServiceProvider.objects.get(pk=form.instance.pk)
             # create a history copy if modifying validated SP
             if sp.validated:

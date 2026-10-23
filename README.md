@@ -143,7 +143,7 @@ API documentation is available in path swagger/ for authenticated users.
 
 ### Requirements
 * Django 5.2
-* Python 3.10
+* Python 3.11
 * MySQL 8+ / MariaDB 10.4+
 * Requires dev libraries for Python and MySQL/MariaDB for compiling Python mysqlclient.
 

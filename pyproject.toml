@@ -4,7 +4,7 @@ version = "2.3.0"
 requires-python = ">=3.11"
 dependencies = [
     "cryptography==50.0.2",
-    "django==5.2.18",
+    "django==5.2.19",
     "django-bootstrap5==26.4",
     "django-filter==26.2",
     "djangorestframework==3.18.3",
@@ -20,13 +20,14 @@ mysql = [
     "mysqlclient==2.3.0",
 ]
 postgresql = [
-    "psycopg==3.3.6",
+    "psycopg==3.3.8",
+    "psycopg-binary==3.3.8",
 ]
 
 [tool.uv]
 audit.malware-check = true
 exclude-newer = "7 days"
-exclude-newer-package = { django = false, certifi = "P3D" }
+exclude-newer-package = { django = false }
 
 [tool.isort]
 profile = "black"

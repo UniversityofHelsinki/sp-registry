@@ -152,6 +152,19 @@ API documentation is available in path swagger/ for authenticated users.
 ### Style guide
 Use black and isort for formatting and sorting imports.
 
+### Translations
+Do not include line numbers or obsolete translations in the translation files.
+
+Use the following commands to update translation files:
+```
+python manage.py makemessages --all --ignore .venv --no-obsolete --add-location file
+```
+
+Use the following command to compile translation files.
+```
+python manage.py compilemessages --ignore .venv
+```
+
 ### Using Vagrant to install development environment
 Vagrantfile with Ansible provisioning is provided for test environment.
 
@@ -187,7 +200,7 @@ Install uv: https://docs.astral.sh/uv/getting-started/installation/ (i.e. "pipx 
 9. run browser tests: ./manage.py behave --settings=settings.development
     * Requires Firefox and geckodriver for headless tests.
 10. Apply database schema: ./manage.py migrate
-11. Compile translations: ./manage.py makemessages
+11. Compile translations: ./manage.py compilemessages  
 12. Create superuser: ./manage.py createsuperuser
 13. run development server: ./manage.py runserver --settings=settings.development
     * You need to add ALLOWED_HOSTS to settings/local_settings.py unless using development settings.

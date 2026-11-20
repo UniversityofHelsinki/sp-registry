@@ -81,6 +81,10 @@ OIDC_TECHNICAL_FIELDS = [
     "token_endpoint_auth_method",
     "jwks_uri",
     "jwks",
+    "backchannel_logout_uri",
+    "backchannel_logout_session_required",
+    "frontchannel_logout_uri",
+    "frontchannel_logout_session_required",
     "production",
     "test",
     "saml_product",
@@ -260,6 +264,15 @@ class ServiceProvider(models.Model):
         max_length=19,
         choices=TOKENENDPOINTAUTHMETHODS,
         verbose_name=_("Token endpoint authentication method"),
+    )
+
+    backchannel_logout_uri = models.URLField(max_length=255, blank=True, verbose_name=_("Backchannel logout URI"))
+    backchannel_logout_session_required = models.BooleanField(
+        default=False, verbose_name=_("Backchannel logout session required")
+    )
+    frontchannel_logout_uri = models.URLField(max_length=255, blank=True, verbose_name=_("Frontchannel logout URI"))
+    frontchannel_logout_session_required = models.BooleanField(
+        default=False, verbose_name=_("Frontchannel logout session required")
     )
 
     admin_require_manual_configuration = models.BooleanField(

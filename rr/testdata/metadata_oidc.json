@@ -1,5 +1,7 @@
 {
     "application_type": "web",
+    "backchannel_logout_session_required": true,
+    "backchannel_logout_uri": "https://sp2.example.org/backchannel_logout_uri",
     "claims": {
         "userinfo": {
             "eppn": null
@@ -13,6 +15,9 @@
         "refresh_token"
     ],
     "policy_uri#fi": "https://example.org/privacyfi",
+    "post_logout_redirect_uris": [
+        "https://sp2.example.org/redirect_uri_logout"
+    ],
     "redirect_uris": [
         "https://sp2.example.org/redirect_uri"
     ],

@@ -164,10 +164,14 @@ class ServiceProviderOIDCTechnicalTestCase(TestCase):
     def test_sp_oidc_metadata(self):
         self.client.force_login(self.user)
         RedirectUri.objects.create(sp=self.user_sp, uri="https://sp2.example.org/redirect_uri")
+        RedirectUri.objects.create(sp=self.user_sp, uri="https://sp2.example.org/redirect_uri_logout", is_logout=True)
         self.user_sp.grant_types.add(GrantType.objects.filter(name="authorization_code").first())
         self.user_sp.grant_types.add(GrantType.objects.filter(name="refresh_token").first())
         self.user_sp.response_types.add(ResponseType.objects.filter(name="code").first())
         self.user_sp.oidc_scopes.add(OIDCScope.objects.filter(name="profile").first())
+        self.user_sp.backchannel_logout_uri = "https://sp2.example.org/backchannel_logout_uri"
+        self.user_sp.backchannel_logout_session_required = True
+        self.user_sp.frontchannel_logout_session_required = True
         self.attr_eppn = Attribute.objects.create(
             friendlyname="eduPersonPrincipalName",
             name="urn:oid:1.3.6.1.4.1.5923.1.1.1.6",

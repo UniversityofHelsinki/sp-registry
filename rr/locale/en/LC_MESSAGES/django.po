@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-20 11:22+0200\n"
+"POT-Creation-Date: 2026-11-20 12:17+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -467,6 +467,22 @@ msgid ""
 msgstr ""
 
 #: rr/forms/serviceprovider.py
+msgid "URI for RPs backchannel logout (backchannel_logout_uri)."
+msgstr ""
+
+#: rr/forms/serviceprovider.py
+msgid "Should sid-parameter be included in the back-channel logout request?"
+msgstr ""
+
+#: rr/forms/serviceprovider.py
+msgid "URI for RPs frontchannel logout (frontchannel_logout_uri)."
+msgstr ""
+
+#: rr/forms/serviceprovider.py
+msgid "Should sid-parameter be included in the front-channel logout request?"
+msgstr ""
+
+#: rr/forms/serviceprovider.py
 msgid ""
 "Publish this RP to the production OP. Only validated data is used. Any "
 "changes to production RPs must be validated by the IdP administrators before "
@@ -542,6 +558,12 @@ msgstr ""
 
 #: rr/forms/serviceprovider.py
 msgid "implicit grant type must be set for id_token response type."
+msgstr ""
+
+#: rr/forms/serviceprovider.py
+msgid ""
+"Backchannel and frontchannel logout URIs are not allowed for native "
+"application type."
 msgstr ""
 
 #: rr/forms/serviceprovider.py
@@ -1066,6 +1088,10 @@ msgstr ""
 msgid "Redirect URI"
 msgstr ""
 
+#: rr/models/redirecturi.py
+msgid "Is logout redirect URI"
+msgstr ""
+
 #: rr/models/serviceprovider.py rr/models/testuser.py
 #: rr/templates/rr/serviceprovider_saml_create_form.html
 msgid "Entity Id"
@@ -1226,6 +1252,22 @@ msgstr ""
 
 #: rr/models/serviceprovider.py
 msgid "Token endpoint authentication method"
+msgstr ""
+
+#: rr/models/serviceprovider.py
+msgid "Backchannel logout URI"
+msgstr ""
+
+#: rr/models/serviceprovider.py
+msgid "Backchannel logout session required"
+msgstr ""
+
+#: rr/models/serviceprovider.py
+msgid "Frontchannel logout URI"
+msgstr ""
+
+#: rr/models/serviceprovider.py
+msgid "Frontchannel logout session required"
 msgstr ""
 
 #: rr/models/serviceprovider.py
@@ -2006,7 +2048,7 @@ msgid "List of contacts"
 msgstr ""
 
 #: rr/templates/rr/contact.html rr/templates/rr/endpoint.html
-#: rr/templates/rr/serviceprovider_detail.html
+#: rr/templates/rr/redirecturi.html rr/templates/rr/serviceprovider_detail.html
 msgid "Type"
 msgstr ""
 

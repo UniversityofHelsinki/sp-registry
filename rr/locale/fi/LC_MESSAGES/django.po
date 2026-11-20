@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-20 11:22+0200\n"
+"POT-Creation-Date: 2026-11-20 12:17+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -558,6 +558,22 @@ msgstr ""
 "käyttää tämän sijaan, jos vain mahdollista."
 
 #: rr/forms/serviceprovider.py
+msgid "URI for RPs backchannel logout (backchannel_logout_uri)."
+msgstr "Palvelinimen välinen logout -osoite (backchannel_logout_uri)"
+
+#: rr/forms/serviceprovider.py
+msgid "Should sid-parameter be included in the back-channel logout request?"
+msgstr "Pitäisikö sid-parametri sisällyttää backchannel logout -pyyntöön?"
+
+#: rr/forms/serviceprovider.py
+msgid "URI for RPs frontchannel logout (frontchannel_logout_uri)."
+msgstr "Selaimen kautta ohjattu logout -osoite (frontchannel_logout_uri)"
+
+#: rr/forms/serviceprovider.py
+msgid "Should sid-parameter be included in the front-channel logout request?"
+msgstr "Pitäisikö sid-parametri sisällyttää frontchannel logout -pyyntöön?"
+
+#: rr/forms/serviceprovider.py
 msgid ""
 "Publish this RP to the production OP. Only validated data is used. Any "
 "changes to production RPs must be validated by the IdP administrators before "
@@ -649,6 +665,12 @@ msgstr "implicit grant type täytyy valita, jos response type on token."
 #: rr/forms/serviceprovider.py
 msgid "implicit grant type must be set for id_token response type."
 msgstr "implicit grant type täytyy valita, jos response type on id_token."
+
+#: rr/forms/serviceprovider.py
+msgid ""
+"Backchannel and frontchannel logout URIs are not allowed for native "
+"application type."
+msgstr ""
 
 #: rr/forms/serviceprovider.py
 msgid ""
@@ -1194,6 +1216,10 @@ msgstr ""
 msgid "Redirect URI"
 msgstr "Paluuosoite (Redirect URI)"
 
+#: rr/models/redirecturi.py
+msgid "Is logout redirect URI"
+msgstr "On loskirjautumisen paluusoite (logout redirect URI)"
+
 #: rr/models/serviceprovider.py rr/models/testuser.py
 #: rr/templates/rr/serviceprovider_saml_create_form.html
 msgid "Entity Id"
@@ -1355,6 +1381,22 @@ msgstr "private_key_jwt"
 #: rr/models/serviceprovider.py
 msgid "Token endpoint authentication method"
 msgstr "Tunniste-yhteysosoitteen kirjautumismetodi"
+
+#: rr/models/serviceprovider.py
+msgid "Backchannel logout URI"
+msgstr "Backchannel logout -osoite"
+
+#: rr/models/serviceprovider.py
+msgid "Backchannel logout session required"
+msgstr "Vaatiiko backchannel logout -pyyntö istuntotunnisteen"
+
+#: rr/models/serviceprovider.py
+msgid "Frontchannel logout URI"
+msgstr "Frontchannel logout -osoite"
+
+#: rr/models/serviceprovider.py
+msgid "Frontchannel logout session required"
+msgstr "Vaatiiko frontchannel logout -pyyntö istuntotunnisteen"
 
 #: rr/models/serviceprovider.py
 msgid "This service requires manual configuration"
@@ -2163,7 +2205,7 @@ msgid "List of contacts"
 msgstr "Lista yhteystiedoista"
 
 #: rr/templates/rr/contact.html rr/templates/rr/endpoint.html
-#: rr/templates/rr/serviceprovider_detail.html
+#: rr/templates/rr/redirecturi.html rr/templates/rr/serviceprovider_detail.html
 msgid "Type"
 msgstr "Tyyppi"
 

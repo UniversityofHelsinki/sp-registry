@@ -76,12 +76,13 @@ def metadata_claims(sp, validation_date):
     return claims
 
 
-def metadata_redirect_uris(sp, validation_date):
+def metadata_redirect_uris(sp, validation_date, logout=False):
     """
     Generates redirect_uris for RP metadata
 
     sp: ServiceProvider object
     validation_date: if None, using unvalidated metadata
+    logout: if True, return only logout redirect URIs, otherwise return only non-logout redirect URIs
 
     Using CamelCase instead of regular underscore attribute names in element tree.
     """
@@ -94,6 +95,10 @@ def metadata_redirect_uris(sp, validation_date):
         )
     else:
         redirect_uris = RedirectUri.objects.filter(sp=sp, end_at=None)
+    if logout:
+        redirect_uris = redirect_uris.filter(is_logout=True)
+    else:
+        redirect_uris = redirect_uris.filter(is_logout=False)
     return list(redirect_uris.values_list("uri", flat=True))
 
 
@@ -130,6 +135,7 @@ def oidc_metadata_generator(sp, validated=True, privacypolicy=False, client_secr
     response_types = entity.response_types.all()
     oidc_scopes = entity.oidc_scopes.all()
     redirect_uris = metadata_redirect_uris(sp=sp, validation_date=validation_date)
+    logout_redirect_uris = metadata_redirect_uris(sp=sp, validation_date=validation_date, logout=True)
     claims = metadata_claims(sp=sp, validation_date=validation_date)
     if redirect_uris:
         metadata["redirect_uris"] = redirect_uris
@@ -141,6 +147,14 @@ def oidc_metadata_generator(sp, validated=True, privacypolicy=False, client_secr
         metadata["response_types"] = list(response_types.values_list("name", flat=True))
     else:
         metadata["response_types"] = ["none"]
+    if logout_redirect_uris:
+        metadata["post_logout_redirect_uris"] = logout_redirect_uris
+    if entity.backchannel_logout_uri:
+        metadata["backchannel_logout_uri"] = entity.backchannel_logout_uri
+        metadata["backchannel_logout_session_required"] = entity.backchannel_logout_session_required
+    if entity.frontchannel_logout_uri:
+        metadata["frontchannel_logout_uri"] = entity.frontchannel_logout_uri
+        metadata["frontchannel_logout_session_required"] = entity.frontchannel_logout_session_required
     scopes = ["openid"]
     if oidc_scopes:
         scopes = scopes + list(oidc_scopes.values_list("name", flat=True))

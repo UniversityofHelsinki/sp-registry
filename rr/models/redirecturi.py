@@ -8,7 +8,7 @@ from drf_spectacular.utils import extend_schema_field
 from rr.models.serviceprovider import ServiceProvider
 
 
-def redirecturi_validator(sp, uri, error):
+def redirecturi_validator(sp, uri, error, is_logout=False):
     """
     Validates redirect URI
 
@@ -16,13 +16,18 @@ def redirecturi_validator(sp, uri, error):
     """
     if ":" not in uri or uri.startswith(":") or uri.endswith(":"):
         raise error(_("Enter a valid URI."))
-    if RedirectUri.objects.filter(sp=sp, uri=uri, end_at=None).exists():
+    if RedirectUri.objects.filter(sp=sp, uri=uri, end_at=None, is_logout=is_logout).exists():
         raise error(_("URI already exists"))
     if sp.application_type == "web" and not uri.startswith("https://"):
         raise error(_("Web application URIs must begin with https: scheme"))
     if "#" in uri:
         raise error(_("URIs must not contain fragments"))
-    if sp.application_type == "native" and uri.startswith("http") and not uri.startswith("http://localhost"):
+    if (
+        sp.application_type == "native"
+        and uri.startswith("http")
+        and not uri.startswith("http://localhost")
+        and not is_logout
+    ):
         raise error(
             _("Native applications must use custom URI schemes or http: scheme with localhost as the hostname.")
         )
@@ -38,6 +43,9 @@ class RedirectUri(models.Model):
     sp = models.ForeignKey(ServiceProvider, related_name="redirecturis", on_delete=models.CASCADE)
 
     uri = models.CharField(max_length=255, verbose_name=_("Redirect URI"))
+
+    is_logout = models.BooleanField(default=False, verbose_name=_("Is logout redirect URI"))
+
     created_at = models.DateTimeField(auto_now_add=True, verbose_name=_("Created at"))
     updated_at = models.DateTimeField(auto_now=True, verbose_name=_("Updated at"))
     end_at = models.DateTimeField(blank=True, null=True, verbose_name=_("Entry end time"))

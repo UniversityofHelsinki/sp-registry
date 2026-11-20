@@ -52,7 +52,8 @@ def _add_redirecturi(request, sp):
     form = RedirectUriForm(request.POST, sp=sp)
     if form.is_valid():
         uri = form.cleaned_data["uri"]
-        RedirectUri.objects.create(sp=sp, uri=uri)
+        is_logout = form.cleaned_data["is_logout"]
+        RedirectUri.objects.create(sp=sp, uri=uri, is_logout=is_logout)
         sp.save_modified()
         logger.info("Redirect URL added for {sp} by {user}".format(sp=sp, user=request.user))
         form = RedirectUriForm(sp=sp)

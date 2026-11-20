@@ -9,6 +9,7 @@ from django.forms.widgets import CheckboxInput, HiddenInput, Textarea
 from django.utils.translation import gettext_lazy as _
 
 from rr.models.nameidformat import NameIDFormat
+from rr.models.redirecturi import redirecturi_validator
 from rr.models.serviceprovider import (
     ServiceProvider,
     ldap_entity_id_from_name,
@@ -365,6 +366,10 @@ class OidcTechnicalInformationForm(ModelForm):
             "token_endpoint_auth_method",
             "jwks_uri",
             "jwks",
+            "backchannel_logout_uri",
+            "backchannel_logout_session_required",
+            "frontchannel_logout_uri",
+            "frontchannel_logout_session_required",
             "production",
             "test",
             "saml_product",
@@ -392,6 +397,14 @@ class OidcTechnicalInformationForm(ModelForm):
             "jwks": _(
                 "RPs JSON Web Key document (jwks) passed as a parameter. Should only be used if the use of "
                 "jwks_uri is not possible."
+            ),
+            "backchannel_logout_uri": _("URI for RPs backchannel logout (backchannel_logout_uri)."),
+            "backchannel_logout_session_required": _(
+                "Should sid-parameter be included in the back-channel logout request?"
+            ),
+            "frontchannel_logout_uri": _("URI for RPs frontchannel logout (frontchannel_logout_uri)."),
+            "frontchannel_logout_session_required": _(
+                "Should sid-parameter be included in the front-channel logout request?"
             ),
             "production": _(
                 "Publish this RP to the production OP. Only validated data is used. "
@@ -467,6 +480,25 @@ class OidcTechnicalInformationForm(ModelForm):
                 raise ValidationError(_("Invalid JWK."))
         return jwks_data
 
+    def clean_backchannel_logout_uri(self):
+        """
+        Validate backchannel_logout_uri
+        """
+        print(self.cleaned_data)
+        backchannel_logout_uri = self.cleaned_data["backchannel_logout_uri"]
+        if backchannel_logout_uri:
+            redirecturi_validator(self.instance, backchannel_logout_uri, ValidationError, is_logout=True)
+        return backchannel_logout_uri
+
+    def clean_frontchannel_logout_uri(self):
+        """
+        Validate frontchannel_logout_uri
+        """
+        frontchannel_logout_uri = self.cleaned_data["frontchannel_logout_uri"]
+        if frontchannel_logout_uri:
+            redirecturi_validator(self.instance, frontchannel_logout_uri, ValidationError, is_logout=True)
+        return frontchannel_logout_uri
+
     def clean(self):
         cleaned_data = super().clean()
         grant_types = cleaned_data.get("grant_types").values_list("name", flat=True)
@@ -481,6 +513,20 @@ class OidcTechnicalInformationForm(ModelForm):
             self.add_error("grant_types", _("implicit grant type must be set for token response type."))
         if "id_token" in response_types and "implicit" not in grant_types:
             self.add_error("grant_types", _("implicit grant type must be set for id_token response type."))
+        application_type = cleaned_data.get("application_type")
+        backchannel_logout_uri = cleaned_data.get("backchannel_logout_uri")
+        frontchannel_logout_uri = cleaned_data.get("frontchannel_logout_uri")
+        if application_type == "native":
+            if backchannel_logout_uri:
+                self.add_error(
+                    "backchannel_logout_uri",
+                    _("Backchannel and frontchannel logout URIs are not allowed for native application type."),
+                )
+            if frontchannel_logout_uri:
+                self.add_error(
+                    "frontchannel_logout_uri",
+                    _("Backchannel and frontchannel logout URIs are not allowed for native application type."),
+                )
 
 
 class SamlServiceProviderCreateForm(ModelForm):

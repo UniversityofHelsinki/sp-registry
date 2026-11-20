@@ -1,4 +1,14 @@
 # Changelog
+## [2.3.0] - 2026-11-20
+### Changes
+* Added OIDC logout parameters
+* Requirements version updates
+* Removed line numbers from translation files
+* Added option to prevent both production and test for same registration
+
+### Updating notes
+* Includes added database fields, run migrations
+
 ## [2.2.0] - 2026-08-06
 ### Changes
 * Changed to Django 5.2
